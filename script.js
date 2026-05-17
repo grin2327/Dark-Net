@@ -1,8 +1,9 @@
-// Connected Credentials - Fixed Nesting Structure!
+// Connected Credentials - Public Upload & Protected Admin Deletion
 const BIN_URL = "https://api.jsonbin.io/v3/b/6a092aef250b1311c3602575";
 const API_KEY = "$2a$10$lqtzvPNB028JnvmaxXVBv.XQAPheFwW5ak6/xiPLYZrOnrPkYJXra";
 
 let localLinksCache = []; 
+let isAdminLoggedIn = false; // Tracks if they used the header login button
 
 // 1. LIVE SYSTEM CLOCK & DATE CONFIGURATION
 function startSystemClock() {
@@ -23,7 +24,7 @@ function startSystemClock() {
     setInterval(tick, 1000);
 }
 
-// 2. FETCH DIRECTORY FROM SECURE NODE CLOUD
+// 2. FETCH DIRECTORY FROM CLOUD STORAGE
 async function loadPublicLinks() {
     const container = document.getElementById('linkList');
     container.innerHTML = '<div class="empty-state">Synchronizing secure cloud terminal streams...</div>';
@@ -40,11 +41,17 @@ async function loadPublicLinks() {
         
         const data = await response.json();
         
-        // Match your exact screenshot database layout structure
-        if (data.record && data.record.record && data.record.record.links) {
-            localLinksCache = data.record.record.links;
-        } else if (data.record && data.record.links) {
-            localLinksCache = data.record.links;
+        // Smart Data Extractor to scan across JSON layouts
+        if (data.record) {
+            if (data.record.links && Array.isArray(data.record.links)) {
+                localLinksCache = data.record.links;
+            } else if (data.record.record && data.record.record.links && Array.isArray(data.record.record.links)) {
+                localLinksCache = data.record.record.links;
+            } else if (Array.isArray(data.record)) {
+                localLinksCache = data.record;
+            } else {
+                localLinksCache = [];
+            }
         } else {
             localLinksCache = [];
         }
@@ -69,7 +76,7 @@ function renderLinksList(records) {
     records.forEach((item, index) => {
         const displayTitle = item.title || "UNTITLED RECORD";
         const displayUrl = item.url || (typeof item === 'string' ? item : "#");
-        const displayMeta = item.timestamp || "Added via Secure Node Portal";
+        const displayMeta = item.timestamp || "Added via Public Node Portal";
 
         const li = document.createElement('li');
         li.className = 'link-item-wrapper'; 
@@ -85,7 +92,7 @@ function renderLinksList(records) {
     });
 }
 
-// 4. ADD NEW URL TO DATA ARRAY
+// 4. ADD NEW URL (100% OPEN PUBLIC UPLOAD - NO LOGIN REQUIRED)
 async function addNewLink() {
     const urlIn = document.getElementById('linkInput');
     const titleIn = document.getElementById('titleInput');
@@ -101,69 +108,154 @@ async function addNewLink() {
     const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
     const formattedTimestamp = `Added on ${dateStr}, ${timeStr}`;
 
-    try {
-        // Add the new link details to our local storage tracker
-        localLinksCache.push({
-            url: cleanUrl,
-            title: cleanTitle,
-            timestamp: formattedTimestamp
-        });
+    const newEntry = {
+        url: cleanUrl,
+        title: cleanTitle,
+        timestamp: formattedTimestamp
+    };
+    
+    localLinksCache.push(newEntry);
 
-        // Send the updated array back to JSONbin matching its exact expected layout
-        const putResponse = await fetch(BIN_URL, {
+    try {
+        // Format 1 Upload Strategy
+        let response = await fetch(BIN_URL, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
                 'X-Master-Key': API_KEY
             },
-            body: JSON.stringify({ 
-                record: {
-                    links: localLinksCache 
-                }
-            })
+            body: JSON.stringify({ links: localLinksCache })
         });
 
-        if (putResponse.ok) {
+        if (response.ok) {
             urlIn.value = '';
             titleIn.value = '';
-            loadPublicLinks(); // Refresh the list instantly on screen!
-        } else {
-            alert("Server update rejected. Please try again.");
+            loadPublicLinks();
+            return;
         }
+
+        // Format 2 Fallback Strategy
+        response = await fetch(BIN_URL, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Master-Key': API_KEY
+            },
+            body: JSON.stringify({ record: { links: localLinksCache } })
+        });
+
+        if (response.ok) {
+            urlIn.value = '';
+            titleIn.value = '';
+            loadPublicLinks();
+            return;
+        }
+
+        // Format 3 Fallback Strategy
+        response = await fetch(BIN_URL, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Master-Key': API_KEY
+            },
+            body: JSON.stringify(localLinksCache)
+        });
+
+        if (response.ok) {
+            urlIn.value = '';
+            titleIn.value = '';
+            loadPublicLinks();
+            return;
+        }
+
+        alert("Cloud storage rejected format handling.");
+
     } catch (err) {
-        console.error(err);
+        console.error("Network Link Error:", err);
     }
 }
 
-// 5. REMOVE ITEM FROM LIVE STORAGE ARRAY
+// 5. REMOVE ITEM FROM LIVE STORAGE ARRAY (RESTRICTED WITH PASSWORD PROMPT)
 async function removeLinkItem(indexTarget) {
-    if(!confirm("Are you sure you want to remove this data link?")) return;
+    // Check if user is already authenticated from header login button.
+    // If they aren't logged in, prompt them for the owner password.
+    if (!isAdminLoggedIn) {
+        const passwordCheck = prompt("Security Lock: Enter Owner Password to delete this link:");
+        
+        if (passwordCheck === null) return; // User pressed cancel
+        
+        if (passwordCheck !== "admin123") {
+            alert("Access Denied. Incorrect owner passphrase.");
+            return; // Terminate execution
+        }
+    }
+
+    // Passphrase confirmed, proceed with verification check
+    if(!confirm("Are you sure you want to completely erase this data link?")) return;
 
     try {
         localLinksCache.splice(indexTarget, 1);
 
-        const putResponse = await fetch(BIN_URL, {
+        let response = await fetch(BIN_URL, {
             method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-Master-Key': API_KEY
-            },
-            body: JSON.stringify({ 
-                record: {
-                    links: localLinksCache 
-                }
-            })
+            headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY },
+            body: JSON.stringify({ links: localLinksCache })
         });
 
-        if (putResponse.ok) {
-            loadPublicLinks(); 
+        if (!response.ok) {
+            response = await fetch(BIN_URL, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY },
+                body: JSON.stringify({ record: { links: localLinksCache } })
+            });
+            
+            if(!response.ok) {
+                await fetch(BIN_URL, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY },
+                    body: JSON.stringify(localLinksCache)
+                });
+            }
         }
+        
+        loadPublicLinks();
     } catch (err) {
         console.error(err);
     }
 }
 
-// 6. REAL-TIME SEARCH STREAM
+// 6. HEADER LOGIN MODULE CONTROLLER
+function initializeLoginSystem() {
+    const loginBtn = document.getElementById('loginBtn');
+    const userStatus = document.getElementById('userStatus');
+
+    if (!loginBtn || !userStatus) return;
+
+    loginBtn.addEventListener('click', () => {
+        if (loginBtn.textContent.includes("Logout")) {
+            loginBtn.textContent = "🔒 Login";
+            userStatus.textContent = "Guest";
+            userStatus.style.color = ""; 
+            isAdminLoggedIn = false; // Turn off admin permissions
+            alert("Terminal connection closed. Logged out.");
+            return;
+        }
+
+        const passwordInput = prompt("Enter Terminal Security Password:");
+        
+        if (passwordInput === "admin123") {
+            loginBtn.textContent = "🔓 Logout";
+            userStatus.textContent = "Admin Root";
+            userStatus.style.color = "#00e676"; 
+            isAdminLoggedIn = true; // Unlock all deletion rights instantly without prompts
+            alert("Access granted. Terminal running in Admin mode.");
+        } else if (passwordInput !== null) {
+            alert("Access Denied. Invalid terminal passphrase.");
+        }
+    });
+}
+
+// 7. REAL-TIME SEARCH STREAM
 document.getElementById('searchInput').addEventListener('input', (e) => {
     const query = e.target.value.toLowerCase();
     const filteredResults = localLinksCache.filter(item => {
@@ -174,7 +266,7 @@ document.getElementById('searchInput').addEventListener('input', (e) => {
     renderLinksList(filteredResults);
 });
 
-// 7. VPN INTERACTIVE ACTION TOGGLE MOCKUP
+// 8. VPN INTERACTIVE ACTION TOGGLE MOCKUP
 document.getElementById('toggleVpnBtn').addEventListener('click', () => {
     const vpn = document.getElementById('vpnStatus');
     if (vpn.textContent === "Disabled") {
@@ -190,5 +282,6 @@ document.getElementById('toggleVpnBtn').addEventListener('click', () => {
 document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('addLinkBtn').addEventListener('click', addNewLink);
     startSystemClock();
+    initializeLoginSystem();
     loadPublicLinks();
 });
