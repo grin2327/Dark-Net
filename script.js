@@ -1,9 +1,9 @@
-// Connected Credentials - Public Upload & Protected Admin Deletion
+// Connected Credentials - Public Upload Fix with Version Overwrite Bypasses
 const BIN_URL = "https://api.jsonbin.io/v3/b/6a092aef250b1311c3602575";
 const API_KEY = "$2a$10$lqtzvPNB028JnvmaxXVBv.XQAPheFwW5ak6/xiPLYZrOnrPkYJXra";
 
 let localLinksCache = []; 
-let isAdminLoggedIn = false; // Tracks if they used the header login button
+let isAdminLoggedIn = false; 
 
 // 1. LIVE SYSTEM CLOCK & DATE CONFIGURATION
 function startSystemClock() {
@@ -41,7 +41,7 @@ async function loadPublicLinks() {
         
         const data = await response.json();
         
-        // Smart Data Extractor to scan across JSON layouts
+        // Smart Data Extractor to scan across different JSON layouts
         if (data.record) {
             if (data.record.links && Array.isArray(data.record.links)) {
                 localLinksCache = data.record.links;
@@ -92,7 +92,7 @@ function renderLinksList(records) {
     });
 }
 
-// 4. ADD NEW URL (100% OPEN PUBLIC UPLOAD - NO LOGIN REQUIRED)
+// 4. ADD NEW URL (PUBLIC UPLOAD - FORCED VERSION OVERWRITE)
 async function addNewLink() {
     const urlIn = document.getElementById('linkInput');
     const titleIn = document.getElementById('titleInput');
@@ -117,12 +117,13 @@ async function addNewLink() {
     localLinksCache.push(newEntry);
 
     try {
-        // Format 1 Upload Strategy
+        // Format 1: Overwrite using modern header configs to skip historical locks
         let response = await fetch(BIN_URL, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
-                'X-Master-Key': API_KEY
+                'X-Master-Key': API_KEY,
+                'X-Bin-Versioning': 'false' // Disables version creation locks
             },
             body: JSON.stringify({ links: localLinksCache })
         });
@@ -134,12 +135,13 @@ async function addNewLink() {
             return;
         }
 
-        // Format 2 Fallback Strategy
+        // Format 2 Fallback: Nested record syntax
         response = await fetch(BIN_URL, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
-                'X-Master-Key': API_KEY
+                'X-Master-Key': API_KEY,
+                'X-Bin-Versioning': 'false'
             },
             body: JSON.stringify({ record: { links: localLinksCache } })
         });
@@ -151,12 +153,13 @@ async function addNewLink() {
             return;
         }
 
-        // Format 3 Fallback Strategy
+        // Format 3 Fallback: Pure array format
         response = await fetch(BIN_URL, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
-                'X-Master-Key': API_KEY
+                'X-Master-Key': API_KEY,
+                'X-Bin-Versioning': 'false'
             },
             body: JSON.stringify(localLinksCache)
         });
@@ -168,29 +171,27 @@ async function addNewLink() {
             return;
         }
 
-        alert("Cloud storage rejected format handling.");
+        // If it still fails, print the real issue inside console log and inform user
+        const serverErrorDetails = await response.json();
+        console.error("CRITICAL JSONBIN ERROR RESPONSE:", serverErrorDetails);
+        alert("Server update rejected. Please check your browser Console log (F12) for error description details.");
 
     } catch (err) {
         console.error("Network Link Error:", err);
     }
 }
 
-// 5. REMOVE ITEM FROM LIVE STORAGE ARRAY (RESTRICTED WITH PASSWORD PROMPT)
+// 5. REMOVE ITEM FROM LIVE STORAGE ARRAY (PASSWORD PROTECTED)
 async function removeLinkItem(indexTarget) {
-    // Check if user is already authenticated from header login button.
-    // If they aren't logged in, prompt them for the owner password.
     if (!isAdminLoggedIn) {
         const passwordCheck = prompt("Security Lock: Enter Owner Password to delete this link:");
-        
-        if (passwordCheck === null) return; // User pressed cancel
-        
+        if (passwordCheck === null) return; 
         if (passwordCheck !== "admin123") {
             alert("Access Denied. Incorrect owner passphrase.");
-            return; // Terminate execution
+            return; 
         }
     }
 
-    // Passphrase confirmed, proceed with verification check
     if(!confirm("Are you sure you want to completely erase this data link?")) return;
 
     try {
@@ -198,21 +199,21 @@ async function removeLinkItem(indexTarget) {
 
         let response = await fetch(BIN_URL, {
             method: 'PUT',
-            headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY },
+            headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY, 'X-Bin-Versioning': 'false' },
             body: JSON.stringify({ links: localLinksCache })
         });
 
         if (!response.ok) {
             response = await fetch(BIN_URL, {
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY },
+                headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY, 'X-Bin-Versioning': 'false' },
                 body: JSON.stringify({ record: { links: localLinksCache } })
             });
             
             if(!response.ok) {
                 await fetch(BIN_URL, {
                     method: 'PUT',
-                    headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY },
+                    headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY, 'X-Bin-Versioning': 'false' },
                     body: JSON.stringify(localLinksCache)
                 });
             }
@@ -236,7 +237,7 @@ function initializeLoginSystem() {
             loginBtn.textContent = "🔒 Login";
             userStatus.textContent = "Guest";
             userStatus.style.color = ""; 
-            isAdminLoggedIn = false; // Turn off admin permissions
+            isAdminLoggedIn = false; 
             alert("Terminal connection closed. Logged out.");
             return;
         }
@@ -247,7 +248,7 @@ function initializeLoginSystem() {
             loginBtn.textContent = "🔓 Logout";
             userStatus.textContent = "Admin Root";
             userStatus.style.color = "#00e676"; 
-            isAdminLoggedIn = true; // Unlock all deletion rights instantly without prompts
+            isAdminLoggedIn = true; 
             alert("Access granted. Terminal running in Admin mode.");
         } else if (passwordInput !== null) {
             alert("Access Denied. Invalid terminal passphrase.");
