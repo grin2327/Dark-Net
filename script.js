@@ -1,10 +1,10 @@
-// Connected Credentials - Auto Setup Complete!
+// Connected Credentials - Auto Setup Complete with your dynamic Bin ID!
 const BIN_URL = "https://api.jsonbin.io/v3/b/6a092aef250b1311c3602575";
 const API_KEY = "$2a$10$lqtzvPNB028JnvmaxXVBv.XQAPheFwW5ak6/xiPLYZrOnrPkYJXra";
 
 let localLinksCache = []; 
 
-// 1. SYSTEM CLOCK & DATE CONFIGURATION
+// 1. LIVE SYSTEM CLOCK & DATE CONFIGURATION
 function startSystemClock() {
     const clockEl = document.getElementById('clockDisplay');
     const dateEl = document.getElementById('dateDisplay');
@@ -39,7 +39,16 @@ async function loadPublicLinks() {
         }
         
         const data = await response.json();
-        localLinksCache = data.record.links || [];
+        
+        // Safety lock: ensure data structure matches perfectly
+        if (data.record && data.record.links) {
+            localLinksCache = data.record.links;
+        } else if (Array.isArray(data.record)) {
+            localLinksCache = data.record;
+        } else {
+            localLinksCache = [];
+        }
+        
         renderLinksList(localLinksCache);
     } catch (err) {
         console.error(err);
@@ -166,8 +175,8 @@ document.getElementById('toggleVpnBtn').addEventListener('click', () => {
 });
 
 // INITIALIZATION
-document.getElementById('addLinkBtn').addEventListener('click', addNewLink);
-window.onload = () => {
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('addLinkBtn').addEventListener('click', addNewLink);
     startSystemClock();
     loadPublicLinks();
-};
+});
