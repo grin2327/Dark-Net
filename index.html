@@ -17,101 +17,208 @@
             color: #e0e0e0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             min-height: 100vh;
-            padding: 20px;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
         }
 
-        /* Top section styling */
+        .full-screen-container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            flex-grow: 1;
+        }
+
+        /* Top Status Bar Row */
+        .header-bar {
+            display: flex; 
+            flex-wrap: wrap; 
+            justify-content: space-between; 
+            gap: 20px; 
+            align-items: center;
+            background: rgba(255, 255, 255, 0.02);
+            padding: 20px 30px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 1.15rem;
+        }
+
+        .flex-group {
+            display: flex; 
+            flex-wrap: wrap; 
+            gap: 15px; 
+            align-items: center;
+        }
+
+        /* 4-Column Metric Grid */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            width: 100%;
+        }
+
         li {
             list-style: none;
-            margin: 15px 0;
-            font-size: 16px;
         }
 
-        div > li {
+        .card-item {
             background: rgba(255, 255, 255, 0.05);
-            padding: 15px 20px;
-            border-left: 3px solid #00d4ff;
-            border-radius: 8px;
+            padding: 25px 30px;
+            border-left: 5px solid #00d4ff;
+            border-radius: 10px;
             backdrop-filter: blur(10px);
             transition: all 0.3s ease;
             font-weight: 500;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 12px;
+            min-height: 130px;
         }
 
-        div > li:hover {
+        .card-item:hover {
             background: rgba(255, 255, 255, 0.1);
-            transform: translateX(5px);
-            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.25);
         }
 
-        /* Clock styling */
+        .card-label {
+            color: #a0a0a0; 
+            font-size: 0.95rem; 
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Full-Screen Input Controls */
+        .input-responsive {
+            padding: 16px 20px; 
+            border: 2px solid #00d4ff; 
+            border-radius: 8px; 
+            background: rgba(255, 255, 255, 0.1); 
+            color: #e0e0e0;
+            font-size: 1.1rem;
+            outline: none;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        
+        .input-responsive:focus {
+            background: rgba(0, 212, 255, 0.15);
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
+        }
+
+        /* CHANGED: Stacked Input Layout Container */
+        .link-creator-stacked {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+            margin-bottom: 30px;
+        }
+
+        /* Sub-row for external link and action button */
+        .link-bottom-row {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 15px;
+            align-items: center;
+            width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .link-bottom-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .search-box {
+            width: 100%;
+            max-width: 600px;
+            padding: 16px 20px; 
+            border: 2px solid #00d4ff; 
+            border-radius: 8px; 
+            background: rgba(255,255,255,0.08); 
+            color: #e0e0e0; 
+            font-weight: 500;
+            font-size: 1.1rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-box:focus {
+            background: rgba(0, 212, 255, 0.15);
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
+        }
+
+        /* Display Layouts */
         #clock {
             color: #00d4ff;
             font-weight: bold;
-            font-size: 18px;
+            font-size: 2rem; 
             font-family: 'Courier New', monospace;
+            letter-spacing: 1px;
         }
 
-        /* Date styling */
-        #date {
-            color: #00ff88;
-            font-weight: bold;
-        }
+        #date { color: #00ff88; font-weight: bold; font-size: 1.4rem; }
+        #live-track { font-weight: bold; color: #ff006e; font-size: 1.4rem; }
+        .web-link-text { font-size: 1.4rem; font-weight: bold; }
+        #vpn-status { color: #00ff88; font-weight: bold; }
+        #vpn-ip { color: #ffcc00; font-weight: bold; }
 
-        /* Number styling */
-        #number {
-            color: #ff006e;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        #number:hover {
-            color: #ff4d7d;
-            text-shadow: 0 0 10px rgba(255, 0, 110, 0.5);
-        }
-
-        /* Button styling */
+        /* Premium Dashboard Action Buttons */
         button {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
-            padding: 8px 16px;
-            border-radius: 5px;
+            padding: 16px 35px; 
+            border-radius: 8px;
             cursor: pointer;
             font-weight: bold;
+            font-size: 1.1rem;
             transition: all 0.3s ease;
-            margin-left: 10px;
+            white-space: nowrap;
+            height: 100%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
 
         button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 15px rgba(102, 126, 234, 0.6);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
         }
 
-        button:active {
-            transform: scale(0.98);
+        /* Main Container Engine */
+        .main-panel {
+            padding: 35px; 
+            background: rgba(255, 255, 255, 0.04); 
+            border-radius: 12px; 
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            flex-grow: 1;
         }
 
-        .login-icon {
-            font-size: 18px;
+        .panel-title {
+            font-size: 1.6rem;
+            color: #00d4ff;
+            margin-bottom: 20px;
         }
 
-        #vpn-status {
+        .section-title {
+            font-size: 1.6rem;
             color: #00ff88;
-            font-weight: bold;
+            margin-top: 35px;
+            margin-bottom: 20px;
         }
 
-        #vpn-ip {
-            color: #ffcc00;
-            font-weight: bold;
-        }
-
-        /* Link styling */
         a {
             color: #00d4ff;
             text-decoration: none;
             font-weight: bold;
             transition: all 0.3s ease;
-            position: relative;
+            word-break: break-all;
         }
 
         a:hover {
@@ -119,119 +226,119 @@
             text-shadow: 0 0 10px rgba(0, 212, 255, 0.7);
         }
 
-        a::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: #00d4ff;
-            transition: width 0.3s ease;
+        .link-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 25px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 8px;
+            margin-bottom: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            flex-wrap: wrap;
+            gap: 20px;
+            animation: slideIn 0.3s ease both;
         }
 
-        a:hover::after {
-            width: 100%;
-        }
-
-        /* Search box animations */
-        #search-query {
-            transition: all 0.3s ease;
-        }
-
-        #search-query:focus {
-            outline: none;
-            background: rgba(0, 212, 255, 0.15) !important;
-            box-shadow: 0 0 10px rgba(0, 212, 255, 0.4);
-            transform: scale(1.02);
-        }
-
-        #saved-links li {
-            animation: slideIn 0.4s ease;
-        }
+        .link-info { flex: 1; min-width: 300px; }
+        .link-info a { font-size: 1.3rem; }
 
         @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateX(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        @keyframes fadeOut {
-            from {
-                opacity: 1;
-            }
-            to {
-                opacity: 0;
-            }
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .no-results {
-            animation: fadeIn 0.3s ease;
             color: #a0a0a0;
-            padding: 10px 0;
+            padding: 40px 0;
             text-align: center;
             font-style: italic;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-
-        .search-highlight {
-            color: #00ff88;
-            font-weight: bold;
+            font-size: 1.2rem;
         }
     </style>
 </head>
 <body>
-    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; margin-bottom: 20px; align-items: center;">
-        <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center;">
-            <button id="login-toggle-button" onclick="toggleLoginForm()" style="display: inline-flex; align-items: center; gap: 8px;">
-                <span class="login-icon">🔒</span> Login
-            </button>
-            <button id="logout-button" onclick="logout()" style="display: none;">Logout</button>
-            <div id="login-status" style="font-weight: bold; color: #00ff88;">Guest</div>
+    <div class="full-screen-container">
+        
+        <div class="header-bar">
+            <div class="flex-group">
+                <button id="login-toggle-button" onclick="toggleLoginForm()" style="padding: 12px 25px;">
+                    <span style="margin-right: 8px;">🔒</span> Login
+                </button>
+                <button id="logout-button" onclick="logout()" style="display: none;">Logout</button>
+                <div id="login-status" style="font-weight: bold; color: #00ff88;">Guest</div>
+            </div>
+            <div class="flex-group">
+                <div style="background: rgba(255,255,255,0.05); padding: 12px 20px; border-radius: 8px; border-left: 4px solid #00d4ff;">
+                    VPN: <span id="vpn-status">Disabled</span>
+                </div>
+                <div style="background: rgba(255,255,255,0.05); padding: 12px 20px; border-radius: 8px; border-left: 4px solid #ffcc00;">
+                    IP: <span id="vpn-ip">Hidden</span>
+                </div>
+                <button onclick="toggleVPN()" style="padding: 12px 25px;">Toggle VPN</button>
+            </div>
         </div>
-        <div style="display: inline-flex; flex-wrap: wrap; gap: 10px; align-items: center;">
-            <div><li>VPN: <span id="vpn-status">Disabled</span></li></div>
-            <div><li>IP: <span id="vpn-ip">Hidden</span></li></div>
-            <button onclick="toggleVPN()" style="margin-left: 0;">Toggle VPN</button>
+
+        <div id="login-panel" style="display: none; padding: 30px; background: rgba(255, 255, 255, 0.05); border-radius: 12px; border: 2px solid rgba(0, 212, 255, 0.2); margin-bottom: 10px;">
+            <h3 style="color: #00d4ff; margin-bottom: 12px; font-size: 1.4rem;">Owner Login</h3>
+            <p style="margin-bottom: 20px; color: #e0e0e0; font-size: 1.1rem;">Default login: <strong>owner</strong> / <strong>admin123</strong></p>
+            <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                <input type="text" id="login-username" placeholder="Username" class="input-responsive" style="max-width: 300px;">
+                <input type="password" id="login-password" placeholder="Password" class="input-responsive" style="max-width: 300px;">
+                <button onclick="submitLogin()">Sign in</button>
+            </div>
         </div>
+
+        <div id="owner-section" style="display: none; padding: 25px; background: rgba(0, 255, 136, 0.08); border-radius: 12px; border: 1px solid rgba(0, 255, 136, 0.2); margin-bottom: 10px;">
+            <h3 style="color: #00ff88; margin-bottom: 8px; font-size: 1.4rem;">Owner Access Area</h3>
+            <p style="font-size: 1.15rem;">Welcome back, <span id="owner-name"></span>. You have access to owner-only controls.</p>
+        </div>
+
+        <div class="info-grid">
+            <div class="card-item">
+                <span class="card-label">System Time</span>
+                <span id="clock"></span>
+            </div>
+            <div class="card-item">
+                <span class="card-label">Calendar Date</span>
+                <span id="date"></span>
+            </div>
+            <div class="card-item" style="flex-direction: row; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+                <div>
+                    <div class="card-label" style="margin-bottom: 4px;">Live Track</div>
+                    <span id="live-track"></span>
+                </div>
+                <button onclick="resetLiveTrack()" style="padding: 8px 16px; font-size: 14px; height: auto;">Reset</button>
+            </div>
+            <div class="card-item">
+                <span class="card-label" style="margin-bottom: 4px;">Web Link</span>
+                <a href="https://www.youtube.com/@AMPIRESONGBD" target="_blank" class="web-link-text">YouTube Channel &rarr;</a>
+            </div>
+        </div>
+
+        <div class="main-panel">
+            <h3 class="panel-title">Add New Link</h3>
+            
+            <div class="link-creator-stacked">
+                <input type="text" id="link-title" placeholder="Link Title (optional)" class="input-responsive">
+                
+                <div class="link-bottom-row">
+                    <input type="text" id="link-url" placeholder="Enter URL (e.g., https://example.com)" class="input-responsive">
+                    <button onclick="addLink()">Add Link</button>
+                </div>
+            </div>
+
+            <div style="margin-top: 35px; margin-bottom: 25px;">
+                <input type="text" id="search-query" placeholder="🔍 Search links by title (real-time)" class="search-box">
+            </div>
+
+            <h3 class="section-title">Saved Links Database</h3>
+            <ul id="saved-links" style="list-style: none; padding: 0;"></ul>
+        </div>
+
     </div>
 
-    <div id="login-panel" style="display: none; margin-bottom: 20px; padding: 20px; background: rgba(255, 255, 255, 0.05); border-radius: 8px; border: 1px solid rgba(0, 212, 255, 0.2);">
-        <h3 style="color: #00d4ff; margin-bottom: 10px;">Owner Login</h3>
-        <p style="margin-bottom: 15px; color: #e0e0e0;">Default login: <strong>owner</strong> / <strong>admin123</strong></p>
-        <input type="text" id="login-username" placeholder="Username" style="padding: 8px; margin-right: 10px; margin-bottom: 10px; border: 1px solid #00d4ff; border-radius: 5px; background: rgba(255, 255, 255, 0.1); color: #e0e0e0;">
-        <input type="password" id="login-password" placeholder="Password" style="padding: 8px; margin-right: 10px; margin-bottom: 10px; border: 1px solid #00d4ff; border-radius: 5px; background: rgba(255, 255, 255, 0.1); color: #e0e0e0;">
-        <button onclick="submitLogin()" style="margin-left: 0;">Sign in</button>
-    </div>
-
-    <div id="owner-section" style="display: none; margin-bottom: 20px; padding: 20px; background: rgba(0, 255, 136, 0.08); border-radius: 8px; border: 1px solid rgba(0, 255, 136, 0.2);">
-        <h3 style="color: #00ff88; margin-bottom: 10px;">Owner Access Area</h3>
-        <p style="margin-bottom: 0;">Welcome back, <span id="owner-name"></span>. You have access to owner-only controls.</p>
-    </div>
-
-    <!-- top - lear -->
-    <div><li>Clock: <span id="clock"></span></li></div>
-    <div><li>Date: <span id="date"></span></li></div>
-    <div><li>Live Track: <span id="live-track"></span> <button onclick="resetLiveTrack()" style="margin-left: 10px;">Reset Views</button></li></div>
-    <div><li>Web View: <a href="https://www.youtube.com/@AMPIRESONGBD" target="_blank">YouTube Channel</a></li></div>
-    <!-- end - top - lear -->
-
- 
     <script>
-        // Real-time clock
         function updateClock() {
             const now = new Date();
             let hours = now.getHours();
@@ -239,37 +346,34 @@
             const seconds = String(now.getSeconds()).padStart(2, '0');
             const ampm = hours >= 12 ? 'PM' : 'AM';
             hours = hours % 12;
-            hours = hours ? hours : 12; // the hour '0' should be '12'
+            hours = hours ? hours : 12; 
             hours = String(hours).padStart(2, '0');
             document.getElementById('clock').textContent = `${hours}:${minutes}:${seconds} ${ampm}`;
         }
 
-        // Real date
         function updateDate() {
             const now = new Date();
             const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
             document.getElementById('date').textContent = now.toLocaleDateString('en-US', options);
         }
 
-        // Live track counter
         function updateLiveTrack() {
             const savedViews = parseInt(localStorage.getItem('liveViews') || '0', 10);
             const newViews = savedViews + 1;
             localStorage.setItem('liveViews', newViews);
-            document.getElementById('live-track').textContent = `${newViews} view${newViews === 1 ? '' : 's'} (live)`;
+            document.getElementById('live-track').textContent = `${newViews} view${newViews === 1 ? '' : 's'}`;
         }
 
         function resetLiveTrack() {
             localStorage.setItem('liveViews', '0');
-            document.getElementById('live-track').textContent = '0 views (live)';
+            document.getElementById('live-track').textContent = '0 views';
         }
 
         window.addEventListener('beforeunload', resetLiveTrack);
         window.addEventListener('pagehide', resetLiveTrack);
 
-        // Login and icon handling
         const defaultCredentials = { username: 'owner', password: 'admin123' };
-        const loginData = JSON.parse(localStorage.getItem('loginData') || '{"loggedIn":false,"username":"Guest"}');
+        let loginData = JSON.parse(localStorage.getItem('loginData') || '{"loggedIn":false,"username":"Guest"}');
 
         function updateLoginUI() {
             const loginToggleButton = document.getElementById('login-toggle-button');
@@ -325,7 +429,6 @@
             updateLoginUI();
         }
 
-        // VPN-style fake IP display
         function generateFakeIp() {
             const octets = Array.from({ length: 4 }, () => Math.floor(Math.random() * 256));
             return `${octets[0]}.${octets[1]}.${octets[2]}.${octets[3]}`;
@@ -343,95 +446,78 @@
             updateVPNDisplay();
         }
 
-        // Initialize clock and date
-        updateClock();
-        updateDate();
-        updateLiveTrack();
-        updateLoginUI();
-        updateVPNDisplay();
-        setInterval(updateClock, 1000); // Update clock every second
-
-        // Auto-save links functionality
-        let savedLinks = (JSON.parse(localStorage.getItem('savedLinks')) || [])
-            .map(link => ({
-                ...link,
-                addedAt: link.addedAt || new Date().toISOString()
-            }));
+        let savedLinks = JSON.parse(localStorage.getItem('savedLinks')) || [];
 
         function displaySavedLinks(filter = '') {
             const linksContainer = document.getElementById('saved-links');
             const query = filter.trim().toLowerCase();
-            const orderedLinks = savedLinks
-                .map((link, index) => ({ ...link, index }))
-                .sort((a, b) => new Date(b.addedAt) - new Date(a.addedAt));
-
+            const orderedLinks = [...savedLinks].sort((a, b) => new Date(b.addedAt) - new Date(a.addedAt));
             const filteredLinks = orderedLinks.filter(link => 
                 !query || link.title.toLowerCase().includes(query)
             );
 
-            // Fade out animation
-            linksContainer.style.opacity = '0';
-            linksContainer.style.transition = 'opacity 0.2s ease';
+            linksContainer.innerHTML = '';
 
-            setTimeout(() => {
-                linksContainer.innerHTML = '';
-                linksContainer.style.opacity = '1';
+            if (filteredLinks.length === 0) {
+                const noResultsLi = document.createElement('li');
+                noResultsLi.className = 'no-results';
+                noResultsLi.textContent = query ? `🔍 No links found matching "${query}"` : '📚 No links yet. Add one to get started!';
+                linksContainer.appendChild(noResultsLi);
+                return;
+            }
 
-                if (filteredLinks.length === 0) {
-                    const noResultsLi = document.createElement('li');
-                    noResultsLi.className = 'no-results';
-                    noResultsLi.textContent = query ? '🔍 No links found matching "' + query + '"' : '📚 No links yet. Add one to get started!';
-                    linksContainer.appendChild(noResultsLi);
-                    return;
-                }
-
-                filteredLinks.forEach((link, displayIndex) => {
-                    const li = document.createElement('li');
-                    const addedAtText = new Date(link.addedAt).toLocaleString('en-US', {
-                        month: 'short',
-                        day: 'numeric',
-                        year: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit'
-                    });
-                    li.style.display = 'flex';
-                    li.style.justifyContent = 'space-between';
-                    li.style.alignItems = 'center';
-                    li.style.padding = '10px 0';
-                    li.style.borderBottom = '1px solid rgba(255,255,255,0.08)';
-                    li.style.animation = `slideIn 0.4s ease ${displayIndex * 0.05}s both`;
-                    li.innerHTML = `
-                        <div style="flex: 1;">
-                            <a href="${link.url}" target="_blank">${link.title || link.url}</a>
-                            <div style="color: #a0a0a0; font-size: 0.9rem; margin-top: 4px;">
-                                Added on ${addedAtText}
-                            </div>
-                        </div>
-                        <button onclick="removeLink(${link.index})" style="margin-left: 15px; white-space: nowrap;">Remove</button>
-                    `;
-                    linksContainer.appendChild(li);
+            filteredLinks.forEach((link, displayIndex) => {
+                const li = document.createElement('li');
+                const addedAtText = new Date(link.addedAt).toLocaleString('en-US', {
+                    month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit'
                 });
-            }, 150);
+                
+                li.className = 'link-row';
+                li.style.animationDelay = `${displayIndex * 0.03}s`;
+                
+                li.innerHTML = `
+                    <div class="link-info">
+                        <a href="${link.url}" target="_blank">${link.title || link.url}</a>
+                        <div style="color: #a0a0a0; font-size: 0.95rem; margin-top: 6px;">
+                            Added on ${addedAtText}
+                        </div>
+                    </div>
+                    <button onclick="removeLink('${link.id}')" style="background: #e63946; padding: 10px 22px; height: auto;">Remove</button>
+                `;
+                linksContainer.appendChild(li);
+            });
         }
 
         function addLink() {
             const urlInput = document.getElementById('link-url');
             const titleInput = document.getElementById('link-title');
-            const url = urlInput.value.trim();
+            let url = urlInput.value.trim();
             const title = titleInput.value.trim() || url;
+            
             if (url) {
-                savedLinks.unshift({ url, title, addedAt: new Date().toISOString() });
+                if (!/^https?:\/\//i.test(url)) {
+                    url = 'https://' + url;
+                }
+                const newLink = { 
+                    id: Date.now().toString(),
+                    url, 
+                    title, 
+                    addedAt: new Date().toISOString() 
+                };
+                savedLinks.unshift(newLink);
                 localStorage.setItem('savedLinks', JSON.stringify(savedLinks));
-                displaySavedLinks(document.getElementById('search-query').value);
+                
                 urlInput.value = '';
                 titleInput.value = '';
+                
+                displaySavedLinks(document.getElementById('search-query').value);
             }
         }
 
-        function removeLink(index) {
+        function removeLink(uniqueId) {
             const password = prompt('Enter password to delete this link:');
             if (password === 'ME-1') {
-                savedLinks.splice(index, 1);
+                savedLinks = savedLinks.filter(link => link.id !== uniqueId);
                 localStorage.setItem('savedLinks', JSON.stringify(savedLinks));
                 displaySavedLinks(document.getElementById('search-query').value);
                 alert('Link deleted successfully!');
@@ -440,64 +526,22 @@
             }
         }
 
-        function filterLinks() {
-            const searchQuery = document.getElementById('search-query').value;
-            displaySavedLinks(searchQuery);
-        }
-
-        function clearSearch() {
-            const searchInput = document.getElementById('search-query');
-            searchInput.value = '';
-            searchInput.focus();
-            displaySavedLinks();
-        }
-
-        // Real-time search on input
         document.addEventListener('DOMContentLoaded', function() {
+            updateClock();
+            updateDate();
+            updateLiveTrack();
+            updateLoginUI();
+            updateVPNDisplay();
+            setInterval(updateClock, 1000);
+            displaySavedLinks();
+
             const searchInput = document.getElementById('search-query');
             if (searchInput) {
                 searchInput.addEventListener('input', function(e) {
                     displaySavedLinks(e.target.value);
-                });
-                searchInput.addEventListener('keypress', function(e) {
-                    if (e.key === 'Enter') {
-                        e.preventDefault();
-                        displaySavedLinks(e.target.value);
-                    }
                 });
             }
         });
-
-        // Load saved links on page load
-        displaySavedLinks();
-
-        // Trigger real-time filter on page load
-        setTimeout(() => {
-            const searchInput = document.getElementById('search-query');
-            if (searchInput) {
-                searchInput.addEventListener('input', function(e) {
-                    displaySavedLinks(e.target.value);
-                });
-            }
-        }, 100);
     </script>
-    <!-- mid - bottom layer -->
-
-    <!-- Bottom section for adding and displaying links -->
-    <div style="margin-top: 50px; padding: 20px; background: rgba(255, 255, 255, 0.05); border-radius: 8px; backdrop-filter: blur(10px);">
-        <h3 style="color: #00d4ff; margin-bottom: 15px;">Add New Link</h3>
-        <input type="text" id="link-url" placeholder="Enter URL (e.g., https://example.com)" style="padding: 8px; margin-right: 10px; margin-bottom: 10px; min-width: 260px; border: 1px solid #00d4ff; border-radius: 5px; background: rgba(255, 255, 255, 0.1); color: #e0e0e0;">
-        <input type="text" id="link-title" placeholder="Link Title (optional)" style="padding: 8px; margin-right: 10px; margin-bottom: 10px; min-width: 220px; border: 1px solid #00d4ff; border-radius: 5px; background: rgba(255, 255, 255, 0.1); color: #e0e0e0;">
-        <button onclick="addLink()" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; font-weight: bold;">Add Link</button>
-
-        <div style="margin-top: 20px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center;">
-            <input type="text" id="search-query" placeholder="🔍 Search links by title (real-time)" style="width: 30%; min-width: 180px; padding: 10px; border: 2px solid #00d4ff; border-radius: 5px; background: rgba(255,255,255,0.08); color: #e0e0e0; font-weight: 500;">
-        </div>
-
-        <h3 style="color: #00ff88; margin-top: 30px; margin-bottom: 15px;">Saved Links</h3>
-        <ul id="saved-links" style="list-style: none; padding: 0;"></ul>
-    </div>
-
-
 </body>
 </html>
