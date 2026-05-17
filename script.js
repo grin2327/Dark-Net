@@ -1,4 +1,4 @@
-// Connected Credentials - Auto Setup Complete with your dynamic Bin ID!
+// Connected Credentials - Fixed Nesting Structure!
 const BIN_URL = "https://api.jsonbin.io/v3/b/6a092aef250b1311c3602575";
 const API_KEY = "$2a$10$lqtzvPNB028JnvmaxXVBv.XQAPheFwW5ak6/xiPLYZrOnrPkYJXra";
 
@@ -40,11 +40,11 @@ async function loadPublicLinks() {
         
         const data = await response.json();
         
-        // Safety lock: ensure data structure matches perfectly
-        if (data.record && data.record.links) {
+        // Match your exact screenshot database layout structure
+        if (data.record && data.record.record && data.record.record.links) {
+            localLinksCache = data.record.record.links;
+        } else if (data.record && data.record.links) {
             localLinksCache = data.record.links;
-        } else if (Array.isArray(data.record)) {
-            localLinksCache = data.record;
         } else {
             localLinksCache = [];
         }
@@ -102,25 +102,33 @@ async function addNewLink() {
     const formattedTimestamp = `Added on ${dateStr}, ${timeStr}`;
 
     try {
+        // Add the new link details to our local storage tracker
         localLinksCache.push({
             url: cleanUrl,
             title: cleanTitle,
             timestamp: formattedTimestamp
         });
 
+        // Send the updated array back to JSONbin matching its exact expected layout
         const putResponse = await fetch(BIN_URL, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
                 'X-Master-Key': API_KEY
             },
-            body: JSON.stringify({ links: localLinksCache })
+            body: JSON.stringify({ 
+                record: {
+                    links: localLinksCache 
+                }
+            })
         });
 
         if (putResponse.ok) {
             urlIn.value = '';
             titleIn.value = '';
-            loadPublicLinks(); 
+            loadPublicLinks(); // Refresh the list instantly on screen!
+        } else {
+            alert("Server update rejected. Please try again.");
         }
     } catch (err) {
         console.error(err);
@@ -140,7 +148,11 @@ async function removeLinkItem(indexTarget) {
                 'Content-Type': 'application/json',
                 'X-Master-Key': API_KEY
             },
-            body: JSON.stringify({ links: localLinksCache })
+            body: JSON.stringify({ 
+                record: {
+                    links: localLinksCache 
+                }
+            })
         });
 
         if (putResponse.ok) {
