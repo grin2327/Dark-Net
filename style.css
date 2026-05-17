@@ -1,4 +1,4 @@
-/* Custom Neon Purple & Cyberpunk Spectrum - Big Text Fullscreen Edition */
+/* Custom Neon Purple & Cyberpunk Spectrum - Full Stealth Aesthetic */
 :root {
     --bg-main-gradient-start: #1c1537;
     --bg-main-gradient-end: #0f0b21;
@@ -66,7 +66,7 @@ header {
 .txt-cyan { color: var(--neon-cyan); font-weight: 600; }
 .txt-yellow { color: #ffb300; font-weight: 600; }
 
-/* USER INTERFACE PREMIUM BUTTONS */
+/* PREMIUM BUTTONS */
 button {
     border: none;
     border-radius: 8px;
@@ -92,13 +92,6 @@ button:active { transform: translateY(0); }
     font-size: 1rem; 
 }
 
-.btn-reset { 
-    background-color: #5c4e8c; 
-    color: #d1c4e9; 
-    padding: 6px 18px; 
-    font-size: 0.9rem; 
-}
-
 .btn-add-link { 
     background: var(--btn-purple-gradient); 
     color: #fff; 
@@ -116,7 +109,7 @@ button:active { transform: translateY(0); }
     border-radius: 6px; 
 }
 
-/* AUTOMATIC FLUID FULLSCREEN CONTAINER */
+/* FLUID FULLSCREEN CONTAINER */
 .main-layout-fullscreen {
     width: 100%;
     max-width: 96%; 
@@ -124,7 +117,7 @@ button:active { transform: translateY(0); }
     padding: 0 20px;
 }
 
-/* TOP GRID MODULE CARDS */
+/* CARDS */
 .info-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
@@ -179,7 +172,7 @@ button:active { transform: translateY(0); }
 }
 .youtube-link:hover { text-decoration: underline; color: #fff; }
 
-/* PANEL CONTAINER WRAPPERS */
+/* WRAPPERS */
 .form-container, .database-container {
     margin-bottom: 45px;
     width: 100%;
@@ -192,7 +185,7 @@ button:active { transform: translateY(0); }
     letter-spacing: 0.5px;
 }
 
-/* VERTICAL INPUT STACKING SYSTEM */
+/* INPUTS */
 .input-stack {
     display: flex;
     flex-direction: column;
@@ -233,13 +226,14 @@ button:active { transform: translateY(0); }
 
 .search-wrapper {
     max-width: 500px; 
+    margin-top: 15px;
 }
 .search-field {
     font-size: 1.1rem !important;
     padding: 12px 18px;
 }
 
-/* SAVED DATABASE LIST ITEMS */
+/* LIST ITEMS */
 .links-list-group {
     list-style: none;
     display: flex;
@@ -281,6 +275,6 @@ button:active { transform: translateY(0); }
 .empty-state {
     text-align: center;
     color: var(--text-muted-slate);
-    padding: 60px 0;
+    padding: 40px 0;
     font-size: 1.3rem;
 }
