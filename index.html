@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DRK-JU | HOME-PAGE</title>
+    <link rel="stylesheet" href="style.css?v=5">
+</head>
+<body>
+
+    <header>
+        <div class="nav-left">
+            <button id="loginBtn" class="btn-login">🔒 Login</button>
+            <span id="userStatus" class="status-guest">Guest</span>
+        </div>
+        <div class="nav-right">
+            <div class="nav-status">VPN: <span id="vpnStatus" class="txt-cyan">Disabled</span></div>
+            <div class="nav-status border-left">IP: <span class="txt-yellow">Hidden</span></div>
+            <button id="toggleVpnBtn" class="btn-toggle-vpn">Toggle VPN</button>
+        </div>
+    </header>
+
+    <main class="main-layout-fullscreen">
+        
+        <section class="info-grid">
+            <div class="info-card border-cyan">
+                <span class="info-label">SYSTEM TIME</span>
+                <div id="clockDisplay" class="info-value txt-cyan-neon">00:00:00 AM</div>
+            </div>
+            <div class="info-card border-green">
+                <span class="info-label">CALENDAR DATE</span>
+                <div id="dateDisplay" class="info-value txt-green-neon">Loading Date...</div>
+            </div>
+            <div class="info-card border-cyan">
+                <span class="info-label">LIVE TRACK</span>
+                <div class="info-row">
+                    <span id="viewCount" class="info-value txt-pink-neon">1 view</span>
+                </div>
+            </div>
+            <div class="info-card border-cyan">
+                <span class="info-label">WEB LINK</span>
+                <div class="info-value">
+                    <a href="https://www.youtube.com/@AMPIRESONGBD" target="_blank" class="youtube-link">YouTube Channel →</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="form-container">
+            <h3 class="section-heading txt-cyan-neon">Add New Link</h3>
+            
+            <div class="input-stack">
+                <input type="text" id="titleInput" class="custom-input" placeholder="Link Title (optional)">
+                
+                <div class="input-inline-row">
+                    <input type="text" id="linkInput" class="custom-input" placeholder="Enter URL (e.g., https://example.com)">
+                    <button id="addLinkBtn" class="btn-add-link">Add Link</button>
+                </div>
+            </div>
+
+            <div class="search-wrapper">
+                <input type="text" id="searchInput" class="custom-input search-field" placeholder="🔍 Search links by title (real-time)">
+            </div>
+        </section>
+
+        <section class="database-container">
+            <h3 class="section-heading txt-green-neon">Saved Links Database</h3>
+            <ul id="linkList" class="links-list-group">
+                </ul>
+        </section>
+
+    </main>
+
+    <script src="script.js?v=5"></script>
+</body>
+</html>
