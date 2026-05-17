@@ -4,7 +4,7 @@ const API_KEY = "YOUR_X_ACCESS_KEY";
 
 let localLinksCache = []; 
 
-// LIVE CLOCK SCHEDULER
+// 1. LIVE SYSTEM CLOCK SCHEDULER
 function startSystemClock() {
     const clockEl = document.getElementById('clockDisplay');
     if(!clockEl) return;
@@ -16,7 +16,7 @@ function startSystemClock() {
     setInterval(tick, 1000);
 }
 
-// FETCH SYSTEM DIRECTORY
+// 2. FETCH SYSTEM DIRECTORY FROM CLOUD
 async function loadPublicLinks() {
     const container = document.getElementById('linkList');
     container.innerHTML = '<div class="empty-state">Synchronizing secure cloud terminal streams...</div>';
@@ -26,6 +26,11 @@ async function loadPublicLinks() {
             method: 'GET',
             headers: { 'X-Master-Key': API_KEY }
         });
+        
+        if (!response.ok) {
+            throw new Error("Network response mismatch");
+        }
+        
         const data = await response.json();
         localLinksCache = data.record.links || [];
         renderLinksList(localLinksCache);
@@ -35,26 +40,29 @@ async function loadPublicLinks() {
     }
 }
 
-// RENDER FUNCTION INTERFACE WITH TIMESTAMP + DELETE ATTACHED
+// 3. RENDER FUNCTION INTERFACE WITH TIMESTAMP + REMOVE BUTTON
 function renderLinksList(records) {
     const container = document.getElementById('linkList');
     container.innerHTML = '';
 
     if (records.length === 0) {
-        container.innerHTML = '<div class="empty-state">📚 No links yet. Add one to get started!</div>';
+        container.innerHTML = '<div class="empty-state">🕵️ No Saved Links in database. Add a link above to get started!</div>';
         return;
     }
 
     records.forEach((item, index) => {
+        // Read object fields safely, fallback to item if it's an old plain-string URL
         const displayTitle = item.title || "UNTITLED RECORD";
+        const displayUrl = item.url || (typeof item === 'string' ? item : "#");
         const displayMeta = item.timestamp || "Added via Secure Node Portal";
 
         const li = document.createElement('li');
-        li.className = 'link-item-wrapper';
+        li.className = 'link-item-wrapper'; 
         li.innerHTML = `
             <div class="link-text-block">
                 <span class="rendered-title">${displayTitle}</span>
-                <span class="rendered-meta">${displayMeta}</span>
+                <a href="${displayUrl}" target="_blank" class="rendered-meta" style="color: var(--text-muted-slate); text-decoration: none;">${displayUrl}</a>
+                <span class="rendered-meta" style="margin-top: 4px; display: block; opacity: 0.6;">${displayMeta}</span>
             </div>
             <button class="btn-remove" onclick="removeLinkItem(${index})">Remove</button>
         `;
@@ -62,7 +70,7 @@ function renderLinksList(records) {
     });
 }
 
-// RECORD GENERATOR (WITH TIMESTAMP CREATION)
+// 4. RECORD GENERATOR (SAVES TITLE, URL & TIMESTAMP)
 async function addNewLink() {
     const urlIn = document.getElementById('linkInput');
     const titleIn = document.getElementById('titleInput');
@@ -72,7 +80,7 @@ async function addNewLink() {
 
     if (cleanUrl === '') return;
 
-    // Generate dynamic timestamp matching your screenshot format
+    // Generate accurate dynamic timestamp matching your screenshot format
     const now = new Date();
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     const dateStr = now.toLocaleDateString('en-US', options);
@@ -87,7 +95,7 @@ async function addNewLink() {
         const currentData = await getResponse.json();
         let currentArray = currentData.record.links || [];
 
-        // Save object setup tracking URL, custom Title, and individual Timestamp
+        // Save everything inside an structured object entry
         currentArray.push({
             url: cleanUrl,
             title: cleanTitle,
@@ -106,19 +114,19 @@ async function addNewLink() {
         if (putResponse.ok) {
             urlIn.value = '';
             titleIn.value = '';
-            loadPublicLinks();
+            loadPublicLinks(); // Refresh layout view instantly
         }
     } catch (err) {
         console.error(err);
     }
 }
 
-// REMOVE FUNCTION TERMINAL INTERFACE
+// 5. REMOVE ITEM FROM LIVE JSONBIN ARRAY
 async function removeLinkItem(indexTarget) {
     if(!confirm("Are you sure you want to remove this data link?")) return;
 
     try {
-        // Splice target selection out of the array list setup
+        // Remove selection from the local list cache array
         localLinksCache.splice(indexTarget, 1);
 
         const putResponse = await fetch(BIN_URL, {
@@ -131,37 +139,37 @@ async function removeLinkItem(indexTarget) {
         });
 
         if (putResponse.ok) {
-            loadPublicLinks(); // Refresh live view
+            loadPublicLinks(); // Reload database values layout
         }
     } catch (err) {
         console.error(err);
     }
 }
 
-// TEXT SELECTION LOOKUP KEYWORDS (REALTIME FILTER)
+// 6. REAL-TIME SEARCH FILTER SYSTEM
 document.getElementById('searchInput').addEventListener('input', (e) => {
     const query = e.target.value.toLowerCase();
     const filteredResults = localLinksCache.filter(item => {
         const matchTitle = (item.title || "").toLowerCase();
-        const matchUrl = (item.url || "").toLowerCase();
+        const matchUrl = (item.url || (typeof item === 'string' ? item : "")).toLowerCase();
         return matchTitle.includes(query) || matchUrl.includes(query);
     });
     renderLinksList(filteredResults);
 });
 
-// VPN MOCK ACTION SWITCH
+// 7. VPN INTERACTIVE ACTION SWITCH MOCKUP
 document.getElementById('toggleVpnBtn').addEventListener('click', () => {
     const vpn = document.getElementById('vpnStatus');
     if (vpn.textContent === "Disabled") {
         vpn.textContent = "Enabled";
-        vpn.style.color = "#26a69a";
+        vpn.style.color = "#00e676"; // Changes to bright green on active connect
     } else {
         vpn.textContent = "Disabled";
-        vpn.style.color = "#29b6f6";
+        vpn.style.color = "#00e5ff"; // Back to cyan on disconnect
     }
 });
 
-// INITIALIZATION
+// INITIALIZE APP ON RUN
 document.getElementById('addLinkBtn').addEventListener('click', addNewLink);
 window.onload = () => {
     startSystemClock();
