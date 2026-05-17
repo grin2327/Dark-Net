@@ -1,10 +1,10 @@
-// Replace these with your true live values from JSONbin dashboard
-const BIN_URL = "https://api.jsonbin.io/v3/b/YOUR_BIN_ID";
-const API_KEY = "YOUR_X_ACCESS_KEY";
+// Connected Credentials - Auto Setup Complete!
+const BIN_URL = "https://api.jsonbin.io/v3/b/6a092aef250b1311c3602575";
+const API_KEY = "$2a$10$lqtzvPNB028JnvmaxXVBv.XQAPheFwW5ak6/xiPLYZrOnrPkYJXra";
 
 let localLinksCache = []; 
 
-// 1. LIVE SYSTEM CLOCK & DATE CONFIGURATION
+// 1. SYSTEM CLOCK & DATE CONFIGURATION
 function startSystemClock() {
     const clockEl = document.getElementById('clockDisplay');
     const dateEl = document.getElementById('dateDisplay');
@@ -14,7 +14,6 @@ function startSystemClock() {
         if(clockEl) clockEl.textContent = now.toLocaleTimeString('en-US', { hour12: true });
     };
     
-    // Set Date Once
     if(dateEl) {
         const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
         dateEl.textContent = new Date().toLocaleDateString('en-US', options);
@@ -24,16 +23,10 @@ function startSystemClock() {
     setInterval(tick, 1000);
 }
 
-// 2. FETCH DIRECTORY (WITH AUTOMATIC REPAIR IF RECORD IS BLANK)
+// 2. FETCH DIRECTORY FROM SECURE NODE CLOUD
 async function loadPublicLinks() {
     const container = document.getElementById('linkList');
     container.innerHTML = '<div class="empty-state">Synchronizing secure cloud terminal streams...</div>';
-
-    // Anti-Crash Check: Warn user if they forgot to update their keys
-    if(BIN_URL.includes("YOUR_BIN_ID") || API_KEY.includes("YOUR_X_ACCESS_KEY")) {
-        container.innerHTML = '<div class="empty-state" style="color:#ef5350">Setup Error: Please enter your real BIN_ID and API_KEY inside script.js file.</div>';
-        return;
-    }
 
     try {
         const response = await fetch(`${BIN_URL}/latest`, {
@@ -46,18 +39,11 @@ async function loadPublicLinks() {
         }
         
         const data = await response.json();
-        
-        // Auto-initialize base record safely if JSONbin is fresh and blank
-        if (data.record === undefined || data.record === null) {
-            localLinksCache = [];
-        } else {
-            localLinksCache = data.record.links || [];
-        }
-        
+        localLinksCache = data.record.links || [];
         renderLinksList(localLinksCache);
     } catch (err) {
         console.error(err);
-        container.innerHTML = '<div class="empty-state" style="color:#ef5350">Handshake encryption failed. Verify your API keys or Access Control permissions.</div>';
+        container.innerHTML = '<div class="empty-state" style="color:#ef5350">Handshake encryption failed. Verify your JSONbin connections.</div>';
     }
 }
 
@@ -67,7 +53,7 @@ function renderLinksList(records) {
     container.innerHTML = '';
 
     if (!records || records.length === 0) {
-        container.innerHTML = '<div class="empty-state">🕵️ No Saved Links in database. Add a link above to get started!</div>';
+        container.innerHTML = '<div class="empty-state">📚 No Saved Links in database. Add a link above to get started!</div>';
         return;
     }
 
@@ -107,7 +93,6 @@ async function addNewLink() {
     const formattedTimestamp = `Added on ${dateStr}, ${timeStr}`;
 
     try {
-        // Append entry into local array setup
         localLinksCache.push({
             url: cleanUrl,
             title: cleanTitle,
@@ -127,8 +112,6 @@ async function addNewLink() {
             urlIn.value = '';
             titleIn.value = '';
             loadPublicLinks(); 
-        } else {
-            alert("Database write rejected. Check key limits.");
         }
     } catch (err) {
         console.error(err);
@@ -182,7 +165,7 @@ document.getElementById('toggleVpnBtn').addEventListener('click', () => {
     }
 });
 
-// STANDBY SCHEDULER INITIALIZATION
+// INITIALIZATION
 document.getElementById('addLinkBtn').addEventListener('click', addNewLink);
 window.onload = () => {
     startSystemClock();
