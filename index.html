@@ -4,18 +4,419 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DRK-JU | HOME-PAGE</title>
-    <link rel="stylesheet" href="style.css?v=5">
+    <style>
+        /* --- DESIGN SYSTEM: SMOOTH PREMIUM CYBER-PASTEL --- */
+        :root {
+            --bg-base: #0b0914;           
+            --primary-hot: #ff337a;       
+            --cute-cyan: #00e5ff;         
+            --accent-purple: #8a4fff;     
+            --neon-green: #2eff66;        
+            --text-main: #f4f2f7;
+            --text-muted: #857da1;
+            --panel-bg: rgba(23, 19, 41, 0.75); 
+            --glass-border: rgba(255, 255, 255, 0.05); 
+            --radius-lg: 20px;
+            --radius-sm: 12px;
+            --transition: all 0.25s ease-out;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background: var(--bg-base);
+            color: var(--text-main);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Ambient Lighting Background Layers */
+        body::before, body::after {
+            content: '';
+            position: fixed;
+            width: 40vw;
+            height: 40vw;
+            border-radius: 50%;
+            filter: blur(160px);
+            z-index: -1;
+            opacity: 0.12; 
+            pointer-events: none;
+        }
+        body::before {
+            background: var(--primary-hot);
+            top: -10%;
+            left: -5%;
+        }
+        body::after {
+            background: var(--accent-purple);
+            bottom: -10%;
+            right: -5%;
+        }
+
+        /* Custom Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-base);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #241f3d;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-purple);
+        }
+
+        /* --- NAVIGATION HEADER SYSTEM --- */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 5%;
+            background: rgba(13, 10, 24, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--glass-border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-left, .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .btn-login, .btn-toggle-vpn, .btn-shop {
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-login {
+            background: rgba(255, 255, 255, 0.04);
+            color: var(--text-main);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .btn-login:hover {
+            background: var(--text-main);
+            color: var(--bg-base);
+            transform: translateY(-1px);
+        }
+
+        .btn-shop {
+            background: linear-gradient(135deg, var(--primary-hot), #ff5287);
+            color: white;
+        }
+
+        .btn-shop:hover {
+            transform: translateY(-1px);
+            filter: brightness(1.1);
+        }
+
+        .btn-toggle-vpn {
+            background: rgba(0, 229, 255, 0.08);
+            color: var(--cute-cyan);
+            border: 1px solid rgba(0, 229, 255, 0.2);
+        }
+
+        .btn-toggle-vpn:hover {
+            background: var(--cute-cyan);
+            color: var(--bg-base);
+            transform: translateY(-1px);
+        }
+
+        .status-guest {
+            font-size: 0.8rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            background: linear-gradient(135deg, var(--primary-hot), var(--accent-purple));
+            padding: 6px 14px;
+            border-radius: 20px;
+            color: white;
+        }
+
+        .nav-status {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .border-left {
+            border-left: 1px solid var(--glass-border);
+            padding-left: 16px;
+        }
+
+        .txt-cyan { color: var(--cute-cyan); font-weight: 700; }
+        .txt-yellow { color: #ffc857; font-weight: 700; }
+        .txt-cyan-neon { color: var(--cute-cyan); font-weight: 800; }
+        .txt-green-neon { color: var(--neon-green); font-weight: 800; }
+        .txt-pink-neon { color: var(--primary-hot); font-weight: 800; }
+
+        /* --- MAIN MASTER LAYOUT --- */
+        .main-layout-fullscreen {
+            max-width: 1100px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 40px 20px;
+            flex: 1;
+        }
+
+        /* --- DASHBOARD ANALYTICS GRID --- */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .info-card {
+            background: var(--panel-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: var(--transition);
+        }
+
+        .info-card:hover {
+            transform: translateY(-3px);
+            background: rgba(28, 23, 48, 0.9);
+        }
+
+        .border-cyan:hover { border-color: rgba(0, 229, 255, 0.3); }
+        .border-green:hover { border-color: rgba(46, 255, 102, 0.3); }
+
+        .info-label {
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .info-value {
+            font-size: 1.35rem;
+            font-weight: 800;
+        }
+
+        .youtube-link {
+            color: var(--primary-hot);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 700;
+            transition: var(--transition);
+        }
+
+        .youtube-link:hover {
+            color: var(--text-main);
+            transform: translateX(3px);
+        }
+
+        /* --- INTERACTIVE FORM CONTAINER --- */
+        .form-container, .database-container {
+            background: var(--panel-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            margin-bottom: 40px;
+        }
+
+        .section-heading {
+            font-size: 1.1rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            margin-bottom: 22px;
+            text-transform: uppercase;
+        }
+
+        .input-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .input-inline-row {
+            display: flex;
+            gap: 14px;
+        }
+
+        .custom-input {
+            width: 100%;
+            background: #0f0c1f;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 14px 20px;
+            border-radius: var(--radius-sm);
+            color: var(--text-main);
+            font-size: 0.95rem;
+            font-weight: 600;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .custom-input:focus {
+            border-color: var(--cute-cyan);
+            background: #130f29;
+        }
+
+        .custom-input::placeholder {
+            color: #534c70;
+        }
+
+        .btn-add-link {
+            background: var(--text-main);
+            color: var(--bg-base);
+            border: none;
+            padding: 0 28px;
+            border-radius: var(--radius-sm);
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+
+        .btn-add-link:hover {
+            background: var(--cute-cyan);
+            transform: translateY(-1px);
+        }
+
+        .search-wrapper {
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            padding-top: 24px;
+        }
+
+        .search-field:focus {
+            border-color: var(--primary-hot);
+        }
+
+        /* --- DATA REFERENCE FEED MATRIX --- */
+        .database-container {
+            margin-bottom: 0;
+        }
+
+        .links-list-group {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .link-item {
+            background: rgba(15, 12, 31, 0.6);
+            border: 1px solid var(--glass-border);
+            padding: 16px 22px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: var(--transition);
+        }
+
+        .link-item:hover {
+            border-color: var(--accent-purple);
+            background: #0f0c1f;
+            transform: translateX(3px);
+        }
+
+        .link-details {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .link-title {
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .link-url {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .link-url:hover {
+            color: var(--cute-cyan);
+        }
+
+        .btn-delete-link {
+            background: rgba(255, 51, 122, 0.1);
+            color: var(--primary-hot);
+            border: 1px solid rgba(255, 51, 122, 0.2);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            transition: var(--transition);
+        }
+
+        .btn-delete-link:hover {
+            background: var(--primary-hot);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .empty-state {
+            color: var(--text-muted);
+            text-align: center;
+            padding: 24px 0;
+            font-style: italic;
+            font-size: 0.95rem;
+        }
+
+        /* --- RESPONSIVENESS MATRIX --- */
+        @media (max-width: 850px) {
+            header { flex-direction: column; gap: 16px; padding: 20px; text-align: center; }
+            .nav-left, .nav-right { width: 100%; justify-content: center; flex-wrap: wrap; }
+            .input-inline-row { flex-direction: column; }
+            .btn-add-link { padding: 14px; }
+        }
+    </style>
 </head>
 <body>
 
     <header>
         <div class="nav-left">
             <button id="loginBtn" class="btn-login">🔒 Login</button>
-            <span id="userStatus" class="status-guest">Guest</span>
         </div>
         <div class="nav-right">
+            <span id="userStatus" class="status-guest">Guest</span>
+            <a href="cute-dress-upload.html" class="btn-shop">🛍️ Shop Lookbook</a>
             <div class="nav-status">VPN: <span id="vpnStatus" class="txt-cyan">Disabled</span></div>
-            <div class="nav-status border-left">IP: <span class="txt-yellow">Hidden</span></div>
+            <div class="nav-status border-left">IP: <span id="ipDisplay" class="txt-yellow">Hidden</span></div>
             <button id="toggleVpnBtn" class="btn-toggle-vpn">Toggle VPN</button>
         </div>
     </header>
@@ -46,7 +447,7 @@
         </section>
 
         <section class="form-container">
-            <h3 class="section-heading txt-cyan-neon">Add New Link</h3>
+            <h3 class="section-heading txt-cyan-neon">✨ Add New Link</h3>
             
             <div class="input-stack">
                 <input type="text" id="titleInput" class="custom-input" placeholder="Link Title (optional)">
@@ -58,18 +459,161 @@
             </div>
 
             <div class="search-wrapper">
-                <input type="text" id="searchInput" class="custom-input search-field" placeholder="🔍 Search links by title (real-time)">
+                <input type="text" id="searchInput" class="custom-input search-field" placeholder="🔍 Search database links in real-time...">
             </div>
         </section>
 
         <section class="database-container">
-            <h3 class="section-heading txt-green-neon">Saved Links Database</h3>
+            <h3 class="section-heading txt-green-neon">🔮 Saved Links Database</h3>
             <ul id="linkList" class="links-list-group">
                 </ul>
         </section>
 
     </main>
 
-    <script src="script.js?v=5"></script>
+    <script>
+        let ipRotationInterval = null;
+
+        // Generates an isolated public IPv4 target string
+        function generateRandomIP() {
+            const part1 = Math.floor(Math.random() * 190) + 12; 
+            const part2 = Math.floor(Math.random() * 254);
+            const part3 = Math.floor(Math.random() * 254);
+            const part4 = Math.floor(Math.random() * 253) + 1;
+            document.getElementById('ipDisplay').textContent = `${part1}.${part2}.${part3}.${part4}`;
+        }
+
+        // Real-time Clock & Calendar Loops
+        function startSystemClock() {
+            const clockEl = document.getElementById('clockDisplay');
+            const dateEl = document.getElementById('dateDisplay');
+            
+            setInterval(() => {
+                const now = new Date();
+                clockEl.textContent = now.toLocaleTimeString();
+                
+                const options = { year: 'numeric', month: 'short', day: 'numeric' };
+                dateEl.textContent = now.toLocaleDateString('en-US', options);
+            }, 1000);
+        }
+
+        // Session Tracker Mock Simulation
+        function handleSessionTracking() {
+            const countEl = document.getElementById('viewCount');
+            let views = parseInt(sessionStorage.getItem('page_view_count') || '0', 10);
+            views++;
+            sessionStorage.setItem('page_view_count', views);
+            countEl.textContent = `${views} ${views === 1 ? 'view' : 'views'}`;
+        }
+
+        // Secure Login Verification Logic
+        document.getElementById('loginBtn').addEventListener('click', function() {
+            const userStatus = document.getElementById('userStatus');
+            
+            if (userStatus.textContent === 'Guest') {
+                // Prompt user for credentials to turn off the instant "auto-login"
+                const inputUser = prompt("Enter Admin Username:");
+                const inputPass = prompt("Enter Admin Password:");
+
+                // Verification check
+                if (inputUser === "admin" && inputPass === "admin123") {
+                    userStatus.textContent = 'Admin 👑';
+                    userStatus.style.background = 'linear-gradient(135deg, var(--cute-cyan), var(--accent-purple))';
+                    this.textContent = '🔒 Logout';
+                } else {
+                    alert("❌ Invalid credentials! Access Denied.");
+                }
+            } else {
+                // Instantly clean session state back to Guest on sign-out
+                userStatus.textContent = 'Guest';
+                userStatus.style.background = 'linear-gradient(135deg, var(--primary-hot), var(--accent-purple))';
+                this.textContent = '🔒 Login';
+            }
+        });
+
+        // Functional VPN Configuration Controls with 1-Minute Live Auto-Rotation Core
+        document.getElementById('toggleVpnBtn').addEventListener('click', function() {
+            const vpnStatus = document.getElementById('vpnStatus');
+            const ipDisplay = document.getElementById('ipDisplay');
+
+            if (vpnStatus.textContent === 'Disabled') {
+                vpnStatus.textContent = 'Enabled';
+                vpnStatus.className = 'txt-green-neon';
+                
+                generateRandomIP();
+                ipRotationInterval = setInterval(generateRandomIP, 60000);
+            } else {
+                vpnStatus.textContent = 'Disabled';
+                vpnStatus.className = 'txt-cyan';
+                
+                clearInterval(ipRotationInterval);
+                ipRotationInterval = null;
+                ipDisplay.textContent = 'Hidden';
+            }
+        });
+
+        // Local Storage Sync Engine
+        let savedLinks = JSON.parse(localStorage.getItem('drk_ju_links') || '[]');
+
+        function updateLinkGallery(filterQuery = '') {
+            const container = document.getElementById('linkList');
+            container.innerHTML = '';
+
+            const filteredData = savedLinks.filter(item => 
+                item.title.toLowerCase().includes(filterQuery.toLowerCase()) || 
+                item.url.toLowerCase().includes(filterQuery.toLowerCase())
+            );
+
+            if (filteredData.length === 0) {
+                container.innerHTML = '<li class="empty-state">No dynamic link entries discovered inside database.</li>';
+                return;
+            }
+
+            filteredData.forEach((link, indexedPos) => {
+                const li = document.createElement('li');
+                li.className = 'link-item';
+                li.innerHTML = `
+                    <div class="link-details">
+                        <span class="link-title">${link.title || 'Untitled Reference Look'}</span>
+                        <a href="${link.url}" target="_blank" class="link-url">${link.url}</a>
+                    </div>
+                    <button class="btn-delete-link" onclick="deleteLinkEntry(${indexedPos})">&times;</button>
+                `;
+                container.appendChild(li);
+            });
+        }
+
+        document.getElementById('addLinkBtn').addEventListener('click', () => {
+            const titleIn = document.getElementById('titleInput');
+            const urlIn = document.getElementById('linkInput');
+
+            if (!urlIn.value.trim()) return alert('Please enter a valid link address mapping.');
+
+            savedLinks.push({
+                title: titleIn.value.trim(),
+                url: urlIn.value.trim()
+            });
+
+            localStorage.setItem('drk_ju_links', JSON.stringify(savedLinks));
+            titleIn.value = '';
+            urlIn.value = '';
+            updateLinkGallery();
+        });
+
+        window.deleteLinkEntry = function(indexTarget) {
+            savedLinks.splice(indexTarget, 1);
+            localStorage.setItem('drk_ju_links', JSON.stringify(savedLinks));
+            updateLinkGallery();
+        };
+
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            updateLinkGallery(e.target.value);
+        });
+
+        // Initialize Native Engines
+        startSystemClock();
+        handleSessionTracking();
+        updateLinkGallery();
+    </script>
 </body>
 </html>

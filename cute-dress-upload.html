@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hot & Cute Dress Gallery</title>
+    <link rel="stylesheet" href="style.css?v=5">
+    <style>
+        /* --- LEGEND DESIGN SYSTEM --- */
+        :root {
+            --bg-dark: #0b0914;
+            --primary-hot: #ff2a6d;       /* Hot Neon Pink */
+            --primary-glow: rgba(255, 42, 109, 0.45);
+            --cute-purple: #9264ff;       /* Vibrant Soft Purple */
+            --cute-cyan: #05d9e8;         /* Electric Cyan Accent */
+            --glass-card: rgba(255, 255, 255, 0.04);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --text-light: #f5f5fa;
+            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-light);
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Ambient Glow System (Hot & Attractive Depth) */
+        body::before, body::after {
+            content: '';
+            position: fixed;
+            width: 45vw;
+            height: 45vw;
+            border-radius: 50%;
+            filter: blur(120px);
+            z-index: -1;
+            opacity: 0.35;
+            pointer-events: none;
+        }
+        body::before {
+            background: var(--primary-hot);
+            top: -10%;
+            right: -10%;
+            animation: pulseOrb 8s infinite alternate ease-in-out;
+        }
+        body::after {
+            background: var(--cute-purple);
+            bottom: -10%;
+            left: -10%;
+            animation: pulseOrb 8s infinite alternate-reverse ease-in-out;
+        }
+
+        @keyframes pulseOrb {
+            0% { transform: scale(1) translate(0, 0); }
+            100% { transform: scale(1.15) translate(30px, -20px); }
+        }
+
+        /* --- STUNNING NAVIGATION HEADER --- */
+        .nav-header {
+            max-width: 1100px;
+            margin: 0 auto 40px auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 14px 28px;
+            border-radius: 50px;
+            border: 1px solid var(--glass-border);
+        }
+
+        .btn-shop {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-shop:hover {
+            color: var(--primary-hot);
+            transform: translateX(-3px);
+        }
+
+        .status-guest {
+            background: linear-gradient(135deg, rgba(255,42,109,0.15), rgba(146,100,255,0.15));
+            border: 1px solid rgba(255, 42, 109, 0.3);
+            color: #ff8fa3;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* --- CONTAINER & MAIN HEADER --- */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        header.main-title-block {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        header.main-title-block h1 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            letter-spacing: -1.5px;
+            background: linear-gradient(45deg, var(--primary-hot), #ff85a2, var(--cute-purple));
+            background-size: 200% auto;
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            -webkit-text-fill-color: transparent;
+            animation: textShimmer 4s linear infinite;
+            display: inline-block;
+        }
+
+        @keyframes textShimmer {
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
+        }
+
+        header.main-title-block p {
+            color: #b0a8cd;
+            font-size: 1.2rem;
+            margin-top: 10px;
+            font-weight: 500;
+        }
+
+        /* --- THE UPLOAD ZONE (Ultra Modern Glassmorphism) --- */
+        .upload-area {
+            background: var(--glass-card);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 2px dashed rgba(255, 42, 109, 0.4);
+            border-radius: 28px;
+            padding: 60px 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-bottom: 45px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-area::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255,42,109,0.05), rgba(5,217,232,0.05));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .upload-area:hover,
+        .upload-area.dragover {
+            border-color: var(--cute-cyan);
+            box-shadow: 0 20px 50px rgba(5, 217, 232, 0.15);
+            transform: scale(1.015);
+        }
+
+        .upload-area:hover::before {
+            opacity: 1;
+        }
+
+        .upload-area .icon {
+            font-size: 4.5rem;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 0 15px var(--primary-glow));
+            animation: floatIcon 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes floatIcon {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-8px); }
+        }
+
+        .upload-area h2 {
+            color: var(--text-light);
+            font-size: 1.6rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .upload-area p {
+            color: #a096c7;
+            margin-top: 8px;
+            font-size: 1rem;
+        }
+
+        .upload-area input[type="file"] {
+            display: none;
+        }
+
+        /* --- SECTION CONTROLS --- */
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            gap: 12px;
+        }
+
+        .controls h2 {
+            color: var(--text-light);
+            font-size: 1.6rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Legend Gradient Hot Button */
+        .clear-btn {
+            background: linear-gradient(45deg, var(--primary-hot), #ff5e7e);
+            color: #fff;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 50px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 6px 20px var(--primary-glow);
+            transition: var(--transition);
+        }
+
+        .clear-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(255, 42, 109, 0.7);
+        }
+
+        /* --- THE GALLERY GRID & HOT CARDS --- */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 24px;
+        }
+
+        .gallery-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .gallery-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: rgba(255, 42, 109, 0.4);
+            box-shadow: 0 20px 40px rgba(255, 42, 109, 0.15);
+        }
+
+        .gallery-card .img-wrapper {
+            width: 100%;
+            height: 310px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .gallery-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        .gallery-card:hover img {
+            transform: scale(1.08);
+        }
+
+        .gallery-card .info {
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(11, 9, 20, 0.5);
+        }
+
+        .gallery-card .info span {
+            color: #e2dbff;
+            font-size: 0.95rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .gallery-card .delete-btn {
+            background: rgba(255, 42, 109, 0.1);
+            border: 1px solid rgba(255, 42, 109, 0.2);
+            color: var(--primary-hot);
+            font-size: 1.3rem;
+            cursor: pointer;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: var(--transition);
+            line-height: 1;
+        }
+
+        .gallery-card .delete-btn:hover {
+            background: var(--primary-hot);
+            color: #fff;
+            transform: rotate(90deg);
+            box-shadow: 0 0 15px var(--primary-glow);
+        }
+
+        /* Empty State */
+        .empty-msg {
+            grid-column: 1 / -1;
+            text-align: center;
+            color: #a096c7;
+            padding: 60px 20px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            background: var(--glass-card);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            backdrop-filter: blur(10px);
+        }
+
+        /* --- PREMIUM TOAST NOTIFICATION --- */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: linear-gradient(45deg, #1f1a3a, #0b0914);
+            border: 1px solid var(--primary-hot);
+            color: #fff;
+            padding: 16px 36px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1rem;
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            pointer-events: none;
+            box-shadow: 0 10px 40px var(--primary-glow), inset 0 0 10px rgba(255,42,109,0.2);
+            z-index: 1000;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* --- RESPONSIVE OPTIMIZATION --- */
+        @media (max-width: 768px) {
+            header.main-title-block h1 { font-size: 2.5rem; }
+            .upload-area { padding: 40px 20px; }
+            .gallery { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
+        }
+
+        @media (max-width: 480px) {
+            .nav-header { padding: 12px 20px; margin-bottom: 25px; }
+            header.main-title-block h1 { font-size: 2.1rem; }
+            .gallery { grid-template-columns: 1fr; }
+            .gallery-card .img-wrapper { height: 360px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Premium Navigation Bar -->
+    <nav class="nav-header">
+        <a href="index.html" class="btn-shop">✨ Home</a>
+        <span class="status-guest">⚡ Premium Guest</span>
+    </nav>
+
+    <div class="container">
+        <!-- Main Elegant Header -->
+        <header class="main-title-block">
+            <h1>🎀 Lookbook Studio</h1>
+            <p>Upload, organize, and showcase your absolute favorite aesthetic dress looks</p>
+        </header>
+
+        <!-- Dynamic Drop Zone -->
+        <div class="upload-area" id="dropZone">
+            <div class="icon">✨</div>
+            <h2>Drop your fire outfits here</h2>
+            <p>or tap to browse files &bull; PNG, JPG, WEBP</p>
+            <input type="file" id="fileInput" accept="image/*" multiple>
+        </div>
+
+        <!-- Controls panel -->
+        <div class="controls">
+            <h2>🍒 Your Gallery Collection</h2>
+            <button class="clear-btn" id="clearBtn">Clear Collection</button>
+        </div>
+
+        <!-- Main Workspace Gallery Container -->
+        <div class="gallery" id="gallery"></div>
+    </div>
+
+    <!-- Pop Toast Alert Notification System -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const gallery = document.getElementById('gallery');
+        const clearBtn = document.getElementById('clearBtn');
+        const toast = document.getElementById('toast');
+
+        let images = JSON.parse(localStorage.getItem('cute_dress_images') || '[]');
+
+        function showToast(msg) {
+            toast.textContent = msg;
+            toast.classList.add('show');
+            clearTimeout(toast._timer);
+            toast._timer = setTimeout(() => toast.classList.remove('show'), 2500);
+        }
+
+        function renderGallery() {
+            if (images.length === 0) {
+                gallery.innerHTML = '<div class="empty-msg">🪄 No looks saved yet. Drop an image up top to start your styling lookbook!</div>';
+                return;
+            }
+            gallery.innerHTML = images.map((src, i) => `
+                <div class="gallery-card">
+                    <div class="img-wrapper">
+                        <img src="${src}" alt="Dress Look ${i + 1}" loading="lazy">
+                    </div>
+                    <div class="info">
+                        <span>Look #0${i + 1}</span>
+                        <button class="delete-btn" data-index="${i}">&times;</button>
+                    </div>
+                </div>
+            `).join('');
+
+            document.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const idx = parseInt(e.target.closest('.delete-btn').dataset.index, 10);
+                    images.splice(idx, 1);
+                    localStorage.setItem('cute_dress_images', JSON.stringify(images));
+                    renderGallery();
+                    showToast('Look deleted successfully 💋');
+                });
+            });
+        }
+
+        function handleFiles(files) {
+            let added = 0;
+            for (const file of files) {
+                if (!file.type.startsWith('image/')) continue;
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    images.push(e.target.result);
+                    localStorage.setItem('cute_dress_images', JSON.stringify(images));
+                    added++;
+                    if (added === 1) showToast('Outfit added to lookbook! 💕');
+                };
+                reader.readAsDataURL(file);
+            }
+            
+            const check = setInterval(() => {
+                if (images.length > 0 && !document.querySelector('img[src=""]')) {
+                    renderGallery();
+                    clearInterval(check);
+                }
+            }, 100);
+            setTimeout(() => { renderGallery(); clearInterval(check); }, 500);
+        }
+
+        dropZone.addEventListener('click', () => fileInput.click());
+        fileInput.addEventListener('change', () => {
+            if (fileInput.files.length) handleFiles(fileInput.files);
+            fileInput.value = '';
+        });
+
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        });
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('dragover');
+        });
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            if (e.dataTransfer.files.length) handleFiles(e.dataTransfer.files);
+        });
+
+        clearBtn.addEventListener('click', () => {
+            if (images.length === 0) return;
+            if (confirm('Are you sure you want to clear your entire style collection?')) {
+                images = [];
+                localStorage.removeItem('cute_dress_images');
+                renderGallery();
+                showToast('Lookbook reset 💎');
+            }
+        });
+
+        renderGallery();
+    </script>
+</body>
+</html>

@@ -92,6 +92,21 @@ button:active { transform: translateY(0); }
     font-size: 1rem; 
 }
 
+/* Shop button */
+.btn-shop {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(90deg, #ff8a80, #ab47bc);
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 10px;
+    font-weight: 700;
+    text-decoration: none;
+    margin-left: 12px;
+}
+.btn-shop:hover { opacity: 0.95; transform: translateY(-1px); }
+
 .btn-add-link { 
     background: var(--btn-purple-gradient); 
     color: #fff; 

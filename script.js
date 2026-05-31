@@ -7,7 +7,7 @@ const RETRY_DELAY = 1000; // ms
 
 let localLinksCache = []; 
 let isAdminLoggedIn = false;
-let retryCount = 0; 
+let ipRotationInterval = null; // Track VPN interval loop
 
 // 1. LIVE SYSTEM CLOCK & DATE CONFIGURATION
 function startSystemClock() {
@@ -28,7 +28,7 @@ function startSystemClock() {
     setInterval(tick, 1000);
 }
 
-// 1.5. LOCAL STORAGE HELPER FUNCTIONS
+// 2. LOCAL STORAGE HELPER FUNCTIONS
 function saveToLocalStorage(data) {
     try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
@@ -47,25 +47,78 @@ function loadFromLocalStorage() {
     }
 }
 
-// 2. FETCH DIRECTORY FROM CLOUD STORAGE
+// 3. FETCH WITH TIMEOUT ENGINE
+async function fetchWithTimeout(resource, options = {}, timeout = 8000) {
+    const controller = new AbortController();
+    const id = setTimeout(() => controller.abort(), timeout);
+    try {
+        const res = await fetch(resource, { ...options, signal: controller.signal });
+        return res;
+    } finally {
+        clearTimeout(id);
+    }
+}
+
+// 4. CENTRAL ONLINE STORE ENGINE (Pushes cache arrays up to JSONBin)
+async function pushToCloud(dataArray) {
+    let success = false;
+    
+    // Structure Format Payload 1
+    let response = await fetchWithTimeout(BIN_URL, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Master-Key': API_KEY,
+            'X-Bin-Versioning': 'false'
+        },
+        body: JSON.stringify({ links: dataArray })
+    }, 8000).catch(() => null);
+
+    if (response && response.ok) return true;
+
+    // Structure Format Payload 2 Fallback
+    response = await fetchWithTimeout(BIN_URL, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Master-Key': API_KEY,
+            'X-Bin-Versioning': 'false'
+        },
+        body: JSON.stringify({ record: { links: dataArray } })
+    }, 8000).catch(() => null);
+
+    if (response && response.ok) return true;
+
+    // Structure Format Payload 3 Fallback
+    response = await fetchWithTimeout(BIN_URL, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Master-Key': API_KEY,
+            'X-Bin-Versioning': 'false'
+        },
+        body: JSON.stringify(dataArray)
+    }, 8000).catch(() => null);
+
+    if (response && response.ok) return true;
+
+    return false;
+}
+
+// 5. FETCH DIRECTORY FROM CLOUD STORAGE
 async function loadPublicLinks() {
     const container = document.getElementById('linkList');
-    container.innerHTML = '<div class="empty-state">Synchronizing secure cloud terminal streams...</div>';
+    if (container) container.innerHTML = '<div class="empty-state">Synchronizing secure cloud terminal streams...</div>';
 
     try {
-        const response = await fetch(`${BIN_URL}/latest`, {
-            method: 'GET',
-            headers: { 'X-Master-Key': API_KEY },
-            timeout: 8000
-        });
-        
-        if (!response.ok) {
-            throw new Error(`Server returned status: ${response.status}`);
+        const url = `${BIN_URL}/latest`;
+        const response = await fetchWithTimeout(url, { method: 'GET', headers: { 'X-Master-Key': API_KEY } }, 8000);
+
+        if (!response || !response.ok) {
+            throw new Error(`Server returned status offline or broken.`);
         }
-        
+
         const data = await response.json();
-        
-        // Smart Data Extractor to scan across different JSON layouts
         let extractedLinks = [];
         
         if (data.record) {
@@ -80,33 +133,34 @@ async function loadPublicLinks() {
             extractedLinks = data;
         }
         
-        // Validate extracted data
-        if (Array.isArray(extractedLinks) && extractedLinks.length > 0) {
+        if (Array.isArray(extractedLinks)) {
             localLinksCache = extractedLinks;
             saveToLocalStorage(localLinksCache);
-            retryCount = 0;
             renderLinksList(localLinksCache);
-        } else {
-            throw new Error("No valid data extracted from server");
+            return;
         }
+
+        throw new Error('No valid data extracted from server');
     } catch (err) {
-        console.error("Cloud sync error:", err);
+        console.error('Cloud sync error, falling back to offline cache:', err);
+
+        localLinksCache = loadFromLocalStorage();
+        renderLinksList(localLinksCache);
         
-        // Fallback to localStorage
-        const cachedData = loadFromLocalStorage();
-        if (cachedData && cachedData.length > 0) {
-            localLinksCache = cachedData;
-            renderLinksList(localLinksCache);
-            container.innerHTML = '<div class="empty-state" style="color:#ffeb3b; margin-top: -10px; font-size: 11px;">⚠️ Using cached data (offline mode)</div>' + container.innerHTML;
-        } else {
-            container.innerHTML = '<div class="empty-state" style="color:#ef5350">Handshake encryption failed. Verify your JSONbin connections.</div>';
+        if (container && localLinksCache.length > 0) {
+            const warningBadge = document.createElement('div');
+            warningBadge.className = 'empty-state';
+            warningBadge.style = 'color:#ffeb3b; margin-top: -10px; font-size: 11px;';
+            warningBadge.textContent = '⚠️ Operating in Offline Storage Mode (Local Copy)';
+            container.insertBefore(warningBadge, container.firstChild);
         }
     }
 }
 
-// 3. RENDER FUNCTION TERMINAL INTERFACE
+// 6. RENDER FUNCTION TERMINAL INTERFACE
 function renderLinksList(records) {
     const container = document.getElementById('linkList');
+    if (!container) return; 
     container.innerHTML = '';
 
     if (!records || !Array.isArray(records) || records.length === 0) {
@@ -115,34 +169,34 @@ function renderLinksList(records) {
     }
 
     records.forEach((item, index) => {
-        if (!item) return; // Skip invalid items
+        if (!item) return; 
         
         const displayTitle = (item.title || "UNTITLED RECORD").toString();
         const displayUrl = (item.url || (typeof item === 'string' ? item : "#")).toString();
         const displayMeta = (item.timestamp || "Added via Public Node Portal").toString();
 
         const li = document.createElement('li');
-        li.className = 'link-item-wrapper'; 
+        li.className = 'link-item'; 
         li.innerHTML = `
-            <div class="link-text-block">
-                <span class="rendered-title">${displayTitle}</span>
-                <a href="${displayUrl}" target="_blank" class="rendered-meta" style="color: var(--neon-cyan); text-decoration: none; margin-top:2px;">${displayUrl}</a>
-                <span class="rendered-meta" style="margin-top: 6px; display: block; opacity: 0.5;">${displayMeta}</span>
+            <div class="link-details">
+                <span class="link-title">${displayTitle}</span>
+                <a href="${displayUrl}" target="_blank" class="link-url">${displayUrl}</a>
+                <span class="rendered-meta" style="margin-top: 6px; display: block; opacity: 0.5; font-size: 0.75rem;">${displayMeta}</span>
             </div>
-            <button class="btn-remove" onclick="removeLinkItem(${index})">Remove</button>
+            <button class="btn-delete-link" onclick="removeLinkItem(${index})">&times;</button>
         `;
         container.appendChild(li);
     });
 }
 
-// 4. ADD NEW URL (PUBLIC UPLOAD - FORCED VERSION OVERWRITE)
+// 7. ADD NEW URL (Saves locally instantly, pushes online if connected)
 async function addNewLink() {
     const urlIn = document.getElementById('linkInput');
     const titleIn = document.getElementById('titleInput');
+    if (!urlIn) return; 
 
-    const cleanUrl = urlIn.value.trim();
-    const cleanTitle = titleIn.value.trim() || "UNTITLED SECURE NODE";
-
+    const cleanUrl = (urlIn.value || '').trim();
+    const cleanTitle = (titleIn && titleIn.value) ? titleIn.value.trim() : "UNTITLED SECURE NODE";
     if (cleanUrl === '') return;
 
     const now = new Date();
@@ -157,82 +211,30 @@ async function addNewLink() {
         timestamp: formattedTimestamp
     };
     
+    // Save locally first to guarantee no data loss
     localLinksCache.push(newEntry);
     saveToLocalStorage(localLinksCache);
+    renderLinksList(localLinksCache);
 
-    try {
-        let success = false;
+    // Clear inputs immediately
+    urlIn.value = '';
+    titleIn.value = '';
 
-        // Format 1: Standard format with versioning disabled
-        let response = await fetch(BIN_URL, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-Master-Key': API_KEY,
-                'X-Bin-Versioning': 'false'
-            },
-            body: JSON.stringify({ links: localLinksCache })
-        });
-
-        if (response.ok) {
-            success = true;
-        } else {
-            // Format 2 Fallback: Nested record syntax
-            response = await fetch(BIN_URL, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-Master-Key': API_KEY,
-                    'X-Bin-Versioning': 'false'
-                },
-                body: JSON.stringify({ record: { links: localLinksCache } })
-            });
-
-            if (response.ok) {
-                success = true;
-            } else {
-                // Format 3 Fallback: Pure array format
-                response = await fetch(BIN_URL, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Master-Key': API_KEY,
-                        'X-Bin-Versioning': 'false'
-                    },
-                    body: JSON.stringify(localLinksCache)
-                });
-
-                if (response.ok) {
-                    success = true;
-                }
-            }
-        }
-
-        if (success) {
-            urlIn.value = '';
-            titleIn.value = '';
+    // Check online visibility state
+    if (navigator.onLine) {
+        const cloudSynced = await pushToCloud(localLinksCache);
+        if (cloudSynced) {
+            console.log("Successfully stored online.");
             loadPublicLinks();
         } else {
-            // If server fails, data is saved locally anyway
-            const serverErrorDetails = await response.json().catch(() => ({}));
-            console.error("JSONBIN ERROR:", serverErrorDetails);
-            urlIn.value = '';
-            titleIn.value = '';
-            loadPublicLinks();
-            alert("Link saved locally. Cloud sync pending...");
+            alert("Saved locally. Cloud database failed to accept package.");
         }
-
-    } catch (err) {
-        console.error("Network error:", err);
-        // Data already saved to localStorage
-        urlIn.value = '';
-        titleIn.value = '';
-        loadPublicLinks();
-        alert("Link saved to local cache. Cloud will sync when available.");
+    } else {
+        alert("Device Offline! Link stored inside local storage cache. Will sync automatically when connected.");
     }
 }
 
-// 5. REMOVE ITEM FROM LIVE STORAGE ARRAY (PASSWORD PROTECTED)
+// 8. REMOVE ITEM FROM STORAGE ARRAY
 async function removeLinkItem(indexTarget) {
     if (!isAdminLoggedIn) {
         const passwordCheck = prompt("Security Lock: Enter Owner Password to delete this link:");
@@ -245,48 +247,21 @@ async function removeLinkItem(indexTarget) {
 
     if(!confirm("Are you sure you want to completely erase this data link?")) return;
 
-    try {
-        if (indexTarget < 0 || indexTarget >= localLinksCache.length) {
-            console.error("Invalid index for removal");
-            return;
-        }
+    if (indexTarget < 0 || indexTarget >= localLinksCache.length) return;
 
-        localLinksCache.splice(indexTarget, 1);
-        saveToLocalStorage(localLinksCache);
+    localLinksCache.splice(indexTarget, 1);
+    saveToLocalStorage(localLinksCache);
+    renderLinksList(localLinksCache);
 
-        let success = false;
-
-        let response = await fetch(BIN_URL, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY, 'X-Bin-Versioning': 'false' },
-            body: JSON.stringify({ links: localLinksCache })
-        });
-
-        if (!response.ok) {
-            response = await fetch(BIN_URL, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY, 'X-Bin-Versioning': 'false' },
-                body: JSON.stringify({ record: { links: localLinksCache } })
-            });
-            
-            if(!response.ok) {
-                await fetch(BIN_URL, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY, 'X-Bin-Versioning': 'false' },
-                    body: JSON.stringify(localLinksCache)
-                });
-            }
-        }
-        
+    if (navigator.onLine) {
+        await pushToCloud(localLinksCache);
         loadPublicLinks();
-    } catch (err) {
-        console.error("Remove item error:", err);
-        // Data already removed from localStorage
-        loadPublicLinks();
+    } else {
+        alert("Removed locally. Sync pending next online connection window.");
     }
 }
 
-// 6. HEADER LOGIN MODULE CONTROLLER
+// 9. HEADER LOGIN MODULE CONTROLLER
 function initializeLoginSystem() {
     const loginBtn = document.getElementById('loginBtn');
     const userStatus = document.getElementById('userStatus');
@@ -297,7 +272,7 @@ function initializeLoginSystem() {
         if (loginBtn.textContent.includes("Logout")) {
             loginBtn.textContent = "🔒 Login";
             userStatus.textContent = "Guest";
-            userStatus.style.color = ""; 
+            userStatus.style.background = 'linear-gradient(135deg, var(--primary-hot), var(--accent-purple))';
             isAdminLoggedIn = false; 
             alert("Terminal connection closed. Logged out.");
             return;
@@ -308,7 +283,7 @@ function initializeLoginSystem() {
         if (passwordInput === "admin123") {
             loginBtn.textContent = "🔓 Logout";
             userStatus.textContent = "Admin Root";
-            userStatus.style.color = "#00e676"; 
+            userStatus.style.background = 'linear-gradient(135deg, var(--cute-cyan), var(--accent-purple))';
             isAdminLoggedIn = true; 
             alert("Access granted. Terminal running in Admin mode.");
         } else if (passwordInput !== null) {
@@ -317,59 +292,84 @@ function initializeLoginSystem() {
     });
 }
 
-// 7. REAL-TIME SEARCH STREAM
-const searchInput = document.getElementById('searchInput');
-if (searchInput) {
-    searchInput.addEventListener('input', (e) => {
-        try {
-            const query = (e.target.value || '').toLowerCase();
-            const filteredResults = localLinksCache.filter(item => {
-                if (!item) return false;
-                const matchTitle = (item.title || "").toLowerCase();
-                const matchUrl = (item.url || (typeof item === 'string' ? item : "")).toLowerCase();
-                return matchTitle.includes(query) || matchUrl.includes(query);
-            });
-            renderLinksList(filteredResults);
-        } catch (err) {
-            console.error("Search error:", err);
-        }
-    });
+// 10. GENERATE RANDOM VPN IP ADDRESS
+function generateRandomIP() {
+    const part1 = Math.floor(Math.random() * 190) + 12; 
+    const part2 = Math.floor(Math.random() * 254);
+    const part3 = Math.floor(Math.random() * 254);
+    const part4 = Math.floor(Math.random() * 253) + 1;
+    const ipDisplay = document.getElementById('ipDisplay');
+    if (ipDisplay) ipDisplay.textContent = `${part1}.${part2}.${part3}.${part4}`;
 }
 
-// 8. VPN INTERACTIVE ACTION TOGGLE MOCKUP
-const toggleVpnBtn = document.getElementById('toggleVpnBtn');
-if (toggleVpnBtn) {
-    toggleVpnBtn.addEventListener('click', () => {
-        try {
-            const vpn = document.getElementById('vpnStatus');
-            if (vpn) {
-                if (vpn.textContent === "Disabled") {
-                    vpn.textContent = "Enabled";
-                    vpn.style.color = "#00e676"; 
-                } else {
-                    vpn.textContent = "Disabled";
-                    vpn.style.color = "#00e5ff"; 
-                }
-            }
-        } catch (err) {
-            console.error("VPN toggle error:", err);
+// 11. AUTOMATIC BACKGROUND ONLINE RECONNECT SYNCHRONIZER
+window.addEventListener('online', async () => {
+    console.log("Network status altered: Device connected online. Executing cloud update updates...");
+    const temporaryCache = loadFromLocalStorage();
+    if(temporaryCache.length > 0) {
+        const syncSuccess = await pushToCloud(temporaryCache);
+        if(syncSuccess) {
+            console.log("Background synchronization complete. Online storage match verified.");
+            loadPublicLinks();
         }
-    });
-}
+    }
+});
 
-// INITIALIZATION
+// INITIALIZATION AND EVENT LISTENERS
 document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('addLinkBtn').addEventListener('click', addNewLink);
     startSystemClock();
     initializeLoginSystem();
-    
-    // Load from localStorage first for instant UI
-    const cachedData = loadFromLocalStorage();
-    if (cachedData && cachedData.length > 0) {
-        localLinksCache = cachedData;
-        renderLinksList(localLinksCache);
+    loadPublicLinks(); // Seed system data from cloud target
+
+    const addBtn = document.getElementById('addLinkBtn');
+    if (addBtn) {
+        addBtn.addEventListener('click', (e) => { 
+            try { addNewLink(); } catch (err) { console.error(err); } 
+        });
     }
-    
-    // Then sync with cloud asynchronously
-    loadPublicLinks();
+
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            try {
+                const query = (e.target.value || '').toLowerCase();
+                const filteredResults = localLinksCache.filter(item => {
+                    if (!item) return false;
+                    const matchTitle = (item.title || "").toLowerCase();
+                    const matchUrl = (item.url || (typeof item === 'string' ? item : "")).toLowerCase();
+                    return matchTitle.includes(query) || matchUrl.includes(query);
+                });
+                renderLinksList(filteredResults);
+            } catch (err) {
+                console.error("Search error:", err);
+            }
+        });
+    }
+
+    const toggleVpnBtn = document.getElementById('toggleVpnBtn');
+    if (toggleVpnBtn) {
+        toggleVpnBtn.addEventListener('click', () => {
+            try {
+                const vpn = document.getElementById('vpnStatus');
+                const ipDisplay = document.getElementById('ipDisplay');
+                if (vpn) {
+                    if (vpn.textContent === "Disabled") {
+                        vpn.textContent = "Enabled";
+                        vpn.className = "txt-green-neon"; 
+                        generateRandomIP();
+                        // Rotates the IP address automatically every 60000ms (1 minute)
+                        ipRotationInterval = setInterval(generateRandomIP, 60000);
+                    } else {
+                        vpn.textContent = "Disabled";
+                        vpn.className = "txt-cyan"; 
+                        clearInterval(ipRotationInterval);
+                        ipRotationInterval = null;
+                        if (ipDisplay) ipDisplay.textContent = "Hidden";
+                    }
+                }
+            } catch (err) {
+                console.error("VPN implementation execution breakdown:", err);
+            }
+        });
+    }
 });
