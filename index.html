@@ -472,148 +472,251 @@
     </main>
 
     <script>
+        // ============================================================
+        // CLOUD SYNC CONFIG — JSONBin shared storage (all users share)
+        // ============================================================
+        const BIN_URL = "https://api.jsonbin.io/v3/b/6a092aef250b1311c3602575";
+        const API_KEY = "$2a$10$lqtzvPNB028JnvmaxXVBv.XQAPheFwW5ak6/xiPLYZrOnrPkYJXra";
+        const LOCAL_KEY = "drk_ju_links_cache";
+
+        let savedLinks = [];
+        let isAdminLoggedIn = false;
         let ipRotationInterval = null;
 
-        // Generates an isolated public IPv4 target string
-        function generateRandomIP() {
-            const part1 = Math.floor(Math.random() * 190) + 12; 
-            const part2 = Math.floor(Math.random() * 254);
-            const part3 = Math.floor(Math.random() * 254);
-            const part4 = Math.floor(Math.random() * 253) + 1;
-            document.getElementById('ipDisplay').textContent = `${part1}.${part2}.${part3}.${part4}`;
+        // ── Helpers ──────────────────────────────────────────────────
+        function saveLocal(data) {
+            try { localStorage.setItem(LOCAL_KEY, JSON.stringify(data)); } catch(e) {}
+        }
+        function loadLocal() {
+            try { return JSON.parse(localStorage.getItem(LOCAL_KEY) || '[]'); } catch(e) { return []; }
         }
 
-        // Real-time Clock & Calendar Loops
-        function startSystemClock() {
-            const clockEl = document.getElementById('clockDisplay');
-            const dateEl = document.getElementById('dateDisplay');
-            
-            setInterval(() => {
-                const now = new Date();
-                clockEl.textContent = now.toLocaleTimeString();
-                
-                const options = { year: 'numeric', month: 'short', day: 'numeric' };
-                dateEl.textContent = now.toLocaleDateString('en-US', options);
-            }, 1000);
+        async function fetchWithTimeout(url, opts = {}, ms = 8000) {
+            const ctrl = new AbortController();
+            const id = setTimeout(() => ctrl.abort(), ms);
+            try { return await fetch(url, { ...opts, signal: ctrl.signal }); }
+            finally { clearTimeout(id); }
         }
 
-        // Session Tracker Mock Simulation
-        function handleSessionTracking() {
-            const countEl = document.getElementById('viewCount');
-            let views = parseInt(sessionStorage.getItem('page_view_count') || '0', 10);
-            views++;
-            sessionStorage.setItem('page_view_count', views);
-            countEl.textContent = `${views} ${views === 1 ? 'view' : 'views'}`;
+        // ── Cloud Push ───────────────────────────────────────────────
+        async function pushToCloud(data) {
+            try {
+                const res = await fetchWithTimeout(BIN_URL, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Master-Key': API_KEY,
+                        'X-Bin-Versioning': 'false'
+                    },
+                    body: JSON.stringify({ links: data })
+                });
+                return res && res.ok;
+            } catch(e) { return false; }
         }
 
-        // Secure Login Verification Logic
-        document.getElementById('loginBtn').addEventListener('click', function() {
-            const userStatus = document.getElementById('userStatus');
-            
-            if (userStatus.textContent === 'Guest') {
-                // Prompt user for credentials to turn off the instant "auto-login"
-                const inputUser = prompt("Enter Admin Username:");
-                const inputPass = prompt("Enter Admin Password:");
+        // ── Cloud Pull ───────────────────────────────────────────────
+        async function loadFromCloud() {
+            const container = document.getElementById('linkList');
+            if (container) container.innerHTML = '<li class="empty-state" style="opacity:0.6">⏳ Syncing cloud database...</li>';
+            try {
+                const res = await fetchWithTimeout(`${BIN_URL}/latest`, {
+                    headers: { 'X-Master-Key': API_KEY }
+                });
+                if (!res || !res.ok) throw new Error('Cloud offline');
+                const data = await res.json();
 
-                // Verification check
-                if (inputUser === "admin" && inputPass === "admin123") {
-                    userStatus.textContent = 'Admin 👑';
-                    userStatus.style.background = 'linear-gradient(135deg, var(--cute-cyan), var(--accent-purple))';
-                    this.textContent = '🔒 Logout';
-                } else {
-                    alert("❌ Invalid credentials! Access Denied.");
+                // Extract links regardless of nesting format
+                let links = [];
+                if (data.record?.links && Array.isArray(data.record.links)) links = data.record.links;
+                else if (data.record?.record?.links) links = data.record.record.links;
+                else if (Array.isArray(data.record)) links = data.record;
+                else if (Array.isArray(data)) links = data;
+
+                savedLinks = links;
+                saveLocal(savedLinks);
+                updateLinkGallery();
+            } catch(e) {
+                console.warn('Cloud sync failed, using local cache:', e);
+                savedLinks = loadLocal();
+                updateLinkGallery();
+                const container = document.getElementById('linkList');
+                if (container && savedLinks.length > 0) {
+                    const warn = document.createElement('li');
+                    warn.style = 'color:#ffeb3b;font-size:11px;padding:4px 12px;opacity:0.7;list-style:none;';
+                    warn.textContent = '⚠️ Offline mode — showing cached data';
+                    container.insertBefore(warn, container.firstChild);
                 }
-            } else {
-                // Instantly clean session state back to Guest on sign-out
-                userStatus.textContent = 'Guest';
-                userStatus.style.background = 'linear-gradient(135deg, var(--primary-hot), var(--accent-purple))';
-                this.textContent = '🔒 Login';
             }
-        });
+        }
 
-        // Functional VPN Configuration Controls with 1-Minute Live Auto-Rotation Core
-        document.getElementById('toggleVpnBtn').addEventListener('click', function() {
-            const vpnStatus = document.getElementById('vpnStatus');
-            const ipDisplay = document.getElementById('ipDisplay');
-
-            if (vpnStatus.textContent === 'Disabled') {
-                vpnStatus.textContent = 'Enabled';
-                vpnStatus.className = 'txt-green-neon';
-                
-                generateRandomIP();
-                ipRotationInterval = setInterval(generateRandomIP, 60000);
-            } else {
-                vpnStatus.textContent = 'Disabled';
-                vpnStatus.className = 'txt-cyan';
-                
-                clearInterval(ipRotationInterval);
-                ipRotationInterval = null;
-                ipDisplay.textContent = 'Hidden';
-            }
-        });
-
-        // Local Storage Sync Engine
-        let savedLinks = JSON.parse(localStorage.getItem('drk_ju_links') || '[]');
-
+        // ── Render ───────────────────────────────────────────────────
         function updateLinkGallery(filterQuery = '') {
             const container = document.getElementById('linkList');
+            if (!container) return;
             container.innerHTML = '';
 
-            const filteredData = savedLinks.filter(item => 
-                item.title.toLowerCase().includes(filterQuery.toLowerCase()) || 
-                item.url.toLowerCase().includes(filterQuery.toLowerCase())
+            const filtered = savedLinks.filter(item =>
+                (item.title || '').toLowerCase().includes(filterQuery.toLowerCase()) ||
+                (item.url || '').toLowerCase().includes(filterQuery.toLowerCase())
             );
 
-            if (filteredData.length === 0) {
-                container.innerHTML = '<li class="empty-state">No dynamic link entries discovered inside database.</li>';
+            if (filtered.length === 0) {
+                container.innerHTML = '<li class="empty-state">📚 No links in database. Add one above!</li>';
                 return;
             }
 
-            filteredData.forEach((link, indexedPos) => {
+            filtered.forEach((link, i) => {
+                const realIndex = savedLinks.indexOf(link);
                 const li = document.createElement('li');
                 li.className = 'link-item';
                 li.innerHTML = `
                     <div class="link-details">
-                        <span class="link-title">${link.title || 'Untitled Reference Look'}</span>
+                        <span class="link-title">${link.title || 'Untitled'}</span>
                         <a href="${link.url}" target="_blank" class="link-url">${link.url}</a>
+                        ${link.timestamp ? `<span style="opacity:0.45;font-size:0.72rem;display:block;margin-top:4px">${link.timestamp}</span>` : ''}
                     </div>
-                    <button class="btn-delete-link" onclick="deleteLinkEntry(${indexedPos})">&times;</button>
+                    <button class="btn-delete-link" onclick="deleteLinkEntry(${realIndex})">&times;</button>
                 `;
                 container.appendChild(li);
             });
         }
 
-        document.getElementById('addLinkBtn').addEventListener('click', () => {
+        // ── Add Link ─────────────────────────────────────────────────
+        async function addNewLink() {
             const titleIn = document.getElementById('titleInput');
-            const urlIn = document.getElementById('linkInput');
+            const urlIn   = document.getElementById('linkInput');
+            if (!urlIn.value.trim()) return alert('Please enter a valid URL.');
 
-            if (!urlIn.value.trim()) return alert('Please enter a valid link address mapping.');
+            const now = new Date();
+            const newEntry = {
+                title: titleIn.value.trim() || 'Untitled',
+                url:   urlIn.value.trim(),
+                timestamp: `Added on ${now.toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' })}, ${now.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit', hour12:true })}`
+            };
 
-            savedLinks.push({
-                title: titleIn.value.trim(),
-                url: urlIn.value.trim()
-            });
-
-            localStorage.setItem('drk_ju_links', JSON.stringify(savedLinks));
+            savedLinks.push(newEntry);
+            saveLocal(savedLinks);
+            updateLinkGallery();
             titleIn.value = '';
             urlIn.value = '';
-            updateLinkGallery();
-        });
 
-        window.deleteLinkEntry = function(indexTarget) {
+            const btn = document.getElementById('addLinkBtn');
+            btn.textContent = '⏳ Saving...';
+            btn.disabled = true;
+
+            if (navigator.onLine) {
+                const ok = await pushToCloud(savedLinks);
+                btn.textContent = ok ? '✅ Saved!' : '⚠️ Local Only';
+                setTimeout(() => { btn.textContent = 'Add Link'; btn.disabled = false; }, 1800);
+                if (ok) await loadFromCloud();
+            } else {
+                btn.textContent = '📴 Offline';
+                setTimeout(() => { btn.textContent = 'Add Link'; btn.disabled = false; }, 1800);
+            }
+        }
+
+        // ── Delete Link ──────────────────────────────────────────────
+        window.deleteLinkEntry = async function(indexTarget) {
+            if (!isAdminLoggedIn) {
+                const pw = prompt("🔒 Enter Admin Password to delete:");
+                if (!pw) return;
+                if (pw !== "admin123") { alert("❌ Access Denied."); return; }
+            }
+            if (!confirm("Delete this link permanently?")) return;
             savedLinks.splice(indexTarget, 1);
-            localStorage.setItem('drk_ju_links', JSON.stringify(savedLinks));
+            saveLocal(savedLinks);
             updateLinkGallery();
+            if (navigator.onLine) await pushToCloud(savedLinks);
         };
 
+        // ── VPN Toggle ───────────────────────────────────────────────
+        function generateRandomIP() {
+            const r = () => Math.floor(Math.random() * 254);
+            const el = document.getElementById('ipDisplay');
+            if (el) el.textContent = `${Math.floor(Math.random()*190)+12}.${r()}.${r()}.${Math.floor(Math.random()*253)+1}`;
+        }
+
+        // ── Clock ────────────────────────────────────────────────────
+        function startSystemClock() {
+            const clockEl = document.getElementById('clockDisplay');
+            const dateEl  = document.getElementById('dateDisplay');
+            const tick = () => {
+                const now = new Date();
+                if (clockEl) clockEl.textContent = now.toLocaleTimeString();
+                if (dateEl)  dateEl.textContent  = now.toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' });
+            };
+            tick();
+            setInterval(tick, 1000);
+        }
+
+        // ── Session view counter ─────────────────────────────────────
+        function handleSessionTracking() {
+            const el = document.getElementById('viewCount');
+            if (!el) return;
+            let v = parseInt(sessionStorage.getItem('page_view_count') || '0') + 1;
+            sessionStorage.setItem('page_view_count', v);
+            el.textContent = `${v} ${v === 1 ? 'view' : 'views'}`;
+        }
+
+        // ── Login ────────────────────────────────────────────────────
+        document.getElementById('loginBtn').addEventListener('click', function() {
+            const userStatus = document.getElementById('userStatus');
+            if (isAdminLoggedIn) {
+                isAdminLoggedIn = false;
+                userStatus.textContent = 'Guest';
+                userStatus.style.background = 'linear-gradient(135deg, var(--primary-hot), var(--accent-purple))';
+                this.textContent = '🔒 Login';
+                return;
+            }
+            const u = prompt("Enter Admin Username:");
+            const p = prompt("Enter Admin Password:");
+            if (u === "admin" && p === "admin123") {
+                isAdminLoggedIn = true;
+                userStatus.textContent = 'Admin 👑';
+                userStatus.style.background = 'linear-gradient(135deg, var(--cute-cyan), var(--accent-purple))';
+                this.textContent = '🔓 Logout';
+            } else if (u !== null) {
+                alert("❌ Invalid credentials! Access Denied.");
+            }
+        });
+
+        // ── VPN Button ───────────────────────────────────────────────
+        document.getElementById('toggleVpnBtn').addEventListener('click', function() {
+            const vpnStatus = document.getElementById('vpnStatus');
+            const ipDisplay = document.getElementById('ipDisplay');
+            if (vpnStatus.textContent === 'Disabled') {
+                vpnStatus.textContent = 'Enabled';
+                vpnStatus.className = 'txt-green-neon';
+                generateRandomIP();
+                ipRotationInterval = setInterval(generateRandomIP, 60000);
+            } else {
+                vpnStatus.textContent = 'Disabled';
+                vpnStatus.className = 'txt-cyan';
+                clearInterval(ipRotationInterval);
+                ipRotationInterval = null;
+                if (ipDisplay) ipDisplay.textContent = 'Hidden';
+            }
+        });
+
+        // ── Add button ───────────────────────────────────────────────
+        document.getElementById('addLinkBtn').addEventListener('click', addNewLink);
+
+        // ── Search ───────────────────────────────────────────────────
         document.getElementById('searchInput').addEventListener('input', function(e) {
             updateLinkGallery(e.target.value);
         });
 
-        // Initialize Native Engines
+        // ── Auto-sync when back online ───────────────────────────────
+        window.addEventListener('online', async () => {
+            const local = loadLocal();
+            if (local.length > 0) await pushToCloud(local);
+            await loadFromCloud();
+        });
+
+        // ── BOOT ─────────────────────────────────────────────────────
         startSystemClock();
         handleSessionTracking();
-        updateLinkGallery();
+        loadFromCloud(); // Load from cloud so ALL users see the same links
     </script>
 </body>
 </html>
