@@ -1,13 +1,22 @@
-// Connected Credentials - Public Upload Fix with Version Overwrite Bypasses
+// Connected Credentials
 const BIN_URL = "https://api.jsonbin.io/v3/b/6a092aef250b1311c3602575";
+// NOTE: Hardcoding API keys in frontend JS is not secure for production apps!
 const API_KEY = "$2a$10$lqtzvPNB028JnvmaxXVBv.XQAPheFwW5ak6/xiPLYZrOnrPkYJXra";
 const STORAGE_KEY = "darknet_links_cache";
-const MAX_RETRIES = 3;
-const RETRY_DELAY = 1000; // ms
 
 let localLinksCache = []; 
 let isAdminLoggedIn = false;
-let ipRotationInterval = null; // Track VPN interval loop
+let ipRotationInterval = null;
+
+// --- UTILITIES ---
+
+// Pro Tip: Always escape user input to prevent XSS (Cross-Site Scripting) attacks
+function escapeHTML(str) {
+    if (!str) return "";
+    return str.replace(/[&<>'"]/g, tag => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+    }[tag]));
+}
 
 // 1. LIVE SYSTEM CLOCK & DATE CONFIGURATION
 function startSystemClock() {
@@ -16,7 +25,9 @@ function startSystemClock() {
     
     const tick = () => {
         const now = new Date();
-        if(clockEl) clockEl.textContent = now.toLocaleTimeString('en-US', { hour12: true });
+        if(clockEl) {
+            clockEl.textContent = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
+        }
     };
     
     if(dateEl) {
@@ -37,6 +48,7 @@ function saveToLocalStorage(data) {
     }
 }
 
+// Fixed to guarantee deep copy initialization
 function loadFromLocalStorage() {
     try {
         const saved = localStorage.getItem(STORAGE_KEY);
@@ -52,18 +64,16 @@ async function fetchWithTimeout(resource, options = {}, timeout = 8000) {
     const controller = new AbortController();
     const id = setTimeout(() => controller.abort(), timeout);
     try {
-        const res = await fetch(resource, { ...options, signal: controller.signal });
-        return res;
+        return await fetch(resource, { ...options, signal: controller.signal });
     } finally {
         clearTimeout(id);
     }
 }
 
-// 4. CENTRAL ONLINE STORE ENGINE (Pushes cache arrays up to JSONBin)
+// 4. CENTRAL ONLINE STORE ENGINE 
 async function pushToCloud(dataArray) {
-    let success = false;
+    const payload = JSON.stringify({ links: dataArray });
     
-    // Structure Format Payload 1
     let response = await fetchWithTimeout(BIN_URL, {
         method: 'PUT',
         headers: {
@@ -71,93 +81,51 @@ async function pushToCloud(dataArray) {
             'X-Master-Key': API_KEY,
             'X-Bin-Versioning': 'false'
         },
-        body: JSON.stringify({ links: dataArray })
+        body: payload
     }, 8000).catch(() => null);
 
-    if (response && response.ok) return true;
-
-    // Structure Format Payload 2 Fallback
-    response = await fetchWithTimeout(BIN_URL, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-Master-Key': API_KEY,
-            'X-Bin-Versioning': 'false'
-        },
-        body: JSON.stringify({ record: { links: dataArray } })
-    }, 8000).catch(() => null);
-
-    if (response && response.ok) return true;
-
-    // Structure Format Payload 3 Fallback
-    response = await fetchWithTimeout(BIN_URL, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-Master-Key': API_KEY,
-            'X-Bin-Versioning': 'false'
-        },
-        body: JSON.stringify(dataArray)
-    }, 8000).catch(() => null);
-
-    if (response && response.ok) return true;
-
-    return false;
+    return !!(response && response.ok);
 }
 
 // 5. FETCH DIRECTORY FROM CLOUD STORAGE
 async function loadPublicLinks() {
-    const container = document.getElementById('linkList');
-    if (container) container.innerHTML = '<div class="empty-state">Synchronizing secure cloud terminal streams...</div>';
-
     try {
         const url = `${BIN_URL}/latest`;
         const response = await fetchWithTimeout(url, { method: 'GET', headers: { 'X-Master-Key': API_KEY } }, 8000);
 
-        if (!response || !response.ok) {
-            throw new Error(`Server returned status offline or broken.`);
-        }
+        if (!response || !response.ok) throw new Error(`Server offline.`);
 
         const data = await response.json();
         let extractedLinks = [];
         
-        if (data.record) {
-            if (data.record.links && Array.isArray(data.record.links)) {
-                extractedLinks = data.record.links;
-            } else if (data.record.record && data.record.record.links && Array.isArray(data.record.record.links)) {
-                extractedLinks = data.record.record.links;
-            } else if (Array.isArray(data.record)) {
-                extractedLinks = data.record;
-            }
+        if (data.record && Array.isArray(data.record.links)) {
+            extractedLinks = data.record.links;
+        } else if (data.record && Array.isArray(data.record)) {
+            extractedLinks = data.record;
         } else if (Array.isArray(data)) {
             extractedLinks = data;
         }
         
-        if (Array.isArray(extractedLinks)) {
-            localLinksCache = extractedLinks;
-            saveToLocalStorage(localLinksCache);
-            renderLinksList(localLinksCache);
-            return;
-        }
-
-        throw new Error('No valid data extracted from server');
-    } catch (err) {
-        console.error('Cloud sync error, falling back to offline cache:', err);
-
-        localLinksCache = loadFromLocalStorage();
+        const mergedMap = new Map();
+        [...localLinksCache, ...extractedLinks].forEach(item => {
+            if (!item || !item.url) return;
+            const key = item.url.trim();
+            if (!mergedMap.has(key)) {
+                mergedMap.set(key, item);
+            }
+        });
+        
+        localLinksCache = Array.from(mergedMap.values());
+        saveToLocalStorage(localLinksCache);
         renderLinksList(localLinksCache);
         
-        if (container && localLinksCache.length > 0) {
-            const warningBadge = document.createElement('div');
-            warningBadge.className = 'empty-state';
-            warningBadge.style = 'color:#ffeb3b; margin-top: -10px; font-size: 11px;';
-            warningBadge.textContent = '⚠️ Operating in Offline Storage Mode (Local Copy)';
-            container.insertBefore(warningBadge, container.firstChild);
-        }
+    } catch (err) {
+        console.error('Cloud sync error, keeping local cache:', err);
+        renderLinksList(localLinksCache);
     }
 }
 
-// 6. RENDER FUNCTION TERMINAL INTERFACE
+// 6. RENDER FUNCTION INTERFACE
 function renderLinksList(records) {
     const container = document.getElementById('linkList');
     if (!container) return; 
@@ -171,9 +139,9 @@ function renderLinksList(records) {
     records.forEach((item, index) => {
         if (!item) return; 
         
-        const displayTitle = (item.title || "UNTITLED RECORD").toString();
-        const displayUrl = (item.url || (typeof item === 'string' ? item : "#")).toString();
-        const displayMeta = (item.timestamp || "Added via Public Node Portal").toString();
+        const displayTitle = escapeHTML(item.title || "UNTITLED RECORD");
+        const displayUrl = escapeHTML(item.url || "#");
+        const displayMeta = escapeHTML(item.timestamp || "Added via Public Node Portal");
 
         const li = document.createElement('li');
         li.className = 'link-item'; 
@@ -189,65 +157,55 @@ function renderLinksList(records) {
     });
 }
 
-// 7. ADD NEW URL (Saves locally instantly, pushes online if connected)
+// 7. ADD NEW URL
 async function addNewLink() {
     const urlIn = document.getElementById('linkInput');
     const titleIn = document.getElementById('titleInput');
     if (!urlIn) return; 
 
-    const cleanUrl = (urlIn.value || '').trim();
-    const cleanTitle = (titleIn && titleIn.value) ? titleIn.value.trim() : "UNTITLED SECURE NODE";
-    if (cleanUrl === '') return;
+    const cleanUrl = urlIn.value.trim();
+    const cleanTitle = titleIn && titleIn.value ? titleIn.value.trim() : "UNTITLED SECURE NODE";
+    
+    if (cleanUrl === '') return alert('Please input a valid URL configuration link.');
 
     const now = new Date();
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    const dateStr = now.toLocaleDateString('en-US', options);
+    const dateStr = now.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
     const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
-    const formattedTimestamp = `Added on ${dateStr}, ${timeStr}`;
-
+    
     const newEntry = {
         url: cleanUrl,
         title: cleanTitle,
-        timestamp: formattedTimestamp
+        timestamp: `Added on ${dateStr}, ${timeStr}`
     };
     
-    // Save locally first to guarantee no data loss
     localLinksCache.push(newEntry);
     saveToLocalStorage(localLinksCache);
     renderLinksList(localLinksCache);
 
-    // Clear inputs immediately
     urlIn.value = '';
-    titleIn.value = '';
+    if(titleIn) titleIn.value = '';
 
-    // Check online visibility state
     if (navigator.onLine) {
         const cloudSynced = await pushToCloud(localLinksCache);
         if (cloudSynced) {
-            console.log("Successfully stored online.");
             loadPublicLinks();
         } else {
-            alert("Saved locally. Cloud database failed to accept package.");
+            alert("Saved locally. Cloud database update failed.");
         }
     } else {
-        alert("Device Offline! Link stored inside local storage cache. Will sync automatically when connected.");
+        alert("Stored inside offline cache. Will sync when network connection is restored.");
     }
 }
 
-// 8. REMOVE ITEM FROM STORAGE ARRAY
+// 8. REMOVE ITEM FROM STORAGE
 async function removeLinkItem(indexTarget) {
     if (!isAdminLoggedIn) {
         const passwordCheck = prompt("Security Lock: Enter Owner Password to delete this link:");
         if (passwordCheck === null) return; 
-        if (passwordCheck !== "admin123") {
-            alert("Access Denied. Incorrect owner passphrase.");
-            return; 
-        }
+        if (passwordCheck !== "admin123") return alert("Access Denied. Incorrect owner passphrase.");
     }
 
     if(!confirm("Are you sure you want to completely erase this data link?")) return;
-
-    if (indexTarget < 0 || indexTarget >= localLinksCache.length) return;
 
     localLinksCache.splice(indexTarget, 1);
     saveToLocalStorage(localLinksCache);
@@ -256,35 +214,30 @@ async function removeLinkItem(indexTarget) {
     if (navigator.onLine) {
         await pushToCloud(localLinksCache);
         loadPublicLinks();
-    } else {
-        alert("Removed locally. Sync pending next online connection window.");
     }
 }
 
-// 9. HEADER LOGIN MODULE CONTROLLER
+// 9. HEADER LOGIN MODULE (Fixed to preserve state securely on refresh)
 function initializeLoginSystem() {
     const loginBtn = document.getElementById('loginBtn');
     const userStatus = document.getElementById('userStatus');
-
     if (!loginBtn || !userStatus) return;
 
+    // Fixed: Changed from sessionStorage to localStorage
+    if (localStorage.getItem('admin_session') === 'true') {
+        setAdminState(loginBtn, userStatus, true);
+    }
+
     loginBtn.addEventListener('click', () => {
-        if (loginBtn.textContent.includes("Logout")) {
-            loginBtn.textContent = "🔒 Login";
-            userStatus.textContent = "Guest";
-            userStatus.style.background = 'linear-gradient(135deg, var(--primary-hot), var(--accent-purple))';
-            isAdminLoggedIn = false; 
+        if (isAdminLoggedIn) {
+            setAdminState(loginBtn, userStatus, false);
             alert("Terminal connection closed. Logged out.");
             return;
         }
 
         const passwordInput = prompt("Enter Terminal Security Password:");
-        
         if (passwordInput === "admin123") {
-            loginBtn.textContent = "🔓 Logout";
-            userStatus.textContent = "Admin Root";
-            userStatus.style.background = 'linear-gradient(135deg, var(--cute-cyan), var(--accent-purple))';
-            isAdminLoggedIn = true; 
+            setAdminState(loginBtn, userStatus, true);
             alert("Access granted. Terminal running in Admin mode.");
         } else if (passwordInput !== null) {
             alert("Access Denied. Invalid terminal passphrase.");
@@ -292,83 +245,112 @@ function initializeLoginSystem() {
     });
 }
 
-// 10. GENERATE RANDOM VPN IP ADDRESS
+function setAdminState(btn, statusEl, isLoggedIn) {
+    isAdminLoggedIn = isLoggedIn;
+    if (isLoggedIn) {
+        btn.textContent = "🔓 Logout";
+        statusEl.textContent = "Admin Root";
+        statusEl.style.background = 'linear-gradient(135deg, var(--cute-cyan), var(--accent-purple))';
+        localStorage.setItem('admin_session', 'true'); // Fixed
+    } else {
+        btn.textContent = "🔒 Login";
+        statusEl.textContent = "Guest";
+        statusEl.style.background = 'linear-gradient(135deg, var(--primary-hot), var(--accent-purple))';
+        localStorage.removeItem('admin_session'); // Fixed
+    }
+}
+
+// 10. GENERATE RANDOM VPN IP (Fixed to save changes)
 function generateRandomIP() {
     const part1 = Math.floor(Math.random() * 190) + 12; 
     const part2 = Math.floor(Math.random() * 254);
     const part3 = Math.floor(Math.random() * 254);
     const part4 = Math.floor(Math.random() * 253) + 1;
     const ipDisplay = document.getElementById('ipDisplay');
-    if (ipDisplay) ipDisplay.textContent = `${part1}.${part2}.${part3}.${part4}`;
+    
+    const generatedIp = `${part1}.${part2}.${part3}.${part4}`;
+    if (ipDisplay) ipDisplay.textContent = generatedIp;
+    
+    // Save to cache so a refresh doesn't alter a current active session IP
+    localStorage.setItem('vpn_ip_cache', generatedIp);
 }
 
-// 11. AUTOMATIC BACKGROUND ONLINE RECONNECT SYNCHRONIZER
-window.addEventListener('online', async () => {
-    console.log("Network status altered: Device connected online. Executing cloud update updates...");
-    const temporaryCache = loadFromLocalStorage();
-    if(temporaryCache.length > 0) {
-        const syncSuccess = await pushToCloud(temporaryCache);
-        if(syncSuccess) {
-            console.log("Background synchronization complete. Online storage match verified.");
-            loadPublicLinks();
-        }
-    }
-});
+// 11. PERSISTENT VPN TRACKING ENGINE (New Logic added to survive reloads)
+function initializeVpnSystem() {
+    const vpn = document.getElementById('vpnStatus');
+    const ipDisplay = document.getElementById('ipDisplay');
+    if (!vpn) return;
 
-// INITIALIZATION AND EVENT LISTENERS
+    const savedVpnStatus = localStorage.getItem('vpn_status_cache') || 'Disabled';
+    const savedIp = localStorage.getItem('vpn_ip_cache') || 'Hidden';
+
+    if (savedVpnStatus === "Enabled") {
+        vpn.textContent = "Enabled";
+        vpn.className = "txt-green-neon";
+        if (ipDisplay) ipDisplay.textContent = savedIp;
+        
+        // Resume rotation loops cleanly
+        if (ipRotationInterval) clearInterval(ipRotationInterval);
+        ipRotationInterval = setInterval(generateRandomIP, 60000);
+    } else {
+        vpn.textContent = "Disabled";
+        vpn.className = "txt-cyan";
+        if (ipDisplay) ipDisplay.textContent = "Hidden";
+    }
+}
+
+// --- INITIALIZATION ---
 document.addEventListener('DOMContentLoaded', () => {
     startSystemClock();
     initializeLoginSystem();
-    loadPublicLinks(); // Seed system data from cloud target
+    initializeVpnSystem(); // Boot up VPN structural memory sync
 
+    // Load instantly from cache for better UX, then sync cloud
+    localLinksCache = loadFromLocalStorage();
+    renderLinksList(localLinksCache);
+    loadPublicLinks(); 
+
+    // Setup Event Listeners
     const addBtn = document.getElementById('addLinkBtn');
-    if (addBtn) {
-        addBtn.addEventListener('click', (e) => { 
-            try { addNewLink(); } catch (err) { console.error(err); } 
-        });
-    }
+    if (addBtn) addBtn.addEventListener('click', addNewLink);
 
     const searchInput = document.getElementById('searchInput');
     if (searchInput) {
         searchInput.addEventListener('input', (e) => {
-            try {
-                const query = (e.target.value || '').toLowerCase();
-                const filteredResults = localLinksCache.filter(item => {
-                    if (!item) return false;
-                    const matchTitle = (item.title || "").toLowerCase();
-                    const matchUrl = (item.url || (typeof item === 'string' ? item : "")).toLowerCase();
-                    return matchTitle.includes(query) || matchUrl.includes(query);
-                });
-                renderLinksList(filteredResults);
-            } catch (err) {
-                console.error("Search error:", err);
-            }
+            const query = (e.target.value || '').toLowerCase();
+            const filteredResults = localLinksCache.filter(item => {
+                if (!item) return false;
+                return (item.title || "").toLowerCase().includes(query) || 
+                       (item.url || "").toLowerCase().includes(query);
+            });
+            renderLinksList(filteredResults);
         });
     }
 
     const toggleVpnBtn = document.getElementById('toggleVpnBtn');
     if (toggleVpnBtn) {
         toggleVpnBtn.addEventListener('click', () => {
-            try {
-                const vpn = document.getElementById('vpnStatus');
-                const ipDisplay = document.getElementById('ipDisplay');
-                if (vpn) {
-                    if (vpn.textContent === "Disabled") {
-                        vpn.textContent = "Enabled";
-                        vpn.className = "txt-green-neon"; 
-                        generateRandomIP();
-                        // Rotates the IP address automatically every 60000ms (1 minute)
-                        ipRotationInterval = setInterval(generateRandomIP, 60000);
-                    } else {
-                        vpn.textContent = "Disabled";
-                        vpn.className = "txt-cyan"; 
-                        clearInterval(ipRotationInterval);
-                        ipRotationInterval = null;
-                        if (ipDisplay) ipDisplay.textContent = "Hidden";
-                    }
-                }
-            } catch (err) {
-                console.error("VPN implementation execution breakdown:", err);
+            const vpn = document.getElementById('vpnStatus');
+            const ipDisplay = document.getElementById('ipDisplay');
+            if (!vpn) return;
+
+            if (vpn.textContent.trim() === "Disabled") {
+                vpn.textContent = "Enabled";
+                vpn.className = "txt-green-neon"; 
+                localStorage.setItem('vpn_status_cache', 'Enabled');
+                generateRandomIP();
+                
+                if (ipRotationInterval) clearInterval(ipRotationInterval);
+                ipRotationInterval = setInterval(generateRandomIP, 60000);
+            } else {
+                vpn.textContent = "Disabled";
+                vpn.className = "txt-cyan"; 
+                localStorage.setItem('vpn_status_cache', 'Disabled');
+                localStorage.setItem('vpn_ip_cache', 'Hidden');
+                
+                clearInterval(ipRotationInterval);
+                ipRotationInterval = null;
+                if (ipDisplay) ipDisplay.textContent = "Hidden";
             }
         });
     }
