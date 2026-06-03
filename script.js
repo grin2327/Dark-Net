@@ -1,45 +1,69 @@
-// Connected Credentials
+// ==========================================
+//  NIOM IT - Link Directory App
+//  Connected Credentials
+//  বিঃদ্রঃ: এগুলো প্রোডাকশনে ব্যাকএন্ডে রাখা উচিত
+// ==========================================
+
 const BIN_URL = "https://api.jsonbin.io/v3/b/6a092aef250b1311c3602575";
-// NOTE: Hardcoding API keys in frontend JS is not secure for production apps!
 const API_KEY = "$2a$10$lqtzvPNB028JnvmaxXVBv.XQAPheFwW5ak6/xiPLYZrOnrPkYJXra";
 const STORAGE_KEY = "darknet_links_cache";
 
-let localLinksCache = []; 
+let localLinksCache = [];
 let isAdminLoggedIn = false;
 let ipRotationInterval = null;
 
-// --- UTILITIES ---
 
-// Pro Tip: Always escape user input to prevent XSS (Cross-Site Scripting) attacks
+// ==========================================
+//  UTILITIES
+// ==========================================
+
+// XSS প্রতিরোধ করার জন্য HTML এস্কেপ ফাংশন
 function escapeHTML(str) {
     if (!str) return "";
     return str.replace(/[&<>'"]/g, tag => ({
-        '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        "'": '&#39;',
+        '"': '&quot;'
     }[tag]));
 }
 
-// 1. LIVE SYSTEM CLOCK & DATE CONFIGURATION
+
+// ==========================================
+//  ১. লাইভ সিস্টেম ক্লক
+// ==========================================
+
 function startSystemClock() {
     const clockEl = document.getElementById('clockDisplay');
     const dateEl = document.getElementById('dateDisplay');
-    
+
     const tick = () => {
         const now = new Date();
-        if(clockEl) {
-            clockEl.textContent = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
+        if (clockEl) {
+            clockEl.textContent = now.toLocaleTimeString('en-US', {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: true
+            });
         }
     };
-    
-    if(dateEl) {
+
+    if (dateEl) {
         const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
         dateEl.textContent = new Date().toLocaleDateString('en-US', options);
     }
-    
+
     tick();
     setInterval(tick, 1000);
 }
 
-// 2. LOCAL STORAGE HELPER FUNCTIONS
+
+// ==========================================
+//  ২. লোকাল স্টোরেজ হেল্পার ফাংশনস
+// ==========================================
+
 function saveToLocalStorage(data) {
     try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
@@ -48,7 +72,6 @@ function saveToLocalStorage(data) {
     }
 }
 
-// Fixed to guarantee deep copy initialization
 function loadFromLocalStorage() {
     try {
         const saved = localStorage.getItem(STORAGE_KEY);
@@ -59,7 +82,11 @@ function loadFromLocalStorage() {
     }
 }
 
-// 3. FETCH WITH TIMEOUT ENGINE
+
+// ==========================================
+//  ৩. ফেচ টাইমআউট ইঞ্জিন
+// ==========================================
+
 async function fetchWithTimeout(resource, options = {}, timeout = 8000) {
     const controller = new AbortController();
     const id = setTimeout(() => controller.abort(), timeout);
@@ -70,34 +97,54 @@ async function fetchWithTimeout(resource, options = {}, timeout = 8000) {
     }
 }
 
-// 4. CENTRAL ONLINE STORE ENGINE 
-async function pushToCloud(dataArray) {
-    const payload = JSON.stringify({ links: dataArray });
-    
-    let response = await fetchWithTimeout(BIN_URL, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-Master-Key': API_KEY,
-            'X-Bin-Versioning': 'false'
-        },
-        body: payload
-    }, 8000).catch(() => null);
 
-    return !!(response && response.ok);
+// ==========================================
+//  ৪. ক্লাউড সার্ভারে ডেটা পুশ (Admin Only)
+// ==========================================
+
+async function pushToCloud(dataArray) {
+    if (!isAdminLoggedIn) {
+        alert("Unauthorized Action: Please login to sync with cloud.");
+        return false;
+    }
+
+    const payload = JSON.stringify({ links: dataArray });
+    try {
+        let response = await fetchWithTimeout(BIN_URL, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Master-Key': API_KEY,
+                'X-Bin-Versioning': 'false'
+            },
+            body: payload
+        }, 8000);
+
+        return !!(response && response.ok);
+    } catch (error) {
+        console.error("Cloud Sync Failed:", error);
+        return false;
+    }
 }
 
-// 5. FETCH DIRECTORY FROM CLOUD STORAGE
+
+// ==========================================
+//  ৫. ক্লাউড থেকে ডেটা লোড ও মার্জ
+// ==========================================
+
 async function loadPublicLinks() {
     try {
         const url = `${BIN_URL}/latest`;
-        const response = await fetchWithTimeout(url, { method: 'GET', headers: { 'X-Master-Key': API_KEY } }, 8000);
+        const response = await fetchWithTimeout(url, {
+            method: 'GET',
+            headers: { 'X-Master-Key': API_KEY }
+        }, 8000);
 
         if (!response || !response.ok) throw new Error(`Server offline.`);
 
         const data = await response.json();
         let extractedLinks = [];
-        
+
         if (data.record && Array.isArray(data.record.links)) {
             extractedLinks = data.record.links;
         } else if (data.record && Array.isArray(data.record)) {
@@ -105,7 +152,8 @@ async function loadPublicLinks() {
         } else if (Array.isArray(data)) {
             extractedLinks = data;
         }
-        
+
+        // ডুপ্লিকেট রিমুভ করে লোকাল + ক্লাউড মার্জ
         const mergedMap = new Map();
         [...localLinksCache, ...extractedLinks].forEach(item => {
             if (!item || !item.url) return;
@@ -114,42 +162,48 @@ async function loadPublicLinks() {
                 mergedMap.set(key, item);
             }
         });
-        
+
         localLinksCache = Array.from(mergedMap.values());
         saveToLocalStorage(localLinksCache);
         renderLinksList(localLinksCache);
-        
+
     } catch (err) {
         console.error('Cloud sync error, keeping local cache:', err);
         renderLinksList(localLinksCache);
     }
 }
 
-// 6. RENDER FUNCTION INTERFACE
+
+// ==========================================
+//  ৬. লিংক লিস্ট রেন্ডার
+// ==========================================
+
 function renderLinksList(records) {
     const container = document.getElementById('linkList');
-    if (!container) return; 
+    if (!container) return;
     container.innerHTML = '';
 
     if (!records || !Array.isArray(records) || records.length === 0) {
-        container.innerHTML = '<div class="empty-state">📚 No Saved Links in database. Add a link above to get started!</div>';
+        container.innerHTML = '<div class="empty-state">📚 No Saved Links in database.</div>';
         return;
     }
 
     records.forEach((item, index) => {
-        if (!item) return; 
-        
+        if (!item) return;
+
         const displayTitle = escapeHTML(item.title || "UNTITLED RECORD");
         const displayUrl = escapeHTML(item.url || "#");
-        const displayMeta = escapeHTML(item.timestamp || "Added via Public Node Portal");
+        const displayMeta = escapeHTML(item.timestamp || "Added via Public Node");
 
         const li = document.createElement('li');
-        li.className = 'link-item'; 
+        li.className = 'link-item';
         li.innerHTML = `
             <div class="link-details">
                 <span class="link-title">${displayTitle}</span>
                 <a href="${displayUrl}" target="_blank" class="link-url">${displayUrl}</a>
-                <span class="rendered-meta" style="margin-top: 6px; display: block; opacity: 0.5; font-size: 0.75rem;">${displayMeta}</span>
+                <span class="rendered-meta" style="margin-top:6px; display:block; opacity:0.5; font-size:0.75rem;">
+                    ${displayMeta}
+                </span>
             </div>
             <button class="btn-delete-link" onclick="removeLinkItem(${index})">&times;</button>
         `;
@@ -157,55 +211,72 @@ function renderLinksList(records) {
     });
 }
 
-// 7. ADD NEW URL
+
+// ==========================================
+//  ৭. নতুন লিঙ্ক যোগ করা (Admin Only)
+// ==========================================
+
 async function addNewLink() {
+    if (!isAdminLoggedIn) {
+        return alert('নিরাপত্তা লক: নতুন লিঙ্ক যোগ করতে প্রথমে লগইন করুন।');
+    }
+
     const urlIn = document.getElementById('linkInput');
     const titleIn = document.getElementById('titleInput');
-    if (!urlIn) return; 
+    if (!urlIn) return;
 
     const cleanUrl = urlIn.value.trim();
-    const cleanTitle = titleIn && titleIn.value ? titleIn.value.trim() : "UNTITLED SECURE NODE";
-    
-    if (cleanUrl === '') return alert('Please input a valid URL configuration link.');
+    const cleanTitle = titleIn && titleIn.value
+        ? titleIn.value.trim()
+        : "UNTITLED SECURE NODE";
+
+    if (cleanUrl === '') return alert('দয়া করে একটি সঠিক URL প্রদান করুন।');
 
     const now = new Date();
-    const dateStr = now.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-    const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
-    
+    const dateStr = now.toLocaleDateString('en-US', {
+        year: 'numeric', month: 'long', day: 'numeric'
+    });
+    const timeStr = now.toLocaleTimeString('en-US', {
+        hour: '2-digit', minute: '2-digit', hour12: true
+    });
+
     const newEntry = {
         url: cleanUrl,
         title: cleanTitle,
         timestamp: `Added on ${dateStr}, ${timeStr}`
     };
-    
+
     localLinksCache.push(newEntry);
     saveToLocalStorage(localLinksCache);
     renderLinksList(localLinksCache);
 
     urlIn.value = '';
-    if(titleIn) titleIn.value = '';
+    if (titleIn) titleIn.value = '';
 
+    // Offline-First Architecture
     if (navigator.onLine) {
         const cloudSynced = await pushToCloud(localLinksCache);
         if (cloudSynced) {
             loadPublicLinks();
         } else {
-            alert("Saved locally. Cloud database update failed.");
+            alert("লোকালি সংরক্ষিত হয়েছে, তবে ক্লাউড সিঙ্ক ব্যর্থ হয়েছে।");
         }
     } else {
-        alert("Stored inside offline cache. Will sync when network connection is restored.");
+        alert("অফলাইন ক্যাশে জমা হয়েছে। ইন্টারনেট কানেকশন পেলে ক্লাউডে সিঙ্ক হবে।");
     }
 }
 
-// 8. REMOVE ITEM FROM STORAGE
+
+// ==========================================
+//  ৮. লিঙ্ক মুছে ফেলা (Admin Only)
+// ==========================================
+
 async function removeLinkItem(indexTarget) {
     if (!isAdminLoggedIn) {
-        const passwordCheck = prompt("Security Lock: Enter Owner Password to delete this link:");
-        if (passwordCheck === null) return; 
-        if (passwordCheck !== "admin123") return alert("Access Denied. Incorrect owner passphrase.");
+        return alert("অ্যাক্সেস অস্বীকৃত! লিঙ্ক মুছতে হলে লগইন থাকা আবশ্যক।");
     }
 
-    if(!confirm("Are you sure you want to completely erase this data link?")) return;
+    if (!confirm("আপনি কি নিশ্চিতভাবে এই লিঙ্কটি মুছে ফেলতে চান?")) return;
 
     localLinksCache.splice(indexTarget, 1);
     saveToLocalStorage(localLinksCache);
@@ -217,13 +288,17 @@ async function removeLinkItem(indexTarget) {
     }
 }
 
-// 9. HEADER LOGIN MODULE (Fixed to preserve state securely on refresh)
+
+// ==========================================
+//  ৯. লগইন সেশন ম্যানেজমেন্ট
+// ==========================================
+
 function initializeLoginSystem() {
     const loginBtn = document.getElementById('loginBtn');
     const userStatus = document.getElementById('userStatus');
     if (!loginBtn || !userStatus) return;
 
-    // Fixed: Changed from sessionStorage to localStorage
+    // পেজ রিফ্রেশ করলেও সেশন চেক করবে
     if (localStorage.getItem('admin_session') === 'true') {
         setAdminState(loginBtn, userStatus, true);
     }
@@ -231,16 +306,18 @@ function initializeLoginSystem() {
     loginBtn.addEventListener('click', () => {
         if (isAdminLoggedIn) {
             setAdminState(loginBtn, userStatus, false);
-            alert("Terminal connection closed. Logged out.");
+            alert("লগআউট সম্পন্ন হয়েছে।");
             return;
         }
 
-        const passwordInput = prompt("Enter Terminal Security Password:");
+        const passwordInput = prompt("এডমিন সিকিউরিটি পাসওয়ার্ড দিন:");
+        // ⚠️ প্রোডাকশনে এই পাসওয়ার্ড ব্যাকএন্ডে রাখতে হবে
         if (passwordInput === "admin123") {
             setAdminState(loginBtn, userStatus, true);
-            alert("Access granted. Terminal running in Admin mode.");
+            alert("অ্যাক্সেস অনুমোদিত। এডমিন মোড সক্রিয়।");
+            loadPublicLinks();
         } else if (passwordInput !== null) {
-            alert("Access Denied. Invalid terminal passphrase.");
+            alert("ভুল পাসওয়ার্ড! অ্যাক্সেস দেওয়া সম্ভব নয়।");
         }
     });
 }
@@ -250,32 +327,35 @@ function setAdminState(btn, statusEl, isLoggedIn) {
     if (isLoggedIn) {
         btn.textContent = "🔓 Logout";
         statusEl.textContent = "Admin Root";
-        statusEl.style.background = 'linear-gradient(135deg, var(--cute-cyan), var(--accent-purple))';
-        localStorage.setItem('admin_session', 'true'); // Fixed
+        statusEl.style.background = 'linear-gradient(135deg, #00f0ff, #7000ff)';
+        localStorage.setItem('admin_session', 'true');
     } else {
         btn.textContent = "🔒 Login";
         statusEl.textContent = "Guest";
-        statusEl.style.background = 'linear-gradient(135deg, var(--primary-hot), var(--accent-purple))';
-        localStorage.removeItem('admin_session'); // Fixed
+        statusEl.style.background = 'linear-gradient(135deg, #ff0055, #7000ff)';
+        localStorage.removeItem('admin_session');
     }
 }
 
-// 10. GENERATE RANDOM VPN IP (Fixed to save changes)
+
+// ==========================================
+//  ১০. VPN আইপি জেনারেটর ও ট্র্যাকিং
+// ==========================================
+
 function generateRandomIP() {
-    const part1 = Math.floor(Math.random() * 190) + 12; 
+    const part1 = Math.floor(Math.random() * 190) + 12;
     const part2 = Math.floor(Math.random() * 254);
     const part3 = Math.floor(Math.random() * 254);
     const part4 = Math.floor(Math.random() * 253) + 1;
-    const ipDisplay = document.getElementById('ipDisplay');
-    
+
     const generatedIp = `${part1}.${part2}.${part3}.${part4}`;
+    const ipDisplay = document.getElementById('ipDisplay');
     if (ipDisplay) ipDisplay.textContent = generatedIp;
-    
-    // Save to cache so a refresh doesn't alter a current active session IP
+
+    // রিফ্রেশেও আইপি ধরে রাখার জন্য ক্যাশ
     localStorage.setItem('vpn_ip_cache', generatedIp);
 }
 
-// 11. PERSISTENT VPN TRACKING ENGINE (New Logic added to survive reloads)
 function initializeVpnSystem() {
     const vpn = document.getElementById('vpnStatus');
     const ipDisplay = document.getElementById('ipDisplay');
@@ -288,9 +368,9 @@ function initializeVpnSystem() {
         vpn.textContent = "Enabled";
         vpn.className = "txt-green-neon";
         if (ipDisplay) ipDisplay.textContent = savedIp;
-        
-        // Resume rotation loops cleanly
+
         if (ipRotationInterval) clearInterval(ipRotationInterval);
+        // প্রতি ৬০ সেকেন্ডে আইপি রোটেট
         ipRotationInterval = setInterval(generateRandomIP, 60000);
     } else {
         vpn.textContent = "Disabled";
@@ -299,34 +379,48 @@ function initializeVpnSystem() {
     }
 }
 
-// --- INITIALIZATION ---
+// (Optional) Real IP Fetcher — ব্যবহার করতে চাইলে আনকমেন্ট করুন
+// async function getRealIP() {
+//     const res = await fetch('https://api.ipify.org?format=json');
+//     const data = await res.json();
+//     const ipDisplay = document.getElementById('ipDisplay');
+//     if (ipDisplay) ipDisplay.textContent = data.ip;
+// }
+
+
+// ==========================================
+//  অ্যাপ্লিকেশন বুটআপ (DOMContentLoaded)
+// ==========================================
+
 document.addEventListener('DOMContentLoaded', () => {
     startSystemClock();
     initializeLoginSystem();
-    initializeVpnSystem(); // Boot up VPN structural memory sync
+    initializeVpnSystem();
 
-    // Load instantly from cache for better UX, then sync cloud
+    // ক্লাউড আসার আগে ক্যাশ ডেটা দিয়ে UI রেন্ডার
     localLinksCache = loadFromLocalStorage();
     renderLinksList(localLinksCache);
-    loadPublicLinks(); 
 
-    // Setup Event Listeners
-    const addBtn = document.getElementById('addLinkBtn');
-    if (addBtn) addBtn.addEventListener('click', addNewLink);
+    // অনলাইনে থাকলে ব্যাকগ্রাউন্ডে ক্লাউড সিঙ্ক
+    if (navigator.onLine) {
+        loadPublicLinks();
+    }
 
+    // সার্চ ফিল্টার
     const searchInput = document.getElementById('searchInput');
     if (searchInput) {
         searchInput.addEventListener('input', (e) => {
             const query = (e.target.value || '').toLowerCase();
             const filteredResults = localLinksCache.filter(item => {
                 if (!item) return false;
-                return (item.title || "").toLowerCase().includes(query) || 
+                return (item.title || "").toLowerCase().includes(query) ||
                        (item.url || "").toLowerCase().includes(query);
             });
             renderLinksList(filteredResults);
         });
     }
 
+    // VPN অন/অফ টগল
     const toggleVpnBtn = document.getElementById('toggleVpnBtn');
     if (toggleVpnBtn) {
         toggleVpnBtn.addEventListener('click', () => {
@@ -336,18 +430,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (vpn.textContent.trim() === "Disabled") {
                 vpn.textContent = "Enabled";
-                vpn.className = "txt-green-neon"; 
+                vpn.className = "txt-green-neon";
                 localStorage.setItem('vpn_status_cache', 'Enabled');
                 generateRandomIP();
-                
+
                 if (ipRotationInterval) clearInterval(ipRotationInterval);
                 ipRotationInterval = setInterval(generateRandomIP, 60000);
             } else {
                 vpn.textContent = "Disabled";
-                vpn.className = "txt-cyan"; 
+                vpn.className = "txt-cyan";
                 localStorage.setItem('vpn_status_cache', 'Disabled');
                 localStorage.setItem('vpn_ip_cache', 'Hidden');
-                
+
                 clearInterval(ipRotationInterval);
                 ipRotationInterval = null;
                 if (ipDisplay) ipDisplay.textContent = "Hidden";
