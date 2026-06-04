@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DRK-JU | HOME-PAGE</title>
+    <link rel="stylesheet" href="style.css">
     <style>
         /* --- DESIGN SYSTEM: SMOOTH PREMIUM CYBER-PASTEL --- */
         :root {
@@ -38,7 +39,6 @@
             flex-direction: column;
         }
 
-        /* Ambient Lighting Background Layers */
         body::before, body::after {
             content: '';
             position: fixed;
@@ -50,33 +50,9 @@
             opacity: 0.12; 
             pointer-events: none;
         }
-        body::before {
-            background: var(--primary-hot);
-            top: -10%;
-            left: -5%;
-        }
-        body::after {
-            background: var(--accent-purple);
-            bottom: -10%;
-            right: -5%;
-        }
+        body::before { background: var(--primary-hot); top: -10%; left: -5%; }
+        body::after { background: var(--accent-purple); bottom: -10%; right: -5%; }
 
-        /* Custom Scrollbar Styling */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: var(--bg-base);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #241f3d;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--accent-purple);
-        }
-
-        /* --- NAVIGATION HEADER SYSTEM --- */
         header {
             display: flex;
             justify-content: space-between;
@@ -91,11 +67,7 @@
             z-index: 100;
         }
 
-        .nav-left, .nav-right {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
+        .nav-left, .nav-right { display: flex; align-items: center; gap: 16px; }
 
         .btn-login, .btn-toggle-vpn, .btn-shop {
             border: none;
@@ -116,34 +88,11 @@
             color: var(--text-main);
             border: 1px solid rgba(255, 255, 255, 0.06);
         }
-
-        .btn-login:hover {
-            background: var(--text-main);
-            color: var(--bg-base);
-            transform: translateY(-1px);
-        }
-
-        .btn-shop {
-            background: linear-gradient(135deg, var(--primary-hot), #ff5287);
-            color: white;
-        }
-
-        .btn-shop:hover {
-            transform: translateY(-1px);
-            filter: brightness(1.1);
-        }
-
-        .btn-toggle-vpn {
-            background: rgba(0, 229, 255, 0.08);
-            color: var(--cute-cyan);
-            border: 1px solid rgba(0, 229, 255, 0.2);
-        }
-
-        .btn-toggle-vpn:hover {
-            background: var(--cute-cyan);
-            color: var(--bg-base);
-            transform: translateY(-1px);
-        }
+        .btn-login:hover { background: var(--text-main); color: var(--bg-base); transform: translateY(-1px); }
+        .btn-shop { background: linear-gradient(135deg, var(--primary-hot), #ff5287); color: white; }
+        .btn-shop:hover { transform: translateY(-1px); filter: brightness(1.1); }
+        .btn-toggle-vpn { background: rgba(0, 229, 255, 0.08); color: var(--cute-cyan); border: 1px solid rgba(0, 229, 255, 0.2); }
+        .btn-toggle-vpn:hover { background: var(--cute-cyan); color: var(--bg-base); transform: translateY(-1px); }
 
         .status-guest {
             font-size: 0.8rem;
@@ -156,19 +105,8 @@
             color: white;
         }
 
-        .nav-status {
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--text-muted);
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .border-left {
-            border-left: 1px solid var(--glass-border);
-            padding-left: 16px;
-        }
+        .nav-status { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); display: flex; align-items: center; gap: 6px; }
+        .border-left { border-left: 1px solid var(--glass-border); padding-left: 16px; }
 
         .txt-cyan { color: var(--cute-cyan); font-weight: 700; }
         .txt-yellow { color: #ffc857; font-weight: 700; }
@@ -176,23 +114,9 @@
         .txt-green-neon { color: var(--neon-green); font-weight: 800; }
         .txt-pink-neon { color: var(--primary-hot); font-weight: 800; }
 
-        /* --- MAIN MASTER LAYOUT --- */
-        .main-layout-fullscreen {
-            max-width: 1100px;
-            width: 100%;
-            margin: 0 auto;
-            padding: 40px 20px;
-            flex: 1;
-        }
+        .main-layout-fullscreen { max-width: 1100px; width: 100%; margin: 0 auto; padding: 40px 20px; flex: 1; }
 
-        /* --- DASHBOARD ANALYTICS GRID --- */
-        .info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-            gap: 20px;
-            margin-bottom: 40px;
-        }
-
+        .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 20px; margin-bottom: 40px; }
         .info-card {
             background: var(--panel-bg);
             border: 1px solid var(--glass-border);
@@ -203,71 +127,21 @@
             justify-content: space-between;
             transition: var(--transition);
         }
-
-        .info-card:hover {
-            transform: translateY(-3px);
-            background: rgba(28, 23, 48, 0.9);
-        }
-
+        .info-card:hover { transform: translateY(-3px); background: rgba(28, 23, 48, 0.9); }
         .border-cyan:hover { border-color: rgba(0, 229, 255, 0.3); }
         .border-green:hover { border-color: rgba(46, 255, 102, 0.3); }
 
-        .info-label {
-            font-size: 0.75rem;
-            font-weight: 800;
-            color: var(--text-muted);
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            margin-bottom: 12px;
-        }
+        .info-label { font-size: 0.75rem; font-weight: 800; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; }
+        .info-value { font-size: 1.35rem; font-weight: 800; }
+        .youtube-link { color: var(--primary-hot); text-decoration: none; font-size: 0.95rem; font-weight: 700; transition: var(--transition); }
+        .youtube-link:hover { color: var(--text-main); transform: translateX(3px); }
 
-        .info-value {
-            font-size: 1.35rem;
-            font-weight: 800;
-        }
-
-        .youtube-link {
-            color: var(--primary-hot);
-            text-decoration: none;
-            font-size: 0.95rem;
-            font-weight: 700;
-            transition: var(--transition);
-        }
-
-        .youtube-link:hover {
-            color: var(--text-main);
-            transform: translateX(3px);
-        }
-
-        /* --- INTERACTIVE FORM CONTAINER --- */
-        .form-container, .database-container {
-            background: var(--panel-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--radius-lg);
-            padding: 30px;
-            margin-bottom: 40px;
-        }
-
-        .section-heading {
-            font-size: 1.1rem;
-            font-weight: 800;
-            letter-spacing: 0.5px;
-            margin-bottom: 22px;
-            text-transform: uppercase;
-        }
-
-        .input-stack {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            margin-bottom: 24px;
-        }
-
-        .input-inline-row {
-            display: flex;
-            gap: 14px;
-        }
-
+        .form-container, .database-container { background: var(--panel-bg); border: 1px solid var(--glass-border); border-radius: var(--radius-lg); padding: 30px; margin-bottom: 40px; }
+        .section-heading { font-size: 1.1rem; font-weight: 800; letter-spacing: 0.5px; margin-bottom: 22px; text-transform: uppercase; }
+        
+        .input-stack { display: flex; flex-direction: column; gap: 16px; margin-bottom: 24px; }
+        .input-inline-row { display: flex; gap: 14px; }
+        
         .custom-input {
             width: 100%;
             background: #0f0c1f;
@@ -280,15 +154,8 @@
             outline: none;
             transition: var(--transition);
         }
-
-        .custom-input:focus {
-            border-color: var(--cute-cyan);
-            background: #130f29;
-        }
-
-        .custom-input::placeholder {
-            color: #534c70;
-        }
+        .custom-input:focus { border-color: var(--cute-cyan); background: #130f29; }
+        .custom-input::placeholder { color: #534c70; }
 
         .btn-add-link {
             background: var(--text-main);
@@ -301,34 +168,12 @@
             transition: var(--transition);
             white-space: nowrap;
         }
+        .btn-add-link:hover { background: var(--cute-cyan); transform: translateY(-1px); }
 
-        .btn-add-link:hover {
-            background: var(--cute-cyan);
-            transform: translateY(-1px);
-        }
+        .search-wrapper { border-top: 1px solid rgba(255, 255, 255, 0.06); padding-top: 24px; }
+        .search-field:focus { border-color: var(--primary-hot); }
 
-        .search-wrapper {
-            border-top: 1px solid rgba(255, 255, 255, 0.06);
-            padding-top: 24px;
-        }
-
-        .search-field:focus {
-            border-color: var(--primary-hot);
-        }
-
-        /* --- DATA REFERENCE FEED MATRIX --- */
-        .database-container {
-            margin-bottom: 0;
-        }
-
-        .links-list-group {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-top: 15px;
-        }
-
+        .links-list-group { list-style: none; display: flex; flex-direction: column; gap: 12px; margin-top: 15px; }
         .link-item {
             background: rgba(15, 12, 31, 0.6);
             border: 1px solid var(--glass-border);
@@ -339,34 +184,11 @@
             align-items: center;
             transition: var(--transition);
         }
-
-        .link-item:hover {
-            border-color: var(--accent-purple);
-            background: #0f0c1f;
-            transform: translateX(3px);
-        }
-
-        .link-details {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .link-title {
-            font-weight: 700;
-            font-size: 1rem;
-        }
-
-        .link-url {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            text-decoration: none;
-            transition: color 0.2s;
-        }
-
-        .link-url:hover {
-            color: var(--cute-cyan);
-        }
+        .link-item:hover { border-color: var(--accent-purple); background: #0f0c1f; transform: translateX(3px); }
+        .link-details { display: flex; flex-direction: column; gap: 4px; }
+        .link-title { font-weight: 700; font-size: 1rem; }
+        .link-url { font-size: 0.8rem; color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+        .link-url:hover { color: var(--cute-cyan); }
 
         .btn-delete-link {
             background: rgba(255, 51, 122, 0.1);
@@ -382,22 +204,9 @@
             font-weight: bold;
             transition: var(--transition);
         }
+        .btn-delete-link:hover { background: var(--primary-hot); color: white; transform: scale(1.05); }
+        .empty-state { color: var(--text-muted); text-align: center; padding: 24px 0; font-style: italic; font-size: 0.95rem; }
 
-        .btn-delete-link:hover {
-            background: var(--primary-hot);
-            color: white;
-            transform: scale(1.05);
-        }
-
-        .empty-state {
-            color: var(--text-muted);
-            text-align: center;
-            padding: 24px 0;
-            font-style: italic;
-            font-size: 0.95rem;
-        }
-
-        /* --- RESPONSIVENESS MATRIX --- */
         @media (max-width: 850px) {
             header { flex-direction: column; gap: 16px; padding: 20px; text-align: center; }
             .nav-left, .nav-right { width: 100%; justify-content: center; flex-wrap: wrap; }
@@ -410,19 +219,19 @@
 
     <header>
         <div class="nav-left">
+            <h2 style="font-size: 1.3rem; margin: 0; font-weight: 800;">🔥 DARK-NET</h2>
             <button id="loginBtn" class="btn-login">🔒 Login</button>
         </div>
         <div class="nav-right">
             <span id="userStatus" class="status-guest">Guest</span>
-            <a href="cute-dress-upload.html" class="btn-shop">🛍️ Shop Lookbook</a>
             <div class="nav-status">VPN: <span id="vpnStatus" class="txt-cyan">Disabled</span></div>
-            <div class="nav-status border-left">IP: <span id="ipDisplay" class="txt-yellow">Hidden</span></div>
-            <button id="toggleVpnBtn" class="btn-toggle-vpn">Toggle VPN</button>
+            <div class="nav-status">IP: <span id="ipDisplay" class="txt-yellow">Hidden</span></div>
+            <button id="toggleVpnBtn" class="btn-toggle-vpn" title="Toggle VPN">🛡️</button>
+            <a href="cute-dress-upload.html" class="btn-shop" title="Go to Shop">🛍️</a>
         </div>
     </header>
 
     <main class="main-layout-fullscreen">
-        
         <section class="info-grid">
             <div class="info-card border-cyan">
                 <span class="info-label">SYSTEM TIME</span>
@@ -448,16 +257,13 @@
 
         <section class="form-container">
             <h3 class="section-heading txt-cyan-neon">✨ Add New Link</h3>
-            
             <div class="input-stack">
                 <input type="text" id="titleInput" class="custom-input" placeholder="Link Title (optional)">
-                
                 <div class="input-inline-row">
                     <input type="text" id="linkInput" class="custom-input" placeholder="Enter URL (e.g., https://example.com)">
                     <button id="addLinkBtn" class="btn-add-link">Add Link</button>
                 </div>
             </div>
-
             <div class="search-wrapper">
                 <input type="text" id="searchInput" class="custom-input search-field" placeholder="🔍 Search database links in real-time...">
             </div>
@@ -465,258 +271,22 @@
 
         <section class="database-container">
             <h3 class="section-heading txt-green-neon">🔮 Saved Links Database</h3>
-            <ul id="linkList" class="links-list-group">
-                </ul>
+            <ul id="linkList" class="links-list-group"></ul>
         </section>
-
     </main>
 
+    <script src="script.js"></script>
     <script>
-        // ============================================================
-        // CLOUD SYNC CONFIG — JSONBin shared storage (all users share)
-        // ============================================================
-        const BIN_URL = "https://api.jsonbin.io/v3/b/6a092aef250b1311c3602575";
-        const API_KEY = "$2a$10$lqtzvPNB028JnvmaxXVBv.XQAPheFwW5ak6/xiPLYZrOnrPkYJXra";
-        const LOCAL_KEY = "drk_ju_links_cache";
-
-        let savedLinks = [];
-        let isAdminLoggedIn = false;
-        let ipRotationInterval = null;
-
-        // ── Helpers ──────────────────────────────────────────────────
-        function saveLocal(data) {
-            try { localStorage.setItem(LOCAL_KEY, JSON.stringify(data)); } catch(e) {}
-        }
-        function loadLocal() {
-            try { return JSON.parse(localStorage.getItem(LOCAL_KEY) || '[]'); } catch(e) { return []; }
-        }
-
-        async function fetchWithTimeout(url, opts = {}, ms = 8000) {
-            const ctrl = new AbortController();
-            const id = setTimeout(() => ctrl.abort(), ms);
-            try { return await fetch(url, { ...opts, signal: ctrl.signal }); }
-            finally { clearTimeout(id); }
-        }
-
-        // ── Cloud Push ───────────────────────────────────────────────
-        async function pushToCloud(data) {
-            try {
-                const res = await fetchWithTimeout(BIN_URL, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Master-Key': API_KEY,
-                        'X-Bin-Versioning': 'false'
-                    },
-                    body: JSON.stringify({ links: data })
-                });
-                return res && res.ok;
-            } catch(e) { return false; }
-        }
-
-        // ── Cloud Pull ───────────────────────────────────────────────
-        async function loadFromCloud() {
-            const container = document.getElementById('linkList');
-            if (container) container.innerHTML = '<li class="empty-state" style="opacity:0.6">⏳ Syncing cloud database...</li>';
-            try {
-                const res = await fetchWithTimeout(`${BIN_URL}/latest`, {
-                    headers: { 'X-Master-Key': API_KEY }
-                });
-                if (!res || !res.ok) throw new Error('Cloud offline');
-                const data = await res.json();
-
-                // Extract links regardless of nesting format
-                let links = [];
-                if (data.record?.links && Array.isArray(data.record.links)) links = data.record.links;
-                else if (data.record?.record?.links) links = data.record.record.links;
-                else if (Array.isArray(data.record)) links = data.record;
-                else if (Array.isArray(data)) links = data;
-
-                savedLinks = links;
-                saveLocal(savedLinks);
-                updateLinkGallery();
-            } catch(e) {
-                console.warn('Cloud sync failed, using local cache:', e);
-                savedLinks = loadLocal();
-                updateLinkGallery();
-                const container = document.getElementById('linkList');
-                if (container && savedLinks.length > 0) {
-                    const warn = document.createElement('li');
-                    warn.style = 'color:#ffeb3b;font-size:11px;padding:4px 12px;opacity:0.7;list-style:none;';
-                    warn.textContent = '⚠️ Offline mode — showing cached data';
-                    container.insertBefore(warn, container.firstChild);
-                }
+        // Separate local view counter initialization
+        (function handleSessionTracking() {
+            const countEl = document.getElementById('viewCount');
+            if(countEl) {
+                let views = parseInt(sessionStorage.getItem('page_view_count') || '0', 10);
+                views++;
+                sessionStorage.setItem('page_view_count', views);
+                countEl.textContent = `${views} ${views === 1 ? 'view' : 'views'}`;
             }
-        }
-
-        // ── Render ───────────────────────────────────────────────────
-        function updateLinkGallery(filterQuery = '') {
-            const container = document.getElementById('linkList');
-            if (!container) return;
-            container.innerHTML = '';
-
-            const filtered = savedLinks.filter(item =>
-                (item.title || '').toLowerCase().includes(filterQuery.toLowerCase()) ||
-                (item.url || '').toLowerCase().includes(filterQuery.toLowerCase())
-            );
-
-            if (filtered.length === 0) {
-                container.innerHTML = '<li class="empty-state">📚 No links in database. Add one above!</li>';
-                return;
-            }
-
-            filtered.forEach((link, i) => {
-                const realIndex = savedLinks.indexOf(link);
-                const li = document.createElement('li');
-                li.className = 'link-item';
-                li.innerHTML = `
-                    <div class="link-details">
-                        <span class="link-title">${link.title || 'Untitled'}</span>
-                        <a href="${link.url}" target="_blank" class="link-url">${link.url}</a>
-                        ${link.timestamp ? `<span style="opacity:0.45;font-size:0.72rem;display:block;margin-top:4px">${link.timestamp}</span>` : ''}
-                    </div>
-                    <button class="btn-delete-link" onclick="deleteLinkEntry(${realIndex})">&times;</button>
-                `;
-                container.appendChild(li);
-            });
-        }
-
-        // ── Add Link ─────────────────────────────────────────────────
-        async function addNewLink() {
-            const titleIn = document.getElementById('titleInput');
-            const urlIn   = document.getElementById('linkInput');
-            if (!urlIn.value.trim()) return alert('Please enter a valid URL.');
-
-            const now = new Date();
-            const newEntry = {
-                title: titleIn.value.trim() || 'Untitled',
-                url:   urlIn.value.trim(),
-                timestamp: `Added on ${now.toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' })}, ${now.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit', hour12:true })}`
-            };
-
-            savedLinks.push(newEntry);
-            saveLocal(savedLinks);
-            updateLinkGallery();
-            titleIn.value = '';
-            urlIn.value = '';
-
-            const btn = document.getElementById('addLinkBtn');
-            btn.textContent = '⏳ Saving...';
-            btn.disabled = true;
-
-            if (navigator.onLine) {
-                const ok = await pushToCloud(savedLinks);
-                btn.textContent = ok ? '✅ Saved!' : '⚠️ Local Only';
-                setTimeout(() => { btn.textContent = 'Add Link'; btn.disabled = false; }, 1800);
-                if (ok) await loadFromCloud();
-            } else {
-                btn.textContent = '📴 Offline';
-                setTimeout(() => { btn.textContent = 'Add Link'; btn.disabled = false; }, 1800);
-            }
-        }
-
-        // ── Delete Link ──────────────────────────────────────────────
-        window.deleteLinkEntry = async function(indexTarget) {
-            if (!isAdminLoggedIn) {
-                const pw = prompt("🔒 Enter Admin Password to delete:");
-                if (!pw) return;
-                if (pw !== "admin123") { alert("❌ Access Denied."); return; }
-            }
-            if (!confirm("Delete this link permanently?")) return;
-            savedLinks.splice(indexTarget, 1);
-            saveLocal(savedLinks);
-            updateLinkGallery();
-            if (navigator.onLine) await pushToCloud(savedLinks);
-        };
-
-        // ── VPN Toggle ───────────────────────────────────────────────
-        function generateRandomIP() {
-            const r = () => Math.floor(Math.random() * 254);
-            const el = document.getElementById('ipDisplay');
-            if (el) el.textContent = `${Math.floor(Math.random()*190)+12}.${r()}.${r()}.${Math.floor(Math.random()*253)+1}`;
-        }
-
-        // ── Clock ────────────────────────────────────────────────────
-        function startSystemClock() {
-            const clockEl = document.getElementById('clockDisplay');
-            const dateEl  = document.getElementById('dateDisplay');
-            const tick = () => {
-                const now = new Date();
-                if (clockEl) clockEl.textContent = now.toLocaleTimeString();
-                if (dateEl)  dateEl.textContent  = now.toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' });
-            };
-            tick();
-            setInterval(tick, 1000);
-        }
-
-        // ── Session view counter ─────────────────────────────────────
-        function handleSessionTracking() {
-            const el = document.getElementById('viewCount');
-            if (!el) return;
-            let v = parseInt(sessionStorage.getItem('page_view_count') || '0') + 1;
-            sessionStorage.setItem('page_view_count', v);
-            el.textContent = `${v} ${v === 1 ? 'view' : 'views'}`;
-        }
-
-        // ── Login ────────────────────────────────────────────────────
-        document.getElementById('loginBtn').addEventListener('click', function() {
-            const userStatus = document.getElementById('userStatus');
-            if (isAdminLoggedIn) {
-                isAdminLoggedIn = false;
-                userStatus.textContent = 'Guest';
-                userStatus.style.background = 'linear-gradient(135deg, var(--primary-hot), var(--accent-purple))';
-                this.textContent = '🔒 Login';
-                return;
-            }
-            const u = prompt("Enter Admin Username:");
-            const p = prompt("Enter Admin Password:");
-            if (u === "admin" && p === "admin123") {
-                isAdminLoggedIn = true;
-                userStatus.textContent = 'Admin 👑';
-                userStatus.style.background = 'linear-gradient(135deg, var(--cute-cyan), var(--accent-purple))';
-                this.textContent = '🔓 Logout';
-            } else if (u !== null) {
-                alert("❌ Invalid credentials! Access Denied.");
-            }
-        });
-
-        // ── VPN Button ───────────────────────────────────────────────
-        document.getElementById('toggleVpnBtn').addEventListener('click', function() {
-            const vpnStatus = document.getElementById('vpnStatus');
-            const ipDisplay = document.getElementById('ipDisplay');
-            if (vpnStatus.textContent === 'Disabled') {
-                vpnStatus.textContent = 'Enabled';
-                vpnStatus.className = 'txt-green-neon';
-                generateRandomIP();
-                ipRotationInterval = setInterval(generateRandomIP, 60000);
-            } else {
-                vpnStatus.textContent = 'Disabled';
-                vpnStatus.className = 'txt-cyan';
-                clearInterval(ipRotationInterval);
-                ipRotationInterval = null;
-                if (ipDisplay) ipDisplay.textContent = 'Hidden';
-            }
-        });
-
-        // ── Add button ───────────────────────────────────────────────
-        document.getElementById('addLinkBtn').addEventListener('click', addNewLink);
-
-        // ── Search ───────────────────────────────────────────────────
-        document.getElementById('searchInput').addEventListener('input', function(e) {
-            updateLinkGallery(e.target.value);
-        });
-
-        // ── Auto-sync when back online ───────────────────────────────
-        window.addEventListener('online', async () => {
-            const local = loadLocal();
-            if (local.length > 0) await pushToCloud(local);
-            await loadFromCloud();
-        });
-
-        // ── BOOT ─────────────────────────────────────────────────────
-        startSystemClock();
-        handleSessionTracking();
-        loadFromCloud(); // Load from cloud so ALL users see the same links
+        })();
     </script>
 </body>
 </html>
