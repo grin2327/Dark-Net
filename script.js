@@ -355,7 +355,7 @@ function initializeLoginSystem() {
     loginBtn.addEventListener('click', () => {
         if (isAdminLoggedIn) {
             setAdminState(loginBtn, userStatus, false);
-            showNotification("Logged out", "success");
+            // removed logout notification per user request
             return;
         }
 
@@ -363,7 +363,7 @@ function initializeLoginSystem() {
         if (passwordInput === "admin123") {
             setAdminState(loginBtn, userStatus, true);
             saveSessionState(true);
-            showNotification("Admin access granted!", "success");
+            // removed login success notification per user request
             loadPublicLinks();
         } else if (passwordInput !== null) {
             showNotification("Wrong password", "error");

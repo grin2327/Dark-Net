@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DRK-JU | HOME-PAGE</title>
-    <link rel="stylesheet" href="style.css">
+    
     <style>
         /* --- DESIGN SYSTEM: SMOOTH PREMIUM CYBER-PASTEL --- */
         :root {
@@ -20,7 +20,22 @@
             --radius-lg: 20px;
             --radius-sm: 12px;
             --transition: all 0.25s ease-out;
+            
+            --bg-main-gradient-start: #1c1537;
+            --bg-main-gradient-end: #0f0b21;
+            --card-bg-opacity: rgba(26, 21, 51, 0.45);
+            --border-purple-glow: #2d235d;
+            --neon-cyan: #00e5ff;
+            --neon-green: #00e676;
+            --neon-pink: #ff1744;
+            --btn-purple-gradient: linear-gradient(135deg, #7e57c2, #5e35b1);
+            --btn-danger-red: #ef5350;
+            --text-white: #ffffff;
+            --text-muted-slate: #7e799c;
         }
+
+
+
 
         * {
             margin: 0;
@@ -30,13 +45,14 @@
         }
 
         body {
-            background: var(--bg-base);
+            background: linear-gradient(145deg, var(--bg-main-gradient-start), var(--bg-main-gradient-end));
             color: var(--text-main);
             min-height: 100vh;
             position: relative;
             overflow-x: hidden;
             display: flex;
             flex-direction: column;
+            padding-bottom: 60px;
         }
 
         body::before, body::after {
@@ -65,9 +81,16 @@
             position: sticky;
             top: 0;
             z-index: 100;
+            flex-wrap: wrap;
+            gap: 16px;
         }
 
-        .nav-left, .nav-right { display: flex; align-items: center; gap: 16px; }
+        .nav-left, .nav-right { 
+            display: flex; 
+            align-items: center; 
+            gap: 16px;
+            flex-wrap: wrap;
+        }
 
         .btn-login, .btn-toggle-vpn, .btn-shop {
             border: none;
@@ -105,13 +128,13 @@
             color: white;
         }
 
-        .nav-status { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); display: flex; align-items: center; gap: 6px; }
+        .nav-status { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); display: flex; align-items: center; gap: 6px; white-space: nowrap; }
         .border-left { border-left: 1px solid var(--glass-border); padding-left: 16px; }
 
         .txt-cyan { color: var(--cute-cyan); font-weight: 700; }
         .txt-yellow { color: #ffc857; font-weight: 700; }
-        .txt-cyan-neon { color: var(--cute-cyan); font-weight: 800; }
-        .txt-green-neon { color: var(--neon-green); font-weight: 800; }
+        .txt-cyan-neon { color: var(--cute-cyan); font-weight: 800; text-shadow: 0 0 8px rgba(0, 229, 255, 0.2); }
+        .txt-green-neon { color: var(--neon-green); font-weight: 800; text-shadow: 0 0 8px rgba(0, 230, 118, 0.2); }
         .txt-pink-neon { color: var(--primary-hot); font-weight: 800; }
 
         .main-layout-fullscreen { max-width: 1100px; width: 100%; margin: 0 auto; padding: 40px 20px; flex: 1; }
@@ -128,8 +151,10 @@
             transition: var(--transition);
         }
         .info-card:hover { transform: translateY(-3px); background: rgba(28, 23, 48, 0.9); }
-        .border-cyan:hover { border-color: rgba(0, 229, 255, 0.3); }
-        .border-green:hover { border-color: rgba(46, 255, 102, 0.3); }
+        .border-cyan { border-left: 4px solid rgba(0, 229, 255, 0.3); }
+        .border-green { border-left: 4px solid rgba(46, 255, 102, 0.3); }
+        .border-cyan:hover { border-color: rgba(0, 229, 255, 0.6); }
+        .border-green:hover { border-color: rgba(46, 255, 102, 0.6); }
 
         .info-label { font-size: 0.75rem; font-weight: 800; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; }
         .info-value { font-size: 1.35rem; font-weight: 800; }
@@ -140,7 +165,17 @@
         .section-heading { font-size: 1.1rem; font-weight: 800; letter-spacing: 0.5px; margin-bottom: 22px; text-transform: uppercase; }
         
         .input-stack { display: flex; flex-direction: column; gap: 16px; margin-bottom: 24px; }
-        .input-inline-row { display: flex; gap: 14px; }
+        .input-inline-row { 
+            display: flex; 
+            gap: 14px;
+            align-items: stretch;
+            width: 100%;
+        }
+        
+        .input-inline-row #linkInput {
+            flex: 1;
+            min-width: 200px;
+        }
         
         .custom-input {
             width: 100%;
@@ -161,12 +196,17 @@
             background: var(--text-main);
             color: var(--bg-base);
             border: none;
-            padding: 0 28px;
+            padding: 14px 28px;
             border-radius: var(--radius-sm);
             font-weight: 700;
             cursor: pointer;
             transition: var(--transition);
             white-space: nowrap;
+            min-height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
         }
         .btn-add-link:hover { background: var(--cute-cyan); transform: translateY(-1px); }
 
@@ -181,13 +221,15 @@
             border-radius: var(--radius-sm);
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: flex-start;
+            gap: 16px;
             transition: var(--transition);
+            flex-wrap: wrap;
         }
         .link-item:hover { border-color: var(--accent-purple); background: #0f0c1f; transform: translateX(3px); }
-        .link-details { display: flex; flex-direction: column; gap: 4px; }
-        .link-title { font-weight: 700; font-size: 1rem; }
-        .link-url { font-size: 0.8rem; color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+        .link-details { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 0; }
+        .link-title { font-weight: 700; font-size: 0.95rem; word-break: break-word; color: var(--cute-cyan); }
+        .link-url { font-size: 0.8rem; color: var(--text-muted); text-decoration: none; transition: color 0.2s; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
         .link-url:hover { color: var(--cute-cyan); }
 
         .btn-delete-link {
@@ -203,15 +245,138 @@
             justify-content: center;
             font-weight: bold;
             transition: var(--transition);
+            flex-shrink: 0;
+            margin-left: auto;
         }
         .btn-delete-link:hover { background: var(--primary-hot); color: white; transform: scale(1.05); }
+        .link-meta { font-size: 0.7rem; color: #666; margin-top: 4px; }
         .empty-state { color: var(--text-muted); text-align: center; padding: 24px 0; font-style: italic; font-size: 0.95rem; }
 
         @media (max-width: 850px) {
-            header { flex-direction: column; gap: 16px; padding: 20px; text-align: center; }
-            .nav-left, .nav-right { width: 100%; justify-content: center; flex-wrap: wrap; }
-            .input-inline-row { flex-direction: column; }
-            .btn-add-link { padding: 14px; }
+            header { 
+                flex-direction: column; 
+                gap: 16px; 
+                padding: 20px; 
+                text-align: center; 
+            }
+            .nav-left, .nav-right { 
+                width: 100%; 
+                justify-content: center; 
+                flex-wrap: wrap; 
+            }
+            .input-inline-row { 
+                flex-direction: column; 
+                gap: 12px;
+            }
+            .btn-add-link { 
+                width: 100%; 
+                padding: 14px;
+                min-height: 44px;
+            }
+            .link-item { 
+                flex-direction: column; 
+                align-items: flex-start; 
+            }
+            .btn-delete-link { 
+                margin-left: 0; 
+                margin-top: 10px; 
+                align-self: flex-end; 
+            }
+        }
+
+        @media (max-width: 600px) {
+            .main-layout-fullscreen {
+                padding: 24px 16px;
+            }
+            
+            .form-container, .database-container {
+                padding: 20px;
+                margin-bottom: 24px;
+            }
+            
+            .info-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 12px;
+                margin-bottom: 24px;
+            }
+            
+            .section-heading {
+                font-size: 1rem;
+            }
+            
+            .custom-input {
+                font-size: 16px;
+                padding: 12px 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header {
+                padding: 12px 16px;
+                gap: 12px;
+            }
+            
+            .nav-left h2 {
+                font-size: 1.1rem;
+            }
+            
+            .nav-status {
+                font-size: 0.75rem;
+                padding: 4px 8px;
+            }
+            
+            .btn-login, .btn-toggle-vpn, .btn-shop {
+                padding: 8px 12px;
+                font-size: 0.8rem;
+            }
+            
+            .btn-toggle-vpn {
+                min-width: 36px;
+                min-height: 36px;
+            }
+            
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .section-heading {
+                font-size: 1rem;
+                margin-bottom: 16px;
+            }
+            
+            .input-stack {
+                gap: 12px;
+                margin-bottom: 16px;
+            }
+            
+            .input-inline-row {
+                flex-direction: column;
+                gap: 12px;
+            }
+            
+            .btn-add-link {
+                width: 100%;
+                padding: 12px;
+                min-height: 44px;
+            }
+            
+            .link-item {
+                padding: 12px;
+                flex-wrap: wrap;
+            }
+            
+            .link-title {
+                font-size: 0.9rem;
+            }
+            
+            .link-url {
+                font-size: 0.75rem;
+            }
+            
+            .custom-input {
+                font-size: 16px;
+                padding: 12px;
+            }
         }
     </style>
 </head>
