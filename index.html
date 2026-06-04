@@ -34,9 +34,6 @@
             --text-muted-slate: #7e799c;
         }
 
-
-
-
         * {
             margin: 0;
             padding: 0;
@@ -283,101 +280,6 @@
                 align-self: flex-end; 
             }
         }
-
-        @media (max-width: 600px) {
-            .main-layout-fullscreen {
-                padding: 24px 16px;
-            }
-            
-            .form-container, .database-container {
-                padding: 20px;
-                margin-bottom: 24px;
-            }
-            
-            .info-grid {
-                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-                gap: 12px;
-                margin-bottom: 24px;
-            }
-            
-            .section-heading {
-                font-size: 1rem;
-            }
-            
-            .custom-input {
-                font-size: 16px;
-                padding: 12px 16px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            header {
-                padding: 12px 16px;
-                gap: 12px;
-            }
-            
-            .nav-left h2 {
-                font-size: 1.1rem;
-            }
-            
-            .nav-status {
-                font-size: 0.75rem;
-                padding: 4px 8px;
-            }
-            
-            .btn-login, .btn-toggle-vpn, .btn-shop {
-                padding: 8px 12px;
-                font-size: 0.8rem;
-            }
-            
-            .btn-toggle-vpn {
-                min-width: 36px;
-                min-height: 36px;
-            }
-            
-            .info-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .section-heading {
-                font-size: 1rem;
-                margin-bottom: 16px;
-            }
-            
-            .input-stack {
-                gap: 12px;
-                margin-bottom: 16px;
-            }
-            
-            .input-inline-row {
-                flex-direction: column;
-                gap: 12px;
-            }
-            
-            .btn-add-link {
-                width: 100%;
-                padding: 12px;
-                min-height: 44px;
-            }
-            
-            .link-item {
-                padding: 12px;
-                flex-wrap: wrap;
-            }
-            
-            .link-title {
-                font-size: 0.9rem;
-            }
-            
-            .link-url {
-                font-size: 0.75rem;
-            }
-            
-            .custom-input {
-                font-size: 16px;
-                padding: 12px;
-            }
-        }
     </style>
 </head>
 <body>
@@ -421,7 +323,7 @@
         </section>
 
         <section class="form-container">
-            <h3 class="section-heading txt-cyan-neon">✨ Add New Link</h3>
+            <h3 class="section-heading txt-cyan-neon">✨ Add New Link (Public Access)</h3>
             <div class="input-stack">
                 <input type="text" id="titleInput" class="custom-input" placeholder="Link Title (optional)">
                 <div class="input-inline-row">
@@ -442,7 +344,6 @@
 
     <script src="script.js"></script>
     <script>
-        // Separate local view counter initialization
         (function handleSessionTracking() {
             const countEl = document.getElementById('viewCount');
             if(countEl) {
