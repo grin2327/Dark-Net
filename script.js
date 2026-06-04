@@ -3,8 +3,7 @@
 //  POWERED BY FREE PUBLIC JSON API (KVDB)
 // ==========================================
 
-// ⚠️ PASTE YOUR GENERATED KVDB BUCKET URL HERE (Make sure it ends with a slash /)
-const KVDB_BUCKET_URL = "https://kvdb.io/3QKuAXCJ6AqgDwMGQCKAs9/"; 
+const KVDB_BUCKET_URL = "https://kvdb.io/3QKuAXCJ6AqgDwMGQCKAs9/";
 const API_URL = `${KVDB_BUCKET_URL}darknet_links`;
 
 const STORAGE_KEY = "darknet_links_cache_v3";
@@ -14,6 +13,7 @@ const SESSION_EXPIRY_KEY = "admin_session_expires";
 let localLinksCache = [];
 let isAdminLoggedIn = false;
 let ipRotationInterval = null;
+let currentSearchQuery = "";
 
 // ==========================================
 //  CORE UTILITIES
@@ -47,6 +47,10 @@ function showNotification(message, type = "info") {
     `;
     document.body.appendChild(notification);
     setTimeout(() => notification.remove(), 3000);
+}
+
+function generateId() {
+    return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
 }
 
 // ==========================================
@@ -108,26 +112,62 @@ async function loadPublicLinks() {
     try {
         const response = await fetch(API_URL, { method: 'GET' });
 
-        // If the database is brand new and empty, it returns a 404. We handle that cleanly.
         if (response.status === 404) {
-            localLinksCache = [];
-            renderLinksList(localLinksCache);
+            localLinksCache = loadFromLocalStorage();
+            renderLinksList(getFilteredData());
             return;
         }
 
         if (!response.ok) throw new Error("Database Connection Error");
 
         const data = await response.json();
-        localLinksCache = Array.isArray(data) ? data : [];
-        
-        saveToLocalStorage(localLinksCache);
-        renderLinksList(localLinksCache);
+        const cloudData = Array.isArray(data) ? data : [];
+
+        const localData = loadFromLocalStorage();
+        if (localData.length >= cloudData.length) {
+            localLinksCache = localData;
+            syncToCloud(localData);
+        } else {
+            localLinksCache = cloudData;
+            saveToLocalStorage(localLinksCache);
+        }
+
+        renderLinksList(getFilteredData());
 
     } catch (err) {
         console.error('Cloud load error:', err);
         localLinksCache = loadFromLocalStorage();
-        renderLinksList(localLinksCache);
+        renderLinksList(getFilteredData());
     }
+}
+
+async function syncToCloud(data) {
+    try {
+        const response = await fetch(API_URL, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data)
+        });
+        if (!response.ok) {
+            console.error(`Cloud sync failed: ${response.status} ${response.statusText}`, await response.text());
+        }
+    } catch (err) {
+        console.error("Cloud sync error:", err.message);
+    }
+}
+
+// ==========================================
+//  SEARCH FILTERING
+// ==========================================
+
+function getFilteredData() {
+    if (!currentSearchQuery) return localLinksCache;
+    const query = currentSearchQuery.toLowerCase();
+    return localLinksCache.filter(item => {
+        if (!item) return false;
+        return (item.title || '').toLowerCase().includes(query) ||
+               (item.url || '').toLowerCase().includes(query);
+    });
 }
 
 // ==========================================
@@ -144,12 +184,13 @@ function renderLinksList(records) {
         return;
     }
 
-    records.forEach((item, index) => {
+    records.forEach((item) => {
         if (!item) return;
 
         const displayTitle = escapeHTML(item.title);
         const displayUrl = escapeHTML(item.url);
-        const displayMeta = escapeHTML(item.timestamp);
+        const displayMeta = escapeHTML(item.timestamp || '');
+        const itemId = escapeHTML(item._id);
 
         const li = document.createElement('li');
         li.className = 'link-item';
@@ -159,7 +200,7 @@ function renderLinksList(records) {
                 <a href="${displayUrl}" target="_blank" rel="noopener" class="link-url">${displayUrl}</a>
                 <span class="link-meta">${displayMeta}</span>
             </div>
-            <button class="btn-delete-link" onclick="removeLinkItem(${index})" title="Delete">&times;</button>
+            <button class="btn-delete-link" onclick="removeLinkItem('${itemId}')" title="Delete">&times;</button>
         `;
         container.appendChild(li);
     });
@@ -194,35 +235,38 @@ async function addNewLink() {
     const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
 
     const newEntry = {
+        _id: generateId(),
         title: cleanTitle,
         url: cleanUrl,
         timestamp: `${dateStr} ${timeStr}`
     };
 
-    // Add new item locally first
-    const updatedLinks = [...localLinksCache, newEntry];
+    localLinksCache.push(newEntry);
+    saveToLocalStorage(localLinksCache);
 
+    urlIn.value = '';
+    if (titleIn) titleIn.value = '';
+
+    renderLinksList(getFilteredData());
+    showNotification("Link Saved Locally!", "success");
+
+    // Background cloud sync
     try {
-        showNotification("Saving to public cloud...", "info");
-        
-        // KVDB uses PUT to save raw arrays directly
         const response = await fetch(API_URL, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(updatedLinks)
+            body: JSON.stringify(localLinksCache)
         });
-
         if (response.ok) {
-            urlIn.value = '';
-            if (titleIn) titleIn.value = '';
             showNotification("Link Shared Universally!", "success");
-            loadPublicLinks(); // Refresh view
         } else {
-            showNotification("Database rejected save.", "error");
+            const errorMsg = await response.text();
+            console.error(`Save failed: ${response.status} ${response.statusText}`, errorMsg);
+            showNotification(`Save failed: ${response.status} ${response.statusText}`, "error");
         }
     } catch (error) {
-        console.error("Save error:", error);
-        showNotification("Network error occurred.", "error");
+        console.error("Cloud sync error:", error);
+        showNotification("Database connection failed", "error");
     }
 }
 
@@ -230,34 +274,37 @@ async function addNewLink() {
 //  REMOVE LINK FROM PUBLIC JSON DATABASE
 // ==========================================
 
-async function removeLinkItem(indexTarget) {
-    if (!confirm("Delete this link from the public cloud database?")) return;
+async function removeLinkItem(id) {
+    if (!confirm("Delete this link from the database?")) return;
 
-    // Remove item from our local copy array
-    const updatedLinks = [...localLinksCache];
-    updatedLinks.splice(indexTarget, 1);
+    const index = localLinksCache.findIndex(item => item && item._id === id);
+    if (index === -1) {
+        showNotification("Link not found.", "error");
+        return;
+    }
 
+    localLinksCache.splice(index, 1);
+    saveToLocalStorage(localLinksCache);
+    renderLinksList(getFilteredData());
+    showNotification("Link deleted permanently", "success");
+
+    // Background cloud sync
     try {
-        showNotification("Updating cloud...", "info");
         const response = await fetch(API_URL, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(updatedLinks)
+            body: JSON.stringify(localLinksCache)
         });
-
-        if (response.ok) {
-            showNotification("Link deleted permanently", "success");
-            loadPublicLinks();
-        } else {
-            showNotification("Could not delete from database.", "error");
+        if (!response.ok) {
+            console.error(`Delete sync failed: ${response.status} ${response.statusText}`);
         }
     } catch (err) {
-        console.error("Delete error:", err);
+        console.error("Delete sync error:", err.message);
     }
 }
 
 // ==========================================
-//  OPTIONAL AUTH STYLING & VPN (Unchanged)
+//  OPTIONAL AUTH STYLING & VPN
 // ==========================================
 
 function initializeLoginSystem() {
@@ -308,7 +355,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeVpnSystem();
 
     localLinksCache = loadFromLocalStorage();
-    renderLinksList(localLinksCache);
+    renderLinksList(getFilteredData());
 
     if (navigator.onLine) {
         loadPublicLinks();
@@ -322,12 +369,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchInput = document.getElementById('searchInput');
     if (searchInput) {
         searchInput.addEventListener('input', (e) => {
-            const query = (e.target.value || '').toLowerCase();
-            const filteredResults = localLinksCache.filter(item => {
-                if (!item) return false;
-                return item.title.toLowerCase().includes(query) || item.url.toLowerCase().includes(query);
-            });
-            renderLinksList(filteredResults);
+            currentSearchQuery = e.target.value || '';
+            renderLinksList(getFilteredData());
         });
     }
 
