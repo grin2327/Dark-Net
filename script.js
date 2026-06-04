@@ -4,7 +4,7 @@
 // ==========================================
 
 // ⚠️ PASTE YOUR GENERATED KVDB BUCKET URL HERE (Make sure it ends with a slash /)
-const KVDB_BUCKET_URL = "https://kvdb.io/YOUR_GENERATED_BUCKET_ID_HERE/"; 
+const KVDB_BUCKET_URL = "https://kvdb.io/3QKuAXCJ6AqgDwMGQCKAs9/"; 
 const API_URL = `${KVDB_BUCKET_URL}darknet_links`;
 
 const STORAGE_KEY = "darknet_links_cache_v3";
