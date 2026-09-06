@@ -14,6 +14,7 @@ let isAdminLoggedIn = false;
 let ipRotationInterval = null;
 let currentSearchQuery = "";
 
+// HTML সেফ করার জন্য এসকেপ ফাংশন
 function escapeHTML(str) {
     if (!str) return "";
     return str.replace(/[&<>'"]/g, tag => ({
@@ -25,6 +26,7 @@ function escapeHTML(str) {
     }[tag]));
 }
 
+// নোটিফিকেশন প্রদর্শন
 function showNotification(message, type = "info") {
     if (type === "error") return;
     
@@ -46,10 +48,21 @@ function showNotification(message, type = "info") {
     setTimeout(() => notification.remove(), 3000);
 }
 
+// ইউনিক আইডি তৈরি
 function generateId() {
     return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
 }
 
+// র্যান্ডম IP জেনারেটর (VPN এর জন্য)
+function generateRandomIP() {
+    const ipDisplay = document.getElementById('ipDisplay');
+    if (ipDisplay) {
+        const randomIP = `${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}`;
+        ipDisplay.textContent = randomIP;
+    }
+}
+
+// লোকাল স্টোরেজে সেভ
 function saveToLocalStorage(data) {
     try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
@@ -60,6 +73,7 @@ function saveToLocalStorage(data) {
     }
 }
 
+// লোকাল স্টোরেজ থেকে লোড
 function loadFromLocalStorage() {
     try {
         const saved = localStorage.getItem(STORAGE_KEY);
@@ -71,6 +85,7 @@ function loadFromLocalStorage() {
     }
 }
 
+// ডিজিটাল ঘড়ি এবং তারিখ চালু
 function startSystemClock() {
     const clockEl = document.getElementById('clockDisplay');
     const dateEl = document.getElementById('dateDisplay');
@@ -93,6 +108,7 @@ function startSystemClock() {
     setInterval(tick, 1000);
 }
 
+// ক্লাউড ডেটাবেস থেকে লিংক লোড
 async function loadPublicLinks() {
     try {
         const response = await fetch(API_URL, { method: 'GET' });
@@ -126,6 +142,7 @@ async function loadPublicLinks() {
     }
 }
 
+// ক্লাউডে সিঙ্ক করা
 async function syncToCloud(data) {
     try {
         await fetch(API_URL, {
@@ -138,6 +155,7 @@ async function syncToCloud(data) {
     }
 }
 
+// সার্চ ফিল্টারিং ডেটা পাওয়া
 function getFilteredData() {
     if (!currentSearchQuery) return localLinksCache;
     const query = currentSearchQuery.toLowerCase();
@@ -148,13 +166,14 @@ function getFilteredData() {
     });
 }
 
+// এইচটিএমএল-এ লিংক রেন্ডার করা
 function renderLinksList(records) {
     const container = document.getElementById('linkList');
     if (!container) return;
     container.innerHTML = '';
 
     if (!records || !Array.isArray(records) || records.length === 0) {
-        container.innerHTML = '<div class="empty-state">No database links found. Add one to start!</div>';
+        container.innerHTML = '<div class="empty-state">📂 No database links found. Add one to start!</div>';
         return;
     }
 
@@ -180,19 +199,26 @@ function renderLinksList(records) {
     });
 }
 
+// নতুন লিংক যোগ করা
 async function addNewLink() {
     const urlIn = document.getElementById('linkInput');
     const titleIn = document.getElementById('titleInput');
     if (!urlIn) return;
 
-    const cleanUrl = urlIn.value.trim();
+    let cleanUrl = urlIn.value.trim();
     const cleanTitle = titleIn && titleIn.value ? titleIn.value.trim() : "Unnamed Link";
 
     if (!cleanUrl) return;
 
+    // ইউআরএল এ http:// বা https:// না থাকলে স্বয়ংক্রিয়ভাবে যোগ করা
+    if (!/^https?:\/\//i.test(cleanUrl)) {
+        cleanUrl = 'https://' + cleanUrl;
+    }
+
     try {
         new URL(cleanUrl);
     } catch {
+        alert("Please enter a valid URL!");
         return;
     }
 
@@ -229,6 +255,7 @@ async function addNewLink() {
     }
 }
 
+// লিংক মুছে ফেলা
 async function removeLinkItem(id) {
     if (!confirm("Delete this link from the database?")) return;
 
@@ -237,6 +264,7 @@ async function removeLinkItem(id) {
 
     localLinksCache.splice(index, 1);
     saveToLocalStorage(localLinksCache);
+
     renderLinksList(getFilteredData());
 
     try {
@@ -245,11 +273,13 @@ async function removeLinkItem(id) {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(localLinksCache)
         });
-    } catch (err) {
-        console.error("Delete sync error:", err.message);
+        showNotification("Link Removed!", "info");
+    } catch (error) {
+        console.error("Cloud delete error:", error);
     }
 }
 
+// লগইন সিস্টেম
 function initializeLoginSystem() {
     const loginBtn = document.getElementById('loginBtn');
     const userStatus = document.getElementById('userStatus');
@@ -283,12 +313,7 @@ function initializeLoginSystem() {
     });
 }
 
-function generateRandomIP() {
-    const generatedIp = `${Math.floor(Math.random() * 190) + 12}.${Math.floor(Math.random() * 254)}.${Math.floor(Math.random() * 254)}.${Math.floor(Math.random() * 253) + 1}`;
-    const ipDisplay = document.getElementById('ipDisplay');
-    if (ipDisplay) ipDisplay.textContent = generatedIp;
-}
-
+// VPN সিস্টেম
 function initializeVpnSystem() {
     const vpn = document.getElementById('vpnStatus');
     if (!vpn) return;
@@ -296,6 +321,7 @@ function initializeVpnSystem() {
     vpn.className = "txt-cyan";
 }
 
+// পেজ লোড হওয়ার পর ইনিশিয়ালাইজেশন
 document.addEventListener('DOMContentLoaded', () => {
     startSystemClock();
     initializeLoginSystem();
@@ -343,6 +369,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+// ইন্টারনেট কানেকশন ফেরত আসলে অটো সিঙ্ক
 window.addEventListener('online', () => {
     loadPublicLinks();
 });
