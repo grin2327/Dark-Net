@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DRK-JU | HOME-PAGE</title>
+    
+    <!-- FontAwesome for Premium OS Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Font for Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- DESIGN SYSTEM: SMOOTH PREMIUM CYBER-PASTEL --- */
+        :root {
+            --bg-base: #0b0914;           
+            --primary-hot: #ff337a;       
+            --cute-cyan: #00e5ff;         
+            --accent-purple: #8a4fff;     
+            --neon-green: #2eff66;        
+            --text-main: #f4f2f7;
+            --text-muted: #857da1;
+            --panel-bg: rgba(23, 19, 41, 0.75); 
+            --glass-border: rgba(255, 255, 255, 0.05); 
+            --radius-lg: 20px;
+            --radius-sm: 12px;
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            
+            --bg-main-gradient-start: #1c1537;
+            --bg-main-gradient-end: #0f0b21;
+            --card-bg-opacity: rgba(26, 21, 51, 0.45);
+            --border-purple-glow: #2d235d;
+            --neon-cyan: #00e5ff;
+            --neon-green: #00e676;
+            --neon-pink: #ff1744;
+            --btn-purple-gradient: linear-gradient(135deg, #7e57c2, #5e35b1);
+            --btn-danger-red: #ef5350;
+            --text-white: #ffffff;
+            --text-muted-slate: #7e799c;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(145deg, var(--bg-main-gradient-start), var(--bg-main-gradient-end));
+            color: var(--text-main);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            padding-bottom: 60px;
+        }
+
+        body::before, body::after {
+            content: '';
+            position: fixed;
+            width: 40vw;
+            height: 40vw;
+            border-radius: 50%;
+            filter: blur(160px);
+            z-index: -1;
+            opacity: 0.12; 
+            pointer-events: none;
+        }
+        body::before { background: var(--primary-hot); top: -10%; left: -5%; }
+        body::after { background: var(--accent-purple); bottom: -10%; right: -5%; }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 5%;
+            background: rgba(13, 10, 24, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--glass-border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .nav-left, .nav-right { 
+            display: flex; 
+            align-items: center; 
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .btn-login, .btn-toggle-vpn, .btn-shop {
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-login {
+            background: rgba(255, 255, 255, 0.04);
+            color: var(--text-main);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .btn-login:hover { background: var(--text-main); color: var(--bg-base); transform: translateY(-1px); }
+        .btn-shop { background: linear-gradient(135deg, var(--primary-hot), #ff5287); color: white; }
+        .btn-shop:hover { transform: translateY(-1px); filter: brightness(1.1); }
+        .btn-toggle-vpn { background: rgba(0, 229, 255, 0.08); color: var(--cute-cyan); border: 1px solid rgba(0, 229, 255, 0.2); }
+        .btn-toggle-vpn:hover { background: var(--cute-cyan); color: var(--bg-base); transform: translateY(-1px); }
+
+        .status-guest {
+            font-size: 0.8rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            background: linear-gradient(135deg, var(--primary-hot), var(--accent-purple));
+            padding: 6px 14px;
+            border-radius: 20px;
+            color: white;
+        }
+
+        .nav-status { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); display: flex; align-items: center; gap: 6px; white-space: nowrap; }
+
+        .txt-cyan { color: var(--cute-cyan); font-weight: 700; }
+        .txt-yellow { color: #ffc857; font-weight: 700; }
+        .txt-cyan-neon { color: var(--cute-cyan); font-weight: 800; text-shadow: 0 0 8px rgba(0, 229, 255, 0.2); }
+        .txt-green-neon { color: var(--neon-green); font-weight: 800; text-shadow: 0 0 8px rgba(0, 230, 118, 0.2); }
+        .txt-pink-neon { color: var(--primary-hot); font-weight: 800; }
+
+        .main-layout-fullscreen { max-width: 1100px; width: 100%; margin: 0 auto; padding: 40px 20px; flex: 1; }
+
+        .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 20px; margin-bottom: 40px; }
+        .info-card {
+            background: var(--panel-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: var(--transition);
+        }
+        .info-card:hover { transform: translateY(-3px); background: rgba(28, 23, 48, 0.9); }
+        .border-cyan { border-left: 4px solid rgba(0, 229, 255, 0.3); }
+        .border-green { border-left: 4px solid rgba(46, 255, 102, 0.3); }
+        .border-cyan:hover { border-color: rgba(0, 229, 255, 0.6); }
+        .border-green:hover { border-color: rgba(46, 255, 102, 0.6); }
+
+        .info-label { font-size: 0.75rem; font-weight: 800; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; }
+        .info-value { font-size: 1.35rem; font-weight: 800; }
+        .youtube-link { color: var(--primary-hot); text-decoration: none; font-size: 0.95rem; font-weight: 700; transition: var(--transition); }
+        .youtube-link:hover { color: var(--text-main); transform: translateX(3px); }
+
+        /* --- AESTHETIC OS APPLICATION SECTION STYLES --- */
+        .os-container {
+            background: var(--panel-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            padding: 28px 24px;
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+        .os-heading {
+            font-size: 1.1rem;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            margin-bottom: 22px;
+            text-transform: uppercase;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .os-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        .os-card {
+            background: rgba(13, 10, 25, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: var(--radius-sm);
+            padding: 24px 16px;
+            text-align: center;
+            text-decoration: none;
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+        
+        /* Card Hover Effects & Distinct Glow Colors */
+        .os-card-win:hover {
+            border-color: #00a4ef;
+            background: rgba(0, 164, 239, 0.08);
+            box-shadow: 0 8px 25px rgba(0, 164, 239, 0.25);
+            transform: translateY(-5px);
+        }
+        .os-card-linux:hover {
+            border-color: var(--neon-green);
+            background: rgba(46, 255, 102, 0.08);
+            box-shadow: 0 8px 25px rgba(46, 255, 102, 0.25);
+            transform: translateY(-5px);
+        }
+        .os-card-mac:hover {
+            border-color: #ff337a;
+            background: rgba(255, 51, 122, 0.08);
+            box-shadow: 0 8px 25px rgba(255, 51, 122, 0.25);
+            transform: translateY(-5px);
+        }
+
+        .os-icon-wrapper {
+            font-size: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+        .os-card:hover .os-icon-wrapper {
+            transform: scale(1.15);
+        }
+
+        /* Neon Icon Colors */
+        .win-glow { color: #00e5ff; filter: drop-shadow(0 0 10px rgba(0, 229, 255, 0.6)); }
+        .linux-glow { color: var(--neon-green); filter: drop-shadow(0 0 10px rgba(46, 255, 102, 0.6)); }
+        .mac-glow { color: #ffffff; filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.6)); }
+
+        .os-title-text {
+            font-family: 'Orbitron', 'Segoe UI', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        
+        /* Stylized Gradient Titles */
+        .win-title {
+            background: linear-gradient(135deg, #ffffff, #00e5ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .linux-title {
+            background: linear-gradient(135deg, #ffffff, #2eff66);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .mac-title {
+            background: linear-gradient(135deg, #ffffff, #ff75a0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .os-sub-text {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 8px;
+            width: 100%;
+        }
+
+        .form-container, .database-container { background: var(--panel-bg); border: 1px solid var(--glass-border); border-radius: var(--radius-lg); padding: 30px; margin-bottom: 40px; }
+        .section-heading { font-size: 1.1rem; font-weight: 800; letter-spacing: 0.5px; margin-bottom: 22px; text-transform: uppercase; }
+        
+        .input-stack { display: flex; flex-direction: column; gap: 16px; margin-bottom: 24px; }
+        .input-inline-row { 
+            display: flex; 
+            gap: 14px;
+            align-items: stretch;
+            width: 100%;
+        }
+        
+        .input-inline-row #linkInput {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .custom-input {
+            width: 100%;
+            background: #0f0c1f;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 14px 20px;
+            border-radius: var(--radius-sm);
+            color: var(--text-main);
+            font-size: 0.95rem;
+            font-weight: 600;
+            outline: none;
+            transition: var(--transition);
+        }
+        .custom-input:focus { border-color: var(--cute-cyan); background: #130f29; }
+        .custom-input::placeholder { color: #534c70; }
+
+        .btn-add-link {
+            background: var(--text-main);
+            color: var(--bg-base);
+            border: none;
+            padding: 14px 28px;
+            border-radius: var(--radius-sm);
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            white-space: nowrap;
+            min-height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .btn-add-link:hover { background: var(--cute-cyan); transform: translateY(-1px); }
+
+        .search-wrapper { border-top: 1px solid rgba(255, 255, 255, 0.06); padding-top: 24px; }
+        .search-field:focus { border-color: var(--primary-hot); }
+
+        /* ALWAYS OPEN MULTI-COLUMN OFFLINE INBOX STYLES */
+        .offline-box {
+            background: var(--panel-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            padding: 20px 24px;
+            margin-bottom: 40px;
+        }
+        .offline-box-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--primary-hot);
+            font-weight: 800;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        
+        .offline-grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .offline-link-list {
+            padding-left: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        .offline-link-list li {
+            color: var(--cute-cyan);
+            font-weight: 700;
+        }
+        .offline-link-list a {
+            color: var(--text-main);
+            text-decoration: none;
+            transition: var(--transition);
+            font-weight: 600;
+        }
+        .offline-link-list a:hover {
+            color: var(--cute-cyan);
+            padding-left: 4px;
+        }
+
+        .links-list-group { list-style: none; display: flex; flex-direction: column; gap: 12px; margin-top: 15px; }
+        .link-item {
+            background: rgba(15, 12, 31, 0.6);
+            border: 1px solid var(--glass-border);
+            padding: 16px 22px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 16px;
+            transition: var(--transition);
+            flex-wrap: wrap;
+        }
+        .link-item:hover { border-color: var(--accent-purple); background: #0f0c1f; transform: translateX(3px); }
+        .link-details { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 0; }
+        .link-title { font-weight: 700; font-size: 0.95rem; word-break: break-word; color: var(--cute-cyan); }
+        .link-url { font-size: 0.8rem; color: var(--text-muted); text-decoration: none; transition: color 0.2s; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .link-url:hover { color: var(--cute-cyan); }
+
+        .btn-delete-link {
+            background: rgba(255, 51, 122, 0.1);
+            color: var(--primary-hot);
+            border: 1px solid rgba(255, 51, 122, 0.2);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            transition: var(--transition);
+            flex-shrink: 0;
+            margin-left: auto;
+        }
+        .btn-delete-link:hover { background: var(--primary-hot); color: white; transform: scale(1.05); }
+        .link-meta { font-size: 0.7rem; color: #666; margin-top: 4px; }
+        .empty-state { color: var(--text-muted); text-align: center; padding: 24px 0; font-style: italic; font-size: 0.95rem; }
+
+        @media (max-width: 850px) {
+            header { flex-direction: column; gap: 16px; padding: 20px; text-align: center; }
+            .nav-left, .nav-right { width: 100%; justify-content: center; flex-wrap: wrap; }
+            .input-inline-row { flex-direction: column; gap: 12px; }
+            .btn-add-link { width: 100%; padding: 14px; min-height: 44px; }
+            .link-item { flex-direction: column; align-items: flex-start; }
+            .btn-delete-link { margin-left: 0; margin-top: 10px; align-self: flex-end; }
+            .os-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="nav-left">
+            <h2 style="font-size: 1.3rem; margin: 0; font-weight: 800;">🔥 DARK-NET</h2>
+            <button id="loginBtn" class="btn-login">🔒 Login</button>
+        </div>
+        <div class="nav-right">
+            <span id="userStatus" class="status-guest">Guest</span>
+            <div class="nav-status">VPN: <span id="vpnStatus" class="txt-cyan">Disabled</span></div>
+            <div class="nav-status">IP: <span id="ipDisplay" class="txt-yellow">Hidden</span></div>
+            <button id="toggleVpnBtn" class="btn-toggle-vpn" title="Toggle VPN">🛡️</button>
+            <a href="cute-dress-upload.html" class="btn-shop" title="Go to Shop">🛍️</a>
+        </div>
+    </header>
+
+    <main class="main-layout-fullscreen">
+        <!-- SYSTEM TIME / TRACK SECTION -->
+        <section class="info-grid">
+            <div class="info-card border-cyan">
+                <span class="info-label">SYSTEM TIME</span>
+                <div id="clockDisplay" class="info-value txt-cyan-neon">00:00:00 AM</div>
+            </div>
+            <div class="info-card border-green">
+                <span class="info-label">CALENDAR DATE</span>
+                <div id="dateDisplay" class="info-value txt-green-neon">Loading Date...</div>
+            </div>
+            <div class="info-card border-cyan">
+                <span class="info-label">LIVE TRACK</span>
+                <div class="info-row">
+                    <span id="viewCount" class="info-value txt-pink-neon">1 view</span>
+                </div>
+            </div>
+            <div class="info-card border-cyan">
+                <span class="info-label">WEB LINK</span>
+                <div class="info-value">
+                    <a href="https://www.youtube.com/@AMPIRESONGBD" target="_blank" class="youtube-link">YouTube Channel →</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- AESTHETIC OS APPLICATIONS HUB SECTION -->
+        <section class="os-container">
+            <h3 class="os-heading txt-cyan-neon">
+                <i class="fa-solid fa-laptop-code"></i> OS Applications Hub
+            </h3>
+            <div class="os-grid">
+                <!-- Left Side: Windows -->
+                <a href="me/windows.html" target="_blank" rel="noopener noreferrer" class="os-card os-card-win">
+                    <div class="os-icon-wrapper win-glow">
+                        <i class="fa-brands fa-windows"></i>
+                    </div>
+                    <span class="os-title-text win-title">Windows</span>
+                    <span class="os-sub-text">Premium Apps • Open Page</span>
+                </a>
+
+                <!-- Middle Side: Linux -->
+                <a href="#" target="_blank" rel="noopener noreferrer" class="os-card os-card-linux">
+                    <div class="os-icon-wrapper linux-glow">
+                        <i class="fa-brands fa-linux"></i>
+                    </div>
+                    <span class="os-title-text linux-title">Linux</span>
+                    <span class="os-sub-text">Open Source • Open Page • In fixING</span>
+                </a>
+
+                <!-- Right Side: Mac OS -->
+                <a href="#" target="_blank" rel="noopener noreferrer" class="os-card os-card-mac">
+                    <div class="os-icon-wrapper mac-glow">
+                        <i class="fa-brands fa-apple"></i>
+                    </div>
+                    <span class="os-title-text mac-title">Mac OS</span>
+                    <span class="os-sub-text">System Tools • Open Page • In fixING </span>
+                </a>
+            </div>
+        </section>
+
+        <!-- OFFLINE MESSAGE INBOX (ALWAYS OPEN & MULTI-COLUMN) -->
+        <div class="offline-box">
+            <div class="offline-box-header">
+                <span>📩 OFFLINE MESSAGE INBOX</span>
+            </div>
+            <div class="offline-grid-container">
+                <!-- Layer 1: Items 1 - 10 -->
+                <ol class="offline-link-list" start="1">
+                    <li><a href="https://earthcam.com" target="_blank" rel="noopener noreferrer">EarthCam</a></li>
+                    <li><a href="https://haveibeenpwned.com" target="_blank" rel="noopener noreferrer">Have I Been Pwned</a></li>
+                    <li><a href="https://guerrillamail.com" target="_blank" rel="noopener noreferrer">Guerrilla Mail</a></li>
+                    <li><a href="https://web.archive.org" target="_blank" rel="noopener noreferrer">Wayback Machine</a></li>
+                    <li><a href="https://radio.garden" target="_blank" rel="noopener noreferrer">Radio Garden</a></li>
+                    <li><a href="https://thispersondoesnotexist.com" target="_blank" rel="noopener noreferrer">This Person Does Not Exist</a></li>
+                    <li><a href="https://tinywow.com" target="_blank" rel="noopener noreferrer">TinyWow</a></li>
+                    <li><a href="https://remove.bg" target="_blank" rel="noopener noreferrer">Remove.bg</a></li>
+                    <li><a href="https://flightradar24.com" target="_blank" rel="noopener noreferrer">FlightRadar24</a></li>
+                    <li><a href="https://openlibrary.org" target="_blank" rel="noopener noreferrer">Open Library</a></li>
+                </ol>
+
+                <!-- Layer 2: Items 11 - 20 -->
+                <ol class="offline-link-list" start="11">
+                    <li><a href="#" target="_blank" rel="noopener noreferrer">---</a></li>
+                    <li><a href="#" target="_blank" rel="noopener noreferrer">---</a></li>
+                    <li><a href="#" target="_blank" rel="noopener noreferrer">---</a></li>
+                    <li><a href="#" target="_blank" rel="noopener noreferrer">---</a></li>
+                    <li><a href="#" target="_blank" rel="noopener noreferrer">---</a></li>
+                    <li><a href="#" target="_blank" rel="noopener noreferrer">---</a></li>
+                    <li><a href="#" target="_blank" rel="noopener noreferrer">---</a></li>
+                    <li><a href="#" target="_blank" rel="noopener noreferrer">---</a></li>
+                    <li><a href="#" target="_blank" rel="noopener noreferrer">---</a></li>
+                    <li><a href="#" target="_blank" rel="noopener noreferrer">---</a></li>
+                </ol>
+
+                <!-- Layer 3: Items 21 - 30 -->
+                <ol class="offline-link-list" start="21">
+                    <li><a href="#" target="_blank" rel="noopener noreferrer">---</a></li>
+                    <li><a href="#" target="_blank" rel="noopener noreferrer">---</a></li>
+                    <li><a href="#" target="_blank" rel="noopener noreferrer">---</a></li>
+                    <li><a href="#" target="_blank" rel="noopener noreferrer">---</a></li>
+                    <li><a href="#" target="_blank" rel="noopener noreferrer">---</a></li>
+                    <li><a href="#" target="_blank" rel="noopener noreferrer">---</a></li>
+                    <li><a href="#" target="_blank" rel="noopener noreferrer">---</a></li>
+                    <li><a href="#" target="_blank" rel="noopener noreferrer">---</a></li>
+                    <li><a href="#" target="_blank" rel="noopener noreferrer">---</a></li>
+                    <li><a href="#" target="_blank" rel="noopener noreferrer">---</a></li>
+                </ol>
+
+                <!-- Layer 4: Items 31 - 40 -->
+                <ol class="offline-link-list" start="31">
+                    <li><a href="#" target="_blank" rel="noopener noreferrer">---</a></li>
+                    <li><a href="#" target="_blank" rel="noopener noreferrer">---</a></li>
+                    <li><a href="#" target="_blank" rel="noopener noreferrer">---</a></li>
+                    <li><a href="#" target="_blank" rel="noopener noreferrer">---</a></li>
+                    <li><a href="#" target="_blank" rel="noopener noreferrer">---</a></li>
+                    <li><a href="#" target="_blank" rel="noopener noreferrer">---</a></li>
+                    <li><a href="#" target="_blank" rel="noopener noreferrer">---</a></li>
+                    <li><a href="#" target="_blank" rel="noopener noreferrer">---</a></li>
+                    <li><a href="#" target="_blank" rel="noopener noreferrer">---</a></li>
+                    <li><a href="#" target="_blank" rel="noopener noreferrer">---</a></li>
+                </ol>
+                <!-- Layer 5: Items 41 - 50 -->
+                <!-- <ol class="offline-link-list" start="41">
+                    <li><a href="#" target="_blank" rel="noopener noreferrer">---</a></li>
+                    <li><a href="#" target="_blank" rel="noopener noreferrer">---</a></li>
+                    <li><a href="#" target="_blank" rel="noopener noreferrer">---</a></li>
+                    <li><a href="#" target="_blank" rel="noopener noreferrer">---</a></li>
+                    <li><a href="#" target="_blank" rel="noopener noreferrer">---</a></li>
+                    <li><a href="#" target="_blank" rel="noopener noreferrer">---</a></li>
+                    <li><a href="#" target="_blank" rel="noopener noreferrer">---</a></li>
+                    <li><a href="#" target="_blank" rel="noopener noreferrer">---</a></li>
+                    <li><a href="#" target="_blank" rel="noopener noreferrer">---</a></li>
+                    <li><a href="#" target="_blank" rel="noopener noreferrer">---</a></li>
+                </ol> -->
+            </div>
+        </div>
+
+        <section class="form-container">
+            <h3 class="section-heading txt-cyan-neon">✨ Add New Link (Public Access)</h3>
+            <div class="input-stack">
+                <input type="text" id="titleInput" class="custom-input" placeholder="Link Title (optional)">
+                <div class="input-inline-row">
+                    <input type="text" id="linkInput" class="custom-input" placeholder="Enter URL (e.g., https://example.com)">
+                    <button id="addLinkBtn" class="btn-add-link">Add Link</button>
+                </div>
+            </div>
+            
+            <div class="search-wrapper">
+                <input type="text" id="searchInput" class="custom-input search-field" placeholder="🔍 Search database links in real-time...">
+            </div>
+        </section>
+
+        <section class="database-container">
+            <h3 class="section-heading txt-green-neon">🔮 Saved Links Database</h3>
+            <ul id="linkList" class="links-list-group"></ul>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+    <script>
+        (function handleSessionTracking() {
+            const countEl = document.getElementById('viewCount');
+            if(countEl) {
+                let views = parseInt(sessionStorage.getItem('page_view_count') || '0', 10);
+                views++;
+                sessionStorage.setItem('page_view_count', views);
+                countEl.textContent = `${views} ${views === 1 ? 'view' : 'views'}`;
+            }
+        })();
+    </script>
+</body>
+</html>
