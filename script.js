@@ -38,14 +38,44 @@ function showNotification(message, type = "info") {
         right: 20px;
         padding: 14px 22px;
         border-radius: 8px;
-        background: ${type === 'success' ? '#2eff66' : '#00e5ff'};
-        color: #0b0914;
+        background: ${type === 'success' ? '#e2136e' : '#00e5ff'};
+        color: #ffffff;
         font-weight: 700;
         z-index: 10000;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.5);
     `;
     document.body.appendChild(notification);
     setTimeout(() => notification.remove(), 3000);
+}
+
+// BKASH POPUP MODAL CONTROL
+function openBkashModal() {
+    const overlay = document.getElementById('bkashModalOverlay');
+    if (overlay) overlay.classList.add('active');
+}
+
+function closeBkashModal() {
+    const overlay = document.getElementById('bkashModalOverlay');
+    if (overlay) overlay.classList.remove('active');
+}
+
+function closeBkashModalOnOutside(e) {
+    if (e.target.id === 'bkashModalOverlay') {
+        closeBkashModal();
+    }
+}
+
+// bKash Number Copy Functionality
+function copyBkashNumber() {
+    const bkashNumEl = document.getElementById('bkashNum');
+    if (!bkashNumEl) return;
+    
+    const bkashNum = bkashNumEl.textContent;
+    navigator.clipboard.writeText(bkashNum).then(() => {
+        showNotification("bKash Personal Number Copied: " + bkashNum, "success");
+    }).catch(err => {
+        console.error("Could not copy number: ", err);
+    });
 }
 
 // ইউনিক আইডি তৈরি
@@ -83,29 +113,6 @@ function loadFromLocalStorage() {
     } catch (err) {
         return [];
     }
-}
-
-// ডিজিটাল ঘড়ি এবং তারিখ চালু
-function startSystemClock() {
-    const clockEl = document.getElementById('clockDisplay');
-    const dateEl = document.getElementById('dateDisplay');
-
-    const tick = () => {
-        const now = new Date();
-        if (clockEl) {
-            clockEl.textContent = now.toLocaleTimeString('en-US', {
-                hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true
-            });
-        }
-    };
-
-    if (dateEl) {
-        const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
-        dateEl.textContent = new Date().toLocaleDateString('en-US', options);
-    }
-
-    tick();
-    setInterval(tick, 1000);
 }
 
 // ক্লাউড ডেটাবেস থেকে লিংক লোড
@@ -210,7 +217,6 @@ async function addNewLink() {
 
     if (!cleanUrl) return;
 
-    // ইউআরএল এ http:// বা https:// না থাকলে স্বয়ংক্রিয়ভাবে যোগ করা
     if (!/^https?:\/\//i.test(cleanUrl)) {
         cleanUrl = 'https://' + cleanUrl;
     }
@@ -323,7 +329,6 @@ function initializeVpnSystem() {
 
 // পেজ লোড হওয়ার পর ইনিশিয়ালাইজেশন
 document.addEventListener('DOMContentLoaded', () => {
-    startSystemClock();
     initializeLoginSystem();
     initializeVpnSystem();
 
