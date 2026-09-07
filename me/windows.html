@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Windows Applications | DRK-JU</title>
     
+    <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
     
     <style>
@@ -16,13 +18,14 @@
             --neon-pink: #ff3399;
             --neon-cyan: #00e5ff;
             --neon-green: #2eff66;
+            --bkash-pink: #e2136e;
             --text-main: #f5edff;
             --text-muted: #9f8bb8;
             --panel-bg: rgba(25, 15, 42, 0.65);
             --glass-border: rgba(176, 66, 255, 0.25);
             --radius-lg: 16px;
             --radius-sm: 10px;
-            --transition: all 0.3s ease;
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
         * {
@@ -64,7 +67,7 @@
             gap: 20px;
         }
 
-        /* --- HEADER & BACK BUTTON --- */
+        /* --- HEADER & NAVIGATION --- */
         .header-wrapper {
             display: flex;
             justify-content: space-between;
@@ -84,6 +87,12 @@
             gap: 10px;
         }
 
+        .nav-buttons-wrap {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
         .btn-back {
             display: inline-flex;
             align-items: center;
@@ -98,12 +107,32 @@
             font-size: 0.9rem;
             transition: var(--transition);
         }
-
         .btn-back:hover {
             background: var(--neon-cyan);
             color: var(--bg-base);
             box-shadow: 0 0 15px rgba(0, 229, 255, 0.4);
             transform: translateX(-3px);
+        }
+
+        .btn-donate {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(226, 19, 110, 0.15);
+            border: 1px solid var(--bkash-pink);
+            color: #ff3399;
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .btn-donate:hover {
+            background: var(--bkash-pink);
+            color: #ffffff;
+            box-shadow: 0 0 15px rgba(226, 19, 110, 0.5);
+            transform: translateY(-2px);
         }
 
         /* --- CATEGORY & FILTER SECTION --- */
@@ -197,7 +226,7 @@
             box-shadow: 0 0 12px rgba(0, 229, 255, 0.3);
         }
 
-        /* --- POSTS CONTAINER & UNIFORM CARD STYLES --- */
+        /* --- POSTS CONTAINER --- */
         #postsContainer {
             display: flex;
             flex-direction: column;
@@ -233,7 +262,7 @@
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
-            height: 2.8em; /* Equal title height */
+            height: 2.8em;
         }
 
         .post-meta {
@@ -256,7 +285,6 @@
             margin-bottom: 18px;
         }
 
-        /* Fixed Uniform Thumbnail Container */
         .post-image-container {
             flex: 0 0 180px;
             height: 110px;
@@ -272,7 +300,7 @@
         .post-image-container img {
             width: 100%;
             height: 100%;
-            object-fit: contain; /* Keeps logo aspect ratio clean */
+            object-fit: contain;
             padding: 8px;
         }
 
@@ -317,7 +345,153 @@
             display: none;
         }
 
-        /* --- RESPONSIVE MOBILE OPTIMIZATION --- */
+        /* --- GLOSSY BKASH MODAL (MATCHING INDEX PAGE) --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(5, 3, 10, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .bkash-modal {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(226, 19, 110, 0.15));
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-top: 1px solid rgba(255, 255, 255, 0.4);
+            border-left: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 28px;
+            padding: 36px 30px;
+            max-width: 440px;
+            width: 90%;
+            position: relative;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), inset 0 0 15px rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            transform: scale(0.85);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-align: center;
+        }
+        .modal-overlay.active .bkash-modal {
+            transform: scale(1);
+        }
+
+        .btn-close-modal {
+            position: absolute;
+            top: 16px;
+            right: 18px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: white;
+            font-size: 1.2rem;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .btn-close-modal:hover { background: var(--bkash-pink); transform: rotate(90deg); }
+
+        .bkash-modal-logo {
+            width: 150px;
+            margin: 0 auto 15px auto;
+            display: block;
+            filter: none;
+        }
+
+        .bkash-modal-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.35rem;
+            color: #ffffff;
+            margin-bottom: 6px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .bkash-modal-subtext {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 22px;
+            line-height: 1.4;
+        }
+
+        .bkash-card-box {
+            background: rgba(15, 8, 22, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 18px;
+            padding: 20px;
+            margin-bottom: 18px;
+            backdrop-filter: blur(10px);
+            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
+        }
+
+        .bkash-badge-tag {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--bkash-pink), #ff2a8d);
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 800;
+            padding: 4px 12px;
+            border-radius: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            box-shadow: 0 4px 10px rgba(226, 19, 110, 0.3);
+        }
+
+        .bkash-num-flex {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 10px 16px;
+            border-radius: 12px;
+        }
+
+        .bkash-big-num {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.25rem;
+            font-weight: 900;
+            color: #ffffff;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-modal-copy {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.05));
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            backdrop-filter: blur(5px);
+        }
+        .btn-modal-copy:hover { 
+            background: var(--bkash-pink); 
+            border-color: var(--bkash-pink);
+            transform: scale(1.05); 
+        }
+
         @media (max-width: 650px) {
             body { padding: 15px 10px; }
             .header-wrapper { flex-direction: row; justify-content: space-between; }
@@ -334,7 +508,11 @@
     <div class="container">
         <div class="header-wrapper">
             <h1 class="page-title"><i class="fa-brands fa-windows"></i> Windows Software</h1>
-            <a href="../index.html" class="btn-back"><i class="fa-solid fa-arrow-left"></i> Back Page</a>
+            
+            <div class="nav-buttons-wrap">
+                <a href="../index.html" class="btn-back"><i class="fa-solid fa-arrow-left"></i> Back Page</a>
+                <button class="btn-donate" onclick="openBkashModal()"><i class="fa-solid fa-heart"></i> Donate</button>
+            </div>
         </div>
 
         <div class="category-container">
@@ -494,7 +672,68 @@
         </div>
     </div>
 
+    <!-- GLOSSY BKASH POPUP MODAL (INDEX PAGE DONATION MODAL) -->
+    <div id="bkashModalOverlay" class="modal-overlay" onclick="closeBkashModalOnOutside(event)">
+        <div class="bkash-modal">
+            <button class="btn-close-modal" onclick="closeBkashModal()">&times;</button>
+            
+            <!-- bKash Vector Logo -->
+            <svg class="bkash-modal-logo" viewBox="0 0 300 120" xmlns="http://www.w3.org/2000/svg">
+                <path fill="#e2136e" d="M35 15 L85 60 L35 105 L15 105 L55 60 L15 15 Z"/>
+                <path fill="#e2136e" d="M90 15 L140 60 L90 105 L110 105 L160 60 L110 15 Z"/>
+                <text x="165" y="72" font-family="'Orbitron', sans-serif" font-size="36" font-weight="900" fill="#ffffff">bKash</text>
+            </svg>
+
+            <h3 class="bkash-modal-title">💖 Support Our Project</h3>
+            <p class="bkash-modal-subtext">Apnar choto donation amader server active rakhte sahajjo korbe.</p>
+
+            <div class="bkash-card-box">
+                <span class="bkash-badge-tag"><i class="fa-solid fa-paper-plane"></i> Personal / Send Money</span>
+                <div class="bkash-num-flex">
+                    <span id="bkashNum" class="bkash-big-num">0156xxx1721</span>
+                    <button id="copyBkashBtn" class="btn-modal-copy" onclick="copyBkashNumber()"><i class="fa-regular fa-copy"></i> Copy</button>
+                </div>
+            </div>
+
+            <p style="font-size: 0.78rem; color: rgba(255,255,255,0.6);"><i class="fa-solid fa-circle-info" style="color: #e2136e;"></i> bKash App ba *247# dial kore Send Money korun.</p>
+        </div>
+    </div>
+
     <script>
+        // Modal Handlers
+        function openBkashModal() {
+            document.getElementById('bkashModalOverlay').classList.add('active');
+        }
+
+        function closeBkashModal() {
+            document.getElementById('bkashModalOverlay').classList.remove('active');
+        }
+
+        function closeBkashModalOnOutside(e) {
+            if (e.target.id === 'bkashModalOverlay') closeBkashModal();
+        }
+
+        // Smart Copy Function with Full bKash Number (Identical to Index Page)
+        function copyBkashNumber() {
+            const actualFullNumber = "01560001721";
+            navigator.clipboard.writeText(actualFullNumber).then(() => {
+                const btn = document.getElementById('copyBkashBtn');
+                if(btn) {
+                    btn.innerHTML = '<i class="fa-solid fa-check"></i> Copied!';
+                    btn.style.background = '#2eff66';
+                    btn.style.color = '#000000';
+                    setTimeout(() => {
+                        btn.innerHTML = '<i class="fa-regular fa-copy"></i> Copy';
+                        btn.style.background = '';
+                        btn.style.color = '';
+                    }, 2000);
+                }
+            }).catch(err => {
+                console.error("Failed to copy number: ", err);
+            });
+        }
+
+        // Category Filtering
         document.addEventListener("DOMContentLoaded", () => {
             const buttons = document.querySelectorAll(".cat-btn");
             const selectFilter = document.getElementById("filterSelect");
@@ -503,10 +742,8 @@
 
             function filterContent(category) {
                 let matchCount = 0;
-
                 posts.forEach(post => {
                     const postCategories = post.getAttribute("data-category").split(" ");
-
                     if (category === "all" || postCategories.includes(category)) {
                         post.style.display = "flex";
                         matchCount++;
@@ -525,15 +762,12 @@
                     }
                 });
 
-                if (selectFilter) {
-                    selectFilter.value = category;
-                }
+                if (selectFilter) selectFilter.value = category;
             }
 
             buttons.forEach(btn => {
                 btn.addEventListener("click", () => {
-                    const filterValue = btn.getAttribute("data-filter");
-                    filterContent(filterValue);
+                    filterContent(btn.getAttribute("data-filter"));
                 });
             });
 
