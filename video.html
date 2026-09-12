@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ভিডিও সেকশন - প্রাইভেট প্লেয়ার</title>
+    <!-- Font Awesome Icons for Navigation and Controls -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #0d1117;
+            color: #c9d1d9;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Top Bar Layout */
+        .top-bar {
+            background-color: #161b22;
+            padding: 15px 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #30363d;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Back Button Style */
+        .back-btn {
+            background-color: #21262d;
+            color: #58a6ff;
+            border: 1px solid #30363d;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .back-btn:hover {
+            background-color: #30363d;
+            color: #79c0ff;
+            border-color: #8b949e;
+        }
+
+        /* Header Title */
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #f0f6fc;
+        }
+
+        .header-title i {
+            color: #238636;
+        }
+
+        /* Video Layout Structure */
+        .main-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .video-card {
+            background-color: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 900px;
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+        }
+
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            background-color: #000;
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        .video-info {
+            padding: 20px;
+        }
+
+        .video-info h2 {
+            font-size: 20px;
+            color: #f0f6fc;
+            margin-bottom: 8px;
+        }
+
+        .video-info p {
+            font-size: 14px;
+            color: #8b949e;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Navigation Bar -->
+    <div class="top-bar">
+        <a href="javascript:history.back()" class="back-btn">
+            <i class="fa-solid fa-arrow-left"></i> ব্যাক (Back)
+        </a>
+        <div class="header-title">
+            <i class="fa-solid fa-circle-play"></i>
+            <span>ভিডিও সেকশন (Video Section)</span>
+        </div>
+        <div style="width: 100px;"></div> <!-- Top bar balance space -->
+    </div>
+
+    <!-- Main Container with YouTube Embedded Player -->
+    <div class="main-container">
+        <div class="video-card">
+            <div class="video-wrapper">
+                <iframe 
+                    src="https://www.youtube.com/embed/i-bN1-L6nsI" 
+                    title="YouTube Video Player" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                    allowfullscreen>
+                </iframe>
+            </div>
+            <div class="video-info">
+                <h2>প্রাইভেট প্লেয়ার সেকশন</h2>
+                <p>এখানে প্লেয়ার কন্ট্রোল ব্যবহার করে ভিডিও প্লে, পজ এবং ফুলস্ক্রিন করতে পারবেন।</p>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
