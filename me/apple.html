@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Windows Applications | DRK-JU</title>
+    <title>macOS Applications | DRK-JU</title>
     
     <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -409,7 +409,6 @@
             width: 150px;
             margin: 0 auto 15px auto;
             display: block;
-            filter: none;
         }
 
         .bkash-modal-title {
@@ -507,8 +506,9 @@
 <body>
 
     <div class="container">
+        <!-- HEADER -->
         <div class="header-wrapper">
-            <h1 class="page-title"><i class="fa-brands fa-windows"></i> Windows Software</h1>
+            <h1 class="page-title"><i class="fa-brands fa-apple"></i> macOS Applications</h1>
             
             <div class="nav-buttons-wrap">
                 <a href="../index.html" class="btn-back"><i class="fa-solid fa-arrow-left"></i> Back Page</a>
@@ -516,6 +516,7 @@
             </div>
         </div>
 
+        <!-- CATEGORIES & FILTER -->
         <div class="category-container">
             <div class="category-header">
                 <div class="category-title">
@@ -526,9 +527,10 @@
                     <label for="filterSelect"><i class="fa-solid fa-filter"></i> Filter:</label>
                     <select id="filterSelect" class="filter-select">
                         <option value="all">All Software</option>
-                        <option value="video-editing">Video Editing</option>
-                        <option value="graphics-design">Graphics Design</option>
-                        <option value="open-source">Free & Open Source</option>
+                        <option value="video-editing">Video Editing Software</option>
+                        <option value="graphics-design">Graphics Design Software</option>
+                        <option value="video-recording">Video Recording Software</option>
+                        <option value="open-source">Free & Open Source Software</option>
                     </select>
                 </div>
             </div>
@@ -543,203 +545,206 @@
                 <button class="cat-btn" data-filter="graphics-design">
                     <i class="fa-solid fa-pen-nib"></i> Graphics Design Software
                 </button>
+                <button class="cat-btn" data-filter="video-recording">
+                    <i class="fa-solid fa-record-vinyl"></i> Video Recording Software
+                </button>
                 <button class="cat-btn" data-filter="open-source">
                     <i class="fa-solid fa-code"></i> Free & Open Source Software
                 </button>
             </div>
         </div>
 
+        <!-- POSTS CONTAINER (MACOS SOFTWARE LIST) -->
         <div id="postsContainer">
             
-            <!-- IDM (Open Source / Utility) -->
-            <article class="post-card" data-category="open-source">
-                <div>
-                    <h2 class="post-title">
-                        IDM 2026: DOWNLOAD [ Lifetime Activated ]
-                    </h2>
-                    <div class="post-meta">
-                        <span><i class="fa-regular fa-clock"></i> September 5, 2026</span>
-                        <span><i class="fa-regular fa-comment"></i> Comments Off</span>
-                    </div>
-                    <div class="post-content">
-                        <div class="post-image-container">
-                            <img src="https://www.internetdownloadmanager.com/register/IDMlib/images/idman_logos.png" alt="IDM Preview">
-                        </div>
-                        <div class="post-text">
-                            ACTIVATE THE IDM AND USE IT. Password: 1234
-                        </div>
-                    </div>
-                </div>
-                <a href="https://drive.google.com/file/d/1vjH9t4KukKU2zo_xVG7os6CL-3f8p4rj/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn-download">
-                    Download / Read More »
-                </a>
-            </article>
-
-            <!-- IObit Uninstaller (Utility / Open Source only) -->
-            <article class="post-card" data-category="open-source">
-                <div>
-                    <h2 class="post-title">
-                        IObit Uninstaller 2026: Tool DEFINT YOURE PC CLEAN AND FAST NO PASSWORD
-                    </h2>
-                    <div class="post-meta">
-                        <span><i class="fa-regular fa-clock"></i> September 6, 2026</span>
-                        <span><i class="fa-regular fa-comment"></i> Comments Off</span>
-                    </div>
-                    <div class="post-content">
-                        <div class="post-image-container">
-                            <img src="https://th.bing.com/th/id/OIP.j80z-HeLMpsJuAJpRMMK5QHaHa?w=108&h=108&c=1&bgcl=fe507c&r=0&o=7&pid=ImgRC&rm=3" alt="IObit Uninstaller Preview">
-                        </div>
-                        <div class="post-text">
-                            Clean and uninstall unnecessary programs easily on Windows OS.
-                        </div>
-                    </div>
-                </div>
-                <a href="https://drive.google.com/file/d/1qMadUOtKRCQAvshPdyq1wghXp_FhKMcA/view" target="_blank" rel="noopener noreferrer" class="btn-download">
-                    Download / Read More »
-                </a>
-            </article>
-            <!-- devinche-resolve -->
-
+            <!-- 1. DaVinci Resolve (Video Editing) -->
             <article class="post-card" data-category="video-editing">
                 <div>
                     <h2 class="post-title">
-                        DaVinci Resolve 2026: Professional color and Video Editor NO PASSWORD
+                        DaVinci Resolve: Professional Hollywood Grade Video Suite for Mac
                     </h2>
                     <div class="post-meta">
-                        <span><i class="fa-regular fa-clock"></i> September 6, 2026</span>
+                        <span><i class="fa-regular fa-clock"></i> September 14, 2026</span>
                         <span><i class="fa-regular fa-comment"></i> Comments Off</span>
                     </div>
                     <div class="post-content">
                         <div class="post-image-container">
-                            <img src="https://th.bing.com/th/id/ODF.eiAZmhuyA3AcIeX5-nC7Qg?w=32&h=32&qlt=92&pcl=fffffa&r=0&o=6&pid=1.2" alt="DaVinci Resolve 2026 Preview">
+                            <img src="https://th.bing.com/th/id/ODF.eiAZmhuyA3AcIeX5-nC7Qg?w=32&h=32&qlt=92&pcl=fffffa&r=0&o=6&pid=1.2" alt="DaVinci Resolve macOS">
                         </div>
                         <div class="post-text">
-                            Blackmagic Design DaVinci Resolve Studio 20.3.2 (x64) Multilingual <br>
-
-                            verson:20.3.2
+                            Extremely powerful video editing, Fairlight audio tools, Fusion visual effects, and world-class color grading natively optimized for Apple Silicon (M1/M2/M3/M4) chips.
                         </div>
                     </div>
                 </div>
-                <a href="https://drive.google.com/drive/folders/1qgIsptojroSGHns7RZzZqIt-93QHdaxT?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn-download">
+                <a href="https://www.blackmagicdesign.com/products/davinciresolve" target="_blank" rel="noopener noreferrer" class="btn-download">
                     Download / Read More »
                 </a>
             </article>
 
-            <!-- Filmora (Video Editing) -->
+            <!-- 2. Apple iMovie (Video Editing) -->
             <article class="post-card" data-category="video-editing">
                 <div>
                     <h2 class="post-title">
-                        FILMORA 2026: Professional Video Editor NO PASSWORD
+                        Apple iMovie: Official Free Video Editor for macOS & iOS
                     </h2>
                     <div class="post-meta">
-                        <span><i class="fa-regular fa-clock"></i> September 6, 2026</span>
+                        <span><i class="fa-regular fa-clock"></i> September 14, 2026</span>
                         <span><i class="fa-regular fa-comment"></i> Comments Off</span>
                     </div>
                     <div class="post-content">
                         <div class="post-image-container">
-                            <img src="https://th.bing.com/th/id/OIP.OIWiUJx_tOqiO-yz1GO_3AHaHd?w=108&h=108&c=1&bgcl=2b87e3&r=0&o=7&pid=ImgRC&rm=3" alt="FILMORA 2026 Preview">
+                            <img src="https://th.bing.com/th/id/OIP.F9Wy5awIFMjJAtXfHaE1-wAAAA?w=108&h=108&c=1&bgcl=769cec&r=0&o=7&pid=ImgRC&rm=3" alt="Apple iMovie">
                         </div>
                         <div class="post-text">
-                            Easy and powerful video editing suite for Windows OS. Free FOR YOU.
+                            Apple's official free video editing application. Perfect for beginners with 4K video editing, studio-quality titles, cinematic mode editing, and seamless Mac ecosystem integration.
                         </div>
                     </div>
                 </div>
-                <a href="https://drive.google.com/file/d/1SC8_lRjRfW51LBMuWGOykPAsJf2IBsi2/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn-download">
+                <a href="https://www.apple.com/imovie/" target="_blank" rel="noopener noreferrer" class="btn-download">
                     Download / Read More »
                 </a>
             </article>
 
-            <!-- Premiere Pro (Video Editing) -->
+            <!-- 3. CapCut for Mac (Video Editing) -->
             <article class="post-card" data-category="video-editing">
                 <div>
                     <h2 class="post-title">
-                        Adobe Premiere Pro 2026: Professional Video Editing Suite
+                        CapCut for Mac: Easy AI-Powered Video Editing & Content Creation
                     </h2>
                     <div class="post-meta">
-                        <span><i class="fa-regular fa-clock"></i> September 6, 2026</span>
+                        <span><i class="fa-regular fa-clock"></i> September 14, 2026</span>
                         <span><i class="fa-regular fa-comment"></i> Comments Off</span>
                     </div>
                     <div class="post-content">
                         <div class="post-image-container">
-                            <img src="https://www.techspot.com/images2/downloads/topdownload/2023/06/2023-06-21-ts3_thumbs-20d-p.webp" alt="Premiere Pro Preview">
+                            <img src="https://th.bing.com/th/id/ODF.8mKc3lxFvuogU2wu_r13-g?w=32&h=32&qlt=90&pcl=fffffa&r=0&o=6&pid=1.2" alt="CapCut macOS">
                         </div>
                         <div class="post-text">
-                            Industry leading video editing suite providing timeline controls, AI video generators, and color tools. Password: 6780
+                            Feature-rich desktop video editor optimized for macOS. Includes auto-captions, background removal, trending transitions, speed ramping, and social media presets.
                         </div>
                     </div>
                 </div>
-                <a href="https://www.mediafire.com/file/7mukx996032iu1w/SETUP_INSTALLER_(PASS=6780).zip/file" target="_blank" rel="noopener noreferrer" class="btn-download">
+                <a href="https://www.capcut.com/" target="_blank" rel="noopener noreferrer" class="btn-download">
                     Download / Read More »
                 </a>
             </article>
 
-            <!-- Photoshop (Graphics Design) -->
-            <article class="post-card" data-category="graphics-design">
-                <div>
-                    <h2 class="post-title">
-                        Adobe Photoshop 2026: Advanced Image & Graphics Suite
-                    </h2>
-                    <div class="post-meta">
-                        <span><i class="fa-regular fa-clock"></i> September 6, 2026</span>
-                        <span><i class="fa-regular fa-comment"></i> Comments Off</span>
-                    </div>
-                    <div class="post-content">
-                        <div class="post-image-container">
-                            <img src="https://th.bing.com/th/id/OIP.hftfEQGR7w8XMQqVW8TKCAHaHa?w=179&h=180&c=7&r=0&o=7&pid=1.7&rm=3" alt="Photoshop Preview">
-                        </div>
-                        <div class="post-text">
-                            Create stunning graphics, digital art, vector manipulation, and UI assets with latest AI features. Password: 6780
-                        </div>
-                    </div>
-                </div>
-                <a href="https://www.mediafire.com/file/7mukx996032iu1w/SETUP_INSTALLER_(PASS=6780).zip/file" target="_blank" rel="noopener noreferrer" class="btn-download">
-                    Download / Read More »
-                </a>
-            </article>
-
-            <!-- OBS Studio (Video Editing / Open Source) -->
+            <!-- 4. Kdenlive (Video Editing / Open Source) -->
             <article class="post-card" data-category="video-editing open-source">
                 <div>
                     <h2 class="post-title">
-                        OBS Studio 2026: Open Source Screen Recorder & Streaming Tool
+                        Kdenlive: Powerful Free & Open Source Video Editor for Mac
                     </h2>
                     <div class="post-meta">
-                        <span><i class="fa-regular fa-clock"></i> September 6, 2026</span>
+                        <span><i class="fa-regular fa-clock"></i> September 14, 2026</span>
                         <span><i class="fa-regular fa-comment"></i> Comments Off</span>
                     </div>
                     <div class="post-content">
                         <div class="post-image-container">
-                            <img src="https://obsproject.com/assets/images/new_icon_small-r.png" alt="OBS Preview">
+                            <img src="https://th.bing.com/th/id/ODF.rybIbTa3yFPztvpPE4GDZw?w=32&h=32&qlt=90&pcl=fffffa&r=0&o=6&pid=1.2" alt="Kdenlive macOS">
                         </div>
                         <div class="post-text">
-                            Free and open-source software for video recording and live streaming on Windows OS.
+                            Fully open-source multi-track timeline video editor available for macOS. Features proxy editing, custom keyframes, audio scopes, and advanced effects.
                         </div>
                     </div>
                 </div>
-                <a href="https://cdn-fastly.obsproject.com/downloads/OBS-Studio-32.2.2-Windows-x64-Installer.exe" target="_blank" rel="noopener noreferrer" class="btn-download">
+                <a href="https://kdenlive.org/en/download/" target="_blank" rel="noopener noreferrer" class="btn-download">
                     Download / Read More »
                 </a>
             </article>
 
-            <article class="post-card" data-category="video-editing open-source">
+            <!-- 5. GIMP (Graphics Design / Open Source) -->
+            <article class="post-card" data-category="graphics-design open-source">
                 <div>
                     <h2 class="post-title">
-                        Shotcut 2026: Open Source Video Editor
+                        GIMP for macOS: Advanced Image Editor & Photoshop Alternative
                     </h2>
                     <div class="post-meta">
-                        <span><i class="fa-regular fa-clock"></i> September 6, 2026</span>
+                        <span><i class="fa-regular fa-clock"></i> September 14, 2026</span>
                         <span><i class="fa-regular fa-comment"></i> Comments Off</span>
                     </div>
                     <div class="post-content">
                         <div class="post-image-container">
-                            <img src="https://th.bing.com/th/id/ODF.25GowLfF2iIxT8WywlXK3g?w=32&h=32&qlt=90&pcl=fffffa&r=0&o=6&pid=1.2" alt="Shotcut Preview">
+                            <img src="https://th.bing.com/th/id/ODF.ZQpRKCkh5zI3_5M1qicOww?w=32&h=32&qlt=90&pcl=fffffa&r=0&o=6&pid=1.2" alt="GIMP macOS">
                         </div>
                         <div class="post-text">
-                            Free and open-source software for video Editing on Windows OS pc only. not laptop.
+                            Free and open-source photo manipulation tool running smoothly on Mac systems. Offers photo retouching, graphic design, composition tools, and plugin expansion.
                         </div>
                     </div>
                 </div>
-                <a href="https://deac-fra.dl.sourceforge.net/project/shotcut/v26.4.30/shotcut-win64-26.4.30.exe?viasf=1&fid=57e87940005c2281&e=1789467550&st=Yb45jTt1AZbdj3Nz8QTalg" target="_blank" rel="noopener noreferrer" class="btn-download">
+                <a href="https://www.gimp.org/downloads/" target="_blank" rel="noopener noreferrer" class="btn-download">
+                    Download / Read More »
+                </a>
+            </article>
+
+            <!-- 6. Inkscape (Graphics Design / Open Source) -->
+            <article class="post-card" data-category="graphics-design open-source">
+                <div>
+                    <h2 class="post-title">
+                        Inkscape macOS: Professional Vector Graphics & Illustrator Alternative
+                    </h2>
+                    <div class="post-meta">
+                        <span><i class="fa-regular fa-clock"></i> September 14, 2026</span>
+                        <span><i class="fa-regular fa-comment"></i> Comments Off</span>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-image-container">
+                            <img src="https://th.bing.com/th/id/ODF.gXpQ5kUZcSns85PgS6pCCg?w=32&h=32&qlt=90&pcl=fffffa&r=0&o=6&pid=1.2" alt="Inkscape macOS">
+                        </div>
+                        <div class="post-text">
+                            High quality vector design app for creating SVG graphics, logos, icons, and illustrations with native macOS hardware acceleration support.
+                        </div>
+                    </div>
+                </div>
+                <a href="https://inkscape.org/release/" target="_blank" rel="noopener noreferrer" class="btn-download">
+                    Download / Read More »
+                </a>
+            </article>
+
+            <!-- 7. OBS Studio (Video Recording / Video Editing / Open Source) -->
+            <article class="post-card" data-category="video-recording video-editing open-source">
+                <div>
+                    <h2 class="post-title">
+                        OBS Studio for Mac: Live Streaming & High Performance Screen Recorder
+                    </h2>
+                    <div class="post-meta">
+                        <span><i class="fa-regular fa-clock"></i> September 14, 2026</span>
+                        <span><i class="fa-regular fa-comment"></i> Comments Off</span>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-image-container">
+                            <img src="https://obsproject.com/assets/images/new_icon_small-r.png" alt="OBS Studio macOS">
+                        </div>
+                        <div class="post-text">
+                            Industry standard free recorder and streaming tool. Fully optimized for macOS Audio Capture and Apple Silicon Hardware Encoders (Apple VT).
+                        </div>
+                    </div>
+                </div>
+                <a href="https://obsproject.com/download" target="_blank" rel="noopener noreferrer" class="btn-download">
+                    Download / Read More »
+                </a>
+            </article>
+
+            <!-- 8. Shotcut (Video Editing / Open Source) -->
+            <article class="post-card" data-category="video-editing open-source">
+                <div>
+                    <h2 class="post-title">
+                        Shotcut Video Editor: Cross-Platform Free 4K Video Suite
+                    </h2>
+                    <div class="post-meta">
+                        <span><i class="fa-regular fa-clock"></i> September 14, 2026</span>
+                        <span><i class="fa-regular fa-comment"></i> Comments Off</span>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-image-container">
+                            <img src="https://th.bing.com/th/id/ODF.25GowLfF2iIxT8WywlXK3g?w=32&h=32&qlt=90&pcl=fffffa&r=0&o=6&pid=1.2" alt="Shotcut macOS">
+                        </div>
+                        <div class="post-text">
+                            Lightweight 4K timeline video editor for Mac users with native video filters, wide audio codec support, and smooth rendering engine.
+                        </div>
+                    </div>
+                </div>
+                <a href="https://shotcut.org/download/" target="_blank" rel="noopener noreferrer" class="btn-download">
                     Download / Read More »
                 </a>
             </article>
