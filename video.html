@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DRK-JU | VIDEO-GALLERY</title>
+    <title>DRK-JU | CRACK SOFTWARE & PRIVATE HUB</title>
     
     <!-- FontAwesome for Cyber Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800;900&family=Rajdhani:wght@600;700&family=Hind+Siliguri:wght@500;600;700&display=swap" rel="stylesheet">
     
     <style>
-        /* --- DESIGN SYSTEM: MATCHED WITH INDEX.HTML --- */
+        /* --- DESIGN SYSTEM: DARK CYBER-PURPLE --- */
         :root {
             --bg-base: #0b0914;           
             --primary-hot: #ff337a;       
@@ -22,8 +22,7 @@
             --text-muted: #857da1;
             --panel-bg: rgba(23, 19, 41, 0.75); 
             --glass-border: rgba(255, 255, 255, 0.08); 
-            --radius-lg: 20px;
-            --radius-sm: 12px;
+            --radius-sm: 10px;
             --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
             --bg-main-gradient-start: #1c1537;
             --bg-main-gradient-end: #0f0b21;
@@ -47,7 +46,7 @@
             padding-bottom: 60px;
         }
 
-        /* Cyber RGB Ambient Glow Background Effects */
+        /* Background Ambient Glow */
         body::before, body::after {
             content: '';
             position: fixed;
@@ -67,7 +66,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 16px 5%;
+            padding: 16px 3%;
             background: rgba(13, 10, 24, 0.85);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
@@ -77,66 +76,104 @@
             z-index: 100;
         }
 
-        /* Styled Premium Cyber Back Button */
-        .btn-cyber-back {
-            background: rgba(138, 79, 255, 0.12);
-            color: var(--text-main);
-            border: 1px solid rgba(138, 79, 255, 0.3);
-            padding: 10px 20px;
-            border-radius: 50px;
-            font-size: 0.9rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: var(--transition);
-            text-decoration: none;
-            display: inline-flex;
+        .brand-logo-link {
+            display: flex;
             align-items: center;
-            gap: 8px;
-            box-shadow: 0 0 10px rgba(138, 79, 255, 0.1);
+            gap: 12px;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: var(--transition);
         }
 
-        .btn-cyber-back:hover {
-            background: var(--accent-purple);
-            color: #ffffff;
+        .brand-logo-link:hover {
+            background: rgba(138, 79, 255, 0.15);
             border-color: var(--accent-purple);
-            box-shadow: 0 0 20px rgba(138, 79, 255, 0.5);
-            transform: translateY(-2px);
+            box-shadow: 0 0 15px rgba(138, 79, 255, 0.4);
+            transform: translateY(-1px);
         }
 
-        .header-title {
+        .brand-icon {
+            color: var(--primary-hot);
+            font-size: 1.2rem;
+            filter: drop-shadow(0 0 8px var(--primary-hot));
+        }
+
+        .brand-title {
             font-family: 'Orbitron', sans-serif;
-            font-size: 1.25rem;
+            font-size: 1.2rem;
             font-weight: 800;
             letter-spacing: 1.5px;
             background: linear-gradient(135deg, #ffffff, var(--cute-cyan));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            display: flex;
-            align-items: center;
-            gap: 10px;
         }
 
-        /* --- MAIN CONTAINER & GRID SYSTEM --- */
+        .top-tagline {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        /* --- MAIN LAYOUT & CATEGORIES --- */
         .main-layout {
-            max-width: 1400px;
+            max-width: 1800px;
             width: 100%;
             margin: 0 auto;
-            padding: 30px 20px;
+            padding: 25px 20px;
             flex: 1;
+        }
+
+        /* Category Filter Buttons Row */
+        .category-filter-bar {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+            scrollbar-width: thin;
+            scrollbar-color: var(--accent-purple) transparent;
+        }
+
+        .cat-btn {
+            background: var(--panel-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-main);
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+            backdrop-filter: blur(8px);
+        }
+
+        .cat-btn:hover, .cat-btn.active {
+            background: linear-gradient(135deg, var(--primary-hot), var(--accent-purple));
+            border-color: transparent;
+            color: #ffffff;
+            box-shadow: 0 4px 15px rgba(255, 51, 122, 0.3);
+            transform: translateY(-2px);
         }
 
         .section-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 25px;
-            padding-bottom: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
             border-bottom: 1px solid var(--glass-border);
         }
 
         .section-title {
             font-family: 'Orbitron', sans-serif;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: 800;
             color: var(--cute-cyan);
             text-transform: uppercase;
@@ -147,14 +184,14 @@
             text-shadow: 0 0 8px rgba(0, 229, 255, 0.3);
         }
 
-        /* 4 Columns Side-by-Side Grid Layout */
-        .video-grid-4x4 {
+        /* 8 COLUMNS GRID LAYOUT */
+        .video-grid-8x3 {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 14px;
         }
 
-        /* Individual Video Box Item */
+        /* Individual Compact Video Card Item */
         .video-card-item {
             background: var(--panel-bg);
             border: 1px solid var(--glass-border);
@@ -168,10 +205,14 @@
             backdrop-filter: blur(10px);
         }
 
+        .video-card-item.hide-card {
+            display: none !important;
+        }
+
         .video-card-item:hover {
-            transform: translateY(-6px);
+            transform: translateY(-5px);
             border-color: var(--accent-purple);
-            box-shadow: 0 10px 25px rgba(138, 79, 255, 0.25), 0 0 15px rgba(255, 51, 122, 0.15);
+            box-shadow: 0 8px 20px rgba(138, 79, 255, 0.3);
         }
 
         /* Video Thumbnail Box */
@@ -194,7 +235,7 @@
             transform: scale(1.08);
         }
 
-        /* RGB Hover Play Overlay */
+        /* RGB Hover Play Button Overlay */
         .play-overlay {
             position: absolute;
             top: 0;
@@ -210,16 +251,16 @@
         }
 
         .play-icon {
-            width: 48px;
-            height: 48px;
+            width: 36px;
+            height: 36px;
             background: linear-gradient(135deg, var(--primary-hot), var(--accent-purple));
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             color: #ffffff;
-            font-size: 1.2rem;
-            box-shadow: 0 0 15px rgba(255, 51, 122, 0.8);
+            font-size: 0.9rem;
+            box-shadow: 0 0 12px rgba(255, 51, 122, 0.8);
             transform: scale(0.8);
             transition: var(--transition);
         }
@@ -234,31 +275,47 @@
 
         .time-badge {
             position: absolute;
-            bottom: 8px;
-            right: 8px;
+            bottom: 6px;
+            right: 6px;
             background: rgba(11, 9, 20, 0.85);
             color: #ffffff;
-            font-size: 0.75rem;
+            font-size: 0.68rem;
             font-weight: 700;
-            padding: 3px 8px;
-            border-radius: 6px;
+            padding: 2px 6px;
+            border-radius: 4px;
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        /* Video Info Metadata */
+        /* Compact Card Text Details */
         .card-details {
-            padding: 14px;
+            padding: 10px;
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 6px;
             flex: 1;
         }
 
+        /* Type Information Bar Header Badge */
+        .info-type-bar {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: rgba(138, 79, 255, 0.15);
+            border: 1px solid rgba(138, 79, 255, 0.3);
+            color: var(--cute-cyan);
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 4px;
+            width: fit-content;
+            letter-spacing: 0.5px;
+        }
+
         .card-title {
-            font-size: 0.92rem;
+            font-size: 0.80rem;
             font-weight: 700;
             color: var(--text-main);
-            line-height: 1.4;
+            line-height: 1.3;
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
@@ -271,7 +328,7 @@
         }
 
         .card-meta {
-            font-size: 0.78rem;
+            font-size: 0.70rem;
             color: var(--text-muted);
             display: flex;
             justify-content: space-between;
@@ -279,242 +336,401 @@
             margin-top: auto;
         }
 
-        .channel-tag {
-            color: var(--accent-purple);
+        .category-tag {
+            color: var(--neon-green);
             font-weight: 700;
         }
 
         /* --- RESPONSIVE BREAKPOINTS --- */
-        @media (max-width: 1200px) {
-            .video-grid-4x4 { grid-template-columns: repeat(3, 1fr); }
+        @media (max-width: 1600px) { .video-grid-8x3 { grid-template-columns: repeat(6, 1fr); } }
+        @media (max-width: 1250px) { .video-grid-8x3 { grid-template-columns: repeat(4, 1fr); } }
+        @media (max-width: 850px) { 
+            .video-grid-8x3 { grid-template-columns: repeat(2, 1fr); }
+            header { flex-direction: column; gap: 8px; text-align: center; }
         }
-
-        @media (max-width: 850px) {
-            .video-grid-4x4 { grid-template-columns: repeat(2, 1fr); }
-            header { padding: 12px 16px; }
-            .header-title { font-size: 1rem; }
-        }
-
-        @media (max-width: 500px) {
-            .video-grid-4x4 { grid-template-columns: 1fr; }
-        }
+        @media (max-width: 480px) { .video-grid-8x3 { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
-    <!-- TOP HEADER WITH PURPLE CYBER BACK BUTTON -->
+    <!-- STICKY HEADER WITH TOGETHER CLICKABLE LOGO TO INDEX.HTML -->
     <header>
-        <a href="index.html" class="btn-cyber-back">
-            <i class="fa-solid fa-arrow-left"></i> Back to Main
+        <a href="index.html" class="brand-logo-link" title="Click to Return Home">
+            <i class="fa-solid fa-play brand-icon"></i>
+            <span class="brand-title">DRK-JU | VIDEO HUB</span>
         </a>
-        <div class="header-title">
-            <i class="fa-solid fa-play" style="color: var(--primary-hot);"></i> DRK VIDEO HUB
-        </div>
-        <div style="width: 110px;"></div> <!-- Layout balance space -->
+        <div class="top-tagline"><i class="fa-solid fa-shield-halved" style="color: var(--neon-green);"></i> Private Software & Research Storage</div>
     </header>
 
-    <!-- MAIN GALLERY CONTAINER -->
+    <!-- MAIN CONTAINER -->
     <main class="main-layout">
         
+        <!-- CATEGORY FILTERS ROW WITH WORKING DATA-CATEGORY ATTRIBUTES -->
+        <div class="category-filter-bar">
+            <button class="cat-btn active" data-category="all"><i class="fa-solid fa-border-all"></i> All Private Videos</button>
+            <button class="cat-btn" data-category="Crack App"><i class="fa-solid fa-key"></i> How to Install Crack Software</button>
+            <button class="cat-btn" data-category="Research"><i class="fa-solid fa-microscope"></i> Scientific Research (Unlisted)</button>
+            <button class="cat-btn" data-category="Video Edit"><i class="fa-solid fa-film"></i> Video Editing Software</button>
+            <button class="cat-btn" data-category="Open Source"><i class="fa-solid fa-code"></i> Open Source Tools</button>
+            <button class="cat-btn" data-category="Graphics"><i class="fa-solid fa-palette"></i> Graphic Design Apps</button>
+        </div>
+
         <div class="section-header">
-            <div class="section-title">
-                <i class="fa-solid fa-border-all"></i> Video Collections (12 Private Slots)
+            <div class="section-title" id="filter-title">
+                <i class="fa-solid fa-lock"></i> All Private Videos
             </div>
         </div>
 
-        <!-- 4 COLUMNS SIDE BY SIDE GRID (TOTAL 12 VIDEOS) -->
-        <div class="video-grid-4x4">
+        <!-- 8 COLUMNS GRID STRUCTURE -->
+        <div class="video-grid-8x3">
 
-            <!-- VIDEO ITEM 1 -->
-            <a href="https://www.youtube.com/watch?dQw4w9WgXcQ" target="_blank" class="video-card-item">
+            <!-- ========================================================= -->
+            <!-- ROW 1 : ITEMS 1 TO 8                                       -->
+            <!-- ========================================================= -->
+
+            <!-- ITEM 01 -->
+            <a href="me/windows.html" target="_blank" class="video-card-item" data-category="Crack App">
                 <div class="thumb-container">
-                    <!-- আপনি চাইলে এখানে নিজস্ব ইমেজের পিকচার URL দিতে পারেন -->
-                    <img src="https://img.youtube.com/vi/dQw4w9WgXcQ/hqdefault.jpg" alt="Video Thumbnail">
+                    <img src="https://picsum.photos/400/225?random=1" alt="Thumbnail">
                     <div class="play-overlay"><div class="play-icon"><i class="fa-solid fa-play"></i></div></div>
-                    <span class="time-badge">04:15</span>
+                    <span class="time-badge">12:45</span>
                 </div>
                 <div class="card-details">
-                    <h4 class="card-title">Dark-Net Cyber Security Tutorial Lesson 01</h4>
-                    <div class="card-meta">
-                        <span class="channel-tag">DRK-JU Lab</span>
-                        <span>12K Views</span>
-                    </div>
+                    <div class="info-type-bar"><i class="fa-solid fa-file-code"></i> Premiere Pro v2026 .EXE</div>
+                    <h4 class="card-title">How to Install Premiere Pro Crack 2026</h4>
+                    <div class="card-meta"><span class="category-tag">Crack App</span><span>Slot 01</span></div>
                 </div>
             </a>
 
-            <!-- VIDEO ITEM 2 -->
-            <a href="https://www.youtube.com/watch?v=3JZ_D3ELwOQ" target="_blank" class="video-card-item">
+            <!-- ITEM 02 -->
+            <a href="#" target="_blank" class="video-card-item" data-category="Research">
                 <div class="thumb-container">
-                    <img src="https://img.youtube.com/vi/3JZ_D3ELwOQ/hqdefault.jpg" alt="Video Thumbnail">
+                    <img src="https://picsum.photos/400/225?random=2" alt="Thumbnail">
                     <div class="play-overlay"><div class="play-icon"><i class="fa-solid fa-play"></i></div></div>
-                    <span class="time-badge">08:22</span>
+                    <span class="time-badge">18:20</span>
                 </div>
                 <div class="card-details">
-                    <h4 class="card-title">Advanced Linux OS Customization & RGB Theme Setup</h4>
-                    <div class="card-meta">
-                        <span class="channel-tag">Linux Dev</span>
-                        <span>45K Views</span>
-                    </div>
+                    <div class="info-type-bar"><i class="fa-solid fa-book-bookmark"></i> Research Paper .PDF</div>
+                    <h4 class="card-title">Scientific Research Methods Not on YT</h4>
+                    <div class="card-meta"><span class="category-tag">Research</span><span>Slot 02</span></div>
                 </div>
             </a>
 
-            <!-- VIDEO ITEM 3 -->
-            <a href="https://www.youtube.com/watch?v=L_LUpnjgPso" target="_blank" class="video-card-item">
+            <!-- ITEM 03 -->
+            <a href="#" target="_blank" class="video-card-item" data-category="Video Edit">
                 <div class="thumb-container">
-                    <img src="https://img.youtube.com/vi/L_LUpnjgPso/hqdefault.jpg" alt="Video Thumbnail">
+                    <img src="https://picsum.photos/400/225?random=3" alt="Thumbnail">
                     <div class="play-overlay"><div class="play-icon"><i class="fa-solid fa-play"></i></div></div>
-                    <span class="time-badge">12:40</span>
+                    <span class="time-badge">08:15</span>
                 </div>
                 <div class="card-details">
-                    <h4 class="card-title">NFAK Top Best Cyber Remixed Hits Qawwali Session</h4>
-                    <div class="card-meta">
-                        <span class="channel-tag">AMPIRE BD</span>
-                        <span>102K Views</span>
-                    </div>
+                    <div class="info-type-bar"><i class="fa-solid fa-key"></i> License Keygen .ZIP</div>
+                    <h4 class="card-title">DaVinci Resolve Studio License Bypass</h4>
+                    <div class="card-meta"><span class="category-tag">Video Edit</span><span>Slot 03</span></div>
                 </div>
             </a>
 
-            <!-- VIDEO ITEM 4 -->
-            <a href="https://www.youtube.com/watch?v=fJ9rUzIMcZQ" target="_blank" class="video-card-item">
+            <!-- ITEM 04 -->
+            <a href="#" target="_blank" class="video-card-item" data-category="Graphics">
                 <div class="thumb-container">
-                    <img src="https://img.youtube.com/vi/fJ9rUzIMcZQ/hqdefault.jpg" alt="Video Thumbnail">
+                    <img src="https://picsum.photos/400/225?random=4" alt="Thumbnail">
                     <div class="play-overlay"><div class="play-icon"><i class="fa-solid fa-play"></i></div></div>
-                    <span class="time-badge">05:10</span>
+                    <span class="time-badge">15:10</span>
                 </div>
                 <div class="card-details">
-                    <h4 class="card-title">Glassmorphism Web Design Masterclass HTML & CSS</h4>
-                    <div class="card-meta">
-                        <span class="channel-tag">UI/UX Studio</span>
-                        <span>8.9K Views</span>
-                    </div>
+                    <div class="info-type-bar"><i class="fa-solid fa-box-open"></i> OpenSource .ZIP</div>
+                    <h4 class="card-title">Top Open Source Graphic Design Apps</h4>
+                    <div class="card-meta"><span class="category-tag">Graphics</span><span>Slot 04</span></div>
                 </div>
             </a>
 
-            <!-- VIDEO ITEM 5 -->
-            <a href="#" target="_blank" class="video-card-item">
+            <!-- ITEM 05 -->
+            <a href="#" target="_blank" class="video-card-item" data-category="Crack App">
                 <div class="thumb-container">
-                    <img src="https://picsum.photos/600/340?random=1" alt="Custom Thumbnail">
+                    <img src="https://picsum.photos/400/225?random=5" alt="Thumbnail">
                     <div class="play-overlay"><div class="play-icon"><i class="fa-solid fa-play"></i></div></div>
-                    <span class="time-badge">15:30</span>
+                    <span class="time-badge">10:40</span>
                 </div>
                 <div class="card-details">
-                    <h4 class="card-title">Private Cloud Server & VPN Tunneling Guide</h4>
-                    <div class="card-meta">
-                        <span class="channel-tag">DRK-JU Lab</span>
-                        <span>15K Views</span>
-                    </div>
+                    <div class="info-type-bar"><i class="fa-solid fa-plug"></i> AE Plugins Patch .RAR</div>
+                    <h4 class="card-title">After Effects Plugins Error Fix</h4>
+                    <div class="card-meta"><span class="category-tag">Crack App</span><span>Slot 05</span></div>
                 </div>
             </a>
 
-            <!-- VIDEO ITEM 6 -->
-            <a href="#" target="_blank" class="video-card-item">
+            <!-- ITEM 06 -->
+            <a href="#" target="_blank" class="video-card-item" data-category="Research">
                 <div class="thumb-container">
-                    <img src="https://picsum.photos/600/340?random=2" alt="Custom Thumbnail">
+                    <img src="https://picsum.photos/400/225?random=6" alt="Thumbnail">
                     <div class="play-overlay"><div class="play-icon"><i class="fa-solid fa-play"></i></div></div>
-                    <span class="time-badge">03:45</span>
+                    <span class="time-badge">22:05</span>
                 </div>
                 <div class="card-details">
-                    <h4 class="card-title">Custom RGB Glowing Buttons Animation Showcase</h4>
-                    <div class="card-meta">
-                        <span class="channel-tag">Dev Studio</span>
-                        <span>3.1K Views</span>
-                    </div>
+                    <div class="info-type-bar"><i class="fa-solid fa-graduation-cap"></i> Academic Portal .URL</div>
+                    <h4 class="card-title">Hidden Journal Downloader Tutorial</h4>
+                    <div class="card-meta"><span class="category-tag">Research</span><span>Slot 06</span></div>
                 </div>
             </a>
 
-            <!-- VIDEO ITEM 7 -->
-            <a href="#" target="_blank" class="video-card-item">
+            <!-- ITEM 07 -->
+            <a href="#" target="_blank" class="video-card-item" data-category="Video Edit">
                 <div class="thumb-container">
-                    <img src="https://picsum.photos/600/340?random=3" alt="Custom Thumbnail">
+                    <img src="https://picsum.photos/400/225?random=7" alt="Thumbnail">
                     <div class="play-overlay"><div class="play-icon"><i class="fa-solid fa-play"></i></div></div>
-                    <span class="time-badge">22:10</span>
+                    <span class="time-badge">14:50</span>
                 </div>
                 <div class="card-details">
-                    <h4 class="card-title">Python Automation & Web Scraping Tools 2026</h4>
-                    <div class="card-meta">
-                        <span class="channel-tag">Code Base</span>
-                        <span>27K Views</span>
-                    </div>
+                    <div class="info-type-bar"><i class="fa-solid fa-scissors"></i> CapCut PC No Watermark</div>
+                    <h4 class="card-title">CapCut Pro PC Install Watermark Free</h4>
+                    <div class="card-meta"><span class="category-tag">Video Edit</span><span>Slot 07</span></div>
                 </div>
             </a>
 
-            <!-- VIDEO ITEM 8 -->
-            <a href="#" target="_blank" class="video-card-item">
+            <!-- ITEM 08 -->
+            <a href="#" target="_blank" class="video-card-item" data-category="Graphics">
                 <div class="thumb-container">
-                    <img src="https://picsum.photos/600/340?random=4" alt="Custom Thumbnail">
+                    <img src="https://picsum.photos/400/225?random=8" alt="Thumbnail">
                     <div class="play-overlay"><div class="play-icon"><i class="fa-solid fa-play"></i></div></div>
-                    <span class="time-badge">09:18</span>
+                    <span class="time-badge">09:30</span>
                 </div>
                 <div class="card-details">
-                    <h4 class="card-title">Dark Net Private Web Browser Setup Tutorial</h4>
-                    <div class="card-meta">
-                        <span class="channel-tag">Cyber Sec</span>
-                        <span>54K Views</span>
-                    </div>
+                    <div class="info-type-bar"><i class="fa-solid fa-wand-magic-sparkles"></i> PS AI Offline Patch</div>
+                    <h4 class="card-title">Photoshop AI Generative Fill Patch</h4>
+                    <div class="card-meta"><span class="category-tag">Graphics</span><span>Slot 08</span></div>
                 </div>
             </a>
 
-            <!-- VIDEO ITEM 9 -->
-            <a href="#" target="_blank" class="video-card-item">
+
+            <!-- ========================================================= -->
+            <!-- ROW 2 : ITEMS 9 TO 16                                      -->
+            <!-- ========================================================= -->
+
+            <!-- ITEM 09 -->
+            <a href="#" target="_blank" class="video-card-item" data-category="Crack App">
                 <div class="thumb-container">
-                    <img src="https://picsum.photos/600/340?random=5" alt="Custom Thumbnail">
+                    <img src="https://picsum.photos/400/225?random=9" alt="Thumbnail">
                     <div class="play-overlay"><div class="play-icon"><i class="fa-solid fa-play"></i></div></div>
-                    <span class="time-badge">06:50</span>
+                    <span class="time-badge">11:15</span>
                 </div>
                 <div class="card-details">
-                    <h4 class="card-title">JavaScript Realtime LocalStorage Sync & Database</h4>
-                    <div class="card-meta">
-                        <span class="channel-tag">Web Dev</span>
-                        <span>19K Views</span>
-                    </div>
+                    <div class="info-type-bar"><i class="fa-solid fa-download"></i> IDM Trial Resetter .BAT</div>
+                    <h4 class="card-title">IDM Integration & Trial Reset Guide</h4>
+                    <div class="card-meta"><span class="category-tag">Crack App</span><span>Slot 09</span></div>
                 </div>
             </a>
 
-            <!-- VIDEO ITEM 10 -->
-            <a href="#" target="_blank" class="video-card-item">
+            <!-- ITEM 10 -->
+            <a href="#" target="_blank" class="video-card-item" data-category="Open Source">
                 <div class="thumb-container">
-                    <img src="https://picsum.photos/600/340?random=6" alt="Custom Thumbnail">
+                    <img src="https://picsum.photos/400/225?random=10" alt="Thumbnail">
                     <div class="play-overlay"><div class="play-icon"><i class="fa-solid fa-play"></i></div></div>
-                    <span class="time-badge">11:05</span>
+                    <span class="time-badge">16:45</span>
                 </div>
                 <div class="card-details">
-                    <h4 class="card-title">How to Hosting HTML Web Application on GitHub Pages</h4>
-                    <div class="card-meta">
-                        <span class="channel-tag">Git Guide</span>
-                        <span>62K Views</span>
-                    </div>
+                    <div class="info-type-bar"><i class="fa-solid fa-terminal"></i> Forensic Tools .SH</div>
+                    <h4 class="card-title">Open Source Cyber Security Tools</h4>
+                    <div class="card-meta"><span class="category-tag">Open Source</span><span>Slot 10</span></div>
                 </div>
             </a>
 
-            <!-- VIDEO ITEM 11 -->
-            <a href="#" target="_blank" class="video-card-item">
+            <!-- ITEM 11 -->
+            <a href="#" target="_blank" class="video-card-item" data-category="Graphics">
                 <div class="thumb-container">
-                    <img src="https://picsum.photos/600/340?random=7" alt="Custom Thumbnail">
+                    <img src="https://picsum.photos/400/225?random=11" alt="Thumbnail">
                     <div class="play-overlay"><div class="play-icon"><i class="fa-solid fa-play"></i></div></div>
-                    <span class="time-badge">07:40</span>
+                    <span class="time-badge">07:20</span>
                 </div>
                 <div class="card-details">
-                    <h4 class="card-title">Cyberpunk UI Neon Effect CSS Walkthrough</h4>
-                    <div class="card-meta">
-                        <span class="channel-tag">UI Lab</span>
-                        <span>14K Views</span>
-                    </div>
+                    <div class="info-type-bar"><i class="fa-solid fa-pen-nib"></i> Illustrator v2026 .EXE</div>
+                    <h4 class="card-title">Illustrator Vector Masterclass Setup</h4>
+                    <div class="card-meta"><span class="category-tag">Graphics</span><span>Slot 11</span></div>
                 </div>
             </a>
 
-            <!-- VIDEO ITEM 12 -->
-            <a href="#" target="_blank" class="video-card-item">
+            <!-- ITEM 12 -->
+            <a href="#" target="_blank" class="video-card-item" data-category="Crack App">
                 <div class="thumb-container">
-                    <img src="https://picsum.photos/600/340?random=8" alt="Custom Thumbnail">
+                    <img src="https://picsum.photos/400/225?random=12" alt="Thumbnail">
                     <div class="play-overlay"><div class="play-icon"><i class="fa-solid fa-play"></i></div></div>
-                    <span class="time-badge">18:25</span>
+                    <span class="time-badge">20:00</span>
                 </div>
                 <div class="card-details">
-                    <h4 class="card-title">Full Dark Mode Responsive Layout System Build</h4>
-                    <div class="card-meta">
-                        <span class="channel-tag">DRK-JU Lab</span>
-                        <span>88K Views</span>
-                    </div>
+                    <div class="info-type-bar"><i class="fa-solid fa-shield-cat"></i> Defender Bypass Reg</div>
+                    <h4 class="card-title">Bypass Windows Defender Antivirus</h4>
+                    <div class="card-meta"><span class="category-tag">Crack App</span><span>Slot 12</span></div>
+                </div>
+            </a>
+
+            <!-- ITEM 13 -->
+            <a href="#" target="_blank" class="video-card-item" data-category="Crack App">
+                <div class="thumb-container">
+                    <img src="https://picsum.photos/400/225?random=13" alt="Thumbnail">
+                    <div class="play-overlay"><div class="play-icon"><i class="fa-solid fa-play"></i></div></div>
+                    <span class="time-badge">13:10</span>
+                </div>
+                <div class="card-details">
+                    <div class="info-type-bar"><i class="fa-solid fa-video"></i> Screen Recorder Crack</div>
+                    <h4 class="card-title">CamSphere Screen Recorder Full Crack</h4>
+                    <div class="card-meta"><span class="category-tag">Crack App</span><span>Slot 13</span></div>
+                </div>
+            </a>
+
+            <!-- ITEM 14 -->
+            <a href="#" target="_blank" class="video-card-item" data-category="Research">
+                <div class="thumb-container">
+                    <img src="https://picsum.photos/400/225?random=14" alt="Thumbnail">
+                    <div class="play-overlay"><div class="play-icon"><i class="fa-solid fa-play"></i></div></div>
+                    <span class="time-badge">25:30</span>
+                </div>
+                <div class="card-details">
+                    <div class="info-type-bar"><i class="fa-solid fa-atom"></i> Physics Journal Database</div>
+                    <h4 class="card-title">Quantum Physics Research Archives</h4>
+                    <div class="card-meta"><span class="category-tag">Research</span><span>Slot 14</span></div>
+                </div>
+            </a>
+
+            <!-- ITEM 15 -->
+            <a href="#" target="_blank" class="video-card-item" data-category="Video Edit">
+                <div class="thumb-container">
+                    <img src="https://picsum.photos/400/225?random=15" alt="Thumbnail">
+                    <div class="play-overlay"><div class="play-icon"><i class="fa-solid fa-play"></i></div></div>
+                    <span class="time-badge">11:00</span>
+                </div>
+                <div class="card-details">
+                    <div class="info-type-bar"><i class="fa-solid fa-clapperboard"></i> Filmora 13 Pre-Activated</div>
+                    <h4 class="card-title">Filmora 13 Full Activated Version</h4>
+                    <div class="card-meta"><span class="category-tag">Video Edit</span><span>Slot 15</span></div>
+                </div>
+            </a>
+
+            <!-- ITEM 16 -->
+            <a href="#" target="_blank" class="video-card-item" data-category="Graphics">
+                <div class="thumb-container">
+                    <img src="https://picsum.photos/400/225?random=16" alt="Thumbnail">
+                    <div class="play-overlay"><div class="play-icon"><i class="fa-solid fa-play"></i></div></div>
+                    <span class="time-badge">05:45</span>
+                </div>
+                <div class="card-details">
+                    <div class="info-type-bar"><i class="fa-solid fa-palette"></i> Corel Keygen .EXE</div>
+                    <h4 class="card-title">CorelDraw Graphic Suite License Patch</h4>
+                    <div class="card-meta"><span class="category-tag">Graphics</span><span>Slot 16</span></div>
+                </div>
+            </a>
+
+
+            <!-- ========================================================= -->
+            <!-- ROW 3 : ITEMS 17 TO 24                                     -->
+            <!-- ========================================================= -->
+
+            <!-- ITEM 17 -->
+            <a href="#" target="_blank" class="video-card-item" data-category="Crack App">
+                <div class="thumb-container">
+                    <img src="https://picsum.photos/400/225?random=17" alt="Thumbnail">
+                    <div class="play-overlay"><div class="play-icon"><i class="fa-solid fa-play"></i></div></div>
+                    <span class="time-badge">19:15</span>
+                </div>
+                <div class="card-details">
+                    <div class="info-type-bar"><i class="fa-solid fa-cube"></i> AutoCAD 2026 Keygen</div>
+                    <h4 class="card-title">AutoCAD 2026 Keygen & Crack Setup</h4>
+                    <div class="card-meta"><span class="category-tag">Crack App</span><span>Slot 17</span></div>
+                </div>
+            </a>
+
+            <!-- ITEM 18 -->
+            <a href="#" target="_blank" class="video-card-item" data-category="Research">
+                <div class="thumb-container">
+                    <img src="https://picsum.photos/400/225?random=18" alt="Thumbnail">
+                    <div class="play-overlay"><div class="play-icon"><i class="fa-solid fa-play"></i></div></div>
+                    <span class="time-badge">14:00</span>
+                </div>
+                <div class="card-details">
+                    <div class="info-type-bar"><i class="fa-solid fa-chart-line"></i> Data Analysis Archives</div>
+                    <h4 class="card-title">Data Analysis Papers Unrestricted Access</h4>
+                    <div class="card-meta"><span class="category-tag">Research</span><span>Slot 18</span></div>
+                </div>
+            </a>
+
+            <!-- ITEM 19 -->
+            <a href="#" target="_blank" class="video-card-item" data-category="Video Edit">
+                <div class="thumb-container">
+                    <img src="https://picsum.photos/400/225?random=19" alt="Thumbnail">
+                    <div class="play-overlay"><div class="play-icon"><i class="fa-solid fa-play"></i></div></div>
+                    <span class="time-badge">17:50</span>
+                </div>
+                <div class="card-details">
+                    <div class="info-type-bar"><i class="fa-solid fa-film"></i> Vegas Pro Full Patch</div>
+                    <h4 class="card-title">Vegas Pro Studio Install Guide</h4>
+                    <div class="card-meta"><span class="category-tag">Video Edit</span><span>Slot 19</span></div>
+                </div>
+            </a>
+
+            <!-- ITEM 20 -->
+            <a href="#" target="_blank" class="video-card-item" data-category="Open Source">
+                <div class="thumb-container">
+                    <img src="https://picsum.photos/400/225?random=20" alt="Thumbnail">
+                    <div class="play-overlay"><div class="play-icon"><i class="fa-solid fa-play"></i></div></div>
+                    <span class="time-badge">08:40</span>
+                </div>
+                <div class="card-details">
+                    <div class="info-type-bar"><i class="fa-solid fa-satellite-dish"></i> OBS Studio Stream Pack</div>
+                    <h4 class="card-title">OBS Studio Plugin Packs & Overlays</h4>
+                    <div class="card-meta"><span class="category-tag">Open Source</span><span>Slot 20</span></div>
+                </div>
+            </a>
+
+            <!-- ITEM 21 -->
+            <a href="#" target="_blank" class="video-card-item" data-category="Crack App">
+                <div class="thumb-container">
+                    <img src="https://picsum.photos/400/225?random=21" alt="Thumbnail">
+                    <div class="play-overlay"><div class="play-icon"><i class="fa-solid fa-play"></i></div></div>
+                    <span class="time-badge">12:30</span>
+                </div>
+                <div class="card-details">
+                    <div class="info-type-bar"><i class="fa-solid fa-music"></i> FL Studio Producer Reg</div>
+                    <h4 class="card-title">FL Studio Producer Edition Crack</h4>
+                    <div class="card-meta"><span class="category-tag">Crack App</span><span>Slot 21</span></div>
+                </div>
+            </a>
+
+            <!-- ITEM 22 -->
+            <a href="#" target="_blank" class="video-card-item" data-category="Research">
+                <div class="thumb-container">
+                    <img src="https://picsum.photos/400/225?random=22" alt="Thumbnail">
+                    <div class="play-overlay"><div class="play-icon"><i class="fa-solid fa-play"></i></div></div>
+                    <span class="time-badge">21:10</span>
+                </div>
+                <div class="card-details">
+                    <div class="info-type-bar"><i class="fa-solid fa-robot"></i> Python AI Script Repo</div>
+                    <h4 class="card-title">Dark Web AI Tools & Python Scripts</h4>
+                    <div class="card-meta"><span class="category-tag">Research</span><span>Slot 22</span></div>
+                </div>
+            </a>
+
+            <!-- ITEM 23 -->
+            <a href="#" target="_blank" class="video-card-item" data-category="Open Source">
+                <div class="thumb-container">
+                    <img src="https://picsum.photos/400/225?random=23" alt="Thumbnail">
+                    <div class="play-overlay"><div class="play-icon"><i class="fa-solid fa-play"></i></div></div>
+                    <span class="time-badge">10:15</span>
+                </div>
+                <div class="card-details">
+                    <div class="info-type-bar"><i class="fa-solid fa-shapes"></i> Blender Cyberpunk Asset</div>
+                    <h4 class="card-title">Blender 3D Cyberpunk Render Setup</h4>
+                    <div class="card-meta"><span class="category-tag">Open Source</span><span>Slot 23</span></div>
+                </div>
+            </a>
+
+            <!-- ITEM 24 -->
+            <a href="#" target="_blank" class="video-card-item" data-category="Graphics">
+                <div class="thumb-container">
+                    <img src="https://picsum.photos/400/225?random=24" alt="Thumbnail">
+                    <div class="play-overlay"><div class="play-icon"><i class="fa-solid fa-play"></i></div></div>
+                    <span class="time-badge">16:00</span>
+                </div>
+                <div class="card-details">
+                    <div class="info-type-bar"><i class="fa-solid fa-image"></i> Lightroom Preset Crack</div>
+                    <h4 class="card-title">Lightroom Classic Preset Crack Installation</h4>
+                    <div class="card-meta"><span class="category-tag">Graphics</span><span>Slot 24</span></div>
                 </div>
             </a>
 
@@ -522,5 +738,39 @@
 
     </main>
 
+    <!-- CATEGORY FILTER JAVASCRIPT -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const filterBtns = document.querySelectorAll('.cat-btn');
+            const videoCards = document.querySelectorAll('.video-card-item');
+            const filterTitle = document.getElementById('filter-title');
+
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Remove active class from all buttons
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    // Add active class to clicked button
+                    btn.classList.add('active');
+
+                    const selectedCategory = btn.getAttribute('data-category');
+                    const categoryText = btn.textContent.trim();
+
+                    // Update Title Text dynamically
+                    filterTitle.innerHTML = `<i class="fa-solid fa-filter"></i> ${categoryText}`;
+
+                    // Filter Videos
+                    videoCards.forEach(card => {
+                        const cardCategory = card.getAttribute('data-category');
+
+                        if (selectedCategory === 'all' || cardCategory === selectedCategory) {
+                            card.classList.remove('hide-card');
+                        } else {
+                            card.classList.add('hide-card');
+                        }
+                    });
+                });
+            });
+        });
+    </script>
 </body>
 </html>
