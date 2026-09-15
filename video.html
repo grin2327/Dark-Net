@@ -3,155 +3,524 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ভিডিও সেকশন - প্রাইভেট প্লেয়ার</title>
-    <!-- Font Awesome Icons for Navigation and Controls -->
+    <title>DRK-JU | VIDEO-GALLERY</title>
+    
+    <!-- FontAwesome for Cyber Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800;900&family=Rajdhani:wght@600;700&family=Hind+Siliguri:wght@500;600;700&display=swap" rel="stylesheet">
+    
     <style>
+        /* --- DESIGN SYSTEM: MATCHED WITH INDEX.HTML --- */
+        :root {
+            --bg-base: #0b0914;           
+            --primary-hot: #ff337a;       
+            --cute-cyan: #00e5ff;         
+            --accent-purple: #8a4fff;     
+            --neon-green: #2eff66;        
+            --text-main: #f4f2f7;
+            --text-muted: #857da1;
+            --panel-bg: rgba(23, 19, 41, 0.75); 
+            --glass-border: rgba(255, 255, 255, 0.08); 
+            --radius-lg: 20px;
+            --radius-sm: 12px;
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --bg-main-gradient-start: #1c1537;
+            --bg-main-gradient-end: #0f0b21;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', 'Hind Siliguri', system-ui, -apple-system, sans-serif;
         }
 
         body {
-            background-color: #0d1117;
-            color: #c9d1d9;
+            background: linear-gradient(145deg, var(--bg-main-gradient-start), var(--bg-main-gradient-end));
+            color: var(--text-main);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
             display: flex;
             flex-direction: column;
-            min-height: 100vh;
+            padding-bottom: 60px;
         }
 
-        /* Top Bar Layout */
-        .top-bar {
-            background-color: #161b22;
-            padding: 15px 25px;
+        /* Cyber RGB Ambient Glow Background Effects */
+        body::before, body::after {
+            content: '';
+            position: fixed;
+            width: 40vw;
+            height: 40vw;
+            border-radius: 50%;
+            filter: blur(160px);
+            z-index: -1;
+            opacity: 0.15; 
+            pointer-events: none;
+        }
+        body::before { background: var(--primary-hot); top: -10%; left: -5%; }
+        body::after { background: var(--accent-purple); bottom: -10%; right: -5%; }
+
+        /* --- STICKY TOP HEADER --- */
+        header {
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            border-bottom: 1px solid #30363d;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            align-items: center;
+            padding: 16px 5%;
+            background: rgba(13, 10, 24, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--glass-border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
-        /* Back Button Style */
-        .back-btn {
-            background-color: #21262d;
-            color: #58a6ff;
-            border: 1px solid #30363d;
-            padding: 8px 16px;
-            border-radius: 6px;
+        /* Styled Premium Cyber Back Button */
+        .btn-cyber-back {
+            background: rgba(138, 79, 255, 0.12);
+            color: var(--text-main);
+            border: 1px solid rgba(138, 79, 255, 0.3);
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 700;
             cursor: pointer;
+            transition: var(--transition);
             text-decoration: none;
-            font-size: 14px;
-            font-weight: 600;
-            display: flex;
+            display: inline-flex;
             align-items: center;
             gap: 8px;
-            transition: all 0.2s ease;
+            box-shadow: 0 0 10px rgba(138, 79, 255, 0.1);
         }
 
-        .back-btn:hover {
-            background-color: #30363d;
-            color: #79c0ff;
-            border-color: #8b949e;
+        .btn-cyber-back:hover {
+            background: var(--accent-purple);
+            color: #ffffff;
+            border-color: var(--accent-purple);
+            box-shadow: 0 0 20px rgba(138, 79, 255, 0.5);
+            transform: translateY(-2px);
         }
 
-        /* Header Title */
         .header-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            background: linear-gradient(135deg, #ffffff, var(--cute-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             display: flex;
             align-items: center;
             gap: 10px;
-            font-size: 18px;
-            font-weight: bold;
-            color: #f0f6fc;
         }
 
-        .header-title i {
-            color: #238636;
-        }
-
-        /* Video Layout Structure */
-        .main-container {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .video-card {
-            background-color: #161b22;
-            border: 1px solid #30363d;
-            border-radius: 12px;
+        /* --- MAIN CONTAINER & GRID SYSTEM --- */
+        .main-layout {
+            max-width: 1400px;
             width: 100%;
-            max-width: 900px;
+            margin: 0 auto;
+            padding: 30px 20px;
+            flex: 1;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 25px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--cute-cyan);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-shadow: 0 0 8px rgba(0, 229, 255, 0.3);
+        }
+
+        /* 4 Columns Side-by-Side Grid Layout */
+        .video-grid-4x4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        /* Individual Video Box Item */
+        .video-card-item {
+            background: var(--panel-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-sm);
             overflow: hidden;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
-        }
-
-        .video-wrapper {
+            display: flex;
+            flex-direction: column;
+            text-decoration: none;
+            transition: var(--transition);
             position: relative;
-            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
-            height: 0;
-            background-color: #000;
+            backdrop-filter: blur(10px);
         }
 
-        .video-wrapper iframe {
+        .video-card-item:hover {
+            transform: translateY(-6px);
+            border-color: var(--accent-purple);
+            box-shadow: 0 10px 25px rgba(138, 79, 255, 0.25), 0 0 15px rgba(255, 51, 122, 0.15);
+        }
+
+        /* Video Thumbnail Box */
+        .thumb-container {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background: #000;
+            overflow: hidden;
+        }
+
+        .thumb-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .video-card-item:hover .thumb-container img {
+            transform: scale(1.08);
+        }
+
+        /* RGB Hover Play Overlay */
+        .play-overlay {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            border: 0;
+            background: rgba(11, 9, 20, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: var(--transition);
         }
 
-        .video-info {
-            padding: 20px;
+        .play-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--primary-hot), var(--accent-purple));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-size: 1.2rem;
+            box-shadow: 0 0 15px rgba(255, 51, 122, 0.8);
+            transform: scale(0.8);
+            transition: var(--transition);
         }
 
-        .video-info h2 {
-            font-size: 20px;
-            color: #f0f6fc;
-            margin-bottom: 8px;
+        .video-card-item:hover .play-overlay {
+            opacity: 1;
         }
 
-        .video-info p {
-            font-size: 14px;
-            color: #8b949e;
+        .video-card-item:hover .play-icon {
+            transform: scale(1);
+        }
+
+        .time-badge {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            background: rgba(11, 9, 20, 0.85);
+            color: #ffffff;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Video Info Metadata */
+        .card-details {
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex: 1;
+        }
+
+        .card-title {
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: var(--text-main);
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .video-card-item:hover .card-title {
+            color: var(--cute-cyan);
+        }
+
+        .card-meta {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+        }
+
+        .channel-tag {
+            color: var(--accent-purple);
+            font-weight: 700;
+        }
+
+        /* --- RESPONSIVE BREAKPOINTS --- */
+        @media (max-width: 1200px) {
+            .video-grid-4x4 { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        @media (max-width: 850px) {
+            .video-grid-4x4 { grid-template-columns: repeat(2, 1fr); }
+            header { padding: 12px 16px; }
+            .header-title { font-size: 1rem; }
+        }
+
+        @media (max-width: 500px) {
+            .video-grid-4x4 { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Top Navigation Bar -->
-    <div class="top-bar">
-        <a href="javascript:history.back()" class="back-btn">
-            <i class="fa-solid fa-arrow-left"></i> ব্যাক (Back)
+    <!-- TOP HEADER WITH PURPLE CYBER BACK BUTTON -->
+    <header>
+        <a href="index.html" class="btn-cyber-back">
+            <i class="fa-solid fa-arrow-left"></i> Back to Main
         </a>
         <div class="header-title">
-            <i class="fa-solid fa-circle-play"></i>
-            <span>ভিডিও সেকশন (Video Section)</span>
+            <i class="fa-solid fa-play" style="color: var(--primary-hot);"></i> DRK VIDEO HUB
         </div>
-        <div style="width: 100px;"></div> <!-- Top bar balance space -->
-    </div>
+        <div style="width: 110px;"></div> <!-- Layout balance space -->
+    </header>
 
-    <!-- Main Container with YouTube Embedded Player -->
-    <div class="main-container">
-        <div class="video-card">
-            <div class="video-wrapper">
-                <iframe 
-                    src="https://www.youtube.com/embed/i-bN1-L6nsI" 
-                    title="YouTube Video Player" 
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                    allowfullscreen>
-                </iframe>
-            </div>
-            <div class="video-info">
-                <h2>প্রাইভেট প্লেয়ার সেকশন</h2>
-                <p>এখানে প্লেয়ার কন্ট্রোল ব্যবহার করে ভিডিও প্লে, পজ এবং ফুলস্ক্রিন করতে পারবেন।</p>
+    <!-- MAIN GALLERY CONTAINER -->
+    <main class="main-layout">
+        
+        <div class="section-header">
+            <div class="section-title">
+                <i class="fa-solid fa-border-all"></i> Video Collections (12 Private Slots)
             </div>
         </div>
-    </div>
+
+        <!-- 4 COLUMNS SIDE BY SIDE GRID (TOTAL 12 VIDEOS) -->
+        <div class="video-grid-4x4">
+
+            <!-- VIDEO ITEM 1 -->
+            <a href="https://www.youtube.com/watch?dQw4w9WgXcQ" target="_blank" class="video-card-item">
+                <div class="thumb-container">
+                    <!-- আপনি চাইলে এখানে নিজস্ব ইমেজের পিকচার URL দিতে পারেন -->
+                    <img src="https://img.youtube.com/vi/dQw4w9WgXcQ/hqdefault.jpg" alt="Video Thumbnail">
+                    <div class="play-overlay"><div class="play-icon"><i class="fa-solid fa-play"></i></div></div>
+                    <span class="time-badge">04:15</span>
+                </div>
+                <div class="card-details">
+                    <h4 class="card-title">Dark-Net Cyber Security Tutorial Lesson 01</h4>
+                    <div class="card-meta">
+                        <span class="channel-tag">DRK-JU Lab</span>
+                        <span>12K Views</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- VIDEO ITEM 2 -->
+            <a href="https://www.youtube.com/watch?v=3JZ_D3ELwOQ" target="_blank" class="video-card-item">
+                <div class="thumb-container">
+                    <img src="https://img.youtube.com/vi/3JZ_D3ELwOQ/hqdefault.jpg" alt="Video Thumbnail">
+                    <div class="play-overlay"><div class="play-icon"><i class="fa-solid fa-play"></i></div></div>
+                    <span class="time-badge">08:22</span>
+                </div>
+                <div class="card-details">
+                    <h4 class="card-title">Advanced Linux OS Customization & RGB Theme Setup</h4>
+                    <div class="card-meta">
+                        <span class="channel-tag">Linux Dev</span>
+                        <span>45K Views</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- VIDEO ITEM 3 -->
+            <a href="https://www.youtube.com/watch?v=L_LUpnjgPso" target="_blank" class="video-card-item">
+                <div class="thumb-container">
+                    <img src="https://img.youtube.com/vi/L_LUpnjgPso/hqdefault.jpg" alt="Video Thumbnail">
+                    <div class="play-overlay"><div class="play-icon"><i class="fa-solid fa-play"></i></div></div>
+                    <span class="time-badge">12:40</span>
+                </div>
+                <div class="card-details">
+                    <h4 class="card-title">NFAK Top Best Cyber Remixed Hits Qawwali Session</h4>
+                    <div class="card-meta">
+                        <span class="channel-tag">AMPIRE BD</span>
+                        <span>102K Views</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- VIDEO ITEM 4 -->
+            <a href="https://www.youtube.com/watch?v=fJ9rUzIMcZQ" target="_blank" class="video-card-item">
+                <div class="thumb-container">
+                    <img src="https://img.youtube.com/vi/fJ9rUzIMcZQ/hqdefault.jpg" alt="Video Thumbnail">
+                    <div class="play-overlay"><div class="play-icon"><i class="fa-solid fa-play"></i></div></div>
+                    <span class="time-badge">05:10</span>
+                </div>
+                <div class="card-details">
+                    <h4 class="card-title">Glassmorphism Web Design Masterclass HTML & CSS</h4>
+                    <div class="card-meta">
+                        <span class="channel-tag">UI/UX Studio</span>
+                        <span>8.9K Views</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- VIDEO ITEM 5 -->
+            <a href="#" target="_blank" class="video-card-item">
+                <div class="thumb-container">
+                    <img src="https://picsum.photos/600/340?random=1" alt="Custom Thumbnail">
+                    <div class="play-overlay"><div class="play-icon"><i class="fa-solid fa-play"></i></div></div>
+                    <span class="time-badge">15:30</span>
+                </div>
+                <div class="card-details">
+                    <h4 class="card-title">Private Cloud Server & VPN Tunneling Guide</h4>
+                    <div class="card-meta">
+                        <span class="channel-tag">DRK-JU Lab</span>
+                        <span>15K Views</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- VIDEO ITEM 6 -->
+            <a href="#" target="_blank" class="video-card-item">
+                <div class="thumb-container">
+                    <img src="https://picsum.photos/600/340?random=2" alt="Custom Thumbnail">
+                    <div class="play-overlay"><div class="play-icon"><i class="fa-solid fa-play"></i></div></div>
+                    <span class="time-badge">03:45</span>
+                </div>
+                <div class="card-details">
+                    <h4 class="card-title">Custom RGB Glowing Buttons Animation Showcase</h4>
+                    <div class="card-meta">
+                        <span class="channel-tag">Dev Studio</span>
+                        <span>3.1K Views</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- VIDEO ITEM 7 -->
+            <a href="#" target="_blank" class="video-card-item">
+                <div class="thumb-container">
+                    <img src="https://picsum.photos/600/340?random=3" alt="Custom Thumbnail">
+                    <div class="play-overlay"><div class="play-icon"><i class="fa-solid fa-play"></i></div></div>
+                    <span class="time-badge">22:10</span>
+                </div>
+                <div class="card-details">
+                    <h4 class="card-title">Python Automation & Web Scraping Tools 2026</h4>
+                    <div class="card-meta">
+                        <span class="channel-tag">Code Base</span>
+                        <span>27K Views</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- VIDEO ITEM 8 -->
+            <a href="#" target="_blank" class="video-card-item">
+                <div class="thumb-container">
+                    <img src="https://picsum.photos/600/340?random=4" alt="Custom Thumbnail">
+                    <div class="play-overlay"><div class="play-icon"><i class="fa-solid fa-play"></i></div></div>
+                    <span class="time-badge">09:18</span>
+                </div>
+                <div class="card-details">
+                    <h4 class="card-title">Dark Net Private Web Browser Setup Tutorial</h4>
+                    <div class="card-meta">
+                        <span class="channel-tag">Cyber Sec</span>
+                        <span>54K Views</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- VIDEO ITEM 9 -->
+            <a href="#" target="_blank" class="video-card-item">
+                <div class="thumb-container">
+                    <img src="https://picsum.photos/600/340?random=5" alt="Custom Thumbnail">
+                    <div class="play-overlay"><div class="play-icon"><i class="fa-solid fa-play"></i></div></div>
+                    <span class="time-badge">06:50</span>
+                </div>
+                <div class="card-details">
+                    <h4 class="card-title">JavaScript Realtime LocalStorage Sync & Database</h4>
+                    <div class="card-meta">
+                        <span class="channel-tag">Web Dev</span>
+                        <span>19K Views</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- VIDEO ITEM 10 -->
+            <a href="#" target="_blank" class="video-card-item">
+                <div class="thumb-container">
+                    <img src="https://picsum.photos/600/340?random=6" alt="Custom Thumbnail">
+                    <div class="play-overlay"><div class="play-icon"><i class="fa-solid fa-play"></i></div></div>
+                    <span class="time-badge">11:05</span>
+                </div>
+                <div class="card-details">
+                    <h4 class="card-title">How to Hosting HTML Web Application on GitHub Pages</h4>
+                    <div class="card-meta">
+                        <span class="channel-tag">Git Guide</span>
+                        <span>62K Views</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- VIDEO ITEM 11 -->
+            <a href="#" target="_blank" class="video-card-item">
+                <div class="thumb-container">
+                    <img src="https://picsum.photos/600/340?random=7" alt="Custom Thumbnail">
+                    <div class="play-overlay"><div class="play-icon"><i class="fa-solid fa-play"></i></div></div>
+                    <span class="time-badge">07:40</span>
+                </div>
+                <div class="card-details">
+                    <h4 class="card-title">Cyberpunk UI Neon Effect CSS Walkthrough</h4>
+                    <div class="card-meta">
+                        <span class="channel-tag">UI Lab</span>
+                        <span>14K Views</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- VIDEO ITEM 12 -->
+            <a href="#" target="_blank" class="video-card-item">
+                <div class="thumb-container">
+                    <img src="https://picsum.photos/600/340?random=8" alt="Custom Thumbnail">
+                    <div class="play-overlay"><div class="play-icon"><i class="fa-solid fa-play"></i></div></div>
+                    <span class="time-badge">18:25</span>
+                </div>
+                <div class="card-details">
+                    <h4 class="card-title">Full Dark Mode Responsive Layout System Build</h4>
+                    <div class="card-meta">
+                        <span class="channel-tag">DRK-JU Lab</span>
+                        <span>88K Views</span>
+                    </div>
+                </div>
+            </a>
+
+        </div>
+
+    </main>
 
 </body>
 </html>
