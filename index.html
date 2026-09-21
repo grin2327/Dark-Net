@@ -63,7 +63,7 @@
         body::before { background: var(--primary-hot); top: -10%; left: -5%; }
         body::after { background: var(--accent-purple); bottom: -10%; right: -5%; }
 
-        /* --- OFFICE LAYOUT TOP NAV HEADER --- */
+        /* --- TOP NAV HEADER --- */
         header {
             display: flex;
             justify-content: space-between;
@@ -92,7 +92,6 @@
             color: var(--text-main);
         }
 
-        /* Dark-Net Styled Cyber Grid Icon */
         .ms-grid-icon {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -141,7 +140,6 @@
             gap: 14px;
         }
 
-        /* YouTube Matched Red Button */
         .btn-youtube-hub {
             background: var(--yt-red);
             color: #ffffff;
@@ -163,7 +161,6 @@
             transform: translateY(-1px);
         }
 
-        /* Search Button */
         .ms-search-btn {
             background: rgba(255, 255, 255, 0.04);
             border: 1px solid rgba(255, 255, 255, 0.08);
@@ -184,7 +181,6 @@
             border-color: var(--cute-cyan);
         }
 
-        /* Profile Avatar Trigger */
         .ms-profile-avatar {
             width: 36px;
             height: 36px;
@@ -230,6 +226,22 @@
         .border-pink:hover { border-color: #ff3399; box-shadow: 0 0 15px rgba(226, 19, 110, 0.2); }
         .border-cyan { border-left: 4px solid rgba(0, 229, 255, 0.3); }
         .border-cyan:hover { border-color: rgba(0, 229, 255, 0.6); }
+
+        /* CLICKABLE TRACKING CARD STYLE */
+        .clickable-card {
+            cursor: pointer;
+            position: relative;
+        }
+        .clickable-card::after {
+            content: '1-Year Stats ↗';
+            position: absolute;
+            top: 12px;
+            right: 16px;
+            font-size: 0.7rem;
+            color: var(--cute-cyan);
+            font-weight: 700;
+            opacity: 0.85;
+        }
 
         .info-label { font-size: 0.75rem; font-weight: 800; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; }
         .info-value { font-size: 1.3rem; font-weight: 800; }
@@ -310,7 +322,7 @@
         .mac-title { background: linear-gradient(135deg, #ffffff, #ff75a0); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .os-sub-text { font-size: 0.75rem; color: var(--text-muted); font-weight: 700; border-top: 1px solid rgba(255, 255, 255, 0.05); padding-top: 8px; width: 100%; }
 
-        /* FORM & INPUT STYLES FIX */
+        /* FORM & INPUT STYLES */
         .form-container, .database-container { background: var(--panel-bg); border: 1px solid var(--glass-border); border-radius: var(--radius-lg); padding: 30px; margin-bottom: 40px; }
         .section-heading { font-size: 1.1rem; font-weight: 800; margin-bottom: 22px; text-transform: uppercase; }
         .input-stack { display: flex; flex-direction: column; gap: 16px; margin-bottom: 24px; }
@@ -355,7 +367,7 @@
         }
         .btn-delete-link:hover { background: var(--primary-hot); color: white; }
 
-        /* RESPONSIVE BREAKPOINTS FIX */
+        /* RESPONSIVE BREAKPOINTS */
         @media (max-width: 850px) {
             header { flex-direction: column; gap: 12px; text-align: center; }
             .ms-nav-left, .ms-nav-right { width: 100%; justify-content: center; flex-wrap: wrap; }
@@ -410,7 +422,7 @@
         <!-- TOP INFORMATIONAL GRID SECTION -->
         <section class="info-grid">
             <!-- SUPPORT OUR PROJECT -->
-            <button class="info-card border-pink support-card-btn" onclick="openBkashModal()">
+            <button class="info-card border-pink support-card-btn" id="openBkashModalBtn">
                 <span class="info-label"><i class="fa-solid fa-heart" style="color: #e2136e;"></i> DONATION</span>
                 <div class="support-trigger-text">
                     <span>Support Our Project</span>
@@ -418,11 +430,11 @@
                 </div>
             </button>
 
-            <!-- LIVE TRACK CARD -->
-            <div class="info-card border-cyan">
-                <span class="info-label">LIVE TRACK</span>
+            <!-- REAL-TIME LIVE TRACK CARD (CLICKABLE FOR ANALYTICS GRAPH & LISTING) -->
+            <div class="info-card border-cyan clickable-card" id="liveTrackingCard" title="Click to view full 365-day visitor analytics & peak times">
+                <span class="info-label"><i class="fa-solid fa-signal" style="color: #00e5ff;"></i> LIVE TRACKING</span>
                 <div class="info-row">
-                    <span id="viewCount" class="info-value txt-pink-neon">1 view</span>
+                    <span id="viewCount" class="info-value txt-pink-neon">1 Active View</span>
                 </div>
             </div>
 
@@ -551,9 +563,9 @@
     </main>
 
     <!-- BKASH POPUP MODAL -->
-    <div id="bkashModalOverlay" class="modal-overlay" onclick="closeBkashModalOnOutside(event)">
+    <div id="bkashModalOverlay" class="modal-overlay">
         <div class="bkash-modal">
-            <button class="btn-close-modal" onclick="closeBkashModal()">×</button>
+            <button class="btn-close-modal" id="closeBkashModalBtn">×</button>
             
             <svg class="bkash-modal-logo" viewBox="0 0 300 120" xmlns="http://www.w3.org/2000/svg">
                 <path fill="#e2136e" d="M35 15 L85 60 L35 105 L15 105 L55 60 L15 15 Z"/>
@@ -567,8 +579,8 @@
             <div class="bkash-card-box">
                 <span class="bkash-badge-tag"><i class="fa-solid fa-paper-plane"></i> Personal / Send Money</span>
                 <div class="bkash-num-flex">
-                    <span id="bkashNum" class="bkash-big-num">0156xxx1721</span>
-                    <button id="copyBkashBtn" class="btn-modal-copy" onclick="copyBkashNumber()"><i class="fa-regular fa-copy"></i> Copy</button>
+                    <span id="bkashNum" class="bkash-big-num">01560001721</span>
+                    <button id="copyBkashBtn" class="btn-modal-copy"><i class="fa-regular fa-copy"></i> Copy</button>
                 </div>
             </div>
 
