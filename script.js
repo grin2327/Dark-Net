@@ -13,19 +13,19 @@ let localLinksCache = [];
 let isAdminLoggedIn = false;
 let currentSearchQuery = "";
 
-// HTML সেফ করার জন্য এসকেপ ফাংশন
+// HTML Safe korar jonno Escape Function
 function escapeHTML(str) {
     if (!str) return "";
-    return str.replace(/[&<>'"]/g, tag => ({
+    return String(str).replace(/[&<>'"]/g, tag => ({
         '&': '&amp;',
         '<': '&lt;',
         '>': '&gt;',
         "'": '&#39;',
         '"': '&quot;'
-    }[tag]));
+    }[tag] || tag));
 }
 
-// নোটিফিকেশন প্রদর্শন
+// Notification Show Function
 function showNotification(message, type = "info") {
     const notification = document.createElement('div');
     notification.textContent = message;
@@ -42,7 +42,11 @@ function showNotification(message, type = "info") {
         box-shadow: 0 4px 15px rgba(0,0,0,0.5);
     `;
     document.body.appendChild(notification);
-    setTimeout(() => notification.remove(), 3000);
+    setTimeout(() => {
+        if (notification.parentNode) {
+            notification.remove();
+        }
+    }, 3000);
 }
 
 // BKASH POPUP MODAL CONTROL
@@ -57,7 +61,7 @@ function closeBkashModal() {
 }
 
 function closeBkashModalOnOutside(e) {
-    if (e.target.id === 'bkashModalOverlay') {
+    if (e && e.target && e.target.id === 'bkashModalOverlay') {
         closeBkashModal();
     }
 }
@@ -65,30 +69,34 @@ function closeBkashModalOnOutside(e) {
 // bKash Number Copy Functionality
 function copyBkashNumber() {
     const actualFullNumber = "01560001721";
-    navigator.clipboard.writeText(actualFullNumber).then(() => {
-        const btn = document.getElementById('copyBkashBtn');
-        if (btn) {
-            btn.innerHTML = '<i class="fa-solid fa-check"></i> Copied!';
-            btn.style.background = '#2eff66';
-            btn.style.color = '#000000';
-            setTimeout(() => {
-                btn.innerHTML = '<i class="fa-regular fa-copy"></i> Copy';
-                btn.style.background = '';
-                btn.style.color = '';
-            }, 2000);
-        }
-        showNotification("bKash Number Copied: " + actualFullNumber, "success");
-    }).catch(err => {
-        console.error("Could not copy number: ", err);
-    });
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(actualFullNumber).then(() => {
+            const btn = document.getElementById('copyBkashBtn');
+            if (btn) {
+                btn.innerHTML = '<i class="fa-solid fa-check"></i> Copied!';
+                btn.style.background = '#2eff66';
+                btn.style.color = '#000000';
+                setTimeout(() => {
+                    btn.innerHTML = '<i class="fa-regular fa-copy"></i> Copy';
+                    btn.style.background = '';
+                    btn.style.color = '';
+                }, 2000);
+            }
+            showNotification("bKash Number Copied: " + actualFullNumber, "success");
+        }).catch(err => {
+            console.error("Could not copy number: ", err);
+        });
+    } else {
+        showNotification("bKash Number: " + actualFullNumber, "info");
+    }
 }
 
-// ইউনিক আইডি তৈরি
+// Unique ID Generator
 function generateId() {
     return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
 }
 
-// লোকাল স্টোরেজে সেভ
+// Save to LocalStorage
 function saveToLocalStorage(data) {
     try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
@@ -99,7 +107,7 @@ function saveToLocalStorage(data) {
     }
 }
 
-// লোকাল স্টোরেজ থেকে লোড
+// Load from LocalStorage
 function loadFromLocalStorage() {
     try {
         const saved = localStorage.getItem(STORAGE_KEY);
@@ -111,7 +119,7 @@ function loadFromLocalStorage() {
     }
 }
 
-// ক্লাউড ডেটাবেস থেকে লিংক লোড
+// Load Links from Cloud Database
 async function loadPublicLinks() {
     try {
         const response = await fetch(API_URL, { method: 'GET' });
@@ -145,7 +153,7 @@ async function loadPublicLinks() {
     }
 }
 
-// ক্লাউডে সিঙ্ক করা
+// Sync Data to Cloud
 async function syncToCloud(data) {
     try {
         await fetch(API_URL, {
@@ -158,7 +166,7 @@ async function syncToCloud(data) {
     }
 }
 
-// সার্চ ফিল্টারিং ডেটা পাওয়া
+// Get Filtered Data based on Search Query
 function getFilteredData() {
     if (!currentSearchQuery) return localLinksCache;
     const query = currentSearchQuery.toLowerCase();
@@ -169,14 +177,14 @@ function getFilteredData() {
     });
 }
 
-// এইচটিএমএল-এ লিংক রেন্ডার করা
+// Render Links List in HTML
 function renderLinksList(records) {
     const container = document.getElementById('linkList');
     if (!container) return;
     container.innerHTML = '';
 
     if (!records || !Array.isArray(records) || records.length === 0) {
-        container.innerHTML = '<div class="empty-state">📂 No database links found. Add one to start!</div>';
+        container.innerHTML = '<div class="empty-state" style="color: var(--text-muted); padding: 15px; text-align: center;">📂 No database links found. Add one to start!</div>';
         return;
     }
 
@@ -193,7 +201,7 @@ function renderLinksList(records) {
         li.innerHTML = `
             <div class="link-details">
                 <span class="link-title">${displayTitle}</span>
-                <a href="${displayUrl}" target="_blank" rel="noopener" class="link-url">${displayUrl}</a>
+                <a href="${displayUrl}" target="_blank" rel="noopener noreferrer" class="link-url">${displayUrl}</a>
                 <span class="link-meta" style="font-size: 0.7rem; color: #666;">${displayMeta}</span>
             </div>
             <button class="btn-delete-link" onclick="removeLinkItem('${itemId}')" title="Delete">&times;</button>
@@ -202,7 +210,7 @@ function renderLinksList(records) {
     });
 }
 
-// নতুন লিংক যোগ করা
+// Add New Link
 async function addNewLink() {
     const urlIn = document.getElementById('linkInput');
     const titleIn = document.getElementById('titleInput');
@@ -222,7 +230,7 @@ async function addNewLink() {
 
     try {
         new URL(cleanUrl);
-    } catch {
+    } catch (_) {
         alert("Please enter a valid URL!");
         return;
     }
@@ -260,7 +268,7 @@ async function addNewLink() {
     }
 }
 
-// লিংক মুছে ফেলা
+// Remove Link Item
 async function removeLinkItem(id) {
     if (!confirm("Delete this link from database?")) return;
 
@@ -284,7 +292,7 @@ async function removeLinkItem(id) {
     }
 }
 
-// প্রোফাইল/লগইন আইকন হ্যান্ডলার
+// Profile/Login System Handler
 function initializeLoginSystem() {
     const loginBtn = document.getElementById('loginBtn');
     if (!loginBtn) return;
@@ -317,7 +325,7 @@ function initializeLoginSystem() {
     });
 }
 
-// পেজ ভিউ ট্র্যাকিং
+// Track Session Views
 function handleSessionTracking() {
     const countEl = document.getElementById('viewCount');
     if (countEl) {
@@ -328,7 +336,7 @@ function handleSessionTracking() {
     }
 }
 
-// পেজ লোড ইনিশিয়ালাইজেশন
+// DOM Initialization
 document.addEventListener('DOMContentLoaded', () => {
     initializeLoginSystem();
     handleSessionTracking();
@@ -353,7 +361,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Top Header-এর Search বাটনে চাপ দিলে সার্চ বক্সে স্ক্রোল ও ফোকাস হবে
     const navSearchTrigger = document.getElementById('navSearchTrigger');
     if (navSearchTrigger && searchInput) {
         navSearchTrigger.addEventListener('click', () => {
@@ -363,7 +370,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// অনলাইন কানেকশনে অটো সিঙ্ক
+// Auto Sync on Reconnecting Online
 window.addEventListener('online', () => {
     loadPublicLinks();
 });

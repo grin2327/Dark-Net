@@ -32,7 +32,8 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', 'Hind Siliguri', system-ui, sans-serif;
+            font-family: 'Segoe UI', 'Hind Siliguri', system-ui, -apple-system, sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
@@ -43,6 +44,7 @@
             flex-direction: column;
             align-items: center;
             padding: 20px 15px;
+            overflow-x: hidden;
         }
 
         body::before, body::after {
@@ -142,6 +144,7 @@
             border-radius: var(--radius-lg);
             padding: 16px 20px;
             backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
             display: flex;
             flex-direction: column;
@@ -171,7 +174,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            background: rgba(10, 6, 18, 0.6);
+            background: rgba(10, 6, 18, 0.8);
             border: 1px solid var(--glass-border);
             padding: 6px 12px;
             border-radius: var(--radius-sm);
@@ -196,6 +199,7 @@
         .filter-select option {
             background: #130a24;
             color: var(--text-main);
+            padding: 5px;
         }
 
         .category-buttons {
@@ -239,6 +243,7 @@
             border-radius: var(--radius-lg);
             padding: 20px;
             backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
             transition: var(--transition);
             display: flex;
@@ -260,9 +265,10 @@
             margin-bottom: 8px;
             display: -webkit-box;
             -webkit-line-clamp: 2;
+            line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
-            height: 2.8em;
+            min-height: auto;
         }
 
         .post-meta {
@@ -311,6 +317,7 @@
             line-height: 1.5;
             display: -webkit-box;
             -webkit-line-clamp: 4;
+            line-clamp: 4;
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
@@ -402,6 +409,9 @@
             border-radius: 50%;
             cursor: pointer;
             transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .btn-close-modal:hover { background: var(--bkash-pink); transform: rotate(90deg); }
 
@@ -409,7 +419,6 @@
             width: 150px;
             margin: 0 auto 15px auto;
             display: block;
-            filter: none;
         }
 
         .bkash-modal-title {
@@ -435,6 +444,7 @@
             padding: 20px;
             margin-bottom: 18px;
             backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
         }
 
@@ -486,6 +496,7 @@
             align-items: center;
             gap: 6px;
             backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
         }
         .btn-modal-copy:hover { 
             background: var(--bkash-pink); 
@@ -493,14 +504,18 @@
             transform: scale(1.05); 
         }
 
+        /* --- MEDIA QUERIES FOR MOBILE RESPONSIVENESS --- */
         @media (max-width: 650px) {
             body { padding: 15px 10px; }
-            .header-wrapper { flex-direction: row; justify-content: space-between; }
+            .header-wrapper { flex-direction: column; align-items: flex-start; gap: 15px; }
+            .nav-buttons-wrap { width: 100%; justify-content: space-between; }
             .post-content { flex-direction: column; align-items: stretch; gap: 12px; }
-            .post-image-container { flex: none; width: 100%; height: 130px; }
-            .post-title { height: auto; -webkit-line-clamp: 3; }
+            .post-image-container { flex: none; width: 100%; height: 140px; }
+            .post-title { height: auto; -webkit-line-clamp: 3; line-clamp: 3; }
             .btn-download { width: 100%; justify-content: center; }
-            .cat-btn { flex: 1 1 calc(50% - 8px); justify-content: center; }
+            .cat-btn { flex: 1 1 calc(50% - 8px); justify-content: center; text-align: center; }
+            .filter-select-wrapper { width: 100%; justify-content: space-between; }
+            .filter-select { width: 100%; }
         }
     </style>
 </head>
@@ -621,7 +636,6 @@
                     Download / Read More »
                 </a>
             </article>
-            <!-- devinche-resolve -->
 
             <article class="post-card" data-category="video-editing">
                 <div>
@@ -638,8 +652,7 @@
                         </div>
                         <div class="post-text">
                             Blackmagic Design DaVinci Resolve Studio 20.3.2 (x64) Multilingual <br>
-
-                            verson:20.3.2
+                            version: 20.3.2
                         </div>
                     </div>
                 </div>
@@ -716,6 +729,30 @@
                     </div>
                 </div>
                 <a href="https://www.mediafire.com/file/7mukx996032iu1w/SETUP_INSTALLER_(PASS=6780).zip/file" target="_blank" rel="noopener noreferrer" class="btn-download">
+                    Download / Read More »
+                </a>
+            </article>
+
+            <!-- Adobe Illustrator 2026 -->
+            <article class="post-card" data-category="graphics-design">
+                <div>
+                    <h2 class="post-title">
+                        Adobe Illustrator 2026: Professional Vector Graphics Editor
+                    </h2>
+                    <div class="post-meta">
+                        <span><i class="fa-regular fa-clock"></i> September 6, 2026</span>
+                        <span><i class="fa-regular fa-comment"></i> Comments Off</span>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-image-container">
+                            <img src="https://th.bing.com/th/id/OIP.0OwjoNEVuqTTk5yqqFFp_QHaH9?w=146&h=180&c=7&r=0&o=7&pid=1.7&rm=3" alt="Illustrator Preview">
+                        </div>
+                        <div class="post-text">
+                            Industry leading vector graphics editor providing advanced design tools and AI-powered features PASSWORD : 6165
+                        </div>
+                    </div>
+                </div>
+                <a href="https://www.mediafire.com/file/wn2c7x7zrwaxiw9/SETUP_INSTALLER_(KEY=6165).zip/file" target="_blank" rel="noopener noreferrer" class="btn-download">
                     Download / Read More »
                 </a>
             </article>

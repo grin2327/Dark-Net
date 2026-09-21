@@ -193,11 +193,11 @@
             text-shadow: 0 0 8px rgba(0, 229, 255, 0.3);
         }
 
-        /* 8 COLUMNS GRID LAYOUT */
+        /* RESPONSIVE GRID LAYOUT FIX */
         .video-grid-8x3 {
             display: grid;
-            grid-template-columns: repeat(8, 1fr);
-            gap: 14px;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 16px;
         }
 
         /* Individual Compact Video Card Item */
@@ -301,7 +301,6 @@
             flex: 1;
         }
 
-        /* Type Information Bar Header Badge */
         .info-type-bar {
             display: inline-flex;
             align-items: center;
@@ -318,7 +317,7 @@
         }
 
         .card-title {
-            font-size: 0.80rem;
+            font-size: 0.85rem;
             font-weight: 700;
             color: var(--text-main);
             line-height: 1.3;
@@ -340,6 +339,7 @@
             justify-content: space-between;
             align-items: center;
             margin-top: auto;
+            padding-top: 4px;
         }
 
         .category-tag {
@@ -347,7 +347,7 @@
             font-weight: 700;
         }
 
-        /* --- VIDEO MODAL POPUP (CYBER STYLE) --- */
+        /* --- VIDEO MODAL POPUP --- */
         .video-modal-overlay {
             position: fixed;
             top: 0;
@@ -431,11 +431,11 @@
         }
 
         /* --- RESPONSIVE BREAKPOINTS --- */
-        @media (max-width: 1600px) { .video-grid-8x3 { grid-template-columns: repeat(6, 1fr); } }
+        @media (min-width: 1600px) { .video-grid-8x3 { grid-template-columns: repeat(8, 1fr); } }
         @media (max-width: 1250px) { .video-grid-8x3 { grid-template-columns: repeat(4, 1fr); } }
         @media (max-width: 850px) { 
             .video-grid-8x3 { grid-template-columns: repeat(2, 1fr); }
-            header { flex-direction: column; gap: 8px; text-align: center; }
+            header { flex-direction: column; gap: 12px; text-align: center; }
         }
         @media (max-width: 480px) { .video-grid-8x3 { grid-template-columns: 1fr; } }
     </style>
@@ -464,42 +464,43 @@
             <button class="cat-btn" data-category="Open Source"><i class="fa-solid fa-code"></i> Open Source</button>
         </div>
 
-        <!-- ========================================================= -->
-        <!-- LAYER 1 : CRACK APP                                       -->
-        <!-- ========================================================= -->
+        <!-- LAYER 1 : CRACK APP -->
         <section class="layer-section" data-layer="Crack App">
             <div class="section-header">
                 <div class="section-title">
-                    <i class="fa-solid fa-key"></i> Crack App Private Videos
+                    <i class="fa-solid fa-key"></i> Nowlage Crack App 
                 </div>
             </div>
+            <!-- 1 -->
             <div class="video-grid-8x3">
-                <div class="video-card-item" data-video-src="video-file/Sochta Houn -(Remix) Dekhte Dekhte - Nfak - Sochta Hoon Ke Woh Kitne Masoom The_2.mp4" data-title="How to Install Premiere Pro Crack 2026">
+                <div class="video-card-item" data-video-src="video-file/Sochta Houn -(Remix) Dekhte Dekhte - Nfak - Sochta Hoon Ke Woh Kitne Masoom The_2.mp4" data-title="Sochta Houn -(Remix) Dekhte Dekhte - Nfak | Sochta Hoon Ke Woh Kitne Masoom The">
                     <div class="thumb-container">
                         <img src="https://th.bing.com/th/id/OVP.wlwhA1yro9wpRMRiolc-FQHgFo?w=243&h=136&c=7&rs=1&qlt=70&o=7&pid=2.1&rm=3" alt="Thumbnail">
                         <div class="play-overlay"><div class="play-icon"><i class="fa-solid fa-play"></i></div></div>
-                        <span class="time-badge">12:45</span>
+                        <span class="time-badge">05:20</span>
                     </div>
                     <div class="card-details">
-                        <div class="info-type-bar"><i class="fa-solid fa-file-code"></i> Premiere Pro v2026 .EXE</div>
-                        <h4 class="card-title">How to Install Premiere Pro Crack 2026</h4>
-                        <div class="card-meta"><span class="category-tag">Crack App</span><span>Slot 01</span></div>
+                        <div class="info-type-bar"><i class="fa-solid fa-file-code"></i>#</div>
+                        <h4 class="card-title">Sochta Houn -(Remix) Dekhte Dekhte - Nfak | Sochta Hoon Ke Woh Kitne Masoom The</h4>
+                        <div class="card-meta"><span class="category-tag">Song</span><span>Slot 01</span></div>
                     </div>
                 </div>
 
-                <div class="video-card-item" data-video-src="" data-title="After Effects Plugins Error Fix">
+                <!-- 2 -->
+                <div class="video-card-item" data-video-src="video-file/Disable Microsoft Defender Antivirus PERMANENTLY in Windows 11 (2025)_2.mp4" data-title="Windows Defender Permanent Disable">
                     <div class="thumb-container">
-                        <img src="https://picsum.photos/400/225?random=5" alt="Thumbnail">
+                        <img src="https://i.ytimg.com/vi/FVBo54-rPsU/hq720.jpg?sqp=-oaymwEnCNAFEJQDSFryq4qpAxkIARUAAIhCGAHYAQHiAQoIGBACGAY4AUAB&rs=AOn4CLB6qhTNvgoUsXMteNhWL1tZ-1Zsmw" alt="Thumbnail">
                         <div class="play-overlay"><div class="play-icon"><i class="fa-solid fa-play"></i></div></div>
-                        <span class="time-badge">10:40</span>
+                        <span class="time-badge">07:00</span>
                     </div>
                     <div class="card-details">
-                        <div class="info-type-bar"><i class="fa-solid fa-plug"></i> AE Plugins Patch .RAR</div>
-                        <h4 class="card-title">After Effects Plugins Error Fix</h4>
-                        <div class="card-meta"><span class="category-tag">Crack App</span><span>Slot 02</span></div>
+                        <div class="info-type-bar"><i class="fa-solid fa-plug"></i>#</div>
+                        <h4 class="card-title">Windows Defender Permanent Disable</h4>
+                        <div class="card-meta"><span class="category-tag">Video</span><span>Slot 02</span></div>
                     </div>
                 </div>
-
+                
+                <!-- 3 -->
                 <div class="video-card-item" data-video-src="" data-title="IDM Integration & Trial Reset Guide">
                     <div class="thumb-container">
                         <img src="https://picsum.photos/400/225?random=9" alt="Thumbnail">
@@ -567,9 +568,7 @@
             </div>
         </section>
 
-        <!-- ========================================================= -->
-        <!-- LAYER 2 : RESEARCH                                        -->
-        <!-- ========================================================= -->
+        <!-- LAYER 2 : RESEARCH -->
         <section class="layer-section" data-layer="Research">
             <div class="section-header">
                 <div class="section-title">
@@ -644,9 +643,7 @@
             </div>
         </section>
 
-        <!-- ========================================================= -->
-        <!-- LAYER 3 : VIDEO EDITING                                   -->
-        <!-- ========================================================= -->
+        <!-- LAYER 3 : VIDEO EDITING -->
         <section class="layer-section" data-layer="Video Edit">
             <div class="section-header">
                 <div class="section-title">
@@ -708,9 +705,7 @@
             </div>
         </section>
 
-        <!-- ========================================================= -->
-        <!-- LAYER 4 : GRAPHICS                                        -->
-        <!-- ========================================================= -->
+        <!-- LAYER 4 : GRAPHICS -->
         <section class="layer-section" data-layer="Graphics">
             <div class="section-header">
                 <div class="section-title">
@@ -785,9 +780,7 @@
             </div>
         </section>
 
-        <!-- ========================================================= -->
-        <!-- LAYER 5 : OPEN SOURCE                                     -->
-        <!-- ========================================================= -->
+        <!-- LAYER 5 : OPEN SOURCE -->
         <section class="layer-section" data-layer="Open Source">
             <div class="section-header">
                 <div class="section-title">
@@ -857,7 +850,6 @@
     <!-- CATEGORY FILTER & POPUP JAVASCRIPT -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Filter Buttons Logic
             const filterBtns = document.querySelectorAll('.cat-btn');
             const layerSections = document.querySelectorAll('.layer-section');
 
@@ -880,7 +872,6 @@
                 });
             });
 
-            // Video Player Modal Logic
             const videoCards = document.querySelectorAll('.video-card-item');
             const videoModal = document.getElementById('videoModal');
             const closeModalBtn = document.getElementById('closeModalBtn');
@@ -903,7 +894,6 @@
                 });
             });
 
-            // Close Modal Functionality
             const closeModal = () => {
                 videoModal.classList.remove('active');
                 mainVideoPlayer.pause();

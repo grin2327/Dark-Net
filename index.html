@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800;900&family=Rajdhani:wght@600;700&family=Hind+Siliguri:wght@500;600;700&display=swap" rel="stylesheet">
     
     <style>
-        /* --- DESIGN SYSTEM: CYBER-PASTEL (ORIGINAL COLORS MAINTAINED) --- */
+        /* --- DESIGN SYSTEM: CYBER-PASTEL --- */
         :root {
             --bg-base: #0b0914;           
             --primary-hot: #ff337a;       
@@ -163,7 +163,7 @@
             transform: translateY(-1px);
         }
 
-        /* Office Style Search Bar Toggle */
+        /* Search Button */
         .ms-search-btn {
             background: rgba(255, 255, 255, 0.04);
             border: 1px solid rgba(255, 255, 255, 0.08);
@@ -184,7 +184,7 @@
             border-color: var(--cute-cyan);
         }
 
-        /* Profile Avatar / Login Trigger */
+        /* Profile Avatar Trigger */
         .ms-profile-avatar {
             width: 36px;
             height: 36px;
@@ -233,7 +233,7 @@
 
         .info-label { font-size: 0.75rem; font-weight: 800; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; }
         .info-value { font-size: 1.3rem; font-weight: 800; }
-        .youtube-link { color: var(--primary-hot); text-decoration: none; font-size: 0.95rem; font-weight: 700; transition: var(--transition); }
+        .youtube-link { color: var(--primary-hot); text-decoration: none; font-size: 0.95rem; font-weight: 700; transition: var(--transition); display: inline-block; }
         .youtube-link:hover { color: var(--text-main); transform: translateX(3px); }
 
         .support-card-btn { background: transparent; border: none; text-align: left; cursor: pointer; width: 100%; }
@@ -262,6 +262,7 @@
             position: absolute; top: 16px; right: 18px; background: rgba(255, 255, 255, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.15); color: white; font-size: 1.2rem;
             width: 32px; height: 32px; border-radius: 50%; cursor: pointer; transition: var(--transition);
+            display: flex; align-items: center; justify-content: center;
         }
         .btn-close-modal:hover { background: var(--bkash-pink); transform: rotate(90deg); }
 
@@ -309,6 +310,7 @@
         .mac-title { background: linear-gradient(135deg, #ffffff, #ff75a0); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .os-sub-text { font-size: 0.75rem; color: var(--text-muted); font-weight: 700; border-top: 1px solid rgba(255, 255, 255, 0.05); padding-top: 8px; width: 100%; }
 
+        /* FORM & INPUT STYLES FIX */
         .form-container, .database-container { background: var(--panel-bg); border: 1px solid var(--glass-border); border-radius: var(--radius-lg); padding: 30px; margin-bottom: 40px; }
         .section-heading { font-size: 1.1rem; font-weight: 800; margin-bottom: 22px; text-transform: uppercase; }
         .input-stack { display: flex; flex-direction: column; gap: 16px; margin-bottom: 24px; }
@@ -320,11 +322,12 @@
             padding: 14px 20px; border-radius: var(--radius-sm); color: var(--text-main); font-weight: 600; outline: none;
             transition: var(--transition);
         }
-        .custom-input:focus { border-color: var(--cute-cyan); }
+        .custom-input:focus { border-color: var(--cute-cyan); box-shadow: 0 0 10px rgba(0, 229, 255, 0.2); }
 
         .btn-add-link {
             background: var(--text-main); color: var(--bg-base); border: none;
             padding: 14px 28px; border-radius: var(--radius-sm); font-weight: 700; cursor: pointer; transition: var(--transition);
+            white-space: nowrap;
         }
         .btn-add-link:hover { background: var(--cute-cyan); }
 
@@ -333,30 +336,33 @@
         .offline-box-header { color: var(--primary-hot); font-weight: 800; font-size: 0.9rem; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid rgba(255, 255, 255, 0.06); }
         .offline-grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
         .offline-link-list { padding-left: 20px; display: flex; flex-direction: column; gap: 10px; font-size: 0.9rem; }
-        .offline-link-list a { color: var(--text-main); text-decoration: none; }
+        .offline-link-list a { color: var(--text-main); text-decoration: none; transition: var(--transition); word-break: break-all; }
         .offline-link-list a:hover { color: var(--cute-cyan); }
 
         .links-list-group { list-style: none; display: flex; flex-direction: column; gap: 12px; margin-top: 15px; }
         .link-item {
             background: rgba(15, 12, 31, 0.6); border: 1px solid var(--glass-border); padding: 16px 22px;
-            border-radius: var(--radius-sm); display: flex; justify-content: space-between; align-items: flex-start; gap: 16px;
+            border-radius: var(--radius-sm); display: flex; justify-content: space-between; align-items: center; gap: 16px;
         }
-        .link-details { display: flex; flex-direction: column; gap: 6px; flex: 1; }
+        .link-details { display: flex; flex-direction: column; gap: 6px; flex: 1; overflow: hidden; }
         .link-title { font-weight: 700; font-size: 0.95rem; color: var(--cute-cyan); }
-        .link-url { font-size: 0.8rem; color: var(--text-muted); text-decoration: none; }
+        .link-url { font-size: 0.8rem; color: var(--text-muted); text-decoration: none; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
 
         .btn-delete-link {
             background: rgba(255, 51, 122, 0.1); color: var(--primary-hot); border: 1px solid rgba(255, 51, 122, 0.2);
             width: 32px; height: 32px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;
-            font-weight: bold; transition: var(--transition);
+            font-weight: bold; transition: var(--transition); flex-shrink: 0;
         }
         .btn-delete-link:hover { background: var(--primary-hot); color: white; }
 
+        /* RESPONSIVE BREAKPOINTS FIX */
         @media (max-width: 850px) {
-            header { flex-direction: column; gap: 12px; }
-            .ms-nav-left, .ms-nav-right { width: 100%; justify-content: space-between; }
+            header { flex-direction: column; gap: 12px; text-align: center; }
+            .ms-nav-left, .ms-nav-right { width: 100%; justify-content: center; flex-wrap: wrap; }
             .ms-menu-links { display: none; }
             .os-grid { grid-template-columns: 1fr; }
+            .input-inline-row { flex-direction: column; }
+            .btn-add-link { width: 100%; }
         }
     </style>
 </head>
@@ -381,18 +387,18 @@
         </div>
 
         <div class="ms-nav-right">
-            <!-- Go to Video Section (YouTube Matched Red Style) -->
+            <!-- Go to Video Section -->
             <a href="video.html" class="btn-youtube-hub" title="Go to Video Section">
                 <i class="fa-brands fa-youtube"></i> Video Hub
             </a>
 
-            <!-- Search Button (Focuses Search Bar) -->
+            <!-- Search Button -->
             <button class="ms-search-btn" id="navSearchTrigger" title="Search Links">
                 <span>Search</span>
                 <i class="fa-solid fa-magnifying-glass"></i>
             </button>
 
-            <!-- Profile / Admin Login Trigger Icon -->
+            <!-- Profile Trigger Icon -->
             <div class="ms-profile-avatar" id="loginBtn" title="Account / Admin Login">
                 <i class="fa-solid fa-user" id="userIcon"></i>
             </div>
@@ -403,7 +409,7 @@
 
         <!-- TOP INFORMATIONAL GRID SECTION -->
         <section class="info-grid">
-            <!-- SUPPORT OUR PROJECT (DONATION MODAL) -->
+            <!-- SUPPORT OUR PROJECT -->
             <button class="info-card border-pink support-card-btn" onclick="openBkashModal()">
                 <span class="info-label"><i class="fa-solid fa-heart" style="color: #e2136e;"></i> DONATION</span>
                 <div class="support-trigger-text">
