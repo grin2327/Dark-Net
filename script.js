@@ -213,13 +213,14 @@ function renderLinksList(records) {
 function addNewLink() {
     const urlIn = document.getElementById('linkInput');
     const titleIn = document.getElementById('titleInput');
+    const addBtn = document.getElementById('addLinkBtn');
     if (!urlIn) return;
 
     let cleanUrl = urlIn.value.trim();
-    const cleanTitle = titleIn && titleIn.value ? titleIn.value.trim() : "Unnamed Link";
+    const cleanTitle = titleIn && titleIn.value.trim() ? titleIn.value.trim() : "Unnamed Link";
 
     if (!cleanUrl) {
-        alert("Please enter a valid URL!");
+        showNotification("Please enter a valid URL!", "info");
         return;
     }
 
@@ -230,8 +231,14 @@ function addNewLink() {
     try {
         new URL(cleanUrl);
     } catch (_) {
-        alert("Please enter a valid URL!");
+        showNotification("Please enter a valid URL format!", "info");
         return;
+    }
+
+    // বাটন সাময়িকভাবে ডিজেবল করা
+    if (addBtn) {
+        addBtn.disabled = true;
+        addBtn.innerText = "Adding...";
     }
 
     const now = new Date();
@@ -253,7 +260,13 @@ function addNewLink() {
     })
     .catch((error) => {
         console.error("Firebase Add Error: ", error);
-        alert("Failed to save link!");
+        showNotification("Failed to save: " + error.message, "info");
+    })
+    .finally(() => {
+        if (addBtn) {
+            addBtn.disabled = false;
+            addBtn.innerText = "Add Link";
+        }
     });
 }
 
@@ -326,7 +339,6 @@ function initializeLoginSystem() {
             } else {
                 const passwordInput = prompt("Enter Admin Password:");
                 if (passwordInput) {
-                    // ফায়ারবেসে রেজিস্টার করা ইমেইল এবং ইনপুট দেওয়া পাসওয়ার্ড দিয়ে লগইন (Line 330)
                     auth.signInWithEmailAndPassword("grin2327@gmail.com", passwordInput)
                     .then(() => {
                         closeProfileModal();
@@ -369,10 +381,26 @@ document.addEventListener('DOMContentLoaded', () => {
     const copyBkashBtn = document.getElementById('copyBkashBtn');
     if (copyBkashBtn) copyBkashBtn.addEventListener('click', copyBkashNumber);
 
+    // Add Link Button Listener
     const addLinkBtn = document.getElementById('addLinkBtn');
     if (addLinkBtn) {
         addLinkBtn.addEventListener('click', addNewLink);
     }
+
+    // Enter Key Support
+    const linkInput = document.getElementById('linkInput');
+    const titleInput = document.getElementById('titleInput');
+
+    [linkInput, titleInput].forEach(input => {
+        if (input) {
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    addNewLink();
+                }
+            });
+        }
+    });
 
     const searchInput = document.getElementById('searchInput');
     if (searchInput) {
