@@ -11,6 +11,10 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800;900&family=Rajdhani:wght@600;700&family=Hind+Siliguri:wght@500;600;700&display=swap" rel="stylesheet">
     
+    <!-- Firebase SDK (v8 Compat) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+
     <style>
         /* --- DESIGN SYSTEM: CYBER-PASTEL --- */
         :root {
@@ -198,6 +202,7 @@
             border-color: var(--cute-cyan);
         }
 
+        /* Profile Avatar Glow Effects */
         .ms-profile-avatar {
             width: 36px;
             height: 36px;
@@ -210,17 +215,36 @@
             font-size: 0.9rem;
             font-weight: 700;
             cursor: pointer;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.2);
             transition: var(--transition);
+        }
+
+        .ms-profile-avatar.admin-active {
+            border-color: #ff0055 !important;
+            box-shadow: 0 0 12px #ff0055, 0 0 20px rgba(255, 0, 85, 0.8) !important;
+            animation: pulseRed 2s infinite alternate;
+        }
+
+        .ms-profile-avatar.public-active {
+            border-color: #00e5ff !important;
+            box-shadow: 0 0 12px #00e5ff, 0 0 20px rgba(0, 229, 255, 0.8) !important;
+            animation: pulseBlue 2s infinite alternate;
+        }
+
+        @keyframes pulseRed {
+            0% { box-shadow: 0 0 8px #ff0055, 0 0 15px rgba(255, 0, 85, 0.6); }
+            100% { box-shadow: 0 0 16px #ff0000, 0 0 28px rgba(255, 0, 0, 0.9); }
+        }
+
+        @keyframes pulseBlue {
+            0% { box-shadow: 0 0 8px #00e5ff, 0 0 15px rgba(0, 229, 255, 0.6); }
+            100% { box-shadow: 0 0 16px #007aff, 0 0 28px rgba(0, 122, 255, 0.9); }
         }
 
         .ms-profile-avatar:hover {
             transform: scale(1.08);
-            box-shadow: 0 0 12px var(--primary-hot);
         }
 
-        /* --- CONTENT STYLES --- */
-        .txt-cyan { color: var(--cute-cyan); font-weight: 700; }
         .txt-cyan-neon {
             color: var(--cute-cyan);
             font-weight: 800;
@@ -284,7 +308,7 @@
             transform: rotate(90deg);
         }
 
-        /* --- PROFILE ACCOUNT MODAL --- */
+        /* --- PROFILE MODAL --- */
         .profile-modal {
             background: linear-gradient(145deg, rgba(23, 19, 41, 0.95), rgba(13, 10, 24, 0.98));
             border: 1px solid rgba(255, 255, 255, 0.15);
@@ -324,17 +348,6 @@
             margin-bottom: 4px;
         }
 
-        .profile-badge {
-            display: inline-block;
-            font-size: 0.75rem;
-            font-weight: 700;
-            padding: 3px 10px;
-            border-radius: 12px;
-            background: rgba(255, 255, 255, 0.08);
-            color: var(--text-muted);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
         .profile-actions-list {
             display: flex;
             flex-direction: column;
@@ -364,8 +377,13 @@
         }
 
         .profile-action-btn.admin-btn:hover {
-            border-color: var(--cute-cyan);
-            color: var(--cute-cyan);
+            border-color: #ff337a;
+            color: #ff337a;
+        }
+
+        .profile-action-btn.public-btn:hover {
+            border-color: var(--neon-green);
+            color: var(--neon-green);
         }
 
         .profile-action-btn.donate-btn {
@@ -412,7 +430,6 @@
         }
 
         .modal-overlay.active .bkash-modal { transform: scale(1); }
-        .bkash-modal-logo { width: 150px; margin: 0 auto 15px auto; display: block; }
         .bkash-modal-title { font-family: 'Orbitron', sans-serif; font-size: 1.35rem; color: #ffffff; margin-bottom: 6px; }
         .bkash-modal-subtext { font-size: 0.9rem; color: rgba(255, 255, 255, 0.85); margin-bottom: 22px; }
 
@@ -489,7 +506,6 @@
             text-align: center;
         }
 
-        /* Flexible Grid with Automatic Centering for Leftover Cards */
         .os-grid {
             display: flex;
             flex-wrap: wrap;
@@ -570,7 +586,7 @@
             width: 100%;
         }
 
-        /* --- MINIMALIST QUICK CATEGORY TOOLS --- */
+        /* --- QUICK TOOLS --- */
         .quick-tools-compact {
             padding: 16px 20px;
             margin-bottom: 40px;
@@ -597,18 +613,9 @@
             border-radius: var(--radius-sm);
         }
 
-        .quick-tools-compact .os-icon-wrapper {
-            font-size: 1.35rem;
-        }
-
-        .quick-tools-compact .os-title-text {
-            font-size: 0.85rem;
-        }
-
-        .quick-tools-compact .os-sub-text {
-            font-size: 0.65rem;
-            padding-top: 4px;
-        }
+        .quick-tools-compact .os-icon-wrapper { font-size: 1.35rem; }
+        .quick-tools-compact .os-title-text { font-size: 0.85rem; }
+        .quick-tools-compact .os-sub-text { font-size: 0.65rem; padding-top: 4px; }
 
         /* FORM & INPUT STYLES */
         .form-container,
@@ -639,8 +646,6 @@
             gap: 14px;
             width: 100%;
         }
-
-        .input-inline-row #linkInput { flex: 1; }
 
         .custom-input {
             width: 100%;
@@ -781,100 +786,20 @@
             color: white;
         }
 
-        /* ========================================================= */
-        /* --- MOBILE & TABLET SMART RESPONSIVE OPTIMIZATIONS --- */
-        /* ========================================================= */
-
         @media (max-width: 768px) {
-            header {
-                flex-direction: column;
-                gap: 12px;
-                padding: 14px 16px;
-            }
-
-            .ms-nav-left,
-            .ms-nav-right {
-                width: 100%;
-                justify-content: center;
-                flex-wrap: wrap;
-            }
-
+            header { flex-direction: column; gap: 12px; padding: 14px 16px; }
+            .ms-nav-left, .ms-nav-right { width: 100%; justify-content: center; flex-wrap: wrap; }
             .ms-menu-links { display: none; }
-
-            .main-layout-fullscreen {
-                padding: 20px 12px;
-            }
-
-            .os-container,
-            .form-container,
-            .database-container,
-            .offline-box {
-                padding: 18px 14px;
-                border-radius: 16px;
-                margin-bottom: 24px;
-            }
-
-            /* OS Grid side-by-side (2 columns) with auto-centered 5th card */
-            .os-grid {
-                gap: 10px;
-                justify-content: center;
-            }
-
-            .os-card {
-                flex: 0 1 calc(50% - 6px); /* 2 items side-by-side */
-                min-width: 135px;
-                max-width: 200px;
-                padding: 16px 10px;
-            }
-
-            .quick-tools-grid {
-                gap: 8px;
-                justify-content: center;
-            }
-
-            .quick-tools-compact .os-card {
-                flex: 0 1 calc(50% - 5px); /* 2 items side-by-side */
-                min-width: 120px;
-                padding: 12px 8px;
-            }
-
-            .offline-grid-container {
-                grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-                gap: 14px;
-            }
-
-            .offline-link-list {
-                padding-left: 16px;
-                font-size: 0.85rem;
-            }
-
+            .main-layout-fullscreen { padding: 20px 12px; }
+            .os-container, .form-container, .database-container, .offline-box { padding: 18px 14px; border-radius: 16px; margin-bottom: 24px; }
+            .os-grid { gap: 10px; justify-content: center; }
+            .os-card { flex: 0 1 calc(50% - 6px); min-width: 135px; max-width: 200px; padding: 16px 10px; }
+            .quick-tools-grid { gap: 8px; justify-content: center; }
+            .quick-tools-compact .os-card { flex: 0 1 calc(50% - 5px); min-width: 120px; padding: 12px 8px; }
+            .offline-grid-container { grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 14px; }
             .input-inline-row { flex-direction: column; }
-
             .btn-add-link { width: 100%; }
-
-            .link-item {
-                padding: 12px 14px;
-            }
-        }
-
-        @media (max-width: 400px) {
-            /* Ultra-small smartphones */
-            .os-card {
-                flex: 0 1 calc(50% - 5px);
-                min-width: 120px;
-            }
-
-            .os-icon-wrapper {
-                font-size: 1.8rem;
-            }
-
-            .os-title-text {
-                font-size: 0.92rem;
-            }
-
-            .os-sub-text {
-                font-size: 0.65rem;
-            }
+            .link-item { padding: 12px 14px; }
         }
     </style>
 </head>
@@ -904,19 +829,16 @@
         </div>
 
         <div class="ms-nav-right">
-            <!-- Go to Video Section -->
             <a href="video.html" class="btn-youtube-hub" title="Go to Video Section">
-                <i class="fa-brands fa-youtube"></i>
-                Video Hub
+                <i class="fa-brands fa-youtube"></i> Video Hub
             </a>
 
-            <!-- Search Button -->
             <button class="ms-search-btn" id="navSearchTrigger" title="Search Links">
                 <span>Search</span>
                 <i class="fa-solid fa-magnifying-glass"></i>
             </button>
 
-            <!-- Profile Trigger Icon -->
+            <!-- Profile Avatar Icon -->
             <div class="ms-profile-avatar" id="loginBtn" title="Account / Profile Options">
                 <i class="fa-solid fa-user" id="userIcon"></i>
             </div>
@@ -925,74 +847,53 @@
 
     <main class="main-layout-fullscreen">
 
-        <!-- OS APPLICATIONS HUB (Windows, Linux, Mac OS, Android, iOS) -->
+        <!-- OS APPLICATIONS HUB -->
         <section class="os-container" id="osSection">
             <h3 class="os-heading txt-cyan-neon">
-                <i class="fa-solid fa-laptop-code"></i>
-                OS Applications Hub
+                <i class="fa-solid fa-laptop-code"></i> OS Applications Hub
             </h3>
-
             <div class="os-grid">
-                <!-- Windows -->
-                <a href="me/windows.html" target="_blank" rel="noopener noreferrer" class="os-card os-card-win">
-                    <div class="os-icon-wrapper win-glow">
-                        <i class="fa-brands fa-windows"></i>
-                    </div>
+                <a href="me/windows.html" target="_blank" class="os-card os-card-win">
+                    <div class="os-icon-wrapper win-glow"><i class="fa-brands fa-windows"></i></div>
                     <span class="os-title-text win-title">Windows</span>
                     <span class="os-sub-text">Premium Apps • Open</span>
                 </a>
-
-                <!-- Linux -->
-                <a href="me/linux.html" target="_blank" rel="noopener noreferrer" class="os-card os-card-linux">
-                    <div class="os-icon-wrapper linux-glow">
-                        <i class="fa-brands fa-linux"></i>
-                    </div>
+                <a href="me/linux.html" target="_blank" class="os-card os-card-linux">
+                    <div class="os-icon-wrapper linux-glow"><i class="fa-brands fa-linux"></i></div>
                     <span class="os-title-text linux-title">Linux</span>
                     <span class="os-sub-text">Open Source • Fixing</span>
                 </a>
-
-                <!-- Mac OS -->
-                <a href="me/apple.html" target="_blank" rel="noopener noreferrer" class="os-card os-card-mac">
-                    <div class="os-icon-wrapper mac-glow">
-                        <i class="fa-brands fa-apple"></i>
-                    </div>
+                <a href="me/apple.html" target="_blank" class="os-card os-card-mac">
+                    <div class="os-icon-wrapper mac-glow"><i class="fa-brands fa-apple"></i></div>
                     <span class="os-title-text mac-title">Mac OS</span>
                     <span class="os-sub-text">System Tools • Fixing</span>
                 </a>
-
-                <!-- Android -->
-                <a href="me/android.html" target="_blank" rel="noopener noreferrer" class="os-card os-card-android">
-                    <div class="os-icon-wrapper android-glow">
-                        <i class="fa-brands fa-android"></i>
-                    </div>
+                <a href="me/android.html" target="_blank" class="os-card os-card-android">
+                    <div class="os-icon-wrapper android-glow"><i class="fa-brands fa-android"></i></div>
                     <span class="os-title-text android-title">Android</span>
                     <span class="os-sub-text">APK & Apps • Open</span>
                 </a>
-
-                <!-- iOS -->
-                <a href="me/ios.html" target="_blank" rel="noopener noreferrer" class="os-card os-card-ios">
-                    <div class="os-icon-wrapper ios-glow">
-                        <i class="fa-brands fa-apple"></i>
-                    </div>
+                <a href="me/ios.html" target="_blank" class="os-card os-card-ios">
+                    <div class="os-icon-wrapper ios-glow"><i class="fa-brands fa-apple"></i></div>
                     <span class="os-title-text ios-title">iOS</span>
                     <span class="os-sub-text">Mobile OS • Fixing</span>
                 </a>
             </div>
         </section>
 
-        <!-- OFFLINE MESSAGE INBOX / RESOURCES -->
+        <!-- OFFLINE RESOURCES -->
         <div class="offline-box" id="offlineSection">
             <div class="offline-box-header">
                 <i class="fa-solid fa-folder-open"></i> OFFLINE RESOURCES & QUICK LINKS
             </div>
             <div class="offline-grid-container">
                 <ul class="offline-link-list">
-                    <li><a href="#" target="_blank"><i class="fa-solid fa-angle-right"></i> System Documentation</a></li>
-                    <li><a href="#" target="_blank"><i class="fa-solid fa-angle-right"></i> Developer API Docs</a></li>
+                    <li><a href="#"><i class="fa-solid fa-angle-right"></i> System Documentation</a></li>
+                    <li><a href="#"><i class="fa-solid fa-angle-right"></i> Developer API Docs</a></li>
                 </ul>
                 <ul class="offline-link-list">
-                    <li><a href="#" target="_blank"><i class="fa-solid fa-angle-right"></i> Server Status & Logs</a></li>
-                    <li><a href="#" target="_blank"><i class="fa-solid fa-angle-right"></i> Network Utilities</a></li>
+                    <li><a href="#"><i class="fa-solid fa-angle-right"></i> Server Status & Logs</a></li>
+                    <li><a href="#"><i class="fa-solid fa-angle-right"></i> Network Utilities</a></li>
                 </ul>
             </div>
         </div>
@@ -1003,214 +904,98 @@
                 <i class="fa-solid fa-screwdriver-wrench"></i> Quick Utilities
             </h3>
             <div class="quick-tools-grid">
-                <a href="#" class="os-card os-card-id">
-                    <div class="os-icon-wrapper id-glow"><i class="fa-solid fa-id-card"></i></div>
-                    <span class="os-title-text id-title">ID Generator</span>
-                    <span class="os-sub-text">Utility Tool</span>
-                </a>
-                <a href="#" class="os-card os-card-temp">
-                    <div class="os-icon-wrapper temp-glow"><i class="fa-solid fa-envelope-open-text"></i></div>
-                    <span class="os-title-text temp-title">Temp Mail</span>
-                    <span class="os-sub-text">Privacy Tool</span>
-                </a>
-                <a href="#" class="os-card os-card-radio">
-                    <div class="os-icon-wrapper radio-glow"><i class="fa-solid fa-tower-cell"></i></div>
-                    <span class="os-title-text radio-title">Live Radio</span>
-                    <span class="os-sub-text">Audio Stream</span>
-                </a>
-                <a href="#" class="os-card os-card-world">
-                    <div class="os-icon-wrapper world-glow"><i class="fa-solid fa-globe"></i></div>
-                    <span class="os-title-text world-title">Web Proxy</span>
-                    <span class="os-sub-text">Bypass Net</span>
-                </a>
-                <a href="#" class="os-card os-card-hack">
-                    <div class="os-icon-wrapper hack-glow"><i class="fa-solid fa-terminal"></i></div>
-                    <span class="os-title-text hack-title">Cyber Lab</span>
-                    <span class="os-sub-text">Testing Tools</span>
-                </a>
+                <a href="#" class="os-card os-card-id"><div class="os-icon-wrapper id-glow"><i class="fa-solid fa-id-card"></i></div><span class="os-title-text id-title">ID Generator</span><span class="os-sub-text">Utility Tool</span></a>
+                <a href="#" class="os-card os-card-temp"><div class="os-icon-wrapper temp-glow"><i class="fa-solid fa-envelope-open-text"></i></div><span class="os-title-text temp-title">Temp Mail</span><span class="os-sub-text">Privacy Tool</span></a>
+                <a href="#" class="os-card os-card-radio"><div class="os-icon-wrapper radio-glow"><i class="fa-solid fa-tower-cell"></i></div><span class="os-title-text radio-title">Live Radio</span><span class="os-sub-text">Audio Stream</span></a>
+                <a href="#" class="os-card os-card-world"><div class="os-icon-wrapper world-glow"><i class="fa-solid fa-globe"></i></div><span class="os-title-text world-title">Web Proxy</span><span class="os-sub-text">Bypass Net</span></a>
+                <a href="#" class="os-card os-card-hack"><div class="os-icon-wrapper hack-glow"><i class="fa-solid fa-terminal"></i></div><span class="os-title-text hack-title">Cyber Lab</span><span class="os-sub-text">Testing Tools</span></a>
             </div>
         </section>
 
         <!-- ADD LINK FORM SECTION -->
         <section class="form-container" id="linkFormSection">
-            <h3 class="section-heading txt-cyan-neon">
-                <i class="fa-solid fa-plus-circle"></i> Add New Link
+            <h3 class="section-heading txt-pink-neon">
+                <i class="fa-solid fa-plus"></i> Add New Resource Link
             </h3>
             <div class="input-stack">
-                <input type="text" id="titleInput" class="custom-input" placeholder="Enter Link Title (e.g. My Portfolio)">
+                <input type="text" id="titleInput" class="custom-input" placeholder="Enter Link Title (e.g., Google Drive)">
                 <div class="input-inline-row">
-                    <input type="url" id="linkInput" class="custom-input" placeholder="Enter URL (https://...)">
-                    <button class="btn-add-link" id="addBtn"><i class="fa-solid fa-paper-plane"></i> Save Link</button>
+                    <input type="url" id="linkInput" class="custom-input" placeholder="https://example.com">
+                    <button class="btn-add-link" id="addLinkBtn"><i class="fa-solid fa-paper-plane"></i> Save Link</button>
                 </div>
             </div>
 
             <div class="search-wrapper">
-                <input type="text" id="searchInput" class="custom-input" placeholder="⚡ Search stored database links...">
+                <input type="text" id="searchInput" class="custom-input" placeholder="Search saved links...">
             </div>
         </section>
 
-        <!-- DATABASE LIST SECTION -->
+        <!-- DATABASE SECTION -->
         <section class="database-container" id="databaseSection">
-            <h3 class="section-heading txt-pink-neon">
-                <i class="fa-solid fa-database"></i> Stored Directory Links
+            <h3 class="section-heading txt-cyan-neon">
+                <i class="fa-solid fa-database"></i> Saved Links Database
             </h3>
-            <ul class="links-list-group" id="linksList">
-                <!-- Dynamic stored links will render here -->
+            <ul class="links-list-group" id="linkList">
+                <!-- Dynamically populated from script.js -->
             </ul>
         </section>
 
     </main>
 
-    <!-- USER PROFILE MODAL -->
+    <!-- PROFILE ACCOUNT MODAL -->
     <div class="modal-overlay" id="profileModalOverlay">
         <div class="profile-modal">
-            <button class="btn-close-modal" id="closeProfileModal">&times;</button>
+            <button class="btn-close-modal" id="closeProfileModalBtn"><i class="fa-solid fa-xmark"></i></button>
             <div class="profile-modal-header">
-                <div class="profile-avatar-large">
+                <div class="profile-avatar-large" id="modalAvatar">
                     <i class="fa-solid fa-user"></i>
                 </div>
-                <h4 class="profile-title">DARK USER</h4>
-                <span class="profile-badge">PRO MEMBER</span>
+                <h4 class="profile-title" id="profileTitleText">User Account</h4>
+                <span id="profileRoleBadge" class="bkash-badge-tag" style="background: rgba(0, 229, 255, 0.1); color: #00e5ff; border: 1px solid rgba(0, 229, 255, 0.2);">Public Guest</span>
             </div>
             <div class="profile-actions-list">
-                <a href="#" class="profile-action-btn admin-btn">
-                    <i class="fa-solid fa-user-shield txt-cyan"></i> Admin Control
-                </a>
-                <button class="profile-action-btn donate-btn" id="openBkashBtn">
-                    <i class="fa-solid fa-hand-holding-dollar"></i> Donate via bKash
+                <!-- Admin Login Option -->
+                <button class="profile-action-btn admin-btn" id="adminAuthBtn">
+                    <i class="fa-solid fa-user-shield"></i> <span id="adminAuthText">Admin Login</span>
                 </button>
+                
+                <!-- Public Login Option -->
+                <button class="profile-action-btn public-btn" id="publicLoginBtn">
+                    <i class="fa-solid fa-user-check"></i> <span>Public Guest Mode</span>
+                </button>
+
                 <div class="profile-divider"></div>
-                <a href="https://github.com" target="_blank" class="profile-action-btn web-link-btn">
+
+                <!-- Support via bKash -->
+                <button class="profile-action-btn donate-btn" id="profileDonateBtn">
+                    <i class="fa-solid fa-heart"></i> Support dev bKash
+                </button>
+
+                <!-- GitHub Repository -->
+                <a href="https://github.com/grin2327/Dark-Net" target="_blank" class="profile-action-btn web-link-btn">
                     <i class="fa-brands fa-github"></i> GitHub Repository
                 </a>
             </div>
         </div>
     </div>
 
-    <!-- BKASH DONATION MODAL -->
+    <!-- BKASH DONATE MODAL -->
     <div class="modal-overlay" id="bkashModalOverlay">
         <div class="bkash-modal">
-            <button class="btn-close-modal" id="closeBkashModal">&times;</button>
-            <img src="https://upload.wikimedia.org/wikipedia/commons/8/8c/BKash_Logo.svg" alt="bKash Logo" class="bkash-modal-logo">
-            <h4 class="bkash-modal-title">Support Our Project</h4>
-            <p class="bkash-modal-subtext">Send your support via bKash Personal Number</p>
+            <button class="btn-close-modal" id="closeBkashModalBtn"><i class="fa-solid fa-xmark"></i></button>
+            <h4 class="bkash-modal-title">Donate bKash</h4>
+            <p class="bkash-modal-subtext">Support the DARK 365 development team!</p>
             <div class="bkash-card-box">
-                <span class="bkash-badge-tag">bKash Personal</span>
+                <span class="bkash-badge-tag">Personal bKash</span>
                 <div class="bkash-num-flex">
-                    <span class="bkash-big-num" id="bkashNum">01700000000</span>
+                    <span class="bkash-big-num" id="bkashNumber">01560001721</span>
                     <button class="btn-modal-copy" id="copyBkashBtn"><i class="fa-solid fa-copy"></i> Copy</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- JAVASCRIPT FUNCTIONALITY -->
-    <script>
-        // Elements Reference
-        const loginBtn = document.getElementById('loginBtn');
-        const profileModalOverlay = document.getElementById('profileModalOverlay');
-        const closeProfileModal = document.getElementById('closeProfileModal');
-
-        const openBkashBtn = document.getElementById('openBkashBtn');
-        const bkashModalOverlay = document.getElementById('bkashModalOverlay');
-        const closeBkashModal = document.getElementById('closeBkashModal');
-        const copyBkashBtn = document.getElementById('copyBkashBtn');
-
-        const navSearchTrigger = document.getElementById('navSearchTrigger');
-        const searchInput = document.getElementById('searchInput');
-
-        // Profile Modal Handlers
-        loginBtn.addEventListener('click', () => profileModalOverlay.classList.add('active'));
-        closeProfileModal.addEventListener('click', () => profileModalOverlay.classList.remove('active'));
-
-        // bKash Modal Handlers
-        openBkashBtn.addEventListener('click', () => {
-            profileModalOverlay.classList.remove('active');
-            bkashModalOverlay.classList.add('active');
-        });
-        closeBkashModal.addEventListener('click', () => bkashModalOverlay.classList.remove('active'));
-
-        // Copy bKash Number
-        copyBkashBtn.addEventListener('click', () => {
-            const bkashNum = document.getElementById('bkashNum').innerText;
-            navigator.clipboard.writeText(bkashNum);
-            copyBkashBtn.innerHTML = '<i class="fa-solid fa-check"></i> Copied!';
-            setTimeout(() => {
-                copyBkashBtn.innerHTML = '<i class="fa-solid fa-copy"></i> Copy';
-            }, 2000);
-        });
-
-        // Focus Search on Nav Search Click
-        navSearchTrigger.addEventListener('click', () => {
-            document.getElementById('linkFormSection').scrollIntoView({ behavior: 'smooth' });
-            searchInput.focus();
-        });
-
-        // LocalStorage Link Database Functionality
-        const addBtn = document.getElementById('addBtn');
-        const titleInput = document.getElementById('titleInput');
-        const linkInput = document.getElementById('linkInput');
-        const linksList = document.getElementById('linksList');
-
-        let storedLinks = JSON.parse(localStorage.getItem('dark_net_links')) || [
-            { id: 1, title: 'GitHub Hub', url: 'https://github.com' },
-            { id: 2, title: 'Google Search', url: 'https://google.com' }
-        ];
-
-        function renderLinks(filter = '') {
-            linksList.innerHTML = '';
-            const filtered = storedLinks.filter(item => 
-                item.title.toLowerCase().includes(filter.toLowerCase()) || 
-                item.url.toLowerCase().includes(filter.toLowerCase())
-            );
-
-            if (filtered.length === 0) {
-                linksList.innerHTML = `<li class="link-item" style="justify-content:center; color: var(--text-muted);">No links found.</li>`;
-                return;
-            }
-
-            filtered.forEach(item => {
-                const li = document.createElement('li');
-                li.className = 'link-item';
-                li.innerHTML = `
-                    <div class="link-details">
-                        <span class="link-title">${item.title}</span>
-                        <a href="${item.url}" target="_blank" class="link-url">${item.url}</a>
-                    </div>
-                    <button class="btn-delete-link" onclick="deleteLink(${item.id})" title="Delete Link">&times;</button>
-                `;
-                linksList.appendChild(li);
-            });
-        }
-
-        addBtn.addEventListener('click', () => {
-            const title = titleInput.value.trim();
-            const url = linkInput.value.trim();
-
-            if (!title || !url) {
-                alert('Please provide both Title and URL!');
-                return;
-            }
-
-            const newLink = { id: Date.now(), title, url };
-            storedLinks.unshift(newLink);
-            localStorage.setItem('dark_net_links', JSON.stringify(storedLinks));
-            
-            titleInput.value = '';
-            linkInput.value = '';
-            renderLinks(searchInput.value);
-        });
-
-        window.deleteLink = function(id) {
-            storedLinks = storedLinks.filter(item => item.id !== id);
-            localStorage.setItem('dark_net_links', JSON.stringify(storedLinks));
-            renderLinks(searchInput.value);
-        };
-
-        searchInput.addEventListener('input', (e) => renderLinks(e.target.value));
-
-        // Initial Render
-        renderLinks();
-    </script>
+    <!-- MAIN SYSTEM SCRIPT -->
+    <script src="script.js"></script>
 </body>
 </html>
