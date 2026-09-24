@@ -117,21 +117,10 @@
             border-radius: 1px;
         }
 
-        .ms-grid-icon .s1 {
-            background-color: var(--primary-hot);
-        }
-
-        .ms-grid-icon .s2 {
-            background-color: var(--neon-green);
-        }
-
-        .ms-grid-icon .s3 {
-            background-color: var(--cute-cyan);
-        }
-
-        .ms-grid-icon .s4 {
-            background-color: var(--accent-purple);
-        }
+        .ms-grid-icon .s1 { background-color: var(--primary-hot); }
+        .ms-grid-icon .s2 { background-color: var(--neon-green); }
+        .ms-grid-icon .s3 { background-color: var(--cute-cyan); }
+        .ms-grid-icon .s4 { background-color: var(--accent-purple); }
 
         .brand-text {
             font-family: 'Orbitron', sans-serif;
@@ -231,27 +220,18 @@
         }
 
         /* --- CONTENT STYLES --- */
-        .txt-cyan {
-            color: var(--cute-cyan);
-            font-weight: 700;
-        }
-
+        .txt-cyan { color: var(--cute-cyan); font-weight: 700; }
         .txt-cyan-neon {
             color: var(--cute-cyan);
             font-weight: 800;
             text-shadow: 0 0 8px rgba(0, 229, 255, 0.2);
         }
-
         .txt-green-neon {
             color: var(--neon-green);
             font-weight: 800;
             text-shadow: 0 0 8px rgba(0, 230, 118, 0.2);
         }
-
-        .txt-pink-neon {
-            color: var(--primary-hot);
-            font-weight: 800;
-        }
+        .txt-pink-neon { color: var(--primary-hot); font-weight: 800; }
 
         .main-layout-fullscreen {
             max-width: 1100px;
@@ -264,10 +244,8 @@
         /* --- MODAL BASE --- */
         .modal-overlay {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
             background: rgba(5, 3, 10, 0.85);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
@@ -287,14 +265,12 @@
 
         .btn-close-modal {
             position: absolute;
-            top: 16px;
-            right: 18px;
+            top: 16px; right: 18px;
             background: rgba(255, 255, 255, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.15);
             color: white;
             font-size: 1.2rem;
-            width: 32px;
-            height: 32px;
+            width: 32px; height: 32px;
             border-radius: 50%;
             cursor: pointer;
             transition: var(--transition);
@@ -323,18 +299,12 @@
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        .modal-overlay.active .profile-modal {
-            transform: scale(1);
-        }
+        .modal-overlay.active .profile-modal { transform: scale(1); }
 
-        .profile-modal-header {
-            text-align: center;
-            margin-bottom: 24px;
-        }
+        .profile-modal-header { text-align: center; margin-bottom: 24px; }
 
         .profile-avatar-large {
-            width: 64px;
-            height: 64px;
+            width: 64px; height: 64px;
             border-radius: 50%;
             background: linear-gradient(135deg, var(--accent-purple), var(--primary-hot));
             color: #ffffff;
@@ -441,28 +411,10 @@
             text-align: center;
         }
 
-        .modal-overlay.active .bkash-modal {
-            transform: scale(1);
-        }
-
-        .bkash-modal-logo {
-            width: 150px;
-            margin: 0 auto 15px auto;
-            display: block;
-        }
-
-        .bkash-modal-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.35rem;
-            color: #ffffff;
-            margin-bottom: 6px;
-        }
-
-        .bkash-modal-subtext {
-            font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.85);
-            margin-bottom: 22px;
-        }
+        .modal-overlay.active .bkash-modal { transform: scale(1); }
+        .bkash-modal-logo { width: 150px; margin: 0 auto 15px auto; display: block; }
+        .bkash-modal-title { font-family: 'Orbitron', sans-serif; font-size: 1.35rem; color: #ffffff; margin-bottom: 6px; }
+        .bkash-modal-subtext { font-size: 0.9rem; color: rgba(255, 255, 255, 0.85); margin-bottom: 22px; }
 
         .bkash-card-box {
             background: rgba(15, 8, 22, 0.5);
@@ -520,7 +472,7 @@
             transform: scale(1.05);
         }
 
-        /* OS HUB & CATEGORY BOXES */
+        /* --- OS HUB & CATEGORY CONTAINERS --- */
         .os-container {
             background: var(--panel-bg);
             border: 1px solid var(--glass-border);
@@ -537,13 +489,17 @@
             text-align: center;
         }
 
+        /* Flexible Grid with Automatic Centering for Leftover Cards */
         .os-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 18px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 16px;
         }
 
         .os-card {
+            flex: 1 1 160px;
+            max-width: 220px;
             background: rgba(13, 10, 25, 0.6);
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: var(--radius-sm);
@@ -559,139 +515,51 @@
             transition: var(--transition);
         }
 
-        .os-card:hover {
-            transform: translateY(-5px);
-        }
+        .os-card:hover { transform: translateY(-5px); }
 
-        .os-card-win:hover {
-            border-color: #00a4ef;
-            background: rgba(0, 164, 239, 0.08);
-        }
+        .os-card-win:hover { border-color: #00a4ef; background: rgba(0, 164, 239, 0.08); }
+        .os-card-linux:hover { border-color: var(--neon-green); background: rgba(46, 255, 102, 0.08); }
+        .os-card-mac:hover { border-color: #ff337a; background: rgba(255, 51, 122, 0.08); }
+        .os-card-android:hover { border-color: #3ddc84; background: rgba(61, 220, 132, 0.08); }
+        .os-card-ios:hover { border-color: #007aff; background: rgba(0, 122, 255, 0.08); }
 
-        .os-card-linux:hover {
-            border-color: var(--neon-green);
-            background: rgba(46, 255, 102, 0.08);
-        }
+        .os-card-id:hover { border-color: #ff9900; background: rgba(255, 153, 0, 0.08); }
+        .os-card-temp:hover { border-color: #a855f7; background: rgba(168, 85, 247, 0.08); }
+        .os-card-radio:hover { border-color: #22c55e; background: rgba(34, 197, 94, 0.08); }
+        .os-card-world:hover { border-color: #06b6d4; background: rgba(6, 182, 212, 0.08); }
+        .os-card-hack:hover { border-color: #ef4444; background: rgba(239, 68, 68, 0.08); }
 
-        .os-card-mac:hover {
-            border-color: #ff337a;
-            background: rgba(255, 51, 122, 0.08);
-        }
+        .os-icon-wrapper { font-size: 2.2rem; }
 
-        .os-card-id:hover {
-            border-color: #ff9900;
-            background: rgba(255, 153, 0, 0.08);
-        }
+        .win-glow { color: #00e5ff; }
+        .linux-glow { color: var(--neon-green); }
+        .mac-glow { color: #ffffff; }
+        .android-glow { color: #3ddc84; }
+        .ios-glow { color: #007aff; }
 
-        .os-card-temp:hover {
-            border-color: #a855f7;
-            background: rgba(168, 85, 247, 0.08);
-        }
-
-        .os-card-radio:hover {
-            border-color: #22c55e;
-            background: rgba(34, 197, 94, 0.08);
-        }
-
-        .os-card-world:hover {
-            border-color: #06b6d4;
-            background: rgba(6, 182, 212, 0.08);
-        }
-
-        .os-card-hack:hover {
-            border-color: #ef4444;
-            background: rgba(239, 68, 68, 0.08);
-        }
-
-        .os-icon-wrapper {
-            font-size: 2.2rem;
-        }
-
-        .win-glow {
-            color: #00e5ff;
-        }
-
-        .linux-glow {
-            color: var(--neon-green);
-        }
-
-        .mac-glow {
-            color: #ffffff;
-        }
-
-        .id-glow {
-            color: #ff9900;
-        }
-
-        .temp-glow {
-            color: #a855f7;
-        }
-
-        .radio-glow {
-            color: #22c55e;
-        }
-
-        .world-glow {
-            color: #06b6d4;
-        }
-
-        .hack-glow {
-            color: #ef4444;
-        }
+        .id-glow { color: #ff9900; }
+        .temp-glow { color: #a855f7; }
+        .radio-glow { color: #22c55e; }
+        .world-glow { color: #06b6d4; }
+        .hack-glow { color: #ef4444; }
 
         .os-title-text {
             font-family: 'Orbitron', sans-serif;
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             font-weight: 800;
         }
 
-        .win-title {
-            background: linear-gradient(135deg, #ffffff, #00e5ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+        .win-title { background: linear-gradient(135deg, #ffffff, #00e5ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .linux-title { background: linear-gradient(135deg, #ffffff, #2eff66); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .mac-title { background: linear-gradient(135deg, #ffffff, #ff75a0); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .android-title { background: linear-gradient(135deg, #ffffff, #3ddc84); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .ios-title { background: linear-gradient(135deg, #ffffff, #007aff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        .linux-title {
-            background: linear-gradient(135deg, #ffffff, #2eff66);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .mac-title {
-            background: linear-gradient(135deg, #ffffff, #ff75a0);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .id-title {
-            background: linear-gradient(135deg, #ffffff, #ff9900);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .temp-title {
-            background: linear-gradient(135deg, #ffffff, #a855f7);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .radio-title {
-            background: linear-gradient(135deg, #ffffff, #22c55e);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .world-title {
-            background: linear-gradient(135deg, #ffffff, #06b6d4);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .hack-title {
-            background: linear-gradient(135deg, #ffffff, #ef4444);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+        .id-title { background: linear-gradient(135deg, #ffffff, #ff9900); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .temp-title { background: linear-gradient(135deg, #ffffff, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .radio-title { background: linear-gradient(135deg, #ffffff, #22c55e); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .world-title { background: linear-gradient(135deg, #ffffff, #06b6d4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hack-title { background: linear-gradient(135deg, #ffffff, #ef4444); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
         .os-sub-text {
             font-size: 0.72rem;
@@ -700,6 +568,46 @@
             border-top: 1px solid rgba(255, 255, 255, 0.05);
             padding-top: 8px;
             width: 100%;
+        }
+
+        /* --- MINIMALIST QUICK CATEGORY TOOLS --- */
+        .quick-tools-compact {
+            padding: 16px 20px;
+            margin-bottom: 40px;
+        }
+
+        .quick-tools-compact .os-heading {
+            font-size: 0.95rem;
+            margin-bottom: 16px;
+            text-align: left;
+        }
+
+        .quick-tools-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .quick-tools-compact .os-card {
+            flex: 1 1 130px;
+            max-width: 180px;
+            padding: 12px 10px;
+            gap: 6px;
+            border-radius: var(--radius-sm);
+        }
+
+        .quick-tools-compact .os-icon-wrapper {
+            font-size: 1.35rem;
+        }
+
+        .quick-tools-compact .os-title-text {
+            font-size: 0.85rem;
+        }
+
+        .quick-tools-compact .os-sub-text {
+            font-size: 0.65rem;
+            padding-top: 4px;
         }
 
         /* FORM & INPUT STYLES */
@@ -732,9 +640,7 @@
             width: 100%;
         }
 
-        .input-inline-row #linkInput {
-            flex: 1;
-        }
+        .input-inline-row #linkInput { flex: 1; }
 
         .custom-input {
             width: 100%;
@@ -765,9 +671,7 @@
             white-space: nowrap;
         }
 
-        .btn-add-link:hover {
-            background: var(--cute-cyan);
-        }
+        .btn-add-link:hover { background: var(--cute-cyan); }
 
         .search-wrapper {
             border-top: 1px solid rgba(255, 255, 255, 0.06);
@@ -793,7 +697,7 @@
 
         .offline-grid-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 20px;
         }
 
@@ -812,9 +716,7 @@
             word-break: break-all;
         }
 
-        .offline-link-list a:hover {
-            color: var(--cute-cyan);
-        }
+        .offline-link-list a:hover { color: var(--cute-cyan); }
 
         .links-list-group {
             list-style: none;
@@ -879,12 +781,15 @@
             color: white;
         }
 
-        /* RESPONSIVE BREAKPOINTS */
-        @media (max-width: 850px) {
+        /* ========================================================= */
+        /* --- MOBILE & TABLET SMART RESPONSIVE OPTIMIZATIONS --- */
+        /* ========================================================= */
+
+        @media (max-width: 768px) {
             header {
                 flex-direction: column;
                 gap: 12px;
-                text-align: center;
+                padding: 14px 16px;
             }
 
             .ms-nav-left,
@@ -894,20 +799,81 @@
                 flex-wrap: wrap;
             }
 
-            .ms-menu-links {
-                display: none;
+            .ms-menu-links { display: none; }
+
+            .main-layout-fullscreen {
+                padding: 20px 12px;
             }
 
+            .os-container,
+            .form-container,
+            .database-container,
+            .offline-box {
+                padding: 18px 14px;
+                border-radius: 16px;
+                margin-bottom: 24px;
+            }
+
+            /* OS Grid side-by-side (2 columns) with auto-centered 5th card */
             .os-grid {
-                grid-template-columns: 1fr;
+                gap: 10px;
+                justify-content: center;
             }
 
-            .input-inline-row {
-                flex-direction: column;
+            .os-card {
+                flex: 0 1 calc(50% - 6px); /* 2 items side-by-side */
+                min-width: 135px;
+                max-width: 200px;
+                padding: 16px 10px;
             }
 
-            .btn-add-link {
-                width: 100%;
+            .quick-tools-grid {
+                gap: 8px;
+                justify-content: center;
+            }
+
+            .quick-tools-compact .os-card {
+                flex: 0 1 calc(50% - 5px); /* 2 items side-by-side */
+                min-width: 120px;
+                padding: 12px 8px;
+            }
+
+            .offline-grid-container {
+                grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+                gap: 14px;
+            }
+
+            .offline-link-list {
+                padding-left: 16px;
+                font-size: 0.85rem;
+            }
+
+            .input-inline-row { flex-direction: column; }
+
+            .btn-add-link { width: 100%; }
+
+            .link-item {
+                padding: 12px 14px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            /* Ultra-small smartphones */
+            .os-card {
+                flex: 0 1 calc(50% - 5px);
+                min-width: 120px;
+            }
+
+            .os-icon-wrapper {
+                font-size: 1.8rem;
+            }
+
+            .os-title-text {
+                font-size: 0.92rem;
+            }
+
+            .os-sub-text {
+                font-size: 0.65rem;
             }
         }
     </style>
@@ -918,7 +884,6 @@
     <!-- DARK-NET TOP NAVIGATION HEADER -->
     <header>
         <div class="ms-nav-left">
-
             <a href="index.html" class="ms-logo-container">
                 <div class="ms-grid-icon">
                     <div class="s1"></div>
@@ -926,225 +891,102 @@
                     <div class="s3"></div>
                     <div class="s4"></div>
                 </div>
-
                 <span class="brand-text">DARK 365</span>
             </a>
 
             <ul class="ms-menu-links">
                 <li><a href="#osSection">Apps</a></li>
+                <li><a href="#offlineSection">Resources</a></li>
                 <li><a href="#quickToolsSection">Quick Tools</a></li>
                 <li><a href="#linkFormSection">Add Link</a></li>
                 <li><a href="#databaseSection">Database</a></li>
-                <li><a href="#offlineSection">Resources</a></li>
             </ul>
         </div>
 
         <div class="ms-nav-right">
-
             <!-- Go to Video Section -->
-            <a href="video.html"
-               class="btn-youtube-hub"
-               title="Go to Video Section">
+            <a href="video.html" class="btn-youtube-hub" title="Go to Video Section">
                 <i class="fa-brands fa-youtube"></i>
                 Video Hub
             </a>
 
             <!-- Search Button -->
-            <button class="ms-search-btn"
-                    id="navSearchTrigger"
-                    title="Search Links">
+            <button class="ms-search-btn" id="navSearchTrigger" title="Search Links">
                 <span>Search</span>
                 <i class="fa-solid fa-magnifying-glass"></i>
             </button>
 
             <!-- Profile Trigger Icon -->
-            <div class="ms-profile-avatar"
-                 id="loginBtn"
-                 title="Account / Profile Options">
+            <div class="ms-profile-avatar" id="loginBtn" title="Account / Profile Options">
                 <i class="fa-solid fa-user" id="userIcon"></i>
             </div>
-
         </div>
     </header>
 
     <main class="main-layout-fullscreen">
 
-        <!-- OS APPLICATIONS HUB -->
+        <!-- OS APPLICATIONS HUB (Windows, Linux, Mac OS, Android, iOS) -->
         <section class="os-container" id="osSection">
-
             <h3 class="os-heading txt-cyan-neon">
                 <i class="fa-solid fa-laptop-code"></i>
                 OS Applications Hub
             </h3>
 
             <div class="os-grid">
-
-                <a href="me/windows.html"
-                   target="_blank"
-                   rel="noopener noreferrer"
-                   class="os-card os-card-win">
+                <!-- Windows -->
+                <a href="me/windows.html" target="_blank" rel="noopener noreferrer" class="os-card os-card-win">
                     <div class="os-icon-wrapper win-glow">
                         <i class="fa-brands fa-windows"></i>
                     </div>
-
-                    <span class="os-title-text win-title">
-                        Windows
-                    </span>
-
-                    <span class="os-sub-text">
-                        Premium Apps • Open Page
-                    </span>
+                    <span class="os-title-text win-title">Windows</span>
+                    <span class="os-sub-text">Premium Apps • Open</span>
                 </a>
 
-                <a href="me/linux.html"
-                   target="_blank"
-                   rel="noopener noreferrer"
-                   class="os-card os-card-linux">
+                <!-- Linux -->
+                <a href="me/linux.html" target="_blank" rel="noopener noreferrer" class="os-card os-card-linux">
                     <div class="os-icon-wrapper linux-glow">
                         <i class="fa-brands fa-linux"></i>
                     </div>
-
-                    <span class="os-title-text linux-title">
-                        Linux
-                    </span>
-
-                    <span class="os-sub-text">
-                        Open Source • In Fixing
-                    </span>
+                    <span class="os-title-text linux-title">Linux</span>
+                    <span class="os-sub-text">Open Source • Fixing</span>
                 </a>
 
-                <a href="me/apple.html"
-                   target="_blank"
-                   rel="noopener noreferrer"
-                   class="os-card os-card-mac">
+                <!-- Mac OS -->
+                <a href="me/apple.html" target="_blank" rel="noopener noreferrer" class="os-card os-card-mac">
                     <div class="os-icon-wrapper mac-glow">
                         <i class="fa-brands fa-apple"></i>
                     </div>
-
-                    <span class="os-title-text mac-title">
-                        Mac OS
-                    </span>
-
-                    <span class="os-sub-text">
-                        System Tools • In Fixing
-                    </span>
+                    <span class="os-title-text mac-title">Mac OS</span>
+                    <span class="os-sub-text">System Tools • Fixing</span>
                 </a>
 
-            </div>
-        </section>
-
-        <!-- QUICK UTILITY CATEGORIES BOX -->
-        <section class="os-container" id="quickToolsSection">
-
-            <h3 class="os-heading txt-green-neon">
-                <i class="fa-solid fa-fire"></i>
-                Quick Category Tools
-            </h3>
-
-            <div class="os-grid">
-
-                <a href="https://haveibeenpwned.com"
-                   target="_blank"
-                   rel="noopener noreferrer"
-                   class="os-card os-card-id">
-
-                    <div class="os-icon-wrapper id-glow">
-                        <i class="fa-solid fa-id-card"></i>
+                <!-- Android -->
+                <a href="me/android.html" target="_blank" rel="noopener noreferrer" class="os-card os-card-android">
+                    <div class="os-icon-wrapper android-glow">
+                        <i class="fa-brands fa-android"></i>
                     </div>
-
-                    <span class="os-title-text id-title">
-                        ID Finder
-                    </span>
-
-                    <span class="os-sub-text">
-                        Check Leaks & OSINT
-                    </span>
+                    <span class="os-title-text android-title">Android</span>
+                    <span class="os-sub-text">APK & Apps • Open</span>
                 </a>
 
-                <a href="https://guerrillamail.com"
-                   target="_blank"
-                   rel="noopener noreferrer"
-                   class="os-card os-card-temp">
-
-                    <div class="os-icon-wrapper temp-glow">
-                        <i class="fa-solid fa-envelope-open-text"></i>
+                <!-- iOS -->
+                <a href="me/ios.html" target="_blank" rel="noopener noreferrer" class="os-card os-card-ios">
+                    <div class="os-icon-wrapper ios-glow">
+                        <i class="fa-brands fa-apple"></i>
                     </div>
-
-                    <span class="os-title-text temp-title">
-                        Temp Mail
-                    </span>
-
-                    <span class="os-sub-text">
-                        Disposable Inbox
-                    </span>
+                    <span class="os-title-text ios-title">iOS</span>
+                    <span class="os-sub-text">Mobile OS • Fixing</span>
                 </a>
-
-                <a href="https://radio.garden"
-                   target="_blank"
-                   rel="noopener noreferrer"
-                   class="os-card os-card-radio">
-
-                    <div class="os-icon-wrapper radio-glow">
-                        <i class="fa-solid fa-radio"></i>
-                    </div>
-
-                    <span class="os-title-text radio-title">
-                        Radio Guide
-                    </span>
-
-                    <span class="os-sub-text">
-                        Live Global Radio
-                    </span>
-                </a>
-
-                <a href="https://earthcam.com"
-                   target="_blank"
-                   rel="noopener noreferrer"
-                   class="os-card os-card-world">
-
-                    <div class="os-icon-wrapper world-glow">
-                        <i class="fa-solid fa-earth-americas"></i>
-                    </div>
-
-                    <span class="os-title-text world-title">
-                        World View
-                    </span>
-
-                    <span class="os-sub-text">
-                        Live Earth Cams
-                    </span>
-                </a>
-
-                <a href="https://bugmenot.com/"
-                   target="_blank"
-                   rel="noopener noreferrer"
-                   class="os-card os-card-hack">
-
-                    <div class="os-icon-wrapper hack-glow">
-                        <i class="fa-solid fa-user-ninja"></i>
-                    </div>
-
-                    <span class="os-title-text hack-title">
-                        Ethical Hacking
-                    </span>
-
-                    <span class="os-sub-text">
-                        Bypass & Security Tools
-                    </span>
-                </a>
-
             </div>
         </section>
 
         <!-- OFFLINE MESSAGE INBOX -->
         <div class="offline-box" id="offlineSection">
-
             <div class="offline-box-header">
                 <span>📩 OFFLINE MESSAGE INBOX</span>
             </div>
 
             <div class="offline-grid-container">
-
                 <ol class="offline-link-list" start="1">
                     <li><a href="https://earthcam.com" target="_blank" rel="noopener noreferrer">EarthCam</a></li>
                     <li><a href="https://haveibeenpwned.com" target="_blank" rel="noopener noreferrer">Have I Been Pwned</a></li>
@@ -1196,220 +1038,159 @@
                     <li><a href="#">---</a></li>
                     <li><a href="#">---</a></li>
                 </ol>
-
             </div>
         </div>
 
+        <!-- QUICK UTILITY CATEGORIES BOX -->
+        <section class="os-container quick-tools-compact" id="quickToolsSection">
+            <h3 class="os-heading txt-green-neon">
+                <i class="fa-solid fa-fire"></i>
+                Quick Category Tools
+            </h3>
+
+            <div class="quick-tools-grid">
+                <a href="https://haveibeenpwned.com" target="_blank" rel="noopener noreferrer" class="os-card os-card-id">
+                    <div class="os-icon-wrapper id-glow">
+                        <i class="fa-solid fa-id-card"></i>
+                    </div>
+                    <span class="os-title-text id-title">ID Finder</span>
+                    <span class="os-sub-text">Check Leaks</span>
+                </a>
+
+                <a href="https://guerrillamail.com" target="_blank" rel="noopener noreferrer" class="os-card os-card-temp">
+                    <div class="os-icon-wrapper temp-glow">
+                        <i class="fa-solid fa-envelope-open-text"></i>
+                    </div>
+                    <span class="os-title-text temp-title">Temp Mail</span>
+                    <span class="os-sub-text">Disposable</span>
+                </a>
+
+                <a href="https://radio.garden" target="_blank" rel="noopener noreferrer" class="os-card os-card-radio">
+                    <div class="os-icon-wrapper radio-glow">
+                        <i class="fa-solid fa-radio"></i>
+                    </div>
+                    <span class="os-title-text radio-title">Radio Guide</span>
+                    <span class="os-sub-text">Global Radio</span>
+                </a>
+
+                <a href="https://earthcam.com" target="_blank" rel="noopener noreferrer" class="os-card os-card-world">
+                    <div class="os-icon-wrapper world-glow">
+                        <i class="fa-solid fa-earth-americas"></i>
+                    </div>
+                    <span class="os-title-text world-title">World View</span>
+                    <span class="os-sub-text">Live Cams</span>
+                </a>
+
+                <a href="https://bugmenot.com/" target="_blank" rel="noopener noreferrer" class="os-card os-card-hack">
+                    <div class="os-icon-wrapper hack-glow">
+                        <i class="fa-solid fa-user-ninja"></i>
+                    </div>
+                    <span class="os-title-text hack-title">Ethical Hack</span>
+                    <span class="os-sub-text">Security Tools</span>
+                </a>
+            </div>
+        </section>
+
         <!-- ADD LINK & SEARCH FORM -->
         <section class="form-container" id="linkFormSection">
-
             <h3 class="section-heading txt-cyan-neon">
                 ✨ Add New Link (Public Access)
             </h3>
 
             <div class="input-stack">
-
-                <input type="text"
-                       id="titleInput"
-                       class="custom-input"
-                       placeholder="Link Title (optional)">
+                <input type="text" id="titleInput" class="custom-input" placeholder="Link Title (optional)">
 
                 <div class="input-inline-row">
-
-                    <input type="text"
-                           id="linkInput"
-                           class="custom-input"
-                           placeholder="Enter URL (e.g., https://example.com)">
-
-                    <button id="addLinkBtn"
-                            class="btn-add-link">
-                        Add Link
-                    </button>
-
+                    <input type="text" id="linkInput" class="custom-input" placeholder="Enter URL (e.g., https://example.com)">
+                    <button id="addLinkBtn" class="btn-add-link">Add Link</button>
                 </div>
-
             </div>
             
             <div class="search-wrapper">
-
-                <input type="text"
-                       id="searchInput"
-                       class="custom-input search-field"
-                       placeholder="🔍 Search database links in real-time...">
-
+                <input type="text" id="searchInput" class="custom-input search-field" placeholder="🔍 Search database links in real-time...">
             </div>
-
         </section>
 
         <!-- DATABASE SECTION -->
         <section class="database-container" id="databaseSection">
-
             <h3 class="section-heading txt-green-neon">
                 🔮 Saved Links Database
             </h3>
 
-            <ul id="linkList"
-                class="links-list-group">
-            </ul>
-
+            <ul id="linkList" class="links-list-group"></ul>
         </section>
 
     </main>
 
     <!-- PROFILE / ACCOUNT OPTIONS MODAL -->
-    <div id="profileModalOverlay"
-         class="modal-overlay">
-
+    <div id="profileModalOverlay" class="modal-overlay">
         <div class="profile-modal">
-
-            <button class="btn-close-modal"
-                    id="closeProfileModalBtn">
-                ×
-            </button>
+            <button class="btn-close-modal" id="closeProfileModalBtn">×</button>
             
             <div class="profile-modal-header">
-
                 <div class="profile-avatar-large">
-                    <i class="fa-solid fa-user-shield"
-                       id="profileModalIcon"></i>
+                    <i class="fa-solid fa-user-shield" id="profileModalIcon"></i>
                 </div>
-
-                <h3 class="profile-title"
-                    id="profileTitleText">
-                    Guest User
-                </h3>
-
-                <span class="profile-badge"
-                      id="profileRoleBadge">
-                    Public Session
-                </span>
-
+                <h3 class="profile-title" id="profileTitleText">Guest User</h3>
+                <span class="profile-badge" id="profileRoleBadge">Public Session</span>
             </div>
 
             <div class="profile-actions-list">
-
                 <!-- Admin Authentication Button -->
-                <button class="profile-action-btn admin-btn"
-                        id="adminAuthBtn">
-
-                    <i class="fa-solid fa-key"
-                       style="color: var(--cute-cyan);"></i>
-
-                    <span id="adminAuthText">
-                        Admin Login
-                    </span>
-
+                <button class="profile-action-btn admin-btn" id="adminAuthBtn">
+                    <i class="fa-solid fa-key" style="color: var(--cute-cyan);"></i>
+                    <span id="adminAuthText">Admin Login</span>
                 </button>
 
                 <div class="profile-divider"></div>
 
                 <!-- Support / Donation Button -->
-                <button class="profile-action-btn donate-btn"
-                        id="profileDonateBtn">
-
-                    <i class="fa-solid fa-heart"
-                       style="color: #e2136e;"></i>
-
-                    <span>
-                        Support Our Project (Donate)
-                    </span>
-
+                <button class="profile-action-btn donate-btn" id="profileDonateBtn">
+                    <i class="fa-solid fa-heart" style="color: #e2136e;"></i>
+                    <span>Support Our Project (Donate)</span>
                 </button>
 
                 <!-- YouTube Web Link Button -->
-                <a href="https://www.youtube.com/@AMPIRESONGBD"
-                   target="_blank"
-                   rel="noopener noreferrer"
-                   class="profile-action-btn web-link-btn">
-
-                    <i class="fa-brands fa-youtube"
-                       style="color: #ff337a;"></i>
-
-                    <span>
-                        YouTube Channel
-                    </span>
-
-                    <i class="fa-solid fa-arrow-up-right-from-square"
-                       style="margin-left: auto; font-size: 0.8rem;">
-                    </i>
-
+                <a href="https://www.youtube.com/@AMPIRESONGBD" target="_blank" rel="noopener noreferrer" class="profile-action-btn web-link-btn">
+                    <i class="fa-brands fa-youtube" style="color: #ff337a;"></i>
+                    <span>YouTube Channel</span>
+                    <i class="fa-solid fa-arrow-up-right-from-square" style="margin-left: auto; font-size: 0.8rem;"></i>
                 </a>
-
             </div>
         </div>
     </div>
 
     <!-- BKASH POPUP MODAL -->
-    <div id="bkashModalOverlay"
-         class="modal-overlay">
-
+    <div id="bkashModalOverlay" class="modal-overlay">
         <div class="bkash-modal">
-
-            <button class="btn-close-modal"
-                    id="closeBkashModalBtn">
-                ×
-            </button>
+            <button class="btn-close-modal" id="closeBkashModalBtn">×</button>
             
-            <svg class="bkash-modal-logo"
-                 viewBox="0 0 300 120"
-                 xmlns="http://www.w3.org/2000/svg">
-
-                <path fill="#e2136e"
-                      d="M35 15 L85 60 L35 105 L15 105 L55 60 L15 15 Z"/>
-
-                <path fill="#e2136e"
-                      d="M90 15 L140 60 L90 105 L110 105 L160 60 L110 15 Z"/>
-
-                <text x="165"
-                      y="72"
-                      font-family="'Orbitron', sans-serif"
-                      font-size="36"
-                      font-weight="900"
-                      fill="#ffffff">
-                    bKash
-                </text>
-
+            <svg class="bkash-modal-logo" viewBox="0 0 300 120" xmlns="http://www.w3.org/2000/svg">
+                <path fill="#e2136e" d="M35 15 L85 60 L35 105 L15 105 L55 60 L15 15 Z"/>
+                <path fill="#e2136e" d="M90 15 L140 60 L90 105 L110 105 L160 60 L110 15 Z"/>
+                <text x="165" y="72" font-family="'Orbitron', sans-serif" font-size="36" font-weight="900" fill="#ffffff">bKash</text>
             </svg>
 
-            <h3 class="bkash-modal-title">
-                💖 Support Our Project
-            </h3>
-
-            <p class="bkash-modal-subtext">
-                আপনার ছোট্ট অনুদান আমাদের সার্ভার সচল রাখতে সাহায্য করবে।
-            </p>
+            <h3 class="bkash-modal-title">💖 Support Our Project</h3>
+            <p class="bkash-modal-subtext">আপনার ছোট্ট অনুদান আমাদের সার্ভার সচল রাখতে সাহায্য করবে।</p>
 
             <div class="bkash-card-box">
-
                 <span class="bkash-badge-tag">
-                    <i class="fa-solid fa-paper-plane"></i>
-                    Personal / Send Money
+                    <i class="fa-solid fa-paper-plane"></i> Personal / Send Money
                 </span>
 
                 <div class="bkash-num-flex">
-
-                    <span id="bkashNum"
-                          class="bkash-big-num">
-                        01560001721
-                    </span>
-
-                    <button id="copyBkashBtn"
-                            class="btn-modal-copy">
-                        <i class="fa-regular fa-copy"></i>
-                        Copy
+                    <span id="bkashNum" class="bkash-big-num">01560001721</span>
+                    <button id="copyBkashBtn" class="btn-modal-copy">
+                        <i class="fa-regular fa-copy"></i> Copy
                     </button>
-
                 </div>
             </div>
 
             <p style="font-size: 0.78rem; color: rgba(255,255,255,0.6);">
-                <i class="fa-solid fa-circle-info"
-                   style="color: #e2136e;">
-                </i>
-
+                <i class="fa-solid fa-circle-info" style="color: #e2136e;"></i>
                 bKash App ba *247# dial kore Send Money korun.
             </p>
-
         </div>
     </div>
 
