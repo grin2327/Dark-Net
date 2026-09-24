@@ -3,8 +3,8 @@
 // ==========================================
 
 // JSONBin API Credentials
-const JSONBIN_BIN_ID = "6ab4cc2bffd5d16053296812";
-const JSONBIN_API_KEY = "$2a$10$m4eIAJmTQZprzKodfXSYkuRhrcLr86GfwudESfXURtTjelCl4GRxa";
+const JSONBIN_BIN_ID = "6ab4e1ddffd5d1605329a6d2";
+const JSONBIN_API_KEY = "$2a$10$HYw4h4y5gW.sx3Cmz02WCeu4rjP9uzhvwVYKfOKjrRv9nO7jEPM22";
 const JSONBIN_URL = `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`;
 
 // Firebase Config (Used for Admin Auth)
