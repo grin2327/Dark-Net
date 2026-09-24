@@ -1,8 +1,13 @@
 // ==========================================
 //  DARK-NET | Link Directory App
-//  Repaired: HTML now loads this exact file
 // ==========================================
 
+// JSONBin API Credentials
+const JSONBIN_BIN_ID = "6ab4cc2bffd5d16053296812";
+const JSONBIN_API_KEY = "$2a$10$m4eIAJmTQZprzKodfXSYkuRhrcLr86GfwudESfXURtTjelCl4GRxa";
+const JSONBIN_URL = `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`;
+
+// Firebase Config (Used for Admin Auth)
 const firebaseConfig = {
     apiKey: "AIzaSyBxJn4KP-GMOdH_cu2ijTkFlt2SYxLldoQ",
     authDomain: "data-base-16fb9.firebaseapp.com",
@@ -14,10 +19,10 @@ const firebaseConfig = {
     measurementId: "G-8MQ54L9G66"
 };
 
-// Firebase Initializations
-firebase.initializeApp(firebaseConfig);
-
-const db = firebase.database();
+// Initialize Firebase Auth
+if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+}
 const auth = firebase.auth();
 
 let localLinksCache = [];
@@ -26,24 +31,14 @@ let currentSearchQuery = "";
 
 // Firebase Auth State Listener
 auth.onAuthStateChanged((user) => {
-
-    if (user) {
-        isAdminLoggedIn = true;
-    } else {
-        isAdminLoggedIn = false;
-    }
-
+    isAdminLoggedIn = !!user;
     updateAdminUIStatus();
     renderLinksList(getFilteredData());
 });
 
-// HTML Escaping to prevent XSS Attacks
+// HTML Escaping (XSS Prevention)
 function escapeHTML(str) {
-
-    if (!str) {
-        return "";
-    }
-
+    if (!str) return "";
     return String(str).replace(/[&<>'"]/g, tag => ({
         '&': '&amp;',
         '<': '&lt;',
@@ -53,13 +48,10 @@ function escapeHTML(str) {
     }[tag] || tag));
 }
 
-// Custom Floating Notification System
+// Custom Notification Toast
 function showNotification(message, type = "info") {
-
     const notification = document.createElement('div');
-
     notification.textContent = message;
-
     notification.style.cssText = `
         position: fixed;
         top: 20px;
@@ -75,337 +67,206 @@ function showNotification(message, type = "info") {
     `;
 
     document.body.appendChild(notification);
-
     setTimeout(() => {
-
         if (notification.parentNode) {
             notification.remove();
         }
-
     }, 3000);
 }
 
 // ==========================================
-// PROFILE MODAL CONTROL
+// MODAL CONTROLS
 // ==========================================
 
 function openProfileModal() {
-
-    const overlay =
-        document.getElementById('profileModalOverlay');
-
-    if (overlay) {
-        overlay.classList.add('active');
-    }
+    const overlay = document.getElementById('profileModalOverlay');
+    if (overlay) overlay.classList.add('active');
 }
 
 function closeProfileModal() {
-
-    const overlay =
-        document.getElementById('profileModalOverlay');
-
-    if (overlay) {
-        overlay.classList.remove('active');
-    }
+    const overlay = document.getElementById('profileModalOverlay');
+    if (overlay) overlay.classList.remove('active');
 }
 
 function closeProfileModalOnOutside(e) {
-
-    if (
-        e &&
-        e.target &&
-        e.target.id === 'profileModalOverlay'
-    ) {
+    if (e && e.target && e.target.id === 'profileModalOverlay') {
         closeProfileModal();
     }
 }
 
-// ==========================================
-// BKASH POPUP MODAL CONTROL
-// ==========================================
-
 function openBkashModal() {
-
-    const overlay =
-        document.getElementById('bkashModalOverlay');
-
-    if (overlay) {
-        overlay.classList.add('active');
-    }
+    const overlay = document.getElementById('bkashModalOverlay');
+    if (overlay) overlay.classList.add('active');
 }
 
 function closeBkashModal() {
-
-    const overlay =
-        document.getElementById('bkashModalOverlay');
-
-    if (overlay) {
-        overlay.classList.remove('active');
-    }
+    const overlay = document.getElementById('bkashModalOverlay');
+    if (overlay) overlay.classList.remove('active');
 }
 
 function closeBkashModalOnOutside(e) {
-
-    if (
-        e &&
-        e.target &&
-        e.target.id === 'bkashModalOverlay'
-    ) {
+    if (e && e.target && e.target.id === 'bkashModalOverlay') {
         closeBkashModal();
     }
 }
 
 // ==========================================
-// bKash Number Copy
+// BKASH COPY SYSTEM
 // ==========================================
 
 function copyBkashNumber() {
-
     const actualFullNumber = "01560001721";
 
-    if (
-        navigator.clipboard &&
-        navigator.clipboard.writeText
-    ) {
-
-        navigator.clipboard
-            .writeText(actualFullNumber)
-
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(actualFullNumber)
             .then(() => {
-
-                const btn =
-                    document.getElementById('copyBkashBtn');
-
+                const btn = document.getElementById('copyBkashBtn');
                 if (btn) {
-
-                    btn.innerHTML =
-                        '<i class="fa-solid fa-check"></i> Copied!';
-
+                    const originalHTML = btn.innerHTML;
+                    btn.innerHTML = '<i class="fa-solid fa-check"></i> Copied!';
                     btn.style.background = '#2eff66';
                     btn.style.color = '#000000';
 
                     setTimeout(() => {
-
-                        btn.innerHTML =
-                            '<i class="fa-regular fa-copy"></i> Copy';
-
+                        btn.innerHTML = originalHTML;
                         btn.style.background = '';
                         btn.style.color = '';
-
                     }, 2000);
                 }
-
-                showNotification(
-                    "bKash Number Copied: " + actualFullNumber,
-                    "success"
-                );
-
+                showNotification("bKash Number Copied: " + actualFullNumber, "success");
             })
-
-            .catch(err => {
-
-                showNotification(
-                    "bKash Number: " + actualFullNumber,
-                    "info"
-                );
-
+            .catch(() => {
+                showNotification("bKash Number: " + actualFullNumber, "info");
             });
-
     } else {
-
-        showNotification(
-            "bKash Number: " + actualFullNumber,
-            "info"
-        );
+        showNotification("bKash Number: " + actualFullNumber, "info");
     }
 }
 
 // ==========================================
-// Realtime Database Listener
+// JSONBIN API OPERATIONS (READ & WRITE)
 // ==========================================
 
-function listenToFirebaseLinks() {
-
-    db.ref('links').on(
-        'value',
-
-        (snapshot) => {
-
-            localLinksCache = [];
-
-            const data = snapshot.val();
-
-            if (data) {
-
-                Object.keys(data).forEach((key) => {
-
-                    localLinksCache.push({
-                        _id: key,
-                        ...data[key]
-                    });
-
-                });
-
-                localLinksCache.reverse();
+// Fetch All Links from JSONBin
+async function fetchLinksFromJSONBin() {
+    try {
+        const response = await fetch(`${JSONBIN_URL}/latest`, {
+            method: 'GET',
+            headers: {
+                'X-Access-Key': JSONBIN_API_KEY
             }
+        });
 
-            renderLinksList(
-                getFilteredData()
-            );
-        },
-
-        (error) => {
-
-            console.error(
-                "Firebase Read Error: ",
-                error
-            );
-
-            showNotification(
-                "Error loading links!",
-                "info"
-            );
+        if (!response.ok) {
+            throw new Error(`HTTP Error: ${response.status}`);
         }
-    );
+
+        const result = await response.json();
+        
+        // JSONBin stores data in result.record
+        if (Array.isArray(result.record)) {
+            localLinksCache = result.record;
+        } else if (result.record && Array.isArray(result.record.links)) {
+            localLinksCache = result.record.links;
+        } else {
+            localLinksCache = [];
+        }
+
+        renderLinksList(getFilteredData());
+    } catch (error) {
+        console.error("JSONBin Read Error: ", error);
+        showNotification("Error loading links from JSONBin!", "info");
+    }
+}
+
+// Update JSONBin Data (Save or Delete)
+async function syncToJSONBin(updatedLinksList) {
+    try {
+        const response = await fetch(JSONBIN_URL, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Access-Key': JSONBIN_API_KEY
+            },
+            body: JSON.stringify(updatedLinksList)
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP Error: ${response.status}`);
+        }
+
+        localLinksCache = updatedLinksList;
+        renderLinksList(getFilteredData());
+        return true;
+    } catch (error) {
+        console.error("JSONBin Sync Error: ", error);
+        showNotification("Failed to update JSONBin!", "info");
+        return false;
+    }
 }
 
 // ==========================================
-// Search Filter
+// SEARCH & FILTER
 // ==========================================
 
 function getFilteredData() {
-
     if (!currentSearchQuery) {
         return localLinksCache;
     }
 
-    const query =
-        currentSearchQuery.toLowerCase();
-
+    const query = currentSearchQuery.toLowerCase().trim();
     return localLinksCache.filter(item => {
-
-        if (!item) {
-            return false;
-        }
-
-        return (
-            (item.title || '')
-                .toLowerCase()
-                .includes(query)
-        ) ||
-        (
-            (item.url || '')
-                .toLowerCase()
-                .includes(query)
-        );
+        if (!item) return false;
+        const titleMatch = (item.title || '').toLowerCase().includes(query);
+        const urlMatch = (item.url || '').toLowerCase().includes(query);
+        return titleMatch || urlMatch;
     });
 }
 
 // ==========================================
-// Render Links List
+// RENDER LINKS LIST
 // ==========================================
 
 function renderLinksList(records) {
-
-    const container =
-        document.getElementById('linkList');
-
-    if (!container) {
-        return;
-    }
+    const container = document.getElementById('linkList');
+    if (!container) return;
 
     container.innerHTML = '';
 
-    if (
-        !records ||
-        !Array.isArray(records) ||
-        records.length === 0
-    ) {
-
+    if (!records || !Array.isArray(records) || records.length === 0) {
         container.innerHTML = `
-            <div
-                class="empty-state"
-                style="
-                    color: var(--text-muted);
-                    padding: 15px;
-                    text-align: center;
-                "
-            >
-                📂 No database links found.
-                Add one to start!
+            <div class="empty-state" style="color: var(--text-muted, #888); padding: 15px; text-align: center;">
+                📂 No database links found. Add one to start!
             </div>
         `;
-
         return;
     }
 
     records.forEach((item) => {
+        if (!item) return;
 
-        if (!item) {
-            return;
-        }
+        const displayTitle = escapeHTML(item.title);
+        const displayUrl = escapeHTML(item.url);
+        const displayMeta = escapeHTML(item.timestamp || '');
+        const itemId = escapeHTML(item._id);
 
-        const displayTitle =
-            escapeHTML(item.title);
-
-        const displayUrl =
-            escapeHTML(item.url);
-
-        const displayMeta =
-            escapeHTML(item.timestamp || '');
-
-        const itemId =
-            escapeHTML(item._id);
-
-        const li =
-            document.createElement('li');
-
+        const li = document.createElement('li');
         li.className = 'link-item';
 
-        // Admin হলে delete button দেখাবে
-        const deleteBtnHTML =
-            isAdminLoggedIn
-
-                ? `
-                    <button
-                        class="btn-delete-link"
-                        data-id="${itemId}"
-                        title="Delete"
-                    >
-                        &times;
-                    </button>
-                  `
-
-                : '';
+        const deleteBtnHTML = isAdminLoggedIn
+            ? `<button class="btn-delete-link" data-id="${itemId}" title="Delete">&times;</button>`
+            : '';
 
         li.innerHTML = `
             <div class="link-details">
-
-                <span class="link-title">
-                    ${displayTitle}
-                </span>
-
-                <a
-                    href="${displayUrl}"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="link-url"
-                >
+                <span class="link-title">${displayTitle}</span>
+                <a href="${displayUrl}" target="_blank" rel="noopener noreferrer" class="link-url">
                     ${displayUrl}
                 </a>
-
-                <span
-                    class="link-meta"
-                    style="
-                        font-size: 0.7rem;
-                        color: #666;
-                    "
-                >
+                <span class="link-meta" style="font-size: 0.7rem; color: #666;">
                     ${displayMeta}
                 </span>
-
             </div>
-
             ${deleteBtnHTML}
         `;
 
@@ -413,601 +274,250 @@ function renderLinksList(records) {
     });
 
     if (isAdminLoggedIn) {
-
-        const deleteButtons =
-            container.querySelectorAll(
-                '.btn-delete-link'
-            );
-
+        const deleteButtons = container.querySelectorAll('.btn-delete-link');
         deleteButtons.forEach(btn => {
-
-            btn.addEventListener(
-                'click',
-
-                (e) => {
-
-                    const id =
-                        e.currentTarget
-                            .getAttribute('data-id');
-
-                    removeLinkItem(id);
-                }
-            );
-
+            btn.addEventListener('click', (e) => {
+                const id = e.currentTarget.getAttribute('data-id');
+                removeLinkItem(id);
+            });
         });
     }
 }
 
 // ==========================================
-// Add New Link
-// সবাই Link যোগ করতে পারবে
+// ADD NEW LINK
 // ==========================================
 
-function addNewLink() {
+async function addNewLink() {
+    const urlIn = document.getElementById('linkInput');
+    const titleIn = document.getElementById('titleInput');
+    const addBtn = document.getElementById('addLinkBtn');
 
-    const urlIn =
-        document.getElementById('linkInput');
+    if (!urlIn) return;
 
-    const titleIn =
-        document.getElementById('titleInput');
-
-    const addBtn =
-        document.getElementById('addLinkBtn');
-
-    if (!urlIn) {
-        return;
-    }
-
-    let cleanUrl =
-        urlIn.value.trim();
-
-    const cleanTitle =
-        titleIn &&
-        titleIn.value.trim()
-
-            ? titleIn.value.trim()
-
-            : "Unnamed Link";
+    let cleanUrl = urlIn.value.trim();
+    const cleanTitle = (titleIn && titleIn.value.trim()) ? titleIn.value.trim() : "Unnamed Link";
 
     if (!cleanUrl) {
-
-        showNotification(
-            "Please enter a valid URL!",
-            "info"
-        );
-
+        showNotification("Please enter a valid URL!", "info");
         return;
     }
 
     if (!/^https?:\/\//i.test(cleanUrl)) {
-
-        cleanUrl =
-            'https://' + cleanUrl;
+        cleanUrl = 'https://' + cleanUrl;
     }
 
     try {
-
         new URL(cleanUrl);
-
     } catch (_) {
-
-        showNotification(
-            "Please enter a valid URL format!",
-            "info"
-        );
-
+        showNotification("Please enter a valid URL format!", "info");
         return;
     }
 
-    // Button disable
     if (addBtn) {
-
         addBtn.disabled = true;
         addBtn.innerText = "Adding...";
     }
 
-    const now =
-        new Date();
-
-    const dateStr =
-        now.toLocaleDateString(
-            'en-US',
-            {
-                month: 'short',
-                day: 'numeric',
-                year: '2-digit'
-            }
-        );
-
-    const timeStr =
-        now.toLocaleTimeString(
-            'en-US',
-            {
-                hour: '2-digit',
-                minute: '2-digit',
-                hour12: true
-            }
-        );
+    const now = new Date();
+    const dateStr = now.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: '2-digit'
+    });
+    const timeStr = now.toLocaleTimeString('en-US', {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true
+    });
 
     const newEntry = {
-
+        _id: 'link_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
         title: cleanTitle,
-
         url: cleanUrl,
-
-        timestamp:
-            `${dateStr} ${timeStr}`,
-
-        createdAt:
-            Date.now()
+        timestamp: `${dateStr} ${timeStr}`,
+        createdAt: Date.now()
     };
 
-    db.ref('links')
-        .push(newEntry)
+    const updatedList = [newEntry, ...localLinksCache];
+    const success = await syncToJSONBin(updatedList);
 
-        .then(() => {
+    if (success) {
+        urlIn.value = '';
+        if (titleIn) titleIn.value = '';
+        showNotification("Link Saved Successfully!", "success");
+    }
 
-            urlIn.value = '';
-
-            if (titleIn) {
-                titleIn.value = '';
-            }
-
-            showNotification(
-                "Link Saved Successfully!",
-                "success"
-            );
-
-        })
-
-        .catch((error) => {
-
-            console.error(
-                "Firebase Add Error: ",
-                error
-            );
-
-            showNotification(
-                "Failed to save: " +
-                error.message,
-                "info"
-            );
-
-        })
-
-        .finally(() => {
-
-            if (addBtn) {
-
-                addBtn.disabled = false;
-                addBtn.innerText = "Add Link";
-            }
-        });
+    if (addBtn) {
+        addBtn.disabled = false;
+        addBtn.innerText = "Add Link";
+    }
 }
 
 // ==========================================
-// Remove Link
+// REMOVE LINK
 // ==========================================
 
-function removeLinkItem(id) {
-
+async function removeLinkItem(id) {
     if (!isAdminLoggedIn) {
-
-        alert(
-            "Only Admin can delete links!"
-        );
-
+        alert("Only Admin can delete links!");
         return;
     }
 
-    if (
-        !confirm(
-            "Delete this link from database?"
-        )
-    ) {
+    if (!confirm("Delete this link from JSONBin database?")) {
         return;
     }
 
-    db.ref('links/' + id)
-        .remove()
+    const updatedList = localLinksCache.filter(item => item._id !== id);
+    const success = await syncToJSONBin(updatedList);
 
-        .then(() => {
-
-            showNotification(
-                "Link Removed!",
-                "info"
-            );
-
-        })
-
-        .catch((error) => {
-
-            console.error(
-                "Firebase Delete Error: ",
-                error
-            );
-
-            alert(
-                "Permission Denied: Only logged in Admin can delete!"
-            );
-        });
+    if (success) {
+        showNotification("Link Removed!", "info");
+    }
 }
 
 // ==========================================
-// Update Admin UI Status
+// ADMIN UI STATUS
 // ==========================================
 
 function updateAdminUIStatus() {
-
-    const loginBtn =
-        document.getElementById('loginBtn');
-
-    const adminAuthText =
-        document.getElementById('adminAuthText');
-
-    const profileTitleText =
-        document.getElementById('profileTitleText');
-
-    const profileRoleBadge =
-        document.getElementById('profileRoleBadge');
+    const loginBtn = document.getElementById('loginBtn');
+    const adminAuthText = document.getElementById('adminAuthText');
+    const profileTitleText = document.getElementById('profileTitleText');
+    const profileRoleBadge = document.getElementById('profileRoleBadge');
 
     if (isAdminLoggedIn) {
-
-        if (loginBtn) {
-
-            loginBtn.style.border =
-                "2px solid #2eff66";
-        }
-
-        if (adminAuthText) {
-
-            adminAuthText.textContent =
-                "Admin Logout";
-        }
-
-        if (profileTitleText) {
-
-            profileTitleText.textContent =
-                "Administrator";
-        }
+        if (loginBtn) loginBtn.style.border = "2px solid #2eff66";
+        if (adminAuthText) adminAuthText.textContent = "Admin Logout";
+        if (profileTitleText) profileTitleText.textContent = "Administrator";
 
         if (profileRoleBadge) {
-
-            profileRoleBadge.textContent =
-                "Admin Active";
-
-            profileRoleBadge.style.background =
-                "rgba(46, 255, 102, 0.15)";
-
-            profileRoleBadge.style.color =
-                "#2eff66";
-
-            profileRoleBadge.style.borderColor =
-                "rgba(46, 255, 102, 0.3)";
+            profileRoleBadge.textContent = "Admin Active";
+            profileRoleBadge.style.background = "rgba(46, 255, 102, 0.15)";
+            profileRoleBadge.style.color = "#2eff66";
+            profileRoleBadge.style.borderColor = "rgba(46, 255, 102, 0.3)";
         }
-
     } else {
-
-        if (loginBtn) {
-
-            loginBtn.style.border =
-                "1px solid rgba(255, 255, 255, 0.2)";
-        }
-
-        if (adminAuthText) {
-
-            adminAuthText.textContent =
-                "Admin Login";
-        }
-
-        if (profileTitleText) {
-
-            profileTitleText.textContent =
-                "Guest User";
-        }
+        if (loginBtn) loginBtn.style.border = "1px solid rgba(255, 255, 255, 0.2)";
+        if (adminAuthText) adminAuthText.textContent = "Admin Login";
+        if (profileTitleText) profileTitleText.textContent = "Guest User";
 
         if (profileRoleBadge) {
-
-            profileRoleBadge.textContent =
-                "Public Session";
-
-            profileRoleBadge.style.background =
-                "rgba(255, 255, 255, 0.08)";
-
-            profileRoleBadge.style.color =
-                "var(--text-muted)";
-
-            profileRoleBadge.style.borderColor =
-                "rgba(255, 255, 255, 0.1)";
+            profileRoleBadge.textContent = "Public Session";
+            profileRoleBadge.style.background = "rgba(255, 255, 255, 0.08)";
+            profileRoleBadge.style.color = "var(--text-muted, #aaa)";
+            profileRoleBadge.style.borderColor = "rgba(255, 255, 255, 0.1)";
         }
     }
 }
 
 // ==========================================
-// Admin Auth System
-// Firebase Auth Integration
+// INITIALIZE AUTH & EVENT LISTENERS
 // ==========================================
 
 function initializeLoginSystem() {
-
-    const loginBtn =
-        document.getElementById('loginBtn');
-
+    const loginBtn = document.getElementById('loginBtn');
     if (loginBtn) {
-
-        loginBtn.addEventListener(
-            'click',
-            openProfileModal
-        );
+        loginBtn.addEventListener('click', openProfileModal);
     }
 
-    const adminAuthBtn =
-        document.getElementById('adminAuthBtn');
-
+    const adminAuthBtn = document.getElementById('adminAuthBtn');
     if (adminAuthBtn) {
-
-        adminAuthBtn.addEventListener(
-            'click',
-
-            () => {
-
-                if (isAdminLoggedIn) {
-
-                    if (
-                        confirm(
-                            "Are you sure you want to Logout?"
-                        )
-                    ) {
-
-                        auth.signOut()
-                            .then(() => {
-
-                                closeProfileModal();
-
-                                showNotification(
-                                    "Logged Out",
-                                    "info"
-                                );
-
-                            });
-                    }
-
-                } else {
-
-                    const passwordInput =
-                        prompt(
-                            "Enter Admin Password:"
-                        );
-
-                    if (passwordInput) {
-
-                        auth.signInWithEmailAndPassword(
-                            "grin2327@gmail.com",
-                            passwordInput
-                        )
-
+        adminAuthBtn.addEventListener('click', () => {
+            if (isAdminLoggedIn) {
+                if (confirm("Are you sure you want to Logout?")) {
+                    auth.signOut().then(() => {
+                        closeProfileModal();
+                        showNotification("Logged Out", "info");
+                    });
+                }
+            } else {
+                const passwordInput = prompt("Enter Admin Password:");
+                if (passwordInput) {
+                    auth.signInWithEmailAndPassword("grin2327@gmail.com", passwordInput)
                         .then(() => {
-
                             closeProfileModal();
-
-                            showNotification(
-                                "Admin Logged In Successfully!",
-                                "success"
-                            );
-
+                            showNotification("Admin Logged In Successfully!", "success");
                         })
-
-                        .catch((error) => {
-
-                            alert(
-                                "Incorrect Password or Login Failed!"
-                            );
-
+                        .catch(() => {
+                            alert("Incorrect Password or Login Failed!");
                         });
-                    }
                 }
             }
-        );
+        });
     }
 }
 
-// ==========================================
-// DOM Event Listeners Setup
-// ==========================================
+document.addEventListener('DOMContentLoaded', () => {
+    initializeLoginSystem();
+    
+    // ১ম বার পেজ লোডের সময় ডেটা ফেচ করবে
+    fetchLinksFromJSONBin();
 
-document.addEventListener(
-    'DOMContentLoaded',
+    // 🔄 AUTO-POLLING: প্রতি ১০ সেকেন্ড পর পর অটোমেটিক নতুন ডেটা চেক করবে
+    setInterval(() => {
+        fetchLinksFromJSONBin();
+    }, 10000); // ১০,০০০ মিলি-সেকেন্ড = ১০ সেকেন্ড
 
-    () => {
+    // Modals Close Events
+    const closeProfileBtn = document.getElementById('closeProfileModalBtn');
+    if (closeProfileBtn) closeProfileBtn.addEventListener('click', closeProfileModal);
 
-        initializeLoginSystem();
+    const profileOverlay = document.getElementById('profileModalOverlay');
+    if (profileOverlay) profileOverlay.addEventListener('click', closeProfileModalOnOutside);
 
-        listenToFirebaseLinks();
-
-        // Close Profile Modal
-        const closeProfileBtn =
-            document.getElementById(
-                'closeProfileModalBtn'
-            );
-
-        if (closeProfileBtn) {
-
-            closeProfileBtn.addEventListener(
-                'click',
-                closeProfileModal
-            );
-        }
-
-        // Profile Overlay
-        const profileOverlay =
-            document.getElementById(
-                'profileModalOverlay'
-            );
-
-        if (profileOverlay) {
-
-            profileOverlay.addEventListener(
-                'click',
-                closeProfileModalOnOutside
-            );
-        }
-
-        // Donate Button
-        const profileDonateBtn =
-            document.getElementById(
-                'profileDonateBtn'
-            );
-
-        if (profileDonateBtn) {
-
-            profileDonateBtn.addEventListener(
-                'click',
-
-                () => {
-
-                    closeProfileModal();
-
-                    openBkashModal();
-                }
-            );
-        }
-
-        // Close bKash Modal
-        const closeBkashBtn =
-            document.getElementById(
-                'closeBkashModalBtn'
-            );
-
-        if (closeBkashBtn) {
-
-            closeBkashBtn.addEventListener(
-                'click',
-                closeBkashModal
-            );
-        }
-
-        // bKash Overlay
-        const bkashOverlay =
-            document.getElementById(
-                'bkashModalOverlay'
-            );
-
-        if (bkashOverlay) {
-
-            bkashOverlay.addEventListener(
-                'click',
-                closeBkashModalOnOutside
-            );
-        }
-
-        // Copy bKash Number
-        const copyBkashBtn =
-            document.getElementById(
-                'copyBkashBtn'
-            );
-
-        if (copyBkashBtn) {
-
-            copyBkashBtn.addEventListener(
-                'click',
-                copyBkashNumber
-            );
-        }
-
-        // Add Link Button
-        const addLinkBtn =
-            document.getElementById(
-                'addLinkBtn'
-            );
-
-        if (addLinkBtn) {
-
-            addLinkBtn.addEventListener(
-                'click',
-                addNewLink
-            );
-        }
-
-        // Enter Key Support
-        const linkInput =
-            document.getElementById(
-                'linkInput'
-            );
-
-        const titleInput =
-            document.getElementById(
-                'titleInput'
-            );
-
-        [
-            linkInput,
-            titleInput
-        ].forEach(input => {
-
-            if (input) {
-
-                input.addEventListener(
-                    'keydown',
-
-                    (e) => {
-
-                        if (e.key === 'Enter') {
-
-                            e.preventDefault();
-
-                            addNewLink();
-                        }
-                    }
-                );
-            }
+    const profileDonateBtn = document.getElementById('profileDonateBtn');
+    if (profileDonateBtn) {
+        profileDonateBtn.addEventListener('click', () => {
+            closeProfileModal();
+            openBkashModal();
         });
-
-        // Search Input
-        const searchInput =
-            document.getElementById(
-                'searchInput'
-            );
-
-        if (searchInput) {
-
-            searchInput.addEventListener(
-                'input',
-
-                (e) => {
-
-                    currentSearchQuery =
-                        e.target.value || '';
-
-                    renderLinksList(
-                        getFilteredData()
-                    );
-                }
-            );
-        }
-
-        // Navigation Search Button
-        const navSearchTrigger =
-            document.getElementById(
-                'navSearchTrigger'
-            );
-
-        if (
-            navSearchTrigger &&
-            searchInput
-        ) {
-
-            navSearchTrigger.addEventListener(
-                'click',
-
-                () => {
-
-                    searchInput.scrollIntoView({
-                        behavior: 'smooth'
-                    });
-
-                    searchInput.focus();
-                }
-            );
-        }
     }
-);
+
+    const closeBkashBtn = document.getElementById('closeBkashModalBtn');
+    if (closeBkashBtn) closeBkashBtn.addEventListener('click', closeBkashModal);
+
+    const bkashOverlay = document.getElementById('bkashModalOverlay');
+    if (bkashOverlay) bkashOverlay.addEventListener('click', closeBkashModalOnOutside);
+
+    // Copy bKash Number
+    const copyBkashBtn = document.getElementById('copyBkashBtn');
+    if (copyBkashBtn) copyBkashBtn.addEventListener('click', copyBkashNumber);
+
+    // Add Link Event
+    const addLinkBtn = document.getElementById('addLinkBtn');
+    if (addLinkBtn) addLinkBtn.addEventListener('click', addNewLink);
+
+    // Enter Key Handler for Inputs
+    const linkInput = document.getElementById('linkInput');
+    const titleInput = document.getElementById('titleInput');
+
+    [linkInput, titleInput].forEach(input => {
+        if (input) {
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    addNewLink();
+                }
+            });
+        }
+    });
+
+    // Search Input Handler
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            currentSearchQuery = e.target.value || '';
+            renderLinksList(getFilteredData());
+        });
+    }
+
+    // Nav Search Trigger
+    const navSearchTrigger = document.getElementById('navSearchTrigger');
+    if (navSearchTrigger && searchInput) {
+        navSearchTrigger.addEventListener('click', () => {
+            searchInput.scrollIntoView({ behavior: 'smooth' });
+            searchInput.focus();
+        });
+    }
+});
