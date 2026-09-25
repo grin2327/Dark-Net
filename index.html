@@ -683,45 +683,192 @@
             padding-top: 24px;
         }
 
+        /* --- EXCEL SHEET & BOX STYLE OFFLINE RESOURCES --- */
         .offline-box {
             background: var(--panel-bg);
             border: 1px solid var(--glass-border);
             border-radius: var(--radius-lg);
-            padding: 20px 24px;
+            padding: 24px;
             margin-bottom: 40px;
         }
 
         .offline-box-header {
             color: var(--primary-hot);
             font-weight: 800;
-            font-size: 0.9rem;
-            margin-bottom: 16px;
+            font-size: 0.95rem;
+            margin-bottom: 18px;
             padding-bottom: 12px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
-        .offline-grid-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
+        .btn-explore-toggle {
+            background: rgba(0, 229, 255, 0.1);
+            border: 1px solid var(--cute-cyan);
+            color: var(--cute-cyan);
+            padding: 6px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: var(--transition);
         }
 
-        .offline-link-list {
-            padding-left: 20px;
+        .btn-explore-toggle:hover {
+            background: var(--cute-cyan);
+            color: #000000;
+            box-shadow: 0 0 12px rgba(0, 229, 255, 0.4);
+        }
+
+        .offline-excel-table {
             display: flex;
             flex-direction: column;
             gap: 10px;
+        }
+
+        .offline-excel-row {
+            display: grid;
+            grid-template-columns: 50px 1fr 140px 100px;
+            align-items: center;
+            background: rgba(12, 9, 24, 0.65);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: var(--radius-sm);
+            padding: 12px 16px;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .offline-excel-row:hover {
+            background: rgba(0, 229, 255, 0.06);
+            border-color: var(--cute-cyan);
+            transform: translateX(4px);
+        }
+
+        .offline-excel-header {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.12);
+            font-weight: 800;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            cursor: default;
+        }
+
+        .offline-excel-header:hover {
+            transform: none;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .offline-sl {
+            font-family: 'Orbitron', monospace;
+            font-weight: 800;
+            color: var(--cute-cyan);
             font-size: 0.9rem;
         }
 
-        .offline-link-list a {
+        .offline-item-title {
+            font-weight: 700;
             color: var(--text-main);
-            text-decoration: none;
-            transition: var(--transition);
-            word-break: break-all;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.95rem;
         }
 
-        .offline-link-list a:hover { color: var(--cute-cyan); }
+        .offline-item-title i {
+            color: var(--primary-hot);
+            font-size: 1rem;
+        }
+
+        .offline-status-tag {
+            font-size: 0.75rem;
+            padding: 4px 10px;
+            border-radius: 20px;
+            background: rgba(46, 255, 102, 0.1);
+            color: var(--neon-green);
+            border: 1px solid rgba(46, 255, 102, 0.2);
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .btn-expand-offline {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: var(--text-main);
+            padding: 6px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: var(--transition);
+        }
+
+        .offline-excel-row:hover .btn-expand-offline {
+            background: var(--cute-cyan);
+            color: #000000;
+            border-color: var(--cute-cyan);
+            box-shadow: 0 0 12px rgba(0, 229, 255, 0.4);
+        }
+
+        /* EXPANDED OFFLINE RESOURCE MODAL */
+        .offline-detail-modal {
+            background: linear-gradient(145deg, rgba(23, 19, 41, 0.98), rgba(13, 10, 24, 0.98));
+            border: 1px solid var(--cute-cyan);
+            border-radius: 24px;
+            padding: 32px 28px;
+            max-width: 600px;
+            width: 90%;
+            position: relative;
+            box-shadow: 0 20px 50px rgba(0, 229, 255, 0.25);
+            backdrop-filter: blur(20px);
+            transform: scale(0.85);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .modal-overlay.active .offline-detail-modal { transform: scale(1); }
+
+        .offline-detail-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 18px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .offline-detail-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3rem;
+            color: var(--cute-cyan);
+        }
+
+        .offline-detail-body {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--text-main);
+            margin-bottom: 24px;
+        }
+
+        .offline-code-block {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 14px;
+            border-radius: var(--radius-sm);
+            font-family: monospace;
+            font-size: 0.85rem;
+            color: var(--neon-green);
+            overflow-x: auto;
+            margin-top: 10px;
+        }
 
         .links-list-group {
             list-style: none;
@@ -796,7 +943,14 @@
             .os-card { flex: 0 1 calc(50% - 6px); min-width: 135px; max-width: 200px; padding: 16px 10px; }
             .quick-tools-grid { gap: 8px; justify-content: center; }
             .quick-tools-compact .os-card { flex: 0 1 calc(50% - 5px); min-width: 120px; padding: 12px 8px; }
-            .offline-grid-container { grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 14px; }
+            
+            .offline-excel-row {
+                grid-template-columns: 35px 1fr 85px;
+                gap: 8px;
+                padding: 10px 12px;
+            }
+            .offline-status-tag { display: none; }
+            
             .input-inline-row { flex-direction: column; }
             .btn-add-link { width: 100%; }
             .link-item { padding: 12px 14px; }
@@ -881,34 +1035,69 @@
             </div>
         </section>
 
-        <!-- OFFLINE RESOURCES -->
+        <!-- OFFLINE RESOURCES & QUICK LINKS (EXCEL GRID BOX STYLE) -->
         <div class="offline-box" id="offlineSection">
             <div class="offline-box-header">
-                <i class="fa-solid fa-folder-open"></i> OFFLINE RESOURCES & QUICK LINKS
+                <span><i class="fa-solid fa-table-cells"></i> OFFLINE RESOURCES & QUICK LINKS • We-Fixing </span>
+                <button class="btn-explore-toggle" id="toggleExploreBtn">
+                    <i class="fa-solid fa-compass"></i> Click to Explore View
+                </button>
             </div>
-            <div class="offline-grid-container">
-                <ul class="offline-link-list">
-                    <li><a href="#"><i class="fa-solid fa-angle-right"></i> System Documentation</a></li>
-                    <li><a href="#"><i class="fa-solid fa-angle-right"></i> Developer API Docs</a></li>
-                </ul>
-                <ul class="offline-link-list">
-                    <li><a href="#"><i class="fa-solid fa-angle-right"></i> Server Status & Logs</a></li>
-                    <li><a href="#"><i class="fa-solid fa-angle-right"></i> Network Utilities</a></li>
-                </ul>
+            
+            <div class="offline-excel-table" id="offlineExcelTable" style="display: none;">
+                <!-- Header Row -->
+                <div class="offline-excel-row offline-excel-header">
+                    <span class="offline-sl">SL</span>
+                    <span>RESOURCE TITLE</span>
+                    <span class="offline-status-tag" style="background:transparent; border:none; color:var(--text-muted);">TYPE</span>
+                    <span style="text-align: center;">ACTION</span>
+                </div>
+
+                <!-- Row 1 -->
+                <div class="offline-excel-row" onclick="openOfflineModal('System Documentation', 'System Architecture Document v2.4.\nAll offline local configurations and offline mode guidelines are stored locally in the application storage.', '<i class=\'fa-solid fa-book-bookmark\'></i> System Documentation')">
+                    <span class="offline-sl">#01</span>
+                    <span class="offline-item-title"><i class="fa-solid fa-book-bookmark"></i> System Documentation</span>
+                    <span class="offline-status-tag">Local Guide</span>
+                    <button class="btn-expand-offline"><i class="fa-solid fa-expand"></i> Expand</button>
+                </div>
+
+                <!-- Row 2 -->
+                <div class="offline-excel-row" onclick="openOfflineModal('Developer API Docs', 'API Reference Guidelines & Offline Endpoints.\nIncludes RESTful API routes, Local JSON storage syntax, and Firebase Compat SDK helpers.', '<i class=\'fa-solid fa-code\'></i> Developer API Docs')">
+                    <span class="offline-sl">#02</span>
+                    <span class="offline-item-title"><i class="fa-solid fa-code"></i> Developer API Docs</span>
+                    <span class="offline-status-tag">API Specification</span>
+                    <button class="btn-expand-offline"><i class="fa-solid fa-expand"></i> Expand</button>
+                </div>
+
+                <!-- Row 3 -->
+                <div class="offline-excel-row" onclick="openOfflineModal('Server Status & Logs', 'Current Status: ONLINE (100% Uptime)\nLocal Storage Cache: Ready\nNetwork Latency: < 12ms\nAll offline modules running smoothly.', '<i class=\'fa-solid fa-server\'></i> Server Status & Logs')">
+                    <span class="offline-sl">#03</span>
+                    <span class="offline-item-title"><i class="fa-solid fa-server"></i> Server Status & Logs</span>
+                    <span class="offline-status-tag">System Logs</span>
+                    <button class="btn-expand-offline"><i class="fa-solid fa-expand"></i> Expand</button>
+                </div>
+
+                <!-- Row 4 -->
+                <div class="offline-excel-row" onclick="openOfflineModal('Network Utilities', 'Internal Network Diagnostic Tools:\n- DNS Resolver\n- Port Ping Utility\n- Glassmorphism UI Mesh Status Check', '<i class=\'fa-solid fa-network-wired\'></i> Network Utilities')">
+                    <span class="offline-sl">#04</span>
+                    <span class="offline-item-title"><i class="fa-solid fa-network-wired"></i> Network Utilities</span>
+                    <span class="offline-status-tag">Tools Suite</span>
+                    <button class="btn-expand-offline"><i class="fa-solid fa-expand"></i> Expand</button>
+                </div>
             </div>
         </div>
 
-        <!-- QUICK TOOLS SECTION -->
+        <!-- QUICK ACCESS TOOL SECTION -->
         <section class="os-container quick-tools-compact" id="quickToolsSection">
             <h3 class="os-heading txt-green-neon">
-                <i class="fa-solid fa-screwdriver-wrench"></i> Quick Utilities
+                <i class="fa-solid fa-screwdriver-wrench"></i> Quick Access Tool
             </h3>
             <div class="quick-tools-grid">
-                <a href="#" class="os-card os-card-id"><div class="os-icon-wrapper id-glow"><i class="fa-solid fa-id-card"></i></div><span class="os-title-text id-title">ID Generator</span><span class="os-sub-text">Utility Tool</span></a>
-                <a href="#" class="os-card os-card-temp"><div class="os-icon-wrapper temp-glow"><i class="fa-solid fa-envelope-open-text"></i></div><span class="os-title-text temp-title">Temp Mail</span><span class="os-sub-text">Privacy Tool</span></a>
-                <a href="#" class="os-card os-card-radio"><div class="os-icon-wrapper radio-glow"><i class="fa-solid fa-tower-cell"></i></div><span class="os-title-text radio-title">Live Radio</span><span class="os-sub-text">Audio Stream</span></a>
-                <a href="#" class="os-card os-card-world"><div class="os-icon-wrapper world-glow"><i class="fa-solid fa-globe"></i></div><span class="os-title-text world-title">Web Proxy</span><span class="os-sub-text">Bypass Net</span></a>
-                <a href="#" class="os-card os-card-hack"><div class="os-icon-wrapper hack-glow"><i class="fa-solid fa-terminal"></i></div><span class="os-title-text hack-title">Cyber Lab</span><span class="os-sub-text">Testing Tools</span></a>
+                <a href="#" class="os-card os-card-id"><div class="os-icon-wrapper id-glow"><i class="fa-solid fa-id-card"></i></div><span class="os-title-text id-title">ID Generator</span><span class="os-sub-text">Run Tool</span></a>
+                <a href="#" class="os-card os-card-temp"><div class="os-icon-wrapper temp-glow"><i class="fa-solid fa-envelope-open-text"></i></div><span class="os-title-text temp-title">Temp Mail</span><span class="os-sub-text">Run Tool</span></a>
+                <a href="#" class="os-card os-card-radio"><div class="os-icon-wrapper radio-glow"><i class="fa-solid fa-tower-cell"></i></div><span class="os-title-text radio-title">Live Radio</span><span class="os-sub-text">Run Tool</span></a>
+                <a href="#" class="os-card os-card-world"><div class="os-icon-wrapper world-glow"><i class="fa-solid fa-globe"></i></div><span class="os-title-text world-title">Web Proxy</span><span class="os-sub-text">Run Tool</span></a>
+                <a href="#" class="os-card os-card-hack"><div class="os-icon-wrapper hack-glow"><i class="fa-solid fa-terminal"></i></div><span class="os-title-text hack-title">Cyber Lab</span><span class="os-sub-text">Run Tool</span></a>
             </div>
         </section>
 
@@ -941,6 +1130,23 @@
         </section>
 
     </main>
+
+    <!-- OFFLINE DETAIL EXPANDED MODAL -->
+    <div class="modal-overlay" id="offlineModalOverlay">
+        <div class="offline-detail-modal">
+            <button class="btn-close-modal" id="closeOfflineModalBtn"><i class="fa-solid fa-xmark"></i></button>
+            <div class="offline-detail-header">
+                <h4 class="offline-detail-title" id="offlineModalHeaderTitle">Document View</h4>
+            </div>
+            <div class="offline-detail-body">
+                <p id="offlineModalContent">Detailed information here...</p>
+                <div class="offline-code-block" id="offlineCodeBlock">
+                    STATUS: READY_OFFLINE
+                    MODE: ACTIVE
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- PROFILE ACCOUNT MODAL -->
     <div class="modal-overlay" id="profileModalOverlay">
@@ -997,5 +1203,40 @@
 
     <!-- MAIN SYSTEM SCRIPT -->
     <script src="script.js"></script>
+
+    <!-- OFFLINE MODAL & TOGGLE CONTROLLER SCRIPT -->
+    <script>
+        function openOfflineModal(title, content, iconHtml) {
+            const modal = document.getElementById('offlineModalOverlay');
+            const titleElem = document.getElementById('offlineModalHeaderTitle');
+            const contentElem = document.getElementById('offlineModalContent');
+            
+            if(titleElem) titleElem.innerHTML = iconHtml ? `${iconHtml}` : title;
+            if(contentElem) contentElem.innerText = content;
+            if(modal) modal.classList.add('active');
+        }
+
+        document.getElementById('closeOfflineModalBtn')?.addEventListener('click', () => {
+            document.getElementById('offlineModalOverlay')?.classList.remove('active');
+        });
+
+        document.getElementById('offlineModalOverlay')?.addEventListener('click', (e) => {
+            if (e.target === document.getElementById('offlineModalOverlay')) {
+                document.getElementById('offlineModalOverlay').classList.remove('active');
+            }
+        });
+
+        // Click to Explore View Button Toggle Functionality
+        document.getElementById('toggleExploreBtn')?.addEventListener('click', () => {
+            const table = document.getElementById('offlineExcelTable');
+            if (table) {
+                if (table.style.display === 'none' || table.style.display === '') {
+                    table.style.display = 'flex';
+                } else {
+                    table.style.display = 'none';
+                }
+            }
+        });
+    </script>
 </body>
 </html>
