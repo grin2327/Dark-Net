@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Android Hub | Fixing</title>
+    
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800;900&family=Hind+Siliguri:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- DESIGN SYSTEM: CYBER-PASTEL --- */
+        :root {
+            --bg-base: #0b0914;           
+            --primary-hot: #ff337a;       
+            --cute-cyan: #00e5ff;         
+            --accent-purple: #8a4fff;     
+            --neon-green: #2eff66;        
+            --bkash-pink: #e2136e;
+            --text-main: #f4f2f7;
+            --text-muted: #857da1;
+            --panel-bg: rgba(23, 19, 41, 0.75); 
+            --glass-border: rgba(255, 255, 255, 0.05); 
+            --radius-lg: 20px;
+            --radius-sm: 12px;
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --bg-main-gradient-start: #1c1537;
+            --bg-main-gradient-end: #0f0b21;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Hind Siliguri', system-ui, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(145deg, var(--bg-main-gradient-start), var(--bg-main-gradient-end));
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body::before, body::after {
+            content: '';
+            position: fixed;
+            width: 40vw;
+            height: 40vw;
+            border-radius: 50%;
+            filter: blur(160px);
+            z-index: -1;
+            opacity: 0.15; 
+            pointer-events: none;
+        }
+
+        body::before { background: var(--neon-green); top: -10%; left: -5%; }
+        body::after { background: var(--accent-purple); bottom: -10%; right: -5%; }
+
+        /* --- MIDDLE SECTION (MAINTENANCE CARD) --- */
+        .maintenance-card {
+            background: var(--panel-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            padding: 50px 40px;
+            text-align: center;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            max-width: 450px;
+            width: 90%;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .icon-glow {
+            font-size: 4.5rem;
+            color: var(--neon-green);
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px rgba(46, 255, 102, 0.4);
+        }
+
+        .title-text {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            color: var(--text-main);
+            margin-bottom: 10px;
+        }
+
+        .sub-text {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            margin-bottom: 35px;
+            font-weight: 500;
+        }
+
+        .btn-support {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(226, 19, 110, 0.1);
+            border: 1px solid rgba(226, 19, 110, 0.4);
+            color: var(--bkash-pink);
+            padding: 12px 24px;
+            border-radius: var(--radius-sm);
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+        }
+
+        .btn-support:hover {
+            background: rgba(226, 19, 110, 0.2);
+            border-color: var(--bkash-pink);
+            box-shadow: 0 0 15px rgba(226, 19, 110, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 25px;
+            color: var(--cute-cyan);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .back-link:hover {
+            color: var(--text-main);
+            text-shadow: 0 0 8px rgba(0, 229, 255, 0.5);
+        }
+
+        /* --- BKASH MODAL --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: rgba(5, 3, 10, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active { opacity: 1; pointer-events: auto; }
+
+        .bkash-modal {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(226, 19, 110, 0.15));
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 28px;
+            padding: 36px 30px;
+            max-width: 440px;
+            width: 90%;
+            position: relative;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+            text-align: center;
+            transform: scale(0.85);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .modal-overlay.active .bkash-modal { transform: scale(1); }
+
+        .btn-close-modal {
+            position: absolute;
+            top: 16px; right: 18px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: white;
+            font-size: 1.2rem;
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-close-modal:hover { background: var(--bkash-pink); transform: rotate(90deg); }
+        .bkash-modal-title { font-family: 'Orbitron', sans-serif; font-size: 1.35rem; color: #ffffff; margin-bottom: 6px; }
+        .bkash-modal-subtext { font-size: 0.9rem; color: rgba(255, 255, 255, 0.85); margin-bottom: 22px; }
+
+        .bkash-card-box {
+            background: rgba(15, 8, 22, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 18px;
+            padding: 20px;
+            margin-bottom: 18px;
+        }
+
+        .bkash-badge-tag {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--bkash-pink), #ff2a8d);
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 800;
+            padding: 4px 12px;
+            border-radius: 12px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .bkash-num-flex {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 10px 16px;
+            border-radius: 12px;
+        }
+
+        .bkash-big-num {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.25rem;
+            font-weight: 900;
+            color: #ffffff;
+        }
+
+        .btn-modal-copy {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.05));
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-modal-copy:hover {
+            background: var(--bkash-pink);
+            border-color: var(--bkash-pink);
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Middle Maintenance Section -->
+    <div class="maintenance-card">
+        <i class="fa-brands fa-android icon-glow"></i>
+        <h2 class="title-text">Android Hub</h2>
+        <p class="sub-text">We are fixing this page.</p>
+        
+        <button class="btn-support" onclick="openBkashModal()">
+            <i class="fa-solid fa-heart"></i> Support Us
+        </button>
+        <br>
+        <a href="../index.html" class="back-link"><i class="fa-solid fa-arrow-left"></i> Return to Home</a>
+    </div>
+
+    <!-- BKASH DONATE MODAL -->
+    <div class="modal-overlay" id="bkashModalOverlay" onclick="closeBkashModalOnOutside(event)">
+        <div class="bkash-modal">
+            <button class="btn-close-modal" onclick="closeBkashModal()"><i class="fa-solid fa-xmark"></i></button>
+            <h4 class="bkash-modal-title">Donate bKash</h4>
+            <p class="bkash-modal-subtext">Support the DARK 365 development team!</p>
+            <div class="bkash-card-box">
+                <span class="bkash-badge-tag">Personal bKash</span>
+                <div class="bkash-num-flex">
+                    <span class="bkash-big-num" id="bkashNumber">01560001721</span>
+                    <button class="btn-modal-copy" id="copyBkashBtn" onclick="copyBkashNumber()"><i class="fa-solid fa-copy"></i> Copy</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script for Modal & Copy -->
+    <script>
+        function openBkashModal() {
+            document.getElementById('bkashModalOverlay').classList.add('active');
+        }
+
+        function closeBkashModal() {
+            document.getElementById('bkashModalOverlay').classList.remove('active');
+        }
+
+        function closeBkashModalOnOutside(e) {
+            if (e.target.id === 'bkashModalOverlay') closeBkashModal();
+        }
+
+        function copyBkashNumber() {
+            const number = "01560001721";
+            navigator.clipboard.writeText(number).then(() => {
+                const btn = document.getElementById('copyBkashBtn');
+                btn.innerHTML = '<i class="fa-solid fa-check"></i> Copied!';
+                btn.style.background = '#2eff66';
+                btn.style.color = '#000000';
+                setTimeout(() => {
+                    btn.innerHTML = '<i class="fa-solid fa-copy"></i> Copy';
+                    btn.style.background = '';
+                    btn.style.color = '';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>
