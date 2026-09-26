@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <title>DARK-NET | HOME-PAGE</title>
     
     <!-- FontAwesome for Icons -->
@@ -41,6 +41,7 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Segoe UI', 'Hind Siliguri', system-ui, -apple-system, sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
@@ -158,7 +159,32 @@
         .ms-nav-right {
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        /* --- VIDEO EDITOR HUB BUTTON --- */
+        .btn-editor-hub {
+            background: linear-gradient(135deg, var(--accent-purple), var(--primary-hot));
+            color: #ffffff;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+            box-shadow: 0 0 12px rgba(138, 79, 255, 0.4);
+            white-space: nowrap;
+        }
+
+        .btn-editor-hub:hover {
+            background: linear-gradient(135deg, var(--primary-hot), var(--accent-purple));
+            color: #ffffff;
+            transform: translateY(-1px);
+            box-shadow: 0 0 18px rgba(255, 51, 122, 0.6);
         }
 
         .btn-youtube-hub {
@@ -174,6 +200,7 @@
             gap: 8px;
             transition: var(--transition);
             box-shadow: 0 0 12px rgba(255, 0, 0, 0.4);
+            white-space: nowrap;
         }
 
         .btn-youtube-hub:hover {
@@ -194,6 +221,7 @@
             padding: 8px 16px;
             border-radius: 20px;
             transition: var(--transition);
+            white-space: nowrap;
         }
 
         .ms-search-btn:hover {
@@ -217,6 +245,7 @@
             cursor: pointer;
             border: 2px solid rgba(255, 255, 255, 0.2);
             transition: var(--transition);
+            flex-shrink: 0;
         }
 
         .ms-profile-avatar.admin-active {
@@ -258,11 +287,12 @@
         .txt-pink-neon { color: var(--primary-hot); font-weight: 800; }
 
         .main-layout-fullscreen {
-            max-width: 1100px;
+            max-width: 1280px;
             width: 100%;
             margin: 0 auto;
             padding: 40px 20px;
             flex: 1;
+            box-sizing: border-box;
         }
 
         /* --- MODAL BASE --- */
@@ -280,6 +310,7 @@
             opacity: 0;
             pointer-events: none;
             transition: all 0.3s ease;
+            padding: 16px;
         }
 
         .modal-overlay.active {
@@ -301,6 +332,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            z-index: 10;
         }
 
         .btn-close-modal:hover {
@@ -315,7 +347,9 @@
             border-radius: 24px;
             padding: 32px 28px;
             max-width: 400px;
-            width: 90%;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
             position: relative;
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
             backdrop-filter: blur(20px);
@@ -420,7 +454,9 @@
             border-radius: 28px;
             padding: 36px 30px;
             max-width: 440px;
-            width: 90%;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
             position: relative;
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
             backdrop-filter: blur(20px);
@@ -469,6 +505,7 @@
             font-size: 1.25rem;
             font-weight: 900;
             color: #ffffff;
+            word-break: break-all;
         }
 
         .btn-modal-copy {
@@ -481,6 +518,7 @@
             font-size: 0.85rem;
             cursor: pointer;
             transition: var(--transition);
+            flex-shrink: 0;
         }
 
         .btn-modal-copy:hover {
@@ -496,6 +534,8 @@
             border-radius: var(--radius-lg);
             padding: 28px 24px;
             margin-bottom: 40px;
+            width: 100%;
+            box-sizing: border-box;
         }
 
         .os-heading {
@@ -625,6 +665,9 @@
             border-radius: var(--radius-lg);
             padding: 30px;
             margin-bottom: 40px;
+            text-align: left;
+            width: 100%;
+            box-sizing: border-box;
         }
 
         .section-heading {
@@ -632,6 +675,7 @@
             font-weight: 800;
             margin-bottom: 22px;
             text-transform: uppercase;
+            text-align: left;
         }
 
         .input-stack {
@@ -657,6 +701,7 @@
             font-weight: 600;
             outline: none;
             transition: var(--transition);
+            text-align: left;
         }
 
         .custom-input:focus {
@@ -683,13 +728,17 @@
             padding-top: 24px;
         }
 
-        /* --- EXCEL SHEET & BOX STYLE OFFLINE RESOURCES --- */
+        /* --- OFFLINE RESOURCES & DYNAMIC LAYER SYSTEM --- */
         .offline-box {
             background: var(--panel-bg);
             border: 1px solid var(--glass-border);
             border-radius: var(--radius-lg);
             padding: 24px;
             margin-bottom: 40px;
+            text-align: left;
+            width: 100%;
+            box-sizing: border-box;
+            overflow: hidden;
         }
 
         .offline-box-header {
@@ -702,6 +751,9 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap;
+            text-align: left;
         }
 
         .btn-explore-toggle {
@@ -725,98 +777,157 @@
             box-shadow: 0 0 12px rgba(0, 229, 255, 0.4);
         }
 
-        .offline-excel-table {
+        .offline-search-wrapper {
+            margin-bottom: 18px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .offline-search-input {
+            width: 100%;
+            background: rgba(15, 12, 31, 0.8);
+            border: 1px solid var(--glass-border);
+            padding: 12px 18px;
+            border-radius: var(--radius-sm);
+            color: var(--text-main);
+            font-size: 0.88rem;
+            outline: none;
+            transition: var(--transition);
+            text-align: left;
+        }
+
+        .offline-search-input:focus {
+            border-color: var(--cute-cyan);
+            box-shadow: 0 0 10px rgba(0, 229, 255, 0.2);
+        }
+
+        .offline-4layer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 16px;
+            margin-top: 10px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .offline-layer-col {
+            background: rgba(12, 9, 24, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: var(--radius-sm);
+            padding: 14px;
             display: flex;
             flex-direction: column;
             gap: 10px;
-        }
-
-        .offline-excel-row {
-            display: grid;
-            grid-template-columns: 50px 1fr 140px 100px;
-            align-items: center;
-            background: rgba(12, 9, 24, 0.65);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: var(--radius-sm);
-            padding: 12px 16px;
             transition: var(--transition);
-            cursor: pointer;
+            min-width: 0;
         }
 
-        .offline-excel-row:hover {
-            background: rgba(0, 229, 255, 0.06);
-            border-color: var(--cute-cyan);
-            transform: translateX(4px);
+        .offline-layer-col:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
         }
 
-        .offline-excel-header {
-            background: rgba(255, 255, 255, 0.05);
-            border-color: rgba(255, 255, 255, 0.12);
+        .offline-layer-header {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.82rem;
             font-weight: 800;
-            font-size: 0.78rem;
-            color: var(--text-muted);
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--cute-cyan);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             text-transform: uppercase;
-            cursor: default;
+            letter-spacing: 0.5px;
         }
 
-        .offline-excel-header:hover {
-            transform: none;
-            background: rgba(255, 255, 255, 0.05);
+        .offline-layer-count {
+            font-size: 0.7rem;
+            background: rgba(255, 255, 255, 0.08);
+            padding: 2px 8px;
+            border-radius: 10px;
+            color: var(--text-muted);
         }
 
-        .offline-sl {
+        .offline-layer-body {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 520px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .offline-layer-body::-webkit-scrollbar {
+            width: 4px;
+        }
+        .offline-layer-body::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 4px;
+        }
+
+        .offline-compact-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            background: rgba(23, 19, 41, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 8px 10px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .offline-compact-row:hover {
+            background: rgba(0, 229, 255, 0.1);
+            border-color: var(--cute-cyan);
+            transform: translateX(3px);
+        }
+
+        .offline-compact-sl {
             font-family: 'Orbitron', monospace;
             font-weight: 800;
-            color: var(--cute-cyan);
-            font-size: 0.9rem;
+            font-size: 0.78rem;
+            flex-shrink: 0;
         }
 
-        .offline-item-title {
-            font-weight: 700;
+        .offline-compact-title {
+            font-size: 0.82rem;
+            font-weight: 600;
             color: var(--text-main);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            flex: 1;
             display: flex;
             align-items: center;
-            gap: 10px;
-            font-size: 0.95rem;
-        }
-
-        .offline-item-title i {
-            color: var(--primary-hot);
-            font-size: 1rem;
-        }
-
-        .offline-status-tag {
-            font-size: 0.75rem;
-            padding: 4px 10px;
-            border-radius: 20px;
-            background: rgba(46, 255, 102, 0.1);
-            color: var(--neon-green);
-            border: 1px solid rgba(46, 255, 102, 0.2);
-            text-align: center;
-            font-weight: 700;
-        }
-
-        .btn-expand-offline {
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            color: var(--text-main);
-            padding: 6px 12px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.8rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             gap: 6px;
+        }
+
+        .offline-compact-title i {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .offline-compact-arrow {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            opacity: 0.5;
             transition: var(--transition);
         }
 
-        .offline-excel-row:hover .btn-expand-offline {
-            background: var(--cute-cyan);
-            color: #000000;
-            border-color: var(--cute-cyan);
-            box-shadow: 0 0 12px rgba(0, 229, 255, 0.4);
+        .offline-compact-row:hover .offline-compact-arrow {
+            color: var(--cute-cyan);
+            opacity: 1;
+            transform: translateX(2px);
+        }
+
+        .offline-empty-layer {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-align: center;
+            padding: 20px 0;
+            font-style: italic;
         }
 
         /* EXPANDED OFFLINE RESOURCE MODAL */
@@ -826,12 +937,15 @@
             border-radius: 24px;
             padding: 32px 28px;
             max-width: 600px;
-            width: 90%;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
             position: relative;
             box-shadow: 0 20px 50px rgba(0, 229, 255, 0.25);
             backdrop-filter: blur(20px);
             transform: scale(0.85);
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-align: left;
         }
 
         .modal-overlay.active .offline-detail-modal { transform: scale(1); }
@@ -843,12 +957,14 @@
             margin-bottom: 18px;
             padding-bottom: 12px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-right: 30px;
         }
 
         .offline-detail-title {
             font-family: 'Orbitron', sans-serif;
             font-size: 1.3rem;
             color: var(--cute-cyan);
+            word-break: break-word;
         }
 
         .offline-detail-body {
@@ -856,6 +972,7 @@
             line-height: 1.6;
             color: var(--text-main);
             margin-bottom: 24px;
+            text-align: left;
         }
 
         .offline-code-block {
@@ -868,6 +985,9 @@
             color: var(--neon-green);
             overflow-x: auto;
             margin-top: 10px;
+            text-align: left;
+            white-space: pre-wrap;
+            word-break: break-all;
         }
 
         .links-list-group {
@@ -876,6 +996,7 @@
             flex-direction: column;
             gap: 12px;
             margin-top: 15px;
+            text-align: left;
         }
 
         .link-item {
@@ -895,6 +1016,7 @@
             gap: 6px;
             flex: 1;
             overflow: hidden;
+            text-align: left;
         }
 
         .link-title {
@@ -933,27 +1055,58 @@
             color: white;
         }
 
+        /* --- RESPONSIVE MEDIA QUERIES --- */
         @media (max-width: 768px) {
-            header { flex-direction: column; gap: 12px; padding: 14px 16px; }
-            .ms-nav-left, .ms-nav-right { width: 100%; justify-content: center; flex-wrap: wrap; }
-            .ms-menu-links { display: none; }
-            .main-layout-fullscreen { padding: 20px 12px; }
-            .os-container, .form-container, .database-container, .offline-box { padding: 18px 14px; border-radius: 16px; margin-bottom: 24px; }
-            .os-grid { gap: 10px; justify-content: center; }
-            .os-card { flex: 0 1 calc(50% - 6px); min-width: 135px; max-width: 200px; padding: 16px 10px; }
-            .quick-tools-grid { gap: 8px; justify-content: center; }
-            .quick-tools-compact .os-card { flex: 0 1 calc(50% - 5px); min-width: 120px; padding: 12px 8px; }
-            
-            .offline-excel-row {
-                grid-template-columns: 35px 1fr 85px;
-                gap: 8px;
-                padding: 10px 12px;
+            header { 
+                flex-direction: column; 
+                gap: 12px; 
+                padding: 12px 14px; 
             }
-            .offline-status-tag { display: none; }
+            .ms-nav-left { 
+                width: 100%; 
+                flex-direction: column; 
+                align-items: flex-start;
+                gap: 10px;
+            }
+            .ms-nav-right { 
+                width: 100%; 
+                justify-content: space-between; 
+                flex-wrap: wrap; 
+                gap: 8px;
+            }
+            .ms-menu-links { 
+                display: flex;
+                width: 100%;
+                overflow-x: auto;
+                padding: 6px 0;
+                gap: 16px;
+                white-space: nowrap;
+                -webkit-overflow-scrolling: touch;
+                border-top: 1px solid rgba(255, 255, 255, 0.05);
+            }
+            .ms-menu-links::-webkit-scrollbar { display: none; }
             
+            .main-layout-fullscreen { padding: 20px 12px; }
+            .os-container, .form-container, .database-container, .offline-box { 
+                padding: 18px 14px; 
+                border-radius: 16px; 
+                margin-bottom: 24px; 
+            }
+            .os-grid { gap: 10px; justify-content: center; }
+            .os-card { flex: 0 1 calc(50% - 5px); min-width: 130px; max-width: 200px; padding: 16px 10px; }
+            .quick-tools-grid { gap: 8px; justify-content: center; }
+            .quick-tools-compact .os-card { flex: 0 1 calc(50% - 4px); min-width: 120px; padding: 12px 8px; }
             .input-inline-row { flex-direction: column; }
             .btn-add-link { width: 100%; }
             .link-item { padding: 12px 14px; }
+        }
+
+        @media (max-width: 420px) {
+            .brand-text { font-size: 1rem; }
+            .ms-search-btn span { display: none; }
+            .btn-youtube-hub, .btn-editor-hub { padding: 8px 12px; font-size: 0.8rem; }
+            .os-card { flex: 1 1 100%; max-width: 100%; }
+            .quick-tools-compact .os-card { flex: 0 1 calc(50% - 4px); }
         }
     </style>
 </head>
@@ -973,6 +1126,7 @@
                 <span class="brand-text">DARK 365</span>
             </a>
 
+            <!-- Mobile Touch-Scrollable Navigation -->
             <ul class="ms-menu-links">
                 <li><a href="#osSection">Apps</a></li>
                 <li><a href="#offlineSection">Resources</a></li>
@@ -983,6 +1137,12 @@
         </div>
 
         <div class="ms-nav-right">
+            <!-- Video Editor Hub Button (Video Hub এর বাম দিকে) -->
+            <a href="video-editor.html" class="btn-editor-hub" title="Go to Video Editor Page">
+                <i class="fa-solid fa-film"></i> Video Editor
+            </a>
+
+            <!-- Video Hub Button -->
             <a href="video.html" class="btn-youtube-hub" title="Go to Video Section">
                 <i class="fa-brands fa-youtube"></i> Video Hub
             </a>
@@ -1035,54 +1195,24 @@
             </div>
         </section>
 
-        <!-- OFFLINE RESOURCES & QUICK LINKS (EXCEL GRID BOX STYLE) -->
+        <!-- OFFLINE RESOURCES (DYNAMIC AUTO-FIT GRID LAYOUT) -->
         <div class="offline-box" id="offlineSection">
             <div class="offline-box-header">
-                <span><i class="fa-solid fa-table-cells"></i> OFFLINE RESOURCES & QUICK LINKS • We-Fixing </span>
+                <span><i class="fa-solid fa-table-cells"></i> OFFLINE RESOURCES & QUICK LINKS</span>
                 <button class="btn-explore-toggle" id="toggleExploreBtn">
                     <i class="fa-solid fa-compass"></i> Click to Explore View
                 </button>
             </div>
             
-            <div class="offline-excel-table" id="offlineExcelTable" style="display: none;">
-                <!-- Header Row -->
-                <div class="offline-excel-row offline-excel-header">
-                    <span class="offline-sl">SL</span>
-                    <span>RESOURCE TITLE</span>
-                    <span class="offline-status-tag" style="background:transparent; border:none; color:var(--text-muted);">TYPE</span>
-                    <span style="text-align: center;">ACTION</span>
+            <div id="offlineTableContainer" style="display: none; margin-top: 15px;">
+                <!-- Search Filter Input -->
+                <div class="offline-search-wrapper">
+                    <input type="text" id="offlineSearchInput" class="offline-search-input" placeholder="Search from offline tools & guides..." onkeyup="filterOfflineTools()">
                 </div>
 
-                <!-- Row 1 -->
-                <div class="offline-excel-row" onclick="openOfflineModal('System Documentation', 'System Architecture Document v2.4.\nAll offline local configurations and offline mode guidelines are stored locally in the application storage.', '<i class=\'fa-solid fa-book-bookmark\'></i> System Documentation')">
-                    <span class="offline-sl">#01</span>
-                    <span class="offline-item-title"><i class="fa-solid fa-book-bookmark"></i> System Documentation</span>
-                    <span class="offline-status-tag">Local Guide</span>
-                    <button class="btn-expand-offline"><i class="fa-solid fa-expand"></i> Expand</button>
-                </div>
-
-                <!-- Row 2 -->
-                <div class="offline-excel-row" onclick="openOfflineModal('Developer API Docs', 'API Reference Guidelines & Offline Endpoints.\nIncludes RESTful API routes, Local JSON storage syntax, and Firebase Compat SDK helpers.', '<i class=\'fa-solid fa-code\'></i> Developer API Docs')">
-                    <span class="offline-sl">#02</span>
-                    <span class="offline-item-title"><i class="fa-solid fa-code"></i> Developer API Docs</span>
-                    <span class="offline-status-tag">API Specification</span>
-                    <button class="btn-expand-offline"><i class="fa-solid fa-expand"></i> Expand</button>
-                </div>
-
-                <!-- Row 3 -->
-                <div class="offline-excel-row" onclick="openOfflineModal('Server Status & Logs', 'Current Status: ONLINE (100% Uptime)\nLocal Storage Cache: Ready\nNetwork Latency: < 12ms\nAll offline modules running smoothly.', '<i class=\'fa-solid fa-server\'></i> Server Status & Logs')">
-                    <span class="offline-sl">#03</span>
-                    <span class="offline-item-title"><i class="fa-solid fa-server"></i> Server Status & Logs</span>
-                    <span class="offline-status-tag">System Logs</span>
-                    <button class="btn-expand-offline"><i class="fa-solid fa-expand"></i> Expand</button>
-                </div>
-
-                <!-- Row 4 -->
-                <div class="offline-excel-row" onclick="openOfflineModal('Network Utilities', 'Internal Network Diagnostic Tools:\n- DNS Resolver\n- Port Ping Utility\n- Glassmorphism UI Mesh Status Check', '<i class=\'fa-solid fa-network-wired\'></i> Network Utilities')">
-                    <span class="offline-sl">#04</span>
-                    <span class="offline-item-title"><i class="fa-solid fa-network-wired"></i> Network Utilities</span>
-                    <span class="offline-status-tag">Tools Suite</span>
-                    <button class="btn-expand-offline"><i class="fa-solid fa-expand"></i> Expand</button>
+                <!-- DYNAMIC LAYER GRID CONTAINER -->
+                <div class="offline-4layer-grid" id="offline4LayerGrid">
+                    <!-- Dynamic Layer Columns rendered via JS -->
                 </div>
             </div>
         </div>
@@ -1141,8 +1271,8 @@
             <div class="offline-detail-body">
                 <p id="offlineModalContent">Detailed information here...</p>
                 <div class="offline-code-block" id="offlineCodeBlock">
-                    STATUS: READY_OFFLINE
-                    MODE: ACTIVE
+STATUS: READY_OFFLINE
+MODE: ACTIVE
                 </div>
             </div>
         </div>
@@ -1204,8 +1334,144 @@
     <!-- MAIN SYSTEM SCRIPT -->
     <script src="script.js"></script>
 
-    <!-- OFFLINE MODAL & TOGGLE CONTROLLER SCRIPT -->
+    <!-- OFFLINE RESOURCES DYNAMIC LAYER CONTROLLER SCRIPT -->
     <script>
+        // 50 Offline Tools & Resources Dataset
+        const offlineToolsData = [
+            { sl: "#01", title: "System Documentation", type: "Local Guide", icon: "fa-book-bookmark", details: "System Architecture Document v2.4.\nAll offline local configurations and offline mode guidelines are stored locally in the application storage." },
+            { sl: "#02", title: "Developer API Docs", type: "API Specification", icon: "fa-code", details: "API Reference Guidelines & Offline Endpoints.\nIncludes RESTful API routes, Local JSON storage syntax, and Web-Speech SDK helpers." },
+            { sl: "#03", title: "Server Status & Logs", type: "System Logs", icon: "fa-server", details: "Current Status: ONLINE (100% Uptime)\nLocal Storage Cache: Ready\nNetwork Latency: < 12ms\nAll offline modules running smoothly." },
+            { sl: "#04", title: "Network Utilities", type: "Tools Suite", icon: "fa-network-wired", details: "Internal Network Diagnostic Tools:\n- DNS Resolver\n- Port Ping Utility\n- Glassmorphism UI Mesh Status Check" },
+            { sl: "#05", title: "Text to Speech Engine", type: "Audio Synthesis", icon: "fa-waveform", details: "Native SpeechSynthesis API for offline text-to-voice conversion with pitch, rate, and accent controls." },
+            { sl: "#06", title: "Audio Frequency Visualizer", type: "Audio Suite", icon: "fa-chart-simple", details: "Real-time canvas spectrum bar visualizer processing offline audio output streams." },
+            { sl: "#07", title: "Offline File Reader", type: "File Utility", icon: "fa-file-lines", details: "Browser-based FileReader API engine to parse .txt, .json, and plain document files without internet." },
+            { sl: "#08", title: "Local Storage Manager", type: "Database", icon: "fa-database", details: "Inspect, manage, export, and clean key-value pairs stored inside window.localStorage." },
+            { sl: "#09", title: "CSS Glassmorphic Generator", type: "UI Tools", icon: "fa-paint-brush", details: "Design customizable glassmorphism cards with real-time CSS backdrop-filter code export." },
+            { sl: "#10", title: "Cyberpunk Palette Selector", type: "Theme Engine", icon: "fa-palette", details: "Presets for neon cyan, dark violet, and stealth cyberpunk color schemes." },
+            { sl: "#11", title: "Markdown Live Editor", type: "Content Editor", icon: "fa-pen-to-square", details: "Write and preview GitHub-flavored markdown content fully offline." },
+            { sl: "#12", title: "Code Syntax Highlighter", type: "Dev Utility", icon: "fa-file-code", details: "Format and colorize JavaScript, HTML, CSS, and JSON code snippets." },
+            { sl: "#13", title: "Base64 Encoder / Decoder", type: "Data Tools", icon: "fa-arrow-right-arrow-left", details: "Convert raw strings and image files to/from Base64 encoding format." },
+            { sl: "#14", title: "SHA-256 Hash Generator", type: "Security", icon: "fa-lock", details: "Generate cryptographic SHA-256 and MD5 hashes instantly using Crypto API." },
+            { sl: "#15", title: "Regex Pattern Tester", type: "Regex Suite", icon: "fa-asterisk", details: "Test regular expressions against target text blocks with live match highlighting." },
+            { sl: "#16", title: "JSON Formatter & Validator", type: "Data Tools", icon: "fa-brackets-curly", details: "Minify, format, or validate raw JSON text offline with detailed error syntax highlighting." },
+            { sl: "#17", title: "URL Encoder & Decoder", type: "Web Tools", icon: "fa-link", details: "Safely encode special URI characters for web parameters and query strings." },
+            { sl: "#18", title: "JWT Token Inspector", type: "Security", icon: "fa-key", details: "Decode JSON Web Tokens (JWT) payload and header claims without leaking signatures." },
+            { sl: "#19", title: "HTML Entity Converter", type: "Web Dev", icon: "fa-code-compare", details: "Convert characters into HTML entities (e.g. &lt;, &gt;, &amp;) for secure DOM rendering." },
+            { sl: "#20", title: "Image Compressor Tool", type: "Media Utility", icon: "fa-file-image", details: "Compress PNG and JPEG image file sizes using client-side HTML5 Canvas rendering." },
+            { sl: "#21", title: "SVG Icon Viewer", type: "UI Design", icon: "fa-shapes", details: "Render and optimize raw SVG code snippets and preview vector graphic scaling." },
+            { sl: "#22", title: "IP Subnet Calculator", type: "Networking", icon: "fa-calculator", details: "Calculate CIDR subnets, broadcast addresses, and usable host ranges." },
+            { sl: "#23", title: "Ping & Latency Simulator", type: "Networking", icon: "fa-circle-nodes", details: "Simulate ping round-trips and diagnose local connection packet timing." },
+            { sl: "#24", title: "Port Reference Guide", type: "Networking", icon: "fa-ethernet", details: "Index of standard TCP/UDP ports (80, 443, 22, 3306, 8080, 27017)." },
+            { sl: "#25", title: "DNS Record Reference", type: "Networking", icon: "fa-globe", details: "Cheat sheet for A, AAAA, CNAME, MX, TXT, and NS records syntax." },
+            { sl: "#26", title: "Cron Schedule Builder", type: "Automation", icon: "fa-clock", details: "Generate 5-part Cron expressions for automation tasks and server scheduled jobs." },
+            { sl: "#27", title: "Git Command Cheat Sheet", type: "Dev Guide", icon: "fa-code-branch", details: "Quick lookup for rebase, cherry-pick, reset, push, and remote origin setup commands." },
+            { sl: "#28", title: "Offline Storage Analyzer", type: "System Tools", icon: "fa-hard-drive", details: "Calculate estimated IndexedDB and CacheStorage quota consumption." },
+            { sl: "#29", title: "UUID / GUID Generator", type: "Dev Tools", icon: "fa-fingerprint", details: "Generate RFC4122 compliant version 4 unique identifier UUIDs." },
+            { sl: "#30", title: "Password Generator", type: "Security", icon: "fa-shield-halved", details: "Create secure random passwords with customizable length and character sets." },
+            { sl: "#31", title: "Lorem Ipsum Generator", type: "Content", icon: "fa-paragraph", details: "Generate placeholder text, sentences, or paragraphs for design wireframes." },
+            { sl: "#32", title: "Text Diff Checker", type: "Text Utility", icon: "fa-clone", details: "Compare two text blocks side-by-side to highlight added or removed lines." },
+            { sl: "#33", title: "CSV to JSON Converter", type: "Data Tools", icon: "fa-file-csv", details: "Parse tabular CSV spreadsheet values into formatted JSON object arrays." },
+            { sl: "#34", title: "XML to JSON Parser", type: "Data Tools", icon: "fa-file-code", details: "Transform legacy XML documents into clean JSON format." },
+            { sl: "#35", title: "Unit & Measurement Converter", type: "Calculators", icon: "fa-ruler", details: "Convert length, weight, temperature, data storage sizes (MB/GB/TB) offline." },
+            { sl: "#36", title: "Math Expression Evaluator", type: "Calculators", icon: "fa-square-root-variable", details: "Evaluate complex mathematical equations and scientific formulas." },
+            { sl: "#37", title: "Epoch Timestamp Converter", type: "Time Suite", icon: "fa-stopwatch", details: "Convert Unix timestamp seconds/milliseconds to human-readable ISO date strings." },
+            { sl: "#38", title: "QR Code Generator", type: "Media Tools", icon: "fa-qrcode", details: "Generate offline scannable QR code images from plain text or URLs." },
+            { sl: "#39", title: "Color Picker & HEX/RGB", type: "UI Design", icon: "fa-eye-dropper", details: "Convert color values between HEX, RGB, HSL, and HSV spaces." },
+            { sl: "#40", title: "HTML/CSS/JS Minifier", type: "Dev Tools", icon: "fa-compress", details: "Strip comments and whitespace from web code files to reduce payload size." },
+            { sl: "#41", title: "JavaScript Beautifier", type: "Dev Tools", icon: "fa-indent", details: "Reformat unreadable minified JS code into nicely indented script blocks." },
+            { sl: "#42", title: "HTTP Status Codes Ref", type: "Web Reference", icon: "fa-list-ol", details: "Index of 200, 301, 400, 401, 403, 404, 500, and 502 status responses." },
+            { sl: "#43", title: "User Agent Inspector", type: "Web Dev", icon: "fa-display", details: "Parse client browser user-agent strings to detect OS and rendering engines." },
+            { sl: "#44", title: "Favicon Previewer", type: "Media Utility", icon: "fa-icons", details: "Test icon sizes across desktop, Android, and iOS home screen shortcuts." },
+            { sl: "#45", title: "CSS Flexbox Playground", type: "UI Design", icon: "fa-border-all", details: "Interactive visual tool to learn flex-direction, justify-content, and align-items." },
+            { sl: "#46", title: "JS Keycode Finder", type: "JS Dev", icon: "fa-keyboard", details: "Press any key on the keyboard to instantly view event.key and event.keyCode." },
+            { sl: "#47", title: "Viewport Screen Resizer", type: "Web Dev", icon: "fa-mobile-screen", details: "Inspect CSS breakpoints for mobile (320px), tablet (768px), and desktop (1024px)." },
+            { sl: "#48", title: "Voice Recorder Utility", type: "Audio Tools", icon: "fa-microphone", details: "Capture and playback local microphone audio using MediaRecorder API." },
+            { sl: "#49", title: "Browser Cookie Viewer", type: "System Tools", icon: "fa-cookie", details: "Inspect active session cookies and security flags (HttpOnly, SameSite)." },
+            { sl: "#50", title: "System Benchmark Utility", type: "Diagnostics", icon: "fa-microchip", details: "Run local CPU loop calculations to test browser execution speed." }
+        ];
+
+        // DYNAMIC CHUNKING ENGINE
+        function renderOfflineLayers(dataList) {
+            const container = document.getElementById('offline4LayerGrid');
+            if (!container) return;
+            container.innerHTML = '';
+
+            if (!dataList || dataList.length === 0) {
+                container.innerHTML = `<div class="offline-empty-layer" style="grid-column: 1 / -1;">No matching resources found.</div>`;
+                return;
+            }
+
+            const ITEMS_PER_LAYER = 10;
+            const themeColors = [
+                "var(--cute-cyan)",
+                "var(--neon-green)",
+                "var(--accent-purple)",
+                "var(--primary-hot)",
+                "#ff9900",
+                "#06b6d4",
+                "#a855f7",
+                "#3ddc84"
+            ];
+
+            const totalLayers = Math.ceil(dataList.length / ITEMS_PER_LAYER);
+
+            for (let l = 0; l < totalLayers; l++) {
+                const startIdx = l * ITEMS_PER_LAYER;
+                const endIdx = Math.min(startIdx + ITEMS_PER_LAYER, dataList.length);
+                const layerItems = dataList.slice(startIdx, endIdx);
+                const layerColor = themeColors[l % themeColors.length];
+
+                const startNum = startIdx + 1;
+                const endNum = startIdx + layerItems.length;
+                const layerTitle = `LAYER ${l + 1} (#${String(startNum).padStart(2, '0')} - #${String(endNum).padStart(2, '0')})`;
+
+                const col = document.createElement('div');
+                col.className = 'offline-layer-col';
+
+                let itemsHTML = '';
+                layerItems.forEach(item => {
+                    const safeTitle = item.title.replace(/'/g, "\\'").replace(/"/g, "&quot;");
+                    const safeDetails = item.details.replace(/'/g, "\\'").replace(/\n/g, "\\n");
+                    const iconHtml = `<i class="fa-solid ${item.icon}"></i> ${safeTitle}`;
+
+                    itemsHTML += `
+                        <div class="offline-compact-row" onclick="openOfflineModal('${safeTitle}', '${safeDetails}', '${iconHtml}')">
+                            <span class="offline-compact-sl" style="color:${layerColor}">${item.sl}</span>
+                            <span class="offline-compact-title"><i class="fa-solid ${item.icon}"></i> ${item.title}</span>
+                            <i class="fa-solid fa-chevron-right offline-compact-arrow"></i>
+                        </div>
+                    `;
+                });
+
+                col.innerHTML = `
+                    <div class="offline-layer-header" style="border-bottom-color: ${layerColor}">
+                        <span style="color: ${layerColor}">${layerTitle}</span>
+                        <span class="offline-layer-count">${layerItems.length} Items</span>
+                    </div>
+                    <div class="offline-layer-body">
+                        ${itemsHTML}
+                    </div>
+                `;
+
+                container.appendChild(col);
+            }
+        }
+
+        // Initialize Dynamic Layer Rendering
+        renderOfflineLayers(offlineToolsData);
+
+        // Real-Time Search Filter Across All Dynamic Layers
+        function filterOfflineTools() {
+            const query = document.getElementById('offlineSearchInput').value.toLowerCase().trim();
+            const filtered = offlineToolsData.filter(item => 
+                item.title.toLowerCase().includes(query) || 
+                item.type.toLowerCase().includes(query) || 
+                item.sl.toLowerCase().includes(query)
+            );
+            renderOfflineLayers(filtered);
+        }
+
+        // Modal Functions
         function openOfflineModal(title, content, iconHtml) {
             const modal = document.getElementById('offlineModalOverlay');
             const titleElem = document.getElementById('offlineModalHeaderTitle');
@@ -1226,14 +1492,17 @@
             }
         });
 
-        // Click to Explore View Button Toggle Functionality
+        // Click to Explore View Toggle
         document.getElementById('toggleExploreBtn')?.addEventListener('click', () => {
-            const table = document.getElementById('offlineExcelTable');
-            if (table) {
-                if (table.style.display === 'none' || table.style.display === '') {
-                    table.style.display = 'flex';
+            const container = document.getElementById('offlineTableContainer');
+            const btn = document.getElementById('toggleExploreBtn');
+            if (container) {
+                if (container.style.display === 'none' || container.style.display === '') {
+                    container.style.display = 'block';
+                    if (btn) btn.innerHTML = `<i class="fa-solid fa-chevron-up"></i> Collapse View`;
                 } else {
-                    table.style.display = 'none';
+                    container.style.display = 'none';
+                    if (btn) btn.innerHTML = `<i class="fa-solid fa-compass"></i> Click to Explore View`;
                 }
             }
         });
