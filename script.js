@@ -52,7 +52,7 @@ if (auth) {
 
 // HTML Escaping (XSS Prevention)
 function escapeHTML(str) {
-    if (!str) return "";
+    if (str === null || str === undefined) return "";
     return String(str).replace(/[&<>'"]/g, tag => ({
         '&': '&amp;',
         '<': '&lt;',
@@ -473,16 +473,16 @@ function initializeLoginSystem() {
 // ==========================================
 
 document.addEventListener('DOMContentLoaded', () => {
-    // ১. পাবলিক সেশন অটো-রেজিস্টার
+    // 1. Auto register public session
     initPublicSession();
 
-    // ২. লগইন ও অ্যাডমিন মোডাল হ্যান্ডলার
+    // 2. Login & modal system initialization
     initializeLoginSystem();
     
-    // ৩. JSONBin থেকে প্রথমবার ডেটা ফেচ
+    // 3. Initial JSONBin Data Fetch
     fetchLinksFromJSONBin();
 
-    // 🔄 AUTO-POLLING: প্রতি ১০ সেকেন্ড পরপর নতুন লিংক ডাটা চেক করবে
+    // AUTO-POLLING: Fetch new link updates every 10 seconds
     setInterval(() => {
         fetchLinksFromJSONBin();
     }, 10000);

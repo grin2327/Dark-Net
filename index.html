@@ -1093,6 +1093,7 @@
                 margin-bottom: 24px; 
             }
             .os-grid { gap: 10px; justify-content: center; }
+            /* প্রতি লাইনে ২টি করে কার্ড রাখার জন্য ৫টি কার্ড থাকলে ৩ নম্বর লাইনের ১ম আইটেমটি অটোমেটিক মাঝখানে যাবে */
             .os-card { flex: 0 1 calc(50% - 5px); min-width: 130px; max-width: 200px; padding: 16px 10px; }
             .quick-tools-grid { gap: 8px; justify-content: center; }
             .quick-tools-compact .os-card { flex: 0 1 calc(50% - 4px); min-width: 120px; padding: 12px 8px; }
@@ -1105,7 +1106,7 @@
             .brand-text { font-size: 1rem; }
             .ms-search-btn span { display: none; }
             .btn-youtube-hub, .btn-editor-hub { padding: 8px 12px; font-size: 0.8rem; }
-            .os-card { flex: 1 1 100%; max-width: 100%; }
+            /* .os-card 100% width রিমুভ করা হয়েছে যাতে ছোট মোবাইলেও 2+2+1 ভিউ থাকে */
             .quick-tools-compact .os-card { flex: 0 1 calc(50% - 4px); }
         }
     </style>
@@ -1137,7 +1138,7 @@
         </div>
 
         <div class="ms-nav-right">
-            <!-- Video Editor Hub Button (Video Hub এর বাম দিকে) -->
+            <!-- Video Editor Hub Button -->
             <a href="py/app.html" class="btn-editor-hub" title="Go to Video Editor Page">
                 <i class="fa-solid fa-film"></i> Video Editor
             </a>
@@ -1207,7 +1208,7 @@
             <div id="offlineTableContainer" style="display: none; margin-top: 15px;">
                 <!-- Search Filter Input -->
                 <div class="offline-search-wrapper">
-                    <input type="text" id="offlineSearchInput" class="offline-search-input" placeholder="Search from offline tools & guides..." onkeyup="filterOfflineTools()">
+                    <input type="text" id="offlineSearchInput" class="offline-search-input" placeholder="Search from offline tools & guides...">
                 </div>
 
                 <!-- DYNAMIC LAYER GRID CONTAINER -->
@@ -1223,11 +1224,11 @@
                 <i class="fa-solid fa-screwdriver-wrench"></i> Quick Access Tool
             </h3>
             <div class="quick-tools-grid">
-                <a href="#" class="os-card os-card-id"><div class="os-icon-wrapper id-glow"><i class="fa-solid fa-id-card"></i></div><span class="os-title-text id-title">ID Generator</span><span class="os-sub-text">Run Tool</span></a>
-                <a href="#" class="os-card os-card-temp"><div class="os-icon-wrapper temp-glow"><i class="fa-solid fa-envelope-open-text"></i></div><span class="os-title-text temp-title">Temp Mail</span><span class="os-sub-text">Run Tool</span></a>
-                <a href="#" class="os-card os-card-radio"><div class="os-icon-wrapper radio-glow"><i class="fa-solid fa-tower-cell"></i></div><span class="os-title-text radio-title">Live Radio</span><span class="os-sub-text">Run Tool</span></a>
-                <a href="#" class="os-card os-card-world"><div class="os-icon-wrapper world-glow"><i class="fa-solid fa-globe"></i></div><span class="os-title-text world-title">Web Proxy</span><span class="os-sub-text">Run Tool</span></a>
-                <a href="#" class="os-card os-card-hack"><div class="os-icon-wrapper hack-glow"><i class="fa-solid fa-terminal"></i></div><span class="os-title-text hack-title">Cyber Lab</span><span class="os-sub-text">Run Tool</span></a>
+                <a href="https://www.idcreator.com/" class="os-card os-card-id"><div class="os-icon-wrapper id-glow"><i class="fa-solid fa-id-card"></i></div><span class="os-title-text id-title">ID Generator</span><span class="os-sub-text">Run Tool</span></a>
+                <a href="https://temp-mail.org/" class="os-card os-card-temp"><div class="os-icon-wrapper temp-glow"><i class="fa-solid fa-envelope-open-text"></i></div><span class="os-title-text temp-title">Temp Mail</span><span class="os-sub-text">Run Tool</span></a>
+                <a href="https://radio.garden/" class="os-card os-card-radio"><div class="os-icon-wrapper radio-glow"><i class="fa-solid fa-tower-cell"></i></div><span class="os-title-text radio-title">Live Radio</span><span class="os-sub-text">Run Tool</span></a>
+                <a href="https://www.croxyproxy.com/" class="os-card os-card-world"><div class="os-icon-wrapper world-glow"><i class="fa-solid fa-globe"></i></div><span class="os-title-text world-title">Web Proxy</span><span class="os-sub-text">Run Tool</span></a>
+                <a href="https://hackerai.co/" class="os-card os-card-hack"><div class="os-icon-wrapper hack-glow"><i class="fa-solid fa-terminal"></i></div><span class="os-title-text hack-title">Cyber Lab</span><span class="os-sub-text">Run Tool</span></a>
             </div>
         </section>
 
@@ -1270,9 +1271,7 @@
             </div>
             <div class="offline-detail-body">
                 <p id="offlineModalContent">Detailed information here...</p>
-                <div class="offline-code-block" id="offlineCodeBlock">
-STATUS: READY_OFFLINE
-MODE: ACTIVE
+                <div class="offline-code-block" id="offlineCodeBlock">STATUS: READY_OFFLINEMODE: ACTIVE
                 </div>
             </div>
         </div>
@@ -1390,11 +1389,24 @@ MODE: ACTIVE
             { sl: "#50", title: "System Benchmark Utility", type: "Diagnostics", icon: "fa-microchip", details: "Run local CPU loop calculations to test browser execution speed." }
         ];
 
-        // DYNAMIC CHUNKING ENGINE
+        let currentActiveOfflineData = [...offlineToolsData];
+
+        function escapeHTMLStr(str) {
+            if (!str) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        // DYNAMIC CHUNKING ENGINE WITH SECURE DATA-ATTRIBUTE BINDING
         function renderOfflineLayers(dataList) {
             const container = document.getElementById('offline4LayerGrid');
             if (!container) return;
             container.innerHTML = '';
+            currentActiveOfflineData = dataList;
 
             if (!dataList || dataList.length === 0) {
                 container.innerHTML = `<div class="offline-empty-layer" style="grid-column: 1 / -1;">No matching resources found.</div>`;
@@ -1429,15 +1441,12 @@ MODE: ACTIVE
                 col.className = 'offline-layer-col';
 
                 let itemsHTML = '';
-                layerItems.forEach(item => {
-                    const safeTitle = item.title.replace(/'/g, "\\'").replace(/"/g, "&quot;");
-                    const safeDetails = item.details.replace(/'/g, "\\'").replace(/\n/g, "\\n");
-                    const iconHtml = `<i class="fa-solid ${item.icon}"></i> ${safeTitle}`;
-
+                layerItems.forEach((item, indexInLayer) => {
+                    const globalIdx = startIdx + indexInLayer;
                     itemsHTML += `
-                        <div class="offline-compact-row" onclick="openOfflineModal('${safeTitle}', '${safeDetails}', '${iconHtml}')">
-                            <span class="offline-compact-sl" style="color:${layerColor}">${item.sl}</span>
-                            <span class="offline-compact-title"><i class="fa-solid ${item.icon}"></i> ${item.title}</span>
+                        <div class="offline-compact-row" data-item-idx="${globalIdx}">
+                            <span class="offline-compact-sl" style="color:${layerColor}">${escapeHTMLStr(item.sl)}</span>
+                            <span class="offline-compact-title"><i class="fa-solid ${escapeHTMLStr(item.icon)}"></i> ${escapeHTMLStr(item.title)}</span>
                             <i class="fa-solid fa-chevron-right offline-compact-arrow"></i>
                         </div>
                     `;
@@ -1460,9 +1469,24 @@ MODE: ACTIVE
         // Initialize Dynamic Layer Rendering
         renderOfflineLayers(offlineToolsData);
 
+        // Event Delegation for Safe Modal Opening
+        document.getElementById('offline4LayerGrid')?.addEventListener('click', (e) => {
+            const row = e.target.closest('.offline-compact-row');
+            if (row) {
+                const idx = parseInt(row.getAttribute('data-item-idx'), 10);
+                const item = currentActiveOfflineData[idx];
+                if (item) {
+                    const iconHtml = `<i class="fa-solid ${escapeHTMLStr(item.icon)}"></i> ${escapeHTMLStr(item.title)}`;
+                    openOfflineModal(item.title, item.details, iconHtml);
+                }
+            }
+        });
+
         // Real-Time Search Filter Across All Dynamic Layers
         function filterOfflineTools() {
-            const query = document.getElementById('offlineSearchInput').value.toLowerCase().trim();
+            const searchInput = document.getElementById('offlineSearchInput');
+            if (!searchInput) return;
+            const query = searchInput.value.toLowerCase().trim();
             const filtered = offlineToolsData.filter(item => 
                 item.title.toLowerCase().includes(query) || 
                 item.type.toLowerCase().includes(query) || 
@@ -1471,15 +1495,17 @@ MODE: ACTIVE
             renderOfflineLayers(filtered);
         }
 
+        document.getElementById('offlineSearchInput')?.addEventListener('keyup', filterOfflineTools);
+
         // Modal Functions
         function openOfflineModal(title, content, iconHtml) {
             const modal = document.getElementById('offlineModalOverlay');
             const titleElem = document.getElementById('offlineModalHeaderTitle');
             const contentElem = document.getElementById('offlineModalContent');
             
-            if(titleElem) titleElem.innerHTML = iconHtml ? `${iconHtml}` : title;
-            if(contentElem) contentElem.innerText = content;
-            if(modal) modal.classList.add('active');
+            if (titleElem) titleElem.innerHTML = iconHtml ? iconHtml : escapeHTMLStr(title);
+            if (contentElem) contentElem.innerText = content;
+            if (modal) modal.classList.add('active');
         }
 
         document.getElementById('closeOfflineModalBtn')?.addEventListener('click', () => {
