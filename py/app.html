@@ -173,11 +173,11 @@
                 <h1 class="text-xl md:text-2xl font-bold tracking-wider text-cyan-400 glow-text-cyan flex items-center gap-2">
                     Text To Speech
                 </h1>
-                <p class="text-[10px] uppercase tracking-widest text-slate-400 font-mono -mt-1 hidden sm:block">AI Cyber Voice Synthesizer</p>
+                <p class="text-[10px] uppercase tracking-widest text-slate-400 font-mono -mt-1 hidden sm:block">AI Cyber Voice Synthesizer & Translator</p>
             </div>
         </div>
 
-        <!-- Header Right: Pill-shaped Home Button (matching requested styling) -->
+        <!-- Header Right: Pill-shaped Home Button -->
         <div class="flex items-center">
             <a href="../index.html" class="group flex items-center gap-2.5 px-5 py-2 rounded-full border border-cyan-500/50 bg-slate-900/80 text-cyan-400 hover:text-cyan-300 hover:border-cyan-400 hover:shadow-[0_0_20px_rgba(0,243,255,0.4)] transition-all duration-300 font-medium text-sm">
                 <i class="fa-solid fa-house text-sm group-hover:scale-110 transition-transform"></i>
@@ -218,7 +218,7 @@
         <!-- Primary Grid: Text Editor & Audio Visualizer Controls -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
-            <!-- Left Column: Input Text Area & Live Toolbar (8 Cols) -->
+            <!-- Left Column: Input Text Area & Live Toolbar (7 Cols) -->
             <div class="lg:col-span-7 flex flex-col gap-4">
                 <div class="glass-panel rounded-2xl p-5 flex flex-col h-full relative">
                     
@@ -230,8 +230,8 @@
                         </div>
                         
                         <!-- Toolbar Buttons -->
-                        <div class="flex items-center gap-2">
-                            <button type="button" id="sample-text-btn" class="px-2.5 py-1 text-xs rounded-lg bg-slate-800/80 hover:bg-slate-700 text-cyan-300 border border-cyan-500/30 transition-all flex items-center gap-1.5" title="Insert cyberpunk sample text">
+                        <div class="flex items-center flex-wrap gap-2">
+                            <button type="button" id="sample-text-btn" class="px-2.5 py-1 text-xs rounded-lg bg-slate-800/80 hover:bg-slate-700 text-cyan-300 border border-cyan-500/30 transition-all flex items-center gap-1.5" title="Insert sample text">
                                 <i class="fa-solid fa-wand-magic-sparkles text-cyan-400"></i>
                                 <span>Sample</span>
                             </button>
@@ -242,6 +242,30 @@
                             <button type="button" id="clear-text-btn" class="px-2.5 py-1 text-xs rounded-lg bg-slate-800/80 hover:bg-red-950/60 text-slate-300 hover:text-red-300 border border-slate-700 hover:border-red-500/40 transition-all flex items-center gap-1.5" title="Clear all text">
                                 <i class="fa-solid fa-trash-can"></i>
                                 <span>Clear</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Translation Toolbar -->
+                    <div class="mb-3 p-2.5 bg-slate-950/80 border border-cyan-500/20 rounded-xl flex flex-wrap items-center justify-between gap-2">
+                        <div class="flex items-center gap-2 text-xs text-purple-400 font-mono">
+                            <i class="fa-solid fa-language text-sm"></i>
+                            <span class="font-semibold">Translate Text:</span>
+                        </div>
+                        <div class="flex items-center gap-2 flex-grow sm:flex-grow-0">
+                            <select id="translate-lang-select" class="bg-slate-900 border border-cyan-500/30 rounded-lg px-2.5 py-1 text-xs text-cyan-300 focus:outline-none focus:border-cyan-400 font-mono">
+                                <option value="bn" selected>Bengali (বাংলা)</option>
+                                <option value="en">English (ইংরেজি)</option>
+                                <option value="hi">Hindi (हिन्दी)</option>
+                                <option value="es">Spanish (Español)</option>
+                                <option value="fr">French (Français)</option>
+                                <option value="de">German (Deutsch)</option>
+                                <option value="ar">Arabic (العربية)</option>
+                                <option value="ja">Japanese (日本語)</option>
+                            </select>
+                            <button type="button" id="translate-btn" class="px-3 py-1 text-xs rounded-lg bg-purple-900/60 hover:bg-purple-800 text-purple-200 border border-purple-500/40 transition-all flex items-center gap-1.5 font-semibold">
+                                <i class="fa-solid fa-rotate text-purple-300"></i>
+                                <span>Translate</span>
                             </button>
                         </div>
                     </div>
@@ -416,6 +440,12 @@
                     <i class="fa-solid fa-stop text-base"></i>
                     <span>Stop</span>
                 </button>
+
+                <!-- Download Audio Button (Fixed with CORS Proxy Fallback) -->
+                <button type="button" id="download-audio-btn" class="px-5 py-3 rounded-xl bg-emerald-950/80 hover:bg-emerald-900 border border-emerald-500/50 text-emerald-300 font-semibold text-sm flex items-center gap-2 shadow-[0_0_15px_rgba(16,185,129,0.3)] transition-all transform active:scale-95 cursor-pointer">
+                    <i class="fa-solid fa-download text-base"></i>
+                    <span id="download-btn-text">Download Audio</span>
+                </button>
             </div>
         </section>
 
@@ -448,6 +478,14 @@
             const pitchValue = document.getElementById('pitch-value');
             const volumeSlider = document.getElementById('volume-slider');
             const volumeValue = document.getElementById('volume-value');
+
+            // Translation DOM Elements
+            const translateLangSelect = document.getElementById('translate-lang-select');
+            const translateBtn = document.getElementById('translate-btn');
+
+            // Download Audio DOM Elements
+            const downloadAudioBtn = document.getElementById('download-audio-btn');
+            const downloadBtnText = document.getElementById('download-btn-text');
 
             // Text Stats Elements
             const charCount = document.getElementById('char-count');
@@ -521,7 +559,6 @@
                     return;
                 }
 
-                // Sort voices: Default/English first, then alphabetical
                 voices.sort((a, b) => {
                     const nameA = a.name.toUpperCase();
                     const nameB = b.name.toUpperCase();
@@ -540,7 +577,6 @@
                     option.value = index;
                     option.textContent = `${voice.name} (${voice.lang})${voice.default ? ' — DEFAULT' : ''}`;
                     
-                    // Prefer English or default voice as initial selection
                     if (!defaultSelected && (voice.default || voice.lang.includes('en'))) {
                         option.selected = true;
                         defaultSelected = true;
@@ -553,7 +589,6 @@
                 }
             }
 
-            // Chrome & Firefox require onvoiceschanged listener
             populateVoices();
             if (speechSynthesis.onvoiceschanged !== undefined) {
                 speechSynthesis.onvoiceschanged = populateVoices;
@@ -565,11 +600,9 @@
                 const chars = text.length;
                 charCount.textContent = chars.toLocaleString();
 
-                // Words count matching valid word sequences
                 const words = text.trim() ? text.trim().split(/\s+/).filter(w => w.length > 0) : [];
                 wordCount.textContent = words.length.toLocaleString();
 
-                // Est Reading Time (Average 200 WPM)
                 const rate = parseFloat(rateSlider.value) || 1.0;
                 const seconds = Math.ceil((words.length / (200 * rate)) * 60);
                 if (seconds < 60) {
@@ -588,11 +621,9 @@
                     return;
                 }
 
-                // Match words and punctuation while retaining original indices
                 currentWordsArray = [];
                 teleprompterContent.innerHTML = '';
 
-                // Split into words while keeping word position indices
                 const regex = /\S+/g;
                 let match;
                 let lastIndex = 0;
@@ -604,7 +635,6 @@
                     const startIndex = match.index;
                     const endIndex = match.index + word.length;
 
-                    // Append skipped spaces or linebreaks
                     if (startIndex > lastIndex) {
                         const spaceText = text.substring(lastIndex, startIndex);
                         fragment.appendChild(document.createTextNode(spaceText));
@@ -623,7 +653,6 @@
                     lastIndex = endIndex;
                 }
 
-                // Append remaining tailing text if any
                 if (lastIndex < text.length) {
                     fragment.appendChild(document.createTextNode(text.substring(lastIndex)));
                 }
@@ -634,7 +663,6 @@
             /* Audio Frequency Spectrum Visualizer Animation */
             function animateVisualizer() {
                 if (!isSpeaking || isPaused) {
-                    // Reset or flatten visualizer when idle or paused
                     barsElements.forEach((bar) => {
                         bar.style.height = '8%';
                         bar.style.backgroundColor = 'rgba(0, 243, 255, 0.2)';
@@ -647,7 +675,6 @@
                 const pitchMult = parseFloat(pitchSlider.value);
 
                 barsElements.forEach((bar, index) => {
-                    // Generates natural organic visual waveforms scaling with speed & pitch sliders
                     const sinWave = Math.sin(time * speedMult + index * 0.45);
                     const cosWave = Math.cos(time * 0.7 * pitchMult - index * 0.3);
                     const randomNoise = Math.random() * 0.25;
@@ -657,13 +684,12 @@
 
                     bar.style.height = `${heightPercent}%`;
 
-                    // Dynamic color shift based on spectrum frequency height
                     if (heightPercent > 70) {
-                        bar.style.backgroundColor = '#ec4899'; // Pink highlight top
+                        bar.style.backgroundColor = '#ec4899';
                     } else if (heightPercent > 40) {
-                        bar.style.backgroundColor = '#a855f7'; // Purple mid
+                        bar.style.backgroundColor = '#a855f7';
                     } else {
-                        bar.style.backgroundColor = '#00f3ff'; // Cyan low
+                        bar.style.backgroundColor = '#00f3ff';
                     }
                 });
 
@@ -680,14 +706,12 @@
                     return;
                 }
 
-                // Cancel existing speech
                 if (synth.speaking || synth.pending) {
                     synth.cancel();
                 }
 
                 currentUtterance = new SpeechSynthesisUtterance(text);
 
-                // Apply parameters
                 const selectedVoiceIndex = voiceSelect.value;
                 if (selectedVoiceIndex !== '' && voices[selectedVoiceIndex]) {
                     currentUtterance.voice = voices[selectedVoiceIndex];
@@ -697,28 +721,21 @@
                 currentUtterance.pitch = parseFloat(pitchSlider.value);
                 currentUtterance.volume = parseFloat(volumeSlider.value);
 
-                // Prepare Teleprompter view
                 prepareTeleprompter(text);
 
-                // Reset Speech Boundary Tracking
                 let totalChars = text.length;
 
-                // Speech Boundary Event (Word-by-word tracking)
                 currentUtterance.onboundary = (event) => {
                     if (event.name === 'word') {
                         const charIndex = event.charIndex;
-                        
-                        // Update Progress Percentage
                         const progress = Math.min(100, Math.round((charIndex / totalChars) * 100));
                         speechProgressBar.style.width = `${progress}%`;
                         speechProgressText.textContent = `${progress}%`;
 
-                        // Highlight Active Word
                         highlightWordAtIndex(charIndex);
                     }
                 };
 
-                // On Speech Start
                 currentUtterance.onstart = () => {
                     isSpeaking = true;
                     isPaused = false;
@@ -728,7 +745,6 @@
                     animateVisualizer();
                 };
 
-                // On Speech End
                 currentUtterance.onend = () => {
                     isSpeaking = false;
                     isPaused = false;
@@ -738,7 +754,6 @@
                     showToast('Speech playback completed', 'success');
                 };
 
-                // On Speech Error
                 currentUtterance.onerror = (event) => {
                     console.error('SpeechSynthesisUtterance error:', event);
                     isSpeaking = false;
@@ -747,13 +762,11 @@
                     showToast('Playback error encountered: ' + (event.error || 'Unknown error'), 'error');
                 };
 
-                // Trigger Synth Speak
                 synth.speak(currentUtterance);
             }
 
             /* Word Highlighting Handler */
             function highlightWordAtIndex(charIndex) {
-                // Remove existing word-active classes
                 currentWordsArray.forEach(item => {
                     const spanIndex = parseInt(item.span.dataset.start);
                     if (spanIndex < charIndex) {
@@ -761,7 +774,6 @@
                     } else if (spanIndex === charIndex || (charIndex >= item.start && charIndex < item.end)) {
                         item.span.className = 'word-active transition-all duration-150';
                         
-                        // Auto-scroll teleprompter to active word
                         item.span.scrollIntoView({
                             behavior: 'smooth',
                             block: 'center',
@@ -802,7 +814,7 @@
 
                     speakBtn.classList.remove('btn-glow-active');
                     pauseBtnText.textContent = 'Resume';
-                } else { // Idle State
+                } else {
                     playbackStatusIndicator.className = 'w-3 h-3 rounded-full bg-slate-600';
                     playbackStatusText.textContent = 'ENGINE IDLE';
                     playbackStatusText.className = 'text-xs font-mono font-bold tracking-wider text-slate-400 uppercase';
@@ -827,6 +839,130 @@
                     });
                 }
             }
+
+            /* --- TRANSLATION FEATURE LOGIC --- */
+            async function translateInputText() {
+                const text = ttsInput.value.trim();
+                const targetLang = translateLangSelect.value;
+
+                if (!text) {
+                    showToast('Please enter text to translate!', 'warning');
+                    return;
+                }
+
+                translateBtn.disabled = true;
+                translateBtn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Translating...`;
+
+                try {
+                    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${targetLang}&dt=t&q=${encodeURIComponent(text)}`;
+                    const response = await fetch(url);
+                    const data = await response.json();
+
+                    let translatedText = '';
+                    if (data && data[0]) {
+                        data[0].forEach(item => {
+                            if (item[0]) translatedText += item[0];
+                        });
+                    }
+
+                    if (translatedText) {
+                        ttsInput.value = translatedText;
+                        updateTextStats();
+                        showToast('Translation successful!', 'success');
+
+                        if (voices.length > 0) {
+                            const matchIndex = voices.findIndex(v => v.lang.toLowerCase().startsWith(targetLang));
+                            if (matchIndex !== -1) {
+                                voiceSelect.value = matchIndex;
+                            }
+                        }
+                    } else {
+                        showToast('Could not translate text', 'error');
+                    }
+                } catch (err) {
+                    console.error('Translation Error:', err);
+                    showToast('Translation failed. Check internet connection.', 'error');
+                } finally {
+                    translateBtn.disabled = false;
+                    translateBtn.innerHTML = `<i class="fa-solid fa-rotate text-purple-300"></i> Translate`;
+                }
+            }
+
+            translateBtn.addEventListener('click', translateInputText);
+
+
+            /* --- ROBUST AUDIO DOWNLOAD FEATURE (CORS FIXED) --- */
+            async function downloadAudio() {
+                const text = ttsInput.value.trim();
+
+                if (!text) {
+                    showToast('Please enter text to generate audio!', 'warning');
+                    return;
+                }
+
+                downloadAudioBtn.disabled = true;
+                downloadBtnText.textContent = 'Generating MP3...';
+                showToast('Preparing audio file download...', 'info');
+
+                try {
+                    let lang = 'en';
+                    const selectedVoiceIndex = voiceSelect.value;
+                    if (selectedVoiceIndex !== '' && voices[selectedVoiceIndex]) {
+                        lang = voices[selectedVoiceIndex].lang.split('-')[0] || 'en';
+                    }
+
+                    const cleanText = encodeURIComponent(text.substring(0, 500));
+                    
+                    // Uses CORS Proxy to bypass browser restrictions seamlessly
+                    const proxyUrl = `https://api.allorigins.win/raw?url=`;
+                    const ttsEndpoint = `https://translate.google.com/translate_tts?ie=UTF-8&q=${cleanText}&tl=${lang}&client=tw-ob`;
+
+                    let response = await fetch(proxyUrl + encodeURIComponent(ttsEndpoint));
+                    
+                    if (!response.ok) {
+                        // Secondary CORS fallback
+                        const fallbackProxy = `https://corsproxy.io/?`;
+                        response = await fetch(fallbackProxy + encodeURIComponent(ttsEndpoint));
+                    }
+
+                    if (!response.ok) throw new Error('Audio generation failed');
+
+                    const blob = await response.blob();
+                    const finalBlob = new Blob([blob], { type: 'audio/mp3' });
+
+                    const blobUrl = URL.createObjectURL(finalBlob);
+                    const downloadAnchor = document.createElement('a');
+                    downloadAnchor.href = blobUrl;
+                    downloadAnchor.download = `CyberTTS_${lang}_${Date.now()}.mp3`;
+                    document.body.appendChild(downloadAnchor);
+                    downloadAnchor.click();
+                    document.body.removeChild(downloadAnchor);
+                    URL.revokeObjectURL(blobUrl);
+
+                    showToast('Audio downloaded successfully!', 'success');
+                } catch (err) {
+                    console.error('Download Error:', err);
+                    
+                    // Final Fail-safe Direct Tab Fallback
+                    try {
+                        let lang = 'en';
+                        if (voiceSelect.value !== '' && voices[voiceSelect.value]) {
+                            lang = voices[voiceSelect.value].lang.split('-')[0] || 'en';
+                        }
+                        const directUrl = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(text.substring(0, 200))}&tl=${lang}&client=tw-ob`;
+                        window.open(directUrl, '_blank');
+                        showToast('Opened audio stream in new tab for direct save!', 'info');
+                    } catch (e) {
+                        showToast('Failed to download audio file.', 'error');
+                    }
+                } finally {
+                    downloadAudioBtn.disabled = false;
+                    downloadBtnText.textContent = 'Download Audio';
+                }
+            }
+
+            downloadAudioBtn.addEventListener('click', downloadAudio);
+
 
             /* Event Listeners - Sliders */
             rateSlider.addEventListener('input', (e) => {
@@ -891,7 +1027,6 @@
                     return;
                 }
                 
-                // Fallback copying method
                 if (navigator.clipboard && navigator.clipboard.writeText) {
                     navigator.clipboard.writeText(ttsInput.value).then(() => {
                         showToast('Copied to clipboard!', 'success');
@@ -1008,12 +1143,10 @@
 
                 toastContainer.appendChild(toast);
 
-                // Animate entrance
                 setTimeout(() => {
                     toast.classList.remove('translate-y-4', 'opacity-0');
                 }, 10);
 
-                // Auto dismiss
                 setTimeout(() => {
                     toast.classList.add('opacity-0', 'translate-y-2');
                     setTimeout(() => {
