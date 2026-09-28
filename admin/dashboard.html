@@ -28,7 +28,9 @@
             --success: #10b981;
             --warning: #f59e0b;
             --danger: #ef4444;
+            --danger-hover: #dc2626;
             --purple: #8b5cf6;
+            --gold: #ffd700;
             
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
@@ -225,6 +227,20 @@
             background: var(--bg-card-hover);
         }
 
+        .btn-mini-reset {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: var(--transition);
+            margin-left: 8px;
+            font-size: 0.8rem;
+        }
+
+        .btn-mini-reset:hover {
+            color: var(--danger);
+        }
+
         /* FILTER BAR */
         .filter-bar {
             background: var(--bg-card);
@@ -298,6 +314,8 @@
             text-transform: uppercase;
             font-weight: 700;
             letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
         }
 
         .kpi-icon {
@@ -324,8 +342,6 @@
             gap: 4px;
         }
 
-        .trend-up { color: var(--success); }
-        .trend-down { color: var(--danger); }
         .trend-neutral { color: var(--text-muted); }
 
         /* CHARTS SECTION */
@@ -607,6 +623,7 @@
                 </div>
                 <div class="header-controls">
                     <button class="btn btn-outline" onclick="exportData()"><i class="fa-solid fa-download"></i> Export</button>
+                    <!-- Global reset removed from here per instructions -->
                     <button class="btn btn-primary" onclick="openAdminModal()"><i class="fa-solid fa-plus"></i> Add Campaign Data</button>
                 </div>
             </header>
@@ -615,18 +632,15 @@
             <section class="filter-bar">
                 <div class="filter-group">
                     <i class="fa-solid fa-filter" style="color: var(--text-muted);"></i>
+                    <!-- Filter dynamic dropown handled by JS -->
                     <select class="select-input" id="channelFilter" onchange="applyFilters()">
                         <option value="all">All Channels</option>
-                        <option value="Facebook">Facebook Ads</option>
-                        <option value="Google">Google Search</option>
-                        <option value="YouTube">YouTube Video</option>
-                        <option value="Organic">Organic SEO</option>
                     </select>
 
                     <select class="select-input" id="periodFilter" onchange="applyFilters()">
                         <option value="all_time">All Time</option>
                         <option value="monthly">Monthly</option>
-                        <option value="weekly">Weekly</option>
+                        <option value="yearly">Yearly</option>
                     </select>
                 </div>
 
@@ -646,7 +660,7 @@
                     <div class="kpi-trend trend-neutral"><i class="fa-solid fa-minus"></i> Live Data</div>
                 </div>
 
-                <div class="kpi-card">
+                <div class="kpi-card" title="The percentage of users who take a desired action">
                     <div class="kpi-header">
                         <span class="kpi-title">Conversion Rate</span>
                         <div class="kpi-icon" style="background: rgba(16, 185, 129, 0.15); color: var(--success);"><i class="fa-solid fa-chart-pie"></i></div>
@@ -655,7 +669,7 @@
                     <div class="kpi-trend trend-neutral"><i class="fa-solid fa-minus"></i> Live Data</div>
                 </div>
 
-                <div class="kpi-card">
+                <div class="kpi-card" title="The total cost spent on marketing to gain a new customer">
                     <div class="kpi-header">
                         <span class="kpi-title">Customer Acq. Cost (CAC)</span>
                         <div class="kpi-icon" style="background: rgba(245, 158, 11, 0.15); color: var(--warning);"><i class="fa-solid fa-hand-holding-dollar"></i></div>
@@ -666,7 +680,10 @@
 
                 <div class="kpi-card">
                     <div class="kpi-header">
-                        <span class="kpi-title">Total Traffic</span>
+                        <span class="kpi-title">
+                            Total Traffic
+                            <button class="btn-mini-reset" onclick="resetTraffic()" title="Reset Traffic to 0"><i class="fa-solid fa-rotate-left"></i></button>
+                        </span>
                         <div class="kpi-icon" style="background: rgba(139, 92, 246, 0.15); color: var(--purple);"><i class="fa-solid fa-users"></i></div>
                     </div>
                     <div class="kpi-value" id="kpiTraffic">0</div>
@@ -678,7 +695,7 @@
             <section class="charts-grid">
                 <div class="chart-card">
                     <div class="chart-header">
-                        <div class="chart-title">Revenue vs Spend Analysis</div>
+                        <div class="chart-title">Revenue vs Spent Analysis</div>
                     </div>
                     <div class="chart-container">
                         <canvas id="revenueChart"></canvas>
@@ -709,11 +726,12 @@
                     <table>
                         <thead>
                             <tr>
-                                <th>Campaign Name</th>
+                                <th>Company Name</th>
                                 <th>Channel</th>
-                                <th>Spend</th>
-                                <th>Revenue</th>
-                                <th>Conversions</th>
+                                <th>Course</th>
+                                <th>Investment</th>
+                                <th>Income</th>
+                                <th>Total Students</th>
                                 <th>Status</th>
                                 <th>Action (Admin)</th>
                             </tr>
@@ -787,35 +805,41 @@
             </div>
             <form id="addDataForm" onsubmit="handleFormSubmit(event)">
                 <div class="form-group">
-                    <label>Campaign Name</label>
+                    <label>Company Name</label>
                     <input type="text" class="form-control" id="inputName" placeholder="e.g. Summer Promo" required>
                 </div>
                 <div class="form-group">
                     <label>Platform / Channel</label>
-                    <select class="form-control" id="inputChannel">
-                        <option value="Facebook">Facebook Ads</option>
-                        <option value="Google">Google Search</option>
-                        <option value="YouTube">YouTube Video</option>
-                        <option value="Organic">Organic SEO</option>
-                    </select>
+                    <input list="channelOptions" class="form-control" id="inputChannel" placeholder="Select or type channel name" required>
+                    <datalist id="channelOptions">
+                        <option value="Company"></option>
+                        <option value="Work"></option>
+                        <option value="Facebook"></option>
+                        <option value="Google"></option>
+                        <option value="YouTube"></option>
+                    </datalist>
                 </div>
                 <div class="form-group">
-                    <label>Total Spend ($)</label>
+                    <label>Course Name (e.g. Microsoft Office)</label>
+                    <input type="text" class="form-control" id="inputCourse" placeholder="e.g. Microsoft Office, Graphic Design" required>
+                </div>
+                <div class="form-group">
+                    <label>Total Investment ($)</label>
                     <input type="number" class="form-control" id="inputSpend" placeholder="e.g. 500" required>
                 </div>
                 <div class="form-group">
-                    <label>Earned Revenue ($)</label>
+                    <label>Income Received ($)</label>
                     <input type="number" class="form-control" id="inputRevenue" placeholder="e.g. 1500" required>
                 </div>
                 <div class="form-group">
-                    <label>Total Conversions (Sales/Leads)</label>
-                    <input type="number" class="form-control" id="inputConversions" placeholder="e.g. 25" required>
+                    <label>Total Student Number (How Many Students)</label>
+                    <input type="number" class="form-control" id="inputConversions" placeholder="e.g. 25" min="0" required>
                 </div>
                 <div class="form-group">
                     <label>Status</label>
                     <select class="form-control" id="inputStatus">
-                        <option value="Active">Active</option>
-                        <option value="Paused">Paused</option>
+                        <option value="Payment Received">Payment Received</option>
+                        <option value="Payment Pending">Payment Pending</option>
                     </select>
                 </div>
                 <button type="submit" id="saveDataBtn" class="btn btn-primary" style="width: 100%; margin-top: 10px; justify-content: center;">
@@ -830,8 +854,8 @@
         // ==========================================
         // 1. JSONBIN API CREDENTIALS (REPLACE THESE)
         // ==========================================
-        const JSONBIN_BIN_ID = "6aba0fcbac6210605afd0b26"; // এখানে আপনার নতুন Bin ID দিন
-        const JSONBIN_API_KEY = "$2a$10$NdVprjNSRs1iJOzSyH896.6YYu87qOoZC5AH5WZsi99PacsVRU7AS"; // এখানে আপনার নতুন API Key দিন
+        const JSONBIN_BIN_ID = "6aba0fcbac6210605afd0b26"; 
+        const JSONBIN_API_KEY = "$2a$10$NdVprjNSRs1iJOzSyH896.6YYu87qOoZC5AH5WZsi99PacsVRU7AS"; 
         const JSONBIN_URL = `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`;
 
         // ==========================================
@@ -874,16 +898,39 @@
         // 4. DATABASE & DASHBOARD LOGIC
         // ==========================================
         
-        // Empty by default, fetched from API
         let campaignData = [];
         let revenueChartInstance = null;
         let channelChartInstance = null;
+        let trafficOffset = 0; // For resetting traffic feature
 
         // Initialize Dashboard
         window.onload = function() {
             initCharts();
             fetchDataFromJSONBin();
         };
+
+        // --- DYNAMIC CHANNEL FILTER DROPDOWN UPDATE ---
+        function updateChannelDropdown() {
+            const filter = document.getElementById('channelFilter');
+            const currentSelection = filter.value;
+            
+            // Collect unique channels
+            const uniqueChannels = [...new Set(campaignData.map(item => item.channel))].filter(Boolean);
+            
+            let optionsHTML = '<option value="all">All Channels</option>';
+            uniqueChannels.forEach(ch => {
+                optionsHTML += `<option value="${ch}">${ch}</option>`;
+            });
+            
+            filter.innerHTML = optionsHTML;
+            
+            // Restore selection
+            if(uniqueChannels.includes(currentSelection)) {
+                filter.value = currentSelection;
+            } else {
+                filter.value = 'all';
+            }
+        }
 
         // --- FETCH DATA FROM API ---
         async function fetchDataFromJSONBin() {
@@ -901,7 +948,6 @@
 
                 const result = await response.json();
                 
-                // Parse fetched data safely
                 if (result.record && Array.isArray(result.record.campaigns)) {
                     campaignData = result.record.campaigns;
                 } else if (Array.isArray(result.record)) {
@@ -913,13 +959,15 @@
                 statusText.innerText = "Online & Synced";
                 statusText.style.color = "var(--success)";
                 
-                applyFilters(); // Renders UI with fetched data
+                updateChannelDropdown(); 
+                applyFilters(); 
 
             } catch (error) {
                 console.error(error);
                 statusText.innerText = "API Not Connected / Empty";
                 statusText.style.color = "var(--danger)";
                 campaignData = [];
+                updateChannelDropdown();
                 applyFilters(); 
             }
         }
@@ -961,19 +1009,29 @@
             tbody.innerHTML = '';
 
             if (dataToRender.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color: var(--text-muted); padding: 20px;">No campaigns found. Add data to begin.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; color: var(--text-muted); padding: 20px;">No campaigns found. Add data to begin.</td></tr>`;
                 return;
             }
 
             dataToRender.forEach(item => {
                 const tr = document.createElement('tr');
+                
+                let iconClass = "fa-brands fa-buffer";
+                let channelLower = (item.channel || '').toLowerCase();
+                if(channelLower.includes('facebook')) iconClass = "fa-brands fa-facebook";
+                else if(channelLower.includes('google')) iconClass = "fa-brands fa-google";
+                else if(channelLower.includes('youtube')) iconClass = "fa-brands fa-youtube";
+                else if(channelLower.includes('company')) iconClass = "fa-solid fa-building";
+                else if(channelLower.includes('work')) iconClass = "fa-solid fa-briefcase";
+
                 tr.innerHTML = `
                     <td style="font-weight: 700;">${item.name}</td>
-                    <td><i class="fa-brands fa-${item.channel.toLowerCase()}"></i> ${item.channel}</td>
+                    <td><i class="${iconClass}"></i> ${item.channel}</td>
+                    <td><span style="color: #3b82f6; font-weight: 600;">${item.course || 'N/A'}</span></td>
                     <td>$${item.spend.toLocaleString()}</td>
                     <td style="color: var(--success); font-weight: 700;">$${item.revenue.toLocaleString()}</td>
                     <td>${item.conversions}</td>
-                    <td><span class="status-badge ${item.status === 'Active' ? 'status-active' : 'status-paused'}">${item.status}</span></td>
+                    <td><span class="status-badge ${item.status === 'Payment Received' ? 'status-active' : 'status-paused'}">${item.status}</span></td>
                     <td>
                         <button class="btn-action" onclick="deleteData(${item.id})" title="Delete Data (Admin)"><i class="fa-solid fa-trash"></i></button>
                     </td>
@@ -985,13 +1043,49 @@
         // --- INITIALIZE CHARTS ---
         function initCharts() {
             const ctx1 = document.getElementById('revenueChart').getContext('2d');
+            
+            // Share market gradient effects
+            let goldGradient = ctx1.createLinearGradient(0, 0, 0, 300);
+            goldGradient.addColorStop(0, 'rgba(255, 215, 0, 0.35)');
+            goldGradient.addColorStop(1, 'rgba(255, 215, 0, 0.0)');
+
+            let redGradient = ctx1.createLinearGradient(0, 0, 0, 300);
+            redGradient.addColorStop(0, 'rgba(239, 68, 68, 0.35)');
+            redGradient.addColorStop(1, 'rgba(239, 68, 68, 0.0)');
+
             revenueChartInstance = new Chart(ctx1, {
                 type: 'line',
                 data: {
-                    labels: [], // Empty initially
+                    labels: [], 
                     datasets: [
-                        { label: 'Revenue ($)', data: [], borderColor: '#3b82f6', backgroundColor: 'rgba(59, 130, 246, 0.1)', fill: true, tension: 0.4 },
-                        { label: 'Spend ($)', data: [], borderColor: '#ef4444', backgroundColor: 'transparent', borderDash: [5, 5], tension: 0.4 }
+                        { 
+                            label: 'Income ($)', 
+                            data: [], 
+                            borderColor: '#ffd700', 
+                            backgroundColor: goldGradient, 
+                            fill: true, 
+                            tension: 0.3,
+                            pointRadius: 6,
+                            pointHoverRadius: 8,
+                            pointBackgroundColor: '#ffd700',
+                            pointBorderColor: '#ffffff',
+                            pointBorderWidth: 2,
+                            pointStyle: 'circle'
+                        },
+                        { 
+                            label: 'Investment ($)', 
+                            data: [], 
+                            borderColor: '#ef4444', 
+                            backgroundColor: redGradient, 
+                            fill: true, 
+                            tension: 0.3,
+                            pointRadius: 6,
+                            pointHoverRadius: 8,
+                            pointBackgroundColor: '#ef4444',
+                            pointBorderColor: '#ffffff',
+                            pointBorderWidth: 2,
+                            pointStyle: 'circle'
+                        }
                     ]
                 },
                 options: {
@@ -999,7 +1093,15 @@
                     plugins: { legend: { labels: { color: '#94a3b8' } } },
                     scales: {
                         x: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(255,255,255,0.05)' } },
-                        y: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(255,255,255,0.05)' } }
+                        y: { 
+                            min: 0,
+                            max: 100000, // 0 to 1 Lakh Limit
+                            ticks: { 
+                                color: '#94a3b8',
+                                callback: function(value) { return '$' + value.toLocaleString(); }
+                            }, 
+                            grid: { color: 'rgba(255,255,255,0.05)' } 
+                        }
                     }
                 }
             });
@@ -1008,10 +1110,10 @@
             channelChartInstance = new Chart(ctx2, {
                 type: 'doughnut',
                 data: {
-                    labels: ['Facebook', 'Google', 'YouTube', 'Organic'],
+                    labels: [], 
                     datasets: [{
-                        data: [0, 0, 0, 0], // Empty initially
-                        backgroundColor: ['#1877f2', '#ea4335', '#ff0000', '#10b981'],
+                        data: [], 
+                        backgroundColor: [],
                         borderWidth: 0
                     }]
                 },
@@ -1026,18 +1128,23 @@
         function updateCharts(data) {
             if (!revenueChartInstance || !channelChartInstance) return;
             
-            // Update Channel Pie Chart
-            let fb = 0, gg = 0, yt = 0, org = 0;
+            let channelCounts = {};
             data.forEach(item => {
-                if(item.channel === 'Facebook') fb++;
-                if(item.channel === 'Google') gg++;
-                if(item.channel === 'YouTube') yt++;
-                if(item.channel === 'Organic') org++;
+                let ch = item.channel || 'Other';
+                channelCounts[ch] = (channelCounts[ch] || 0) + 1;
             });
-            channelChartInstance.data.datasets[0].data = [fb, gg, yt, org];
+            
+            let chLabels = Object.keys(channelCounts);
+            let chData = Object.values(channelCounts);
+            
+            const chartColors = ['#1877f2', '#ea4335', '#ff0000', '#10b981', '#8b5cf6', '#f59e0b', '#3b82f6', '#ec4899', '#14b8a6'];
+            let bgColors = chLabels.map((_, index) => chartColors[index % chartColors.length]);
+
+            channelChartInstance.data.labels = chLabels;
+            channelChartInstance.data.datasets[0].data = chData;
+            channelChartInstance.data.datasets[0].backgroundColor = bgColors;
             channelChartInstance.update();
             
-            // Update Revenue Line Chart (Using campaign names as labels)
             let labels = data.map(item => item.name.substring(0, 10) + (item.name.length > 10 ? '..' : ''));
             let revData = data.map(item => item.revenue);
             let spendData = data.map(item => item.spend);
@@ -1048,18 +1155,35 @@
             revenueChartInstance.update();
         }
 
-        // --- FILTER LOGIC ---
+        // --- ADVANCED FILTER LOGIC ---
         function applyFilters() {
             const channel = document.getElementById('channelFilter').value;
+            const period = document.getElementById('periodFilter').value;
+            
             let filtered = campaignData;
+            const now = new Date();
 
+            // Apply Period Filter using ID timestamp
+            if (period === 'monthly') {
+                filtered = filtered.filter(item => {
+                    const itemDate = new Date(item.id);
+                    return itemDate.getMonth() === now.getMonth() && itemDate.getFullYear() === now.getFullYear();
+                });
+            } else if (period === 'yearly') {
+                filtered = filtered.filter(item => {
+                    const itemDate = new Date(item.id);
+                    return itemDate.getFullYear() === now.getFullYear();
+                });
+            }
+
+            // Apply Channel Filter
             if (channel !== 'all') {
-                filtered = campaignData.filter(item => item.channel === channel);
+                filtered = filtered.filter(item => item.channel === channel);
             }
 
             renderTable(filtered);
             updateKPICards(filtered);
-            updateCharts(filtered);
+            updateCharts(filtered); 
         }
 
         // --- DYNAMIC KPI UPDATE ---
@@ -1074,15 +1198,40 @@
                 totalConversions += item.conversions || 0;
             });
 
-            // Calculations
             let cac = totalConversions > 0 ? (totalSpend / totalConversions).toFixed(2) : 0;
-            let mockTraffic = totalSpend * 3.5; // Estimating traffic based on spend for dashboard feel
+            
+            // Traffic Calculation with Reset Logic
+            let mockTraffic = totalSpend * 3.5; 
+            let displayedTraffic = Math.max(0, mockTraffic - trafficOffset);
             let conversionRate = mockTraffic > 0 ? ((totalConversions / mockTraffic) * 100).toFixed(2) : "0.00";
 
             document.getElementById('kpiRevenue').innerText = `$${totalRevenue.toLocaleString()}`;
             document.getElementById('kpiConversion').innerText = `${conversionRate}%`;
             document.getElementById('kpiCAC').innerText = `$${cac}`;
-            document.getElementById('kpiTraffic').innerText = Math.floor(mockTraffic).toLocaleString();
+            document.getElementById('kpiTraffic').innerText = Math.floor(displayedTraffic).toLocaleString();
+        }
+        
+        // --- TRAFFIC RESET LOGIC ---
+        function resetTraffic() {
+            const channel = document.getElementById('channelFilter').value;
+            const period = document.getElementById('periodFilter').value;
+            let filtered = campaignData;
+            const now = new Date();
+            
+            if (period === 'monthly') {
+                filtered = filtered.filter(item => new Date(item.id).getMonth() === now.getMonth() && new Date(item.id).getFullYear() === now.getFullYear());
+            } else if (period === 'yearly') {
+                filtered = filtered.filter(item => new Date(item.id).getFullYear() === now.getFullYear());
+            }
+            if (channel !== 'all') {
+                filtered = filtered.filter(item => item.channel === channel);
+            }
+
+            let currentSpend = 0;
+            filtered.forEach(item => currentSpend += (item.spend || 0));
+            
+            trafficOffset = currentSpend * 3.5;
+            applyFilters();
         }
 
         // --- SEARCH IN TABLE ---
@@ -1090,7 +1239,8 @@
             const query = document.getElementById('tableSearch').value.toLowerCase();
             const filtered = campaignData.filter(item => 
                 item.name.toLowerCase().includes(query) || 
-                item.channel.toLowerCase().includes(query)
+                item.channel.toLowerCase().includes(query) ||
+                (item.course && item.course.toLowerCase().includes(query))
             );
             renderTable(filtered);
         }
@@ -1107,24 +1257,23 @@
             saveBtn.innerText = "Saving...";
 
             const newEntry = {
-                id: Date.now(),
+                id: Date.now(), // IMPORTANT: Used for Monthly/Yearly Filtering
                 name: document.getElementById('inputName').value,
                 channel: document.getElementById('inputChannel').value,
+                course: document.getElementById('inputCourse').value,
                 spend: parseFloat(document.getElementById('inputSpend').value),
                 revenue: parseFloat(document.getElementById('inputRevenue').value),
                 conversions: parseInt(document.getElementById('inputConversions').value),
                 status: document.getElementById('inputStatus').value
             };
 
-            // Add to local array
             const updatedData = [newEntry, ...campaignData];
-
-            // Sync to JSONBin
             const success = await syncToJSONBin(updatedData);
 
             if (success) {
                 campaignData = updatedData;
-                applyFilters();
+                updateChannelDropdown(); 
+                applyFilters(); 
                 closeAdminModal();
                 document.getElementById('addDataForm').reset();
             }
@@ -1141,6 +1290,7 @@
                 const success = await syncToJSONBin(updatedData);
                 if (success) {
                     campaignData = updatedData;
+                    updateChannelDropdown();
                     applyFilters();
                 }
             }
