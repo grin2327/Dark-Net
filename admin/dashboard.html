@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enterprise Marketing Analytics Dashboard</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Chart.js for Visualizations -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        /* --- PRO ENTERPRISE DASHBOARD THEMING (LIGHT & DARK LUXE) --- */
+        :root {
+            --bg-body: #0f172a;
+            --bg-sidebar: #1e293b;
+            --bg-card: #1e293b;
+            --bg-card-hover: #334155;
+            --border-color: rgba(255, 255, 255, 0.08);
+            
+            --primary: #3b82f6;
+            --primary-hover: #2563eb;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --purple: #8b5cf6;
+            
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --text-inverse: #0f172a;
+
+            --radius-lg: 16px;
+            --radius-md: 10px;
+            --radius-sm: 6px;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+            --transition: all 0.25s ease-in-out;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            min-height: 100vh;
+            /* Initially hidden for Authentication System */
+            display: none; 
+            overflow-x: hidden;
+        }
+
+        /* SIDEBAR STYLES */
+        aside {
+            width: 260px;
+            background: var(--bg-sidebar);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 24px 16px;
+            position: fixed;
+            height: 100vh;
+            z-index: 100;
+            transition: var(--transition);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 12px 24px 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .brand-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--purple));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+        }
+
+        .brand-text h2 {
+            font-size: 1.1rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: #fff;
+        }
+
+        .brand-text span {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .nav-list {
+            list-style: none;
+            margin-top: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .nav-item a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            color: var(--text-muted);
+            text-decoration: none;
+            border-radius: var(--radius-md);
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .nav-item.active a, .nav-item a:hover {
+            background: var(--primary);
+            color: #ffffff;
+            box-shadow: 0 4px 14px rgba(59, 130, 246, 0.35);
+        }
+
+        .admin-badge {
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: var(--success);
+            padding: 12px;
+            border-radius: var(--radius-md);
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+        }
+
+        /* MAIN CONTENT AREA */
+        main {
+            margin-left: 260px;
+            flex: 1;
+            padding: 28px 36px;
+            width: calc(100% - 260px);
+        }
+
+        /* CONTENT SECTIONS */
+        .content-section {
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* TOP NAVIGATION / HEADER */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .header-title h1 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .header-title p {
+            color: var(--text-muted);
+            font-size: 0.88rem;
+            margin-top: 2px;
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 10px 18px;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            font-size: 0.88rem;
+            cursor: pointer;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+        }
+
+        .btn-outline:hover {
+            background: var(--bg-card-hover);
+        }
+
+        /* FILTER BAR */
+        .filter-bar {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 28px;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .select-input {
+            background: var(--bg-body);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 9px 14px;
+            border-radius: var(--radius-md);
+            font-size: 0.88rem;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .select-input:focus {
+            border-color: var(--primary);
+        }
+
+        /* KPI CARDS GRID */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-bottom: 28px;
+        }
+
+        .kpi-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(255, 255, 255, 0.18);
+        }
+
+        .kpi-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .kpi-title {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .kpi-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+
+        .kpi-value {
+            font-size: 1.7rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .kpi-trend {
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .trend-up { color: var(--success); }
+        .trend-down { color: var(--danger); }
+        .trend-neutral { color: var(--text-muted); }
+
+        /* CHARTS SECTION */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+            margin-bottom: 28px;
+        }
+
+        .chart-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 22px;
+            box-shadow: var(--shadow);
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .chart-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+
+        /* DATA TABLE SECTION */
+        .table-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 22px;
+            box-shadow: var(--shadow);
+            margin-bottom: 28px;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            position: relative;
+            min-width: 260px;
+        }
+
+        .search-box input {
+            width: 100%;
+            background: var(--bg-body);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 9px 14px 9px 36px;
+            color: var(--text-main);
+            outline: none;
+            font-size: 0.88rem;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.88rem;
+        }
+
+        th {
+            background: rgba(15, 23, 42, 0.5);
+            padding: 12px 16px;
+            color: var(--text-muted);
+            font-weight: 700;
+            border-bottom: 1px solid var(--border-color);
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-main);
+        }
+
+        tr:hover {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .status-badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            display: inline-block;
+        }
+
+        .status-active { background: rgba(16, 185, 129, 0.15); color: var(--success); }
+        .status-paused { background: rgba(245, 158, 11, 0.15); color: var(--warning); }
+
+        .btn-action {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 6px;
+            border-radius: var(--radius-sm);
+            transition: var(--transition);
+        }
+
+        .btn-action:hover {
+            color: var(--danger);
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        /* MODAL POPUP (ADMIN ADD DATA) */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(6px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: var(--transition);
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            width: 100%;
+            max-width: 500px;
+            padding: 28px;
+            box-shadow: var(--shadow);
+            transform: scale(0.9);
+            transition: var(--transition);
+        }
+
+        .modal-overlay.active .modal {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .btn-close {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        .form-control {
+            width: 100%;
+            background: var(--bg-body);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 10px 14px;
+            color: var(--text-main);
+            outline: none;
+            font-size: 0.9rem;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+        }
+
+        /* RESPONSIVE DESIGN */
+        @media (max-width: 1024px) {
+            .charts-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 768px) {
+            aside { width: 70px; padding: 16px 8px; }
+            .brand-text, .admin-badge span, .nav-item span { display: none; }
+            main { margin-left: 70px; width: calc(100% - 70px); padding: 20px; }
+            .filter-bar { flex-direction: column; align-items: stretch; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SIDEBAR -->
+    <aside>
+        <div>
+            <div class="brand">
+                <div class="brand-icon"><i class="fa-solid fa-chart-line"></i></div>
+                <div class="brand-text">
+                    <h2>ANALYTICS</h2>
+                    <span>Admin Control Hub</span>
+                </div>
+            </div>
+            
+            <ul class="nav-list">
+                <li class="nav-item active">
+                    <a href="#" onclick="switchSection('section-dashboard', this)"><i class="fa-solid fa-house"></i> <span>Dashboard</span></a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" onclick="switchSection('section-campaigns', this)"><i class="fa-solid fa-bullhorn"></i> <span>Campaigns</span></a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" onclick="switchSection('section-audience', this)"><i class="fa-solid fa-users"></i> <span>Audience</span></a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" onclick="switchSection('section-settings', this)"><i class="fa-solid fa-gear"></i> <span>Settings</span></a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="admin-badge">
+            <i class="fa-solid fa-shield-halved"></i>
+            <span>Admin Active</span>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT AREA -->
+    <main>
+        <!-- 1. DASHBOARD MAIN SECTION -->
+        <div id="section-dashboard" class="content-section" style="display: block;">
+            <!-- HEADER -->
+            <header>
+                <div class="header-title">
+                    <h1>Marketing Analytics Dashboard</h1>
+                    <p>Real-time company marketing data performance monitoring</p>
+                </div>
+                <div class="header-controls">
+                    <button class="btn btn-outline" onclick="exportData()"><i class="fa-solid fa-download"></i> Export</button>
+                    <button class="btn btn-primary" onclick="openAdminModal()"><i class="fa-solid fa-plus"></i> Add Campaign Data</button>
+                </div>
+            </header>
+
+            <!-- FILTERS BAR -->
+            <section class="filter-bar">
+                <div class="filter-group">
+                    <i class="fa-solid fa-filter" style="color: var(--text-muted);"></i>
+                    <select class="select-input" id="channelFilter" onchange="applyFilters()">
+                        <option value="all">All Channels</option>
+                        <option value="Facebook">Facebook Ads</option>
+                        <option value="Google">Google Search</option>
+                        <option value="YouTube">YouTube Video</option>
+                        <option value="Organic">Organic SEO</option>
+                    </select>
+
+                    <select class="select-input" id="periodFilter" onchange="applyFilters()">
+                        <option value="all_time">All Time</option>
+                        <option value="monthly">Monthly</option>
+                        <option value="weekly">Weekly</option>
+                    </select>
+                </div>
+
+                <div style="font-size: 0.82rem; color: var(--text-muted);">
+                    Data Status: <span id="dataStatusText" style="color: var(--success); font-weight: 600;">Syncing...</span>
+                </div>
+            </section>
+
+            <!-- KPI METRICS GRID -->
+            <section class="kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <span class="kpi-title">Total Revenue</span>
+                        <div class="kpi-icon" style="background: rgba(59, 130, 246, 0.15); color: var(--primary);"><i class="fa-solid fa-sack-dollar"></i></div>
+                    </div>
+                    <div class="kpi-value" id="kpiRevenue">$0</div>
+                    <div class="kpi-trend trend-neutral"><i class="fa-solid fa-minus"></i> Live Data</div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <span class="kpi-title">Conversion Rate</span>
+                        <div class="kpi-icon" style="background: rgba(16, 185, 129, 0.15); color: var(--success);"><i class="fa-solid fa-chart-pie"></i></div>
+                    </div>
+                    <div class="kpi-value" id="kpiConversion">0.00%</div>
+                    <div class="kpi-trend trend-neutral"><i class="fa-solid fa-minus"></i> Live Data</div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <span class="kpi-title">Customer Acq. Cost (CAC)</span>
+                        <div class="kpi-icon" style="background: rgba(245, 158, 11, 0.15); color: var(--warning);"><i class="fa-solid fa-hand-holding-dollar"></i></div>
+                    </div>
+                    <div class="kpi-value" id="kpiCAC">$0</div>
+                    <div class="kpi-trend trend-neutral"><i class="fa-solid fa-minus"></i> Live Data</div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <span class="kpi-title">Total Traffic</span>
+                        <div class="kpi-icon" style="background: rgba(139, 92, 246, 0.15); color: var(--purple);"><i class="fa-solid fa-users"></i></div>
+                    </div>
+                    <div class="kpi-value" id="kpiTraffic">0</div>
+                    <div class="kpi-trend trend-neutral"><i class="fa-solid fa-minus"></i> Live Data</div>
+                </div>
+            </section>
+
+            <!-- CHARTS SECTION -->
+            <section class="charts-grid">
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <div class="chart-title">Revenue vs Spend Analysis</div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="revenueChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <div class="chart-title">Channel Share Performance</div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="channelChart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <!-- DATA TABLE SECTION -->
+            <section class="table-card">
+                <div class="table-header">
+                    <div class="chart-title">Active Marketing Campaigns</div>
+                    <div class="search-box">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" id="tableSearch" placeholder="Search campaign..." onkeyup="searchTable()">
+                    </div>
+                </div>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Campaign Name</th>
+                                <th>Channel</th>
+                                <th>Spend</th>
+                                <th>Revenue</th>
+                                <th>Conversions</th>
+                                <th>Status</th>
+                                <th>Action (Admin)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="campaignTableBody">
+                            <!-- Dynamically populated via Javascript -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+
+        <!-- 2. CAMPAIGNS SECTION -->
+        <div id="section-campaigns" class="content-section" style="display: none;">
+            <header>
+                <div class="header-title">
+                    <h1>Campaigns Manager</h1>
+                    <p>Track, create, and manage all your marketing campaigns</p>
+                </div>
+            </header>
+            <section class="table-card">
+                <div style="padding: 60px 20px; text-align: center; color: var(--text-muted);">
+                    <i class="fa-solid fa-bullhorn" style="font-size: 3.5rem; margin-bottom: 20px; color: var(--primary);"></i>
+                    <h2>Campaigns Module</h2>
+                    <p style="margin-top: 10px;">This section is successfully integrated and ready for future campaign management data.</p>
+                </div>
+            </section>
+        </div>
+
+        <!-- 3. AUDIENCE SECTION -->
+        <div id="section-audience" class="content-section" style="display: none;">
+            <header>
+                <div class="header-title">
+                    <h1>Audience Insights</h1>
+                    <p>Analyze demographic and customer target data</p>
+                </div>
+            </header>
+            <section class="table-card">
+                <div style="padding: 60px 20px; text-align: center; color: var(--text-muted);">
+                    <i class="fa-solid fa-users" style="font-size: 3.5rem; margin-bottom: 20px; color: var(--purple);"></i>
+                    <h2>Audience Overview</h2>
+                    <p style="margin-top: 10px;">User insights, behavior analytics, and demographic data will be displayed here.</p>
+                </div>
+            </section>
+        </div>
+
+        <!-- 4. SETTINGS SECTION -->
+        <div id="section-settings" class="content-section" style="display: none;">
+            <header>
+                <div class="header-title">
+                    <h1>Dashboard Settings</h1>
+                    <p>Configure system preferences and admin controls</p>
+                </div>
+            </header>
+            <section class="table-card">
+                <div style="padding: 60px 20px; text-align: center; color: var(--text-muted);">
+                    <i class="fa-solid fa-gear" style="font-size: 3.5rem; margin-bottom: 20px; color: var(--warning);"></i>
+                    <h2>System Settings</h2>
+                    <p style="margin-top: 10px;">Admin controls, profile management, and dashboard configurations will be available here.</p>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- ADMIN DATA INPUT MODAL -->
+    <div class="modal-overlay" id="adminModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Add New Marketing Data</h3>
+                <button class="btn-close" onclick="closeAdminModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="addDataForm" onsubmit="handleFormSubmit(event)">
+                <div class="form-group">
+                    <label>Campaign Name</label>
+                    <input type="text" class="form-control" id="inputName" placeholder="e.g. Summer Promo" required>
+                </div>
+                <div class="form-group">
+                    <label>Platform / Channel</label>
+                    <select class="form-control" id="inputChannel">
+                        <option value="Facebook">Facebook Ads</option>
+                        <option value="Google">Google Search</option>
+                        <option value="YouTube">YouTube Video</option>
+                        <option value="Organic">Organic SEO</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Total Spend ($)</label>
+                    <input type="number" class="form-control" id="inputSpend" placeholder="e.g. 500" required>
+                </div>
+                <div class="form-group">
+                    <label>Earned Revenue ($)</label>
+                    <input type="number" class="form-control" id="inputRevenue" placeholder="e.g. 1500" required>
+                </div>
+                <div class="form-group">
+                    <label>Total Conversions (Sales/Leads)</label>
+                    <input type="number" class="form-control" id="inputConversions" placeholder="e.g. 25" required>
+                </div>
+                <div class="form-group">
+                    <label>Status</label>
+                    <select class="form-control" id="inputStatus">
+                        <option value="Active">Active</option>
+                        <option value="Paused">Paused</option>
+                    </select>
+                </div>
+                <button type="submit" id="saveDataBtn" class="btn btn-primary" style="width: 100%; margin-top: 10px; justify-content: center;">
+                    <i class="fa-solid fa-cloud-arrow-up"></i> Save to Database
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT SYSTEM LOGIC -->
+    <script>
+        // ==========================================
+        // 1. JSONBIN API CREDENTIALS (REPLACE THESE)
+        // ==========================================
+        const JSONBIN_BIN_ID = "6aba0fcbac6210605afd0b26"; // এখানে আপনার নতুন Bin ID দিন
+        const JSONBIN_API_KEY = "$2a$10$NdVprjNSRs1iJOzSyH896.6YYu87qOoZC5AH5WZsi99PacsVRU7AS"; // এখানে আপনার নতুন API Key দিন
+        const JSONBIN_URL = `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`;
+
+        // ==========================================
+        // 2. ADMIN LOGIN AUTHENTICATION SYSTEM
+        // ==========================================
+        const ADMIN_PASSWORD = "admin"; 
+        
+        let pass = prompt("Enter Admin Password to access the Dashboard:");
+        if (pass === ADMIN_PASSWORD) {
+            document.body.style.display = 'flex'; 
+        } else {
+            document.body.innerHTML = `
+                <div style="width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; background: #0f172a; color: #ef4444; flex-direction: column;">
+                    <i class="fa-solid fa-lock" style="font-size: 4rem; margin-bottom: 20px;"></i>
+                    <h1 style="font-family: 'Plus Jakarta Sans', sans-serif;">Access Denied</h1>
+                    <p style="color: #94a3b8; margin-top: 10px; font-family: 'Plus Jakarta Sans', sans-serif;">Incorrect Password! Please reload the page to try again.</p>
+                </div>
+            `;
+            document.body.style.display = 'flex';
+            throw new Error("Authentication failed.");
+        }
+
+        // ==========================================
+        // 3. DASHBOARD NAVIGATION SYSTEM
+        // ==========================================
+        function switchSection(sectionId, navElement) {
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(sec => sec.style.display = 'none');
+            document.getElementById(sectionId).style.display = 'block';
+
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => item.classList.remove('active'));
+
+            if(navElement) {
+                navElement.closest('.nav-item').classList.add('active');
+            }
+        }
+
+        // ==========================================
+        // 4. DATABASE & DASHBOARD LOGIC
+        // ==========================================
+        
+        // Empty by default, fetched from API
+        let campaignData = [];
+        let revenueChartInstance = null;
+        let channelChartInstance = null;
+
+        // Initialize Dashboard
+        window.onload = function() {
+            initCharts();
+            fetchDataFromJSONBin();
+        };
+
+        // --- FETCH DATA FROM API ---
+        async function fetchDataFromJSONBin() {
+            const statusText = document.getElementById('dataStatusText');
+            statusText.innerText = "Loading data...";
+            statusText.style.color = "var(--warning)";
+
+            try {
+                const response = await fetch(`${JSONBIN_URL}/latest`, {
+                    method: 'GET',
+                    headers: { 'X-Access-Key': JSONBIN_API_KEY }
+                });
+
+                if (!response.ok) throw new Error("API Fetch Error");
+
+                const result = await response.json();
+                
+                // Parse fetched data safely
+                if (result.record && Array.isArray(result.record.campaigns)) {
+                    campaignData = result.record.campaigns;
+                } else if (Array.isArray(result.record)) {
+                    campaignData = result.record;
+                } else {
+                    campaignData = [];
+                }
+
+                statusText.innerText = "Online & Synced";
+                statusText.style.color = "var(--success)";
+                
+                applyFilters(); // Renders UI with fetched data
+
+            } catch (error) {
+                console.error(error);
+                statusText.innerText = "API Not Connected / Empty";
+                statusText.style.color = "var(--danger)";
+                campaignData = [];
+                applyFilters(); 
+            }
+        }
+
+        // --- SAVE DATA TO API ---
+        async function syncToJSONBin(updatedData) {
+            const statusText = document.getElementById('dataStatusText');
+            statusText.innerText = "Saving to cloud...";
+            statusText.style.color = "var(--warning)";
+
+            try {
+                const response = await fetch(JSONBIN_URL, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Access-Key': JSONBIN_API_KEY
+                    },
+                    body: JSON.stringify({ campaigns: updatedData })
+                });
+
+                if (!response.ok) throw new Error("API Save Error");
+                
+                statusText.innerText = "Online & Synced";
+                statusText.style.color = "var(--success)";
+                return true;
+
+            } catch (error) {
+                console.error(error);
+                statusText.innerText = "Sync Failed!";
+                statusText.style.color = "var(--danger)";
+                alert("Failed to save data to database. Check your JSONBin credentials.");
+                return false;
+            }
+        }
+
+        // --- RENDER TABLE ---
+        function renderTable(dataToRender = campaignData) {
+            const tbody = document.getElementById('campaignTableBody');
+            tbody.innerHTML = '';
+
+            if (dataToRender.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color: var(--text-muted); padding: 20px;">No campaigns found. Add data to begin.</td></tr>`;
+                return;
+            }
+
+            dataToRender.forEach(item => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td style="font-weight: 700;">${item.name}</td>
+                    <td><i class="fa-brands fa-${item.channel.toLowerCase()}"></i> ${item.channel}</td>
+                    <td>$${item.spend.toLocaleString()}</td>
+                    <td style="color: var(--success); font-weight: 700;">$${item.revenue.toLocaleString()}</td>
+                    <td>${item.conversions}</td>
+                    <td><span class="status-badge ${item.status === 'Active' ? 'status-active' : 'status-paused'}">${item.status}</span></td>
+                    <td>
+                        <button class="btn-action" onclick="deleteData(${item.id})" title="Delete Data (Admin)"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // --- INITIALIZE CHARTS ---
+        function initCharts() {
+            const ctx1 = document.getElementById('revenueChart').getContext('2d');
+            revenueChartInstance = new Chart(ctx1, {
+                type: 'line',
+                data: {
+                    labels: [], // Empty initially
+                    datasets: [
+                        { label: 'Revenue ($)', data: [], borderColor: '#3b82f6', backgroundColor: 'rgba(59, 130, 246, 0.1)', fill: true, tension: 0.4 },
+                        { label: 'Spend ($)', data: [], borderColor: '#ef4444', backgroundColor: 'transparent', borderDash: [5, 5], tension: 0.4 }
+                    ]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: { legend: { labels: { color: '#94a3b8' } } },
+                    scales: {
+                        x: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+                        y: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(255,255,255,0.05)' } }
+                    }
+                }
+            });
+
+            const ctx2 = document.getElementById('channelChart').getContext('2d');
+            channelChartInstance = new Chart(ctx2, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Facebook', 'Google', 'YouTube', 'Organic'],
+                    datasets: [{
+                        data: [0, 0, 0, 0], // Empty initially
+                        backgroundColor: ['#1877f2', '#ea4335', '#ff0000', '#10b981'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8' } } }
+                }
+            });
+        }
+
+        // --- UPDATE CHARTS DYNAMICALLY ---
+        function updateCharts(data) {
+            if (!revenueChartInstance || !channelChartInstance) return;
+            
+            // Update Channel Pie Chart
+            let fb = 0, gg = 0, yt = 0, org = 0;
+            data.forEach(item => {
+                if(item.channel === 'Facebook') fb++;
+                if(item.channel === 'Google') gg++;
+                if(item.channel === 'YouTube') yt++;
+                if(item.channel === 'Organic') org++;
+            });
+            channelChartInstance.data.datasets[0].data = [fb, gg, yt, org];
+            channelChartInstance.update();
+            
+            // Update Revenue Line Chart (Using campaign names as labels)
+            let labels = data.map(item => item.name.substring(0, 10) + (item.name.length > 10 ? '..' : ''));
+            let revData = data.map(item => item.revenue);
+            let spendData = data.map(item => item.spend);
+            
+            revenueChartInstance.data.labels = labels.length ? labels : ['No Data'];
+            revenueChartInstance.data.datasets[0].data = revData.length ? revData : [0];
+            revenueChartInstance.data.datasets[1].data = spendData.length ? spendData : [0];
+            revenueChartInstance.update();
+        }
+
+        // --- FILTER LOGIC ---
+        function applyFilters() {
+            const channel = document.getElementById('channelFilter').value;
+            let filtered = campaignData;
+
+            if (channel !== 'all') {
+                filtered = campaignData.filter(item => item.channel === channel);
+            }
+
+            renderTable(filtered);
+            updateKPICards(filtered);
+            updateCharts(filtered);
+        }
+
+        // --- DYNAMIC KPI UPDATE ---
+        function updateKPICards(data) {
+            let totalRevenue = 0;
+            let totalSpend = 0;
+            let totalConversions = 0;
+
+            data.forEach(item => {
+                totalRevenue += item.revenue || 0;
+                totalSpend += item.spend || 0;
+                totalConversions += item.conversions || 0;
+            });
+
+            // Calculations
+            let cac = totalConversions > 0 ? (totalSpend / totalConversions).toFixed(2) : 0;
+            let mockTraffic = totalSpend * 3.5; // Estimating traffic based on spend for dashboard feel
+            let conversionRate = mockTraffic > 0 ? ((totalConversions / mockTraffic) * 100).toFixed(2) : "0.00";
+
+            document.getElementById('kpiRevenue').innerText = `$${totalRevenue.toLocaleString()}`;
+            document.getElementById('kpiConversion').innerText = `${conversionRate}%`;
+            document.getElementById('kpiCAC').innerText = `$${cac}`;
+            document.getElementById('kpiTraffic').innerText = Math.floor(mockTraffic).toLocaleString();
+        }
+
+        // --- SEARCH IN TABLE ---
+        function searchTable() {
+            const query = document.getElementById('tableSearch').value.toLowerCase();
+            const filtered = campaignData.filter(item => 
+                item.name.toLowerCase().includes(query) || 
+                item.channel.toLowerCase().includes(query)
+            );
+            renderTable(filtered);
+        }
+
+        // --- MODAL CONTROLS ---
+        function openAdminModal() { document.getElementById('adminModal').classList.add('active'); }
+        function closeAdminModal() { document.getElementById('adminModal').classList.remove('active'); }
+
+        // --- ADD NEW DATA & SAVE TO API ---
+        async function handleFormSubmit(e) {
+            e.preventDefault();
+            const saveBtn = document.getElementById('saveDataBtn');
+            saveBtn.disabled = true;
+            saveBtn.innerText = "Saving...";
+
+            const newEntry = {
+                id: Date.now(),
+                name: document.getElementById('inputName').value,
+                channel: document.getElementById('inputChannel').value,
+                spend: parseFloat(document.getElementById('inputSpend').value),
+                revenue: parseFloat(document.getElementById('inputRevenue').value),
+                conversions: parseInt(document.getElementById('inputConversions').value),
+                status: document.getElementById('inputStatus').value
+            };
+
+            // Add to local array
+            const updatedData = [newEntry, ...campaignData];
+
+            // Sync to JSONBin
+            const success = await syncToJSONBin(updatedData);
+
+            if (success) {
+                campaignData = updatedData;
+                applyFilters();
+                closeAdminModal();
+                document.getElementById('addDataForm').reset();
+            }
+
+            saveBtn.disabled = false;
+            saveBtn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> Save to Database';
+        }
+
+        // --- DELETE DATA & SAVE TO API ---
+        async function deleteData(id) {
+            if(confirm('Are you sure you want to delete this campaign entry permanently?')) {
+                const updatedData = campaignData.filter(item => item.id !== id);
+                
+                const success = await syncToJSONBin(updatedData);
+                if (success) {
+                    campaignData = updatedData;
+                    applyFilters();
+                }
+            }
+        }
+
+        function exportData() {
+            alert('Exporting dataset to CSV/Excel format...');
+        }
+    </script>
+</body>
+</html>

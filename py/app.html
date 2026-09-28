@@ -52,7 +52,6 @@
             min-height: 100vh;
         }
 
-        /* Custom Glassmorphism Effect */
         .glass-panel {
             background: rgba(15, 21, 37, 0.65);
             backdrop-filter: blur(16px);
@@ -61,25 +60,15 @@
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
         }
 
-        .glass-panel-hover {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
         .glass-panel-hover:hover {
             border-color: rgba(0, 243, 255, 0.4);
             box-shadow: 0 0 25px rgba(0, 243, 255, 0.15);
         }
 
-        /* Neon Glow Texts and Borders */
         .glow-text-cyan {
             text-shadow: 0 0 12px rgba(0, 243, 255, 0.75), 0 0 25px rgba(0, 243, 255, 0.35);
         }
 
-        .glow-box-cyan {
-            box-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
-        }
-
-        /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 5px;
             height: 5px;
@@ -91,11 +80,7 @@
             background: rgba(0, 243, 255, 0.3);
             border-radius: 4px;
         }
-        ::-webkit-scrollbar-thumb:hover {
-            background: rgba(0, 243, 255, 0.6);
-        }
 
-        /* Cyberpunk Input Range Styling */
         input[type=range] {
             -webkit-appearance: none;
             background: transparent;
@@ -120,15 +105,8 @@
             -webkit-appearance: none;
             margin-top: -6px;
             box-shadow: 0 0 10px #00f3ff;
-            transition: transform 0.15s ease, background-color 0.15s ease;
-        }
-        input[type=range]::-webkit-slider-thumb:hover {
-            transform: scale(1.25);
-            background: #38bdf8;
-            box-shadow: 0 0 15px #00f3ff;
         }
 
-        /* Active word highlighting in real-time teleprompter */
         .word-active {
             background-color: rgba(0, 243, 255, 0.25);
             color: #00f3ff;
@@ -136,24 +114,20 @@
             border-radius: 2px;
             font-weight: 700;
             padding: 0 2px;
-            box-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
-            transition: all 0.1s ease;
         }
 
         .word-spoken {
             color: rgba(226, 232, 240, 0.5);
         }
 
-        /* Spectrum Bar Pulse */
         .spectrum-bar {
             transition: height 0.08s ease, background-color 0.15s ease;
             transform-origin: bottom;
         }
 
-        /* Ripple effect animation on Speak button */
         @keyframes pulseGlow {
-            0%, 100% { box-shadow: 0 0 15px rgba(0, 243, 255, 0.4), 0 0 30px rgba(168, 85, 247, 0.2); }
-            50% { box-shadow: 0 0 25px rgba(0, 243, 255, 0.8), 0 0 45px rgba(168, 85, 247, 0.5); }
+            0%, 100% { box-shadow: 0 0 15px rgba(0, 243, 255, 0.4); }
+            50% { box-shadow: 0 0 25px rgba(0, 243, 255, 0.8); }
         }
         .btn-glow-active {
             animation: pulseGlow 2s infinite;
@@ -162,9 +136,7 @@
 </head>
 <body class="flex flex-col min-h-screen antialiased selection:bg-cyan-500 selection:text-slate-900">
 
-    <!-- Application Header -->
     <header class="sticky top-0 z-50 w-full glass-panel border-b border-cyan-500/20 bg-opacity-80 backdrop-blur-md px-3 sm:px-6 py-3 flex items-center justify-between">
-        <!-- Header Left: Icon & Title -->
         <div class="flex items-center gap-2.5 sm:gap-3">
             <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-cyan-950/60 border border-cyan-500/40 flex items-center justify-center text-cyan-400 shadow-[0_0_15px_rgba(0,243,255,0.3)] shrink-0">
                 <i class="fa-solid fa-wave-square text-base sm:text-lg animate-pulse"></i>
@@ -173,222 +145,173 @@
                 <h1 class="text-lg sm:text-2xl font-bold tracking-wider text-cyan-400 glow-text-cyan flex items-center gap-2">
                     Text To Speech
                 </h1>
-                <p class="text-[9px] sm:text-[10px] uppercase tracking-widest text-slate-400 font-mono -mt-1 hidden sm:block">AI Cyber Voice Synthesizer & Translator</p>
+                <p class="text-[9px] sm:text-[10px] uppercase tracking-widest text-slate-400 font-mono -mt-1 hidden sm:block">AI Cyber Voice Synthesizer & Generator</p>
             </div>
         </div>
 
-        <!-- Header Right: Pill-shaped Home Button -->
         <div class="flex items-center">
-            <a href="../index.html" class="group flex items-center gap-1.5 sm:gap-2.5 px-3 sm:px-5 py-1.5 sm:py-2 rounded-full border border-cyan-500/50 bg-slate-900/80 text-cyan-400 hover:text-cyan-300 hover:border-cyan-400 hover:shadow-[0_0_20px_rgba(0,243,255,0.4)] transition-all duration-300 font-medium text-xs sm:text-sm">
-                <i class="fa-solid fa-house text-xs sm:text-sm group-hover:scale-110 transition-transform"></i>
+            <a href="../index.html" class="group flex items-center gap-1.5 sm:gap-2.5 px-3 sm:px-5 py-1.5 sm:py-2 rounded-full border border-cyan-500/50 bg-slate-900/80 text-cyan-400 hover:text-cyan-300 transition-all font-medium text-xs sm:text-sm">
+                <i class="fa-solid fa-house text-xs sm:text-sm"></i>
                 <span>Home</span>
             </a>
         </div>
     </header>
 
-    <!-- Main Workspace Container -->
     <main class="flex-grow container mx-auto px-3 sm:px-4 py-4 sm:py-8 max-w-7xl flex flex-col gap-4 sm:gap-6">
 
-        <!-- Drag & Drop File Upload Area -->
         <section class="w-full">
-            <div id="drop-zone" class="glass-panel glass-panel-hover rounded-2xl p-3.5 sm:p-6 text-center cursor-pointer border-2 border-dashed border-cyan-500/30 hover:border-cyan-400 transition-all group relative overflow-hidden">
+            <div id="drop-zone" class="glass-panel glass-panel-hover rounded-2xl p-3.5 sm:p-6 text-center cursor-pointer border-2 border-dashed border-cyan-500/30 transition-all group">
                 <input type="file" id="file-input" accept=".txt" class="hidden">
-                <div class="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 relative z-10">
-                    <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 group-hover:scale-110 group-hover:bg-cyan-500/20 transition-all shrink-0">
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
+                    <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 shrink-0">
                         <i class="fa-solid fa-file-arrow-up text-lg sm:text-xl"></i>
                     </div>
                     <div class="text-center sm:text-left">
                         <p class="text-xs sm:text-sm font-semibold text-slate-200">
-                            Drop your <span class="text-cyan-400 font-mono">.TXT</span> file here or <span class="text-cyan-400 underline underline-offset-4">browse file</span>
+                            Drop your <span class="text-cyan-400 font-mono">.TXT</span> file here or <span class="text-cyan-400 underline">browse file</span>
                         </p>
-                        <p class="text-[11px] sm:text-xs text-slate-400 mt-0.5">Quickly import plain text files directly into the synthesizer voice engine.</p>
+                        <p class="text-[11px] sm:text-xs text-slate-400 mt-0.5">Import text directly to synthesize.</p>
                     </div>
                 </div>
-                <!-- File details chip -->
-                <div id="file-info" class="hidden mt-3 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-950/80 border border-cyan-500/40 text-xs font-mono text-cyan-300 max-w-full truncate">
+                <div id="file-info" class="hidden mt-3 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-950/80 border border-cyan-500/40 text-xs font-mono text-cyan-300">
                     <i class="fa-solid fa-file-lines shrink-0"></i>
                     <span id="file-name" class="truncate">document.txt</span>
-                    <button type="button" id="remove-file-btn" class="ml-1 text-slate-400 hover:text-red-400 transition-colors shrink-0">
+                    <button type="button" id="remove-file-btn" class="ml-1 text-slate-400 hover:text-red-400">
                         <i class="fa-solid fa-xmark"></i>
                     </button>
                 </div>
             </div>
         </section>
 
-        <!-- Primary Grid: Text Editor & Audio Visualizer Controls -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6">
 
-            <!-- Left Column: Input Text Area & Live Toolbar (7 Cols) -->
             <div class="lg:col-span-7 flex flex-col gap-4">
                 <div class="glass-panel rounded-2xl p-3.5 sm:p-5 flex flex-col h-full relative">
-                    
-                    <!-- Editor Header / Live Counter Bar -->
                     <div class="flex flex-wrap items-center justify-between gap-2 pb-3 mb-3 border-b border-cyan-500/15">
                         <div class="flex items-center gap-2">
                             <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
                             <h2 class="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-300 font-mono">Text Input Console</h2>
                         </div>
                         
-                        <!-- Toolbar Buttons -->
                         <div class="flex items-center flex-wrap gap-1.5 sm:gap-2">
-                            <button type="button" id="sample-text-btn" class="px-2 sm:px-2.5 py-1 text-[11px] sm:text-xs rounded-lg bg-slate-800/80 hover:bg-slate-700 text-cyan-300 border border-cyan-500/30 transition-all flex items-center gap-1.5">
+                            <button type="button" id="sample-text-btn" class="px-2.5 py-1 text-xs rounded-lg bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-cyan-500/30 flex items-center gap-1.5">
                                 <i class="fa-solid fa-wand-magic-sparkles text-cyan-400"></i>
                                 <span>Sample</span>
                             </button>
-                            <button type="button" id="copy-text-btn" class="px-2 sm:px-2.5 py-1 text-[11px] sm:text-xs rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-300 border border-slate-700 transition-all flex items-center gap-1.5">
+                            <button type="button" id="copy-text-btn" class="px-2.5 py-1 text-xs rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 flex items-center gap-1.5">
                                 <i class="fa-solid fa-copy"></i>
                                 <span>Copy</span>
                             </button>
-                            <button type="button" id="clear-text-btn" class="px-2 sm:px-2.5 py-1 text-[11px] sm:text-xs rounded-lg bg-slate-800/80 hover:bg-red-950/60 text-slate-300 hover:text-red-300 border border-slate-700 hover:border-red-500/40 transition-all flex items-center gap-1.5">
+                            <button type="button" id="clear-text-btn" class="px-2.5 py-1 text-xs rounded-lg bg-slate-800 hover:bg-red-950/60 text-slate-300 hover:text-red-300 border border-slate-700 flex items-center gap-1.5">
                                 <i class="fa-solid fa-trash-can"></i>
                                 <span>Clear</span>
                             </button>
                         </div>
                     </div>
 
-                    <!-- Translation Toolbar -->
-                    <div class="mb-3 p-2 sm:p-2.5 bg-slate-950/80 border border-cyan-500/20 rounded-xl flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2">
+                    <div class="mb-3 p-2.5 bg-slate-950/80 border border-cyan-500/20 rounded-xl flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2">
                         <div class="flex items-center gap-2 text-xs text-purple-400 font-mono">
                             <i class="fa-solid fa-language text-sm"></i>
                             <span class="font-semibold">Translate Text:</span>
                         </div>
-                        <div class="flex items-center gap-2 w-full sm:w-auto">
-                            <select id="translate-lang-select" class="flex-1 sm:flex-initial bg-slate-900 border border-cyan-500/30 rounded-lg px-2.5 py-1 text-xs text-cyan-300 focus:outline-none focus:border-cyan-400 font-mono">
+                        <div class="flex items-center gap-2">
+                            <select id="translate-lang-select" class="bg-slate-900 border border-cyan-500/30 rounded-lg px-2.5 py-1 text-xs text-cyan-300 focus:outline-none font-mono">
                                 <option value="bn" selected>Bengali (বাংলা)</option>
                                 <option value="en">English (ইংরেজি)</option>
                                 <option value="hi">Hindi (हिन्दी)</option>
                                 <option value="es">Spanish (Español)</option>
                                 <option value="fr">French (Français)</option>
-                                <option value="de">German (Deutsch)</option>
-                                <option value="ar">Arabic (العربية)</option>
-                                <option value="ja">Japanese (日本語)</option>
                             </select>
-                            <button type="button" id="translate-btn" class="px-3 py-1 text-xs rounded-lg bg-purple-900/60 hover:bg-purple-800 text-purple-200 border border-purple-500/40 transition-all flex items-center justify-center gap-1.5 font-semibold shrink-0">
+                            <button type="button" id="translate-btn" class="px-3 py-1 text-xs rounded-lg bg-purple-900/60 hover:bg-purple-800 text-purple-200 border border-purple-500/40 flex items-center gap-1.5 font-semibold">
                                 <i class="fa-solid fa-rotate text-purple-300"></i>
                                 <span>Translate</span>
                             </button>
                         </div>
                     </div>
 
-                    <!-- Main Textarea -->
-                    <textarea id="tts-input" class="w-full h-48 sm:h-64 md:h-80 bg-slate-950/60 border border-cyan-500/20 rounded-xl p-3 sm:p-4 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 font-sans text-xs sm:text-sm md:text-base resize-none leading-relaxed transition-all" placeholder="Enter or paste your text here to convert into natural speech sound waves..."></textarea>
+                    <textarea id="tts-input" class="w-full h-48 sm:h-64 md:h-80 bg-slate-950/60 border border-cyan-500/20 rounded-xl p-3 sm:p-4 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-cyan-400 font-sans text-xs sm:text-sm md:text-base resize-none leading-relaxed">Welcome to CyberTTS, an advanced artificial speech synthesis engine operating on WebSpeech API protocols. Text-to-speech technology transforms written digital parameters into human acoustic frequencies in real time. Adjust speed rate, pitch level, and master volume controls to customize output vocal harmonics. CyberTTS supports file imports, live word boundary synchronization, and visual audio frequency monitoring. System initialized. Stand by for vocal transmission.</textarea>
 
-                    <!-- Real-time Text Metrics Bar -->
-                    <div class="mt-3 sm:mt-4 pt-2.5 sm:pt-3 border-t border-slate-800/80 flex flex-wrap items-center justify-between text-[11px] sm:text-xs font-mono text-slate-400 gap-2">
-                        <div class="flex items-center gap-3 sm:gap-4">
+                    <div class="mt-3 sm:mt-4 pt-2.5 sm:pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs font-mono text-slate-400">
+                        <div class="flex items-center gap-4">
                             <div>Chars: <span id="char-count" class="text-cyan-400 font-bold">0</span></div>
                             <div>Words: <span id="word-count" class="text-purple-400 font-bold">0</span></div>
                         </div>
-                        <div class="flex items-center gap-1.5 text-slate-400">
+                        <div class="flex items-center gap-1.5">
                             <i class="fa-regular fa-clock text-cyan-400"></i>
-                            <span>Est: <strong id="reading-time" class="text-slate-200 font-mono">0 sec</strong></span>
+                            <span>Est: <strong id="reading-time" class="text-slate-200">0 sec</strong></span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Right Column: Voice Engine Controls & Spectrum Display (5 Cols) -->
             <div class="lg:col-span-5 flex flex-col gap-4 sm:gap-6">
-                
-                <!-- Voice Settings Card -->
                 <div class="glass-panel rounded-2xl p-3.5 sm:p-5 flex flex-col gap-4 sm:gap-5">
                     <div class="flex items-center justify-between pb-3 border-b border-cyan-500/15">
                         <h2 class="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-300 font-mono flex items-center gap-2">
                             <i class="fa-solid fa-sliders text-cyan-400"></i>
                             <span>Voice Parameters</span>
                         </h2>
-                        <span class="text-[9px] sm:text-[10px] px-2 py-0.5 rounded bg-cyan-950 text-cyan-400 font-mono border border-cyan-500/30">WebSpeech</span>
+                        <span class="text-[10px] px-2 py-0.5 rounded bg-cyan-950 text-cyan-400 font-mono border border-cyan-500/30">WebSpeech</span>
                     </div>
 
-                    <!-- Voice Dropdown Selector -->
                     <div class="flex flex-col gap-1.5">
                         <label for="voice-select" class="text-xs font-semibold text-slate-300 flex items-center justify-between">
                             <span>Select Voice Engine</span>
-                            <span id="voice-count-badge" class="text-[10px] text-slate-400 font-mono">Loading voices...</span>
+                            <span id="voice-count-badge" class="text-[10px] text-slate-400 font-mono">Loading...</span>
                         </label>
-                        <div class="relative">
-                            <select id="voice-select" class="w-full bg-slate-950/80 border border-cyan-500/30 rounded-xl px-3 py-2 sm:py-2.5 text-xs sm:text-sm text-cyan-300 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 appearance-none font-mono cursor-pointer transition-all pr-8 truncate">
-                                <option value="" disabled selected>Searching for installed system voices...</option>
-                            </select>
-                            <div class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-cyan-400 text-xs">
-                                <i class="fa-solid fa-chevron-down"></i>
-                            </div>
-                        </div>
+                        <select id="voice-select" class="w-full bg-slate-950/80 border border-cyan-500/30 rounded-xl px-3 py-2 text-xs sm:text-sm text-cyan-300 focus:outline-none font-mono cursor-pointer">
+                            <option value="" disabled selected>Searching installed voices...</option>
+                        </select>
                     </div>
 
-                    <!-- Speed Rate Slider -->
                     <div class="flex flex-col gap-1.5">
                         <div class="flex items-center justify-between text-xs">
                             <label for="rate-slider" class="font-semibold text-slate-300 flex items-center gap-1.5">
                                 <i class="fa-solid fa-gauge-high text-cyan-400"></i> Speed Rate
                             </label>
-                            <span id="rate-value" class="font-mono text-cyan-400 font-bold bg-cyan-950/50 px-2 py-0.5 rounded border border-cyan-500/30">1.0x</span>
+                            <span id="rate-value" class="font-mono text-cyan-400 font-bold bg-cyan-950/50 px-2 py-0.5 rounded">1.0x</span>
                         </div>
                         <input type="range" id="rate-slider" min="0.5" max="2.0" step="0.1" value="1.0">
-                        <div class="flex justify-between text-[10px] text-slate-500 font-mono">
-                            <span>0.5x (Slow)</span>
-                            <span>1.0x (Normal)</span>
-                            <span>2.0x (Fast)</span>
-                        </div>
                     </div>
 
-                    <!-- Pitch Level Slider -->
                     <div class="flex flex-col gap-1.5">
                         <div class="flex items-center justify-between text-xs">
                             <label for="pitch-slider" class="font-semibold text-slate-300 flex items-center gap-1.5">
                                 <i class="fa-solid fa-music text-purple-400"></i> Pitch Level
                             </label>
-                            <span id="pitch-value" class="font-mono text-purple-400 font-bold bg-purple-950/50 px-2 py-0.5 rounded border border-purple-500/30">1.0</span>
+                            <span id="pitch-value" class="font-mono text-purple-400 font-bold bg-purple-950/50 px-2 py-0.5 rounded">1.0</span>
                         </div>
                         <input type="range" id="pitch-slider" min="0.5" max="2.0" step="0.1" value="1.0">
-                        <div class="flex justify-between text-[10px] text-slate-500 font-mono">
-                            <span>0.5 (Low)</span>
-                            <span>1.0 (Normal)</span>
-                            <span>2.0 (High)</span>
-                        </div>
                     </div>
 
-                    <!-- Volume Slider -->
                     <div class="flex flex-col gap-1.5">
                         <div class="flex items-center justify-between text-xs">
                             <label for="volume-slider" class="font-semibold text-slate-300 flex items-center gap-1.5">
                                 <i class="fa-solid fa-volume-high text-cyan-400"></i> Master Volume
                             </label>
-                            <span id="volume-value" class="font-mono text-cyan-400 font-bold bg-cyan-950/50 px-2 py-0.5 rounded border border-cyan-500/30">100%</span>
+                            <span id="volume-value" class="font-mono text-cyan-400 font-bold bg-cyan-950/50 px-2 py-0.5 rounded">100%</span>
                         </div>
                         <input type="range" id="volume-slider" min="0" max="1" step="0.05" value="1">
-                        <div class="flex justify-between text-[10px] text-slate-500 font-mono">
-                            <span>0%</span>
-                            <span>50%</span>
-                            <span>100%</span>
-                        </div>
                     </div>
 
                 </div>
-
             </div>
         </div>
 
-        <!-- Visualizer & Real-time Spoken Text Teleprompter -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6">
-
-            <!-- 20-Bar Frequency Spectrum Visualizer (5 Cols) -->
-            <div class="lg:col-span-5 glass-panel rounded-2xl p-3.5 sm:p-5 flex flex-col justify-between min-h-[160px] sm:min-h-[180px]">
+            <div class="lg:col-span-5 glass-panel rounded-2xl p-3.5 sm:p-5 flex flex-col justify-between min-h-[160px]">
                 <div class="flex items-center justify-between mb-3 border-b border-cyan-500/15 pb-2">
                     <div class="flex items-center gap-2">
                         <i class="fa-solid fa-chart-simple text-cyan-400"></i>
                         <h3 class="text-xs font-bold uppercase tracking-wider text-slate-300 font-mono">Frequency Visualizer</h3>
                     </div>
-                    <span id="visualizer-status" class="text-[10px] font-mono text-slate-400 bg-slate-900 px-2 py-0.5 rounded border border-slate-700">STANDBY</span>
+                    <span id="visualizer-status" class="text-[10px] font-mono text-slate-400 bg-slate-900 px-2 py-0.5 rounded">STANDBY</span>
                 </div>
 
-                <!-- Visualizer Bars Grid (20 Bars) -->
-                <div id="visualizer-container" class="flex items-end justify-between h-20 sm:h-24 px-1.5 sm:px-2 py-1 bg-slate-950/80 rounded-xl border border-cyan-500/20 overflow-hidden gap-0.5 sm:gap-1">
-                    <!-- 20 spectrum bars generated via JS dynamically -->
+                <div id="visualizer-container" class="flex items-end justify-between h-20 sm:h-24 px-2 py-1 bg-slate-950/80 rounded-xl border border-cyan-500/20 gap-1">
                 </div>
             </div>
 
-            <!-- Real-Time Synchronized Word Highlighting Viewer (7 Cols) -->
             <div class="lg:col-span-7 glass-panel rounded-2xl p-3.5 sm:p-5 flex flex-col">
                 <div class="flex items-center justify-between mb-3 border-b border-cyan-500/15 pb-2">
                     <div class="flex items-center gap-2">
@@ -401,86 +324,57 @@
                     </div>
                 </div>
 
-                <!-- Progress Bar -->
                 <div class="w-full bg-slate-950 rounded-full h-1.5 mb-3 overflow-hidden border border-slate-800">
-                    <div id="speech-progress-bar" class="bg-gradient-to-r from-cyan-400 to-purple-500 h-full w-0 transition-all duration-150"></div>
+                    <div id="speech-progress-bar" class="bg-gradient-to-r from-cyan-400 to-purple-500 h-full w-0 transition-all"></div>
                 </div>
 
-                <!-- Teleprompter / Highlighting Box -->
-                <div id="teleprompter-box" class="w-full h-20 sm:h-24 overflow-y-auto bg-slate-950/70 rounded-xl p-3 sm:p-3.5 border border-cyan-500/20 text-xs sm:text-sm font-sans leading-relaxed text-slate-300 transition-all">
-                    <p id="teleprompter-content" class="text-slate-400 italic">Spoken words will be highlighted in real-time here during voice synthesis playback...</p>
+                <div id="teleprompter-box" class="w-full h-20 sm:h-24 overflow-y-auto bg-slate-950/70 rounded-xl p-3.5 border border-cyan-500/20 text-xs sm:text-sm font-sans leading-relaxed text-slate-300">
+                    <p id="teleprompter-content" class="text-slate-400 italic">Spoken words will highlight here...</p>
                 </div>
             </div>
-
         </div>
 
-        <!-- Playback Controls Sticky Footer Bar -->
         <section class="glass-panel rounded-2xl p-3.5 sm:p-5 flex flex-col md:flex-row items-center justify-between gap-4 border border-cyan-500/30">
-            <div class="flex items-center gap-3 w-full md:w-auto justify-center md:justify-start">
-                <div id="playback-status-indicator" class="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-slate-600"></div>
+            <div class="flex items-center gap-3">
+                <div id="playback-status-indicator" class="w-3 h-3 rounded-full bg-slate-600"></div>
                 <span id="playback-status-text" class="text-xs font-mono font-bold tracking-wider text-slate-400 uppercase">Engine Idle</span>
             </div>
 
-            <!-- Main Control Buttons Container -->
-            <div class="flex flex-col sm:flex-row items-stretch sm:items-center w-full md:w-auto gap-3">
-                
-                <!-- Speech Action Buttons Group -->
-                <div class="grid grid-cols-3 sm:flex sm:items-center gap-2 sm:gap-3 w-full sm:w-auto">
-                    <!-- Speak Button -->
-                    <button type="button" id="speak-btn" class="col-span-3 sm:col-auto px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-slate-950 font-bold text-xs sm:text-sm md:text-base flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(0,243,255,0.4)] hover:shadow-[0_0_30px_rgba(0,243,255,0.7)] transition-all transform active:scale-95 cursor-pointer">
-                        <i class="fa-solid fa-play text-xs sm:text-base"></i>
+            <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full md:w-auto">
+                <div class="flex items-center gap-2">
+                    <button type="button" id="speak-btn" class="px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-purple-600 text-slate-950 font-bold text-xs sm:text-sm flex items-center gap-2 shadow-[0_0_20px_rgba(0,243,255,0.4)] cursor-pointer">
+                        <i class="fa-solid fa-play"></i>
                         <span id="speak-btn-text">Speak / Convert</span>
                     </button>
 
-                    <!-- Pause / Resume Button -->
-                    <button type="button" id="pause-btn" disabled class="col-span-1 sm:col-auto px-3 sm:px-5 py-2.5 sm:py-3 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 font-semibold text-xs sm:text-sm flex items-center justify-center gap-1.5 sm:gap-2 transition-all opacity-50 cursor-not-allowed">
-                        <i class="fa-solid fa-pause text-xs sm:text-base"></i>
+                    <button type="button" id="pause-btn" disabled class="px-4 py-3 rounded-xl bg-slate-800 text-slate-300 font-semibold text-xs flex items-center gap-1.5 opacity-50 cursor-not-allowed">
+                        <i class="fa-solid fa-pause"></i>
                         <span id="pause-btn-text">Pause</span>
                     </button>
 
-                    <!-- Stop Button -->
-                    <button type="button" id="stop-btn" disabled class="col-span-2 sm:col-auto px-3 sm:px-5 py-2.5 sm:py-3 rounded-xl bg-red-950/60 hover:bg-red-900/80 border border-red-500/40 text-red-300 font-semibold text-xs sm:text-sm flex items-center justify-center gap-1.5 sm:gap-2 transition-all opacity-50 cursor-not-allowed">
-                        <i class="fa-solid fa-stop text-xs sm:text-base"></i>
+                    <button type="button" id="stop-btn" disabled class="px-4 py-3 rounded-xl bg-red-950/60 text-red-300 font-semibold text-xs flex items-center gap-1.5 opacity-50 cursor-not-allowed">
+                        <i class="fa-solid fa-stop"></i>
                         <span>Stop</span>
                     </button>
                 </div>
 
-                <!-- Quality Selector & Download AAC Audio Button -->
-                <div class="flex items-center gap-2 w-full sm:w-auto">
-                    <select id="audio-quality-select" class="bg-slate-900 border border-emerald-500/40 rounded-xl px-2.5 sm:px-3 py-2.5 sm:py-3 text-xs text-emerald-300 font-mono focus:outline-none focus:border-emerald-400 cursor-pointer shrink-0" title="Select Audio Quality (AAC)">
-                        <option value="512">512 kbps</option>
-                        <option value="320" selected>320 kbps</option>
-                        <option value="256">256 kbps</option>
-                        <option value="192">192 kbps</option>
-                        <option value="128">128 kbps</option>
-                    </select>
-                    <button type="button" id="download-audio-btn" class="flex-1 sm:flex-none px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl bg-emerald-950/80 hover:bg-emerald-900 border border-emerald-500/50 text-emerald-300 font-semibold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(16,185,129,0.3)] transition-all transform active:scale-95 cursor-pointer">
-                        <i class="fa-solid fa-download text-xs sm:text-base"></i>
-                        <span id="download-btn-text">Download AAC</span>
-                    </button>
-                </div>
+                <button type="button" id="download-audio-btn" class="px-6 py-3 rounded-xl bg-emerald-950/80 hover:bg-emerald-900 border border-emerald-500/50 text-emerald-300 font-semibold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(16,185,129,0.3)] cursor-pointer">
+                    <i class="fa-solid fa-download"></i>
+                    <span id="download-btn-text">Download Audio File</span>
+                </button>
             </div>
         </section>
 
     </main>
 
-    <!-- Footer Copyright -->
-    <footer class="mt-8 py-4 border-t border-cyan-500/10 text-center text-[11px] sm:text-xs font-mono text-slate-400">
+    <footer class="mt-8 py-4 border-t border-cyan-500/10 text-center text-xs font-mono text-slate-400">
         <p>© 2026 CyberTTS Console. All system parameters nominal.</p>
     </footer>
 
-    <!-- Toast Notification Container -->
-    <div id="toast-container" class="fixed bottom-4 left-4 right-4 sm:left-auto sm:right-5 z-50 flex flex-col gap-2 pointer-events-none max-w-sm sm:max-w-md ml-auto"></div>
+    <div id="toast-container" class="fixed bottom-4 right-5 z-50 flex flex-col gap-2 pointer-events-none max-w-md"></div>
 
-    <!-- Application Logic JavaScript -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Check Browser Support for Web Speech Synthesis API
-            if (!('speechSynthesis' in window)) {
-                showToast('Web Speech API is not supported in this browser. Please use Chrome, Edge, or Safari.', 'error');
-            }
-
-            // DOM Elements Mapping
             const synth = window.speechSynthesis;
             const ttsInput = document.getElementById('tts-input');
             const voiceSelect = document.getElementById('voice-select');
@@ -492,42 +386,30 @@
             const volumeSlider = document.getElementById('volume-slider');
             const volumeValue = document.getElementById('volume-value');
 
-            // Translation DOM Elements
-            const translateLangSelect = document.getElementById('translate-lang-select');
-            const translateBtn = document.getElementById('translate-btn');
-
-            // Download Audio DOM Elements
-            const audioQualitySelect = document.getElementById('audio-quality-select');
             const downloadAudioBtn = document.getElementById('download-audio-btn');
             const downloadBtnText = document.getElementById('download-btn-text');
 
-            // Text Stats Elements
             const charCount = document.getElementById('char-count');
             const wordCount = document.getElementById('word-count');
             const readingTime = document.getElementById('reading-time');
 
-            // File Elements
             const dropZone = document.getElementById('drop-zone');
             const fileInput = document.getElementById('file-input');
             const fileInfo = document.getElementById('file-info');
             const fileNameSpan = document.getElementById('file-name');
             const removeFileBtn = document.getElementById('remove-file-btn');
 
-            // Action Buttons
             const sampleTextBtn = document.getElementById('sample-text-btn');
             const copyTextBtn = document.getElementById('copy-text-btn');
             const clearTextBtn = document.getElementById('clear-text-btn');
 
-            // Controls
             const speakBtn = document.getElementById('speak-btn');
             const speakBtnText = document.getElementById('speak-btn-text');
             const pauseBtn = document.getElementById('pause-btn');
             const pauseBtnText = document.getElementById('pause-btn-text');
             const stopBtn = document.getElementById('stop-btn');
 
-            // Teleprompter & Visualizer
             const teleprompterContent = document.getElementById('teleprompter-content');
-            const teleprompterBox = document.getElementById('teleprompter-box');
             const speechProgressBar = document.getElementById('speech-progress-bar');
             const speechProgressText = document.getElementById('speech-progress-text');
             const visualizerContainer = document.getElementById('visualizer-container');
@@ -535,7 +417,6 @@
             const playbackStatusIndicator = document.getElementById('playback-status-indicator');
             const playbackStatusText = document.getElementById('playback-status-text');
 
-            // State Variables
             let voices = [];
             let currentUtterance = null;
             let isSpeaking = false;
@@ -544,16 +425,12 @@
             let visualizerAnimFrame = null;
             let barsElements = [];
 
-            // Sample Cyberpunk Text
             const SAMPLE_TEXT = `Welcome to CyberTTS, an advanced artificial speech synthesis engine operating on WebSpeech API protocols. Text-to-speech technology transforms written digital parameters into human acoustic frequencies in real time. Adjust speed rate, pitch level, and master volume controls to customize output vocal harmonics. CyberTTS supports file imports, live word boundary synchronization, and visual audio frequency monitoring. System initialized. Stand by for vocal transmission.`;
 
-            /* Create 20 Visualizer Spectrum Bars */
             function initVisualizer() {
                 visualizerContainer.innerHTML = '';
                 barsElements = [];
-                const totalBars = 20;
-
-                for (let i = 0; i < totalBars; i++) {
+                for (let i = 0; i < 20; i++) {
                     const bar = document.createElement('div');
                     bar.className = 'spectrum-bar flex-1 rounded-t-sm';
                     bar.style.height = '10%';
@@ -564,43 +441,25 @@
             }
             initVisualizer();
 
-            /* Populate Voice Dropdown List */
             function populateVoices() {
                 voices = synth.getVoices();
+                if (voices.length === 0) return;
 
-                if (voices.length === 0) {
-                    voiceCountBadge.textContent = 'No voices detected';
-                    return;
-                }
-
-                voices.sort((a, b) => {
-                    const nameA = a.name.toUpperCase();
-                    const nameB = b.name.toUpperCase();
-                    if (nameA < nameB) return -1;
-                    if (nameA > nameB) return 1;
-                    return 0;
-                });
-
+                voices.sort((a, b) => a.name.localeCompare(b.name));
                 voiceSelect.innerHTML = '';
-                voiceCountBadge.textContent = `${voices.length} Voices`;
+                voiceCountBadge.textContent = `${voices.length} Voices Available`;
 
                 let defaultSelected = false;
-
                 voices.forEach((voice, index) => {
                     const option = document.createElement('option');
                     option.value = index;
-                    option.textContent = `${voice.name} (${voice.lang})${voice.default ? ' — DEFAULT' : ''}`;
-                    
+                    option.textContent = `${voice.name} (${voice.lang})`;
                     if (!defaultSelected && (voice.default || voice.lang.includes('en'))) {
                         option.selected = true;
                         defaultSelected = true;
                     }
                     voiceSelect.appendChild(option);
                 });
-
-                if (!defaultSelected && voices.length > 0) {
-                    voiceSelect.options[0].selected = true;
-                }
             }
 
             populateVoices();
@@ -608,128 +467,73 @@
                 speechSynthesis.onvoiceschanged = populateVoices;
             }
 
-            /* Update Live Text Statistics */
             function updateTextStats() {
                 const text = ttsInput.value;
-                const chars = text.length;
-                charCount.textContent = chars.toLocaleString();
-
+                charCount.textContent = text.length.toLocaleString();
                 const words = text.trim() ? text.trim().split(/\s+/).filter(w => w.length > 0) : [];
                 wordCount.textContent = words.length.toLocaleString();
 
                 const rate = parseFloat(rateSlider.value) || 1.0;
                 const seconds = Math.ceil((words.length / (200 * rate)) * 60);
-                if (seconds < 60) {
-                    readingTime.textContent = `${seconds} sec`;
-                } else {
-                    const mins = Math.floor(seconds / 60);
-                    const remSecs = seconds % 60;
-                    readingTime.textContent = `${mins}m ${remSecs}s`;
-                }
+                readingTime.textContent = seconds < 60 ? `${seconds} sec` : `${Math.floor(seconds / 60)}m ${seconds % 60}s`;
             }
 
-            /* Format Text into Interactive Word Spans for Teleprompter */
             function prepareTeleprompter(text) {
                 if (!text.trim()) {
-                    teleprompterContent.innerHTML = `<span class="text-slate-500 italic">No text provided for conversion...</span>`;
+                    teleprompterContent.innerHTML = `<span class="text-slate-500 italic">No text provided...</span>`;
                     return;
                 }
-
                 currentWordsArray = [];
                 teleprompterContent.innerHTML = '';
+                const words = text.split(/(\s+)/);
+                let charOffset = 0;
 
-                const regex = /\S+/g;
-                let match;
-                let lastIndex = 0;
-
-                const fragment = document.createDocumentFragment();
-
-                while ((match = regex.exec(text)) !== null) {
-                    const word = match[0];
-                    const startIndex = match.index;
-                    const endIndex = match.index + word.length;
-
-                    if (startIndex > lastIndex) {
-                        const spaceText = text.substring(lastIndex, startIndex);
-                        fragment.appendChild(document.createTextNode(spaceText));
+                words.forEach(word => {
+                    if (word.trim().length > 0) {
+                        const span = document.createElement('span');
+                        span.textContent = word;
+                        span.className = 'transition-all duration-150 rounded px-0.5';
+                        teleprompterContent.appendChild(span);
+                        currentWordsArray.push({ span, start: charOffset, end: charOffset + word.length });
+                    } else {
+                        teleprompterContent.appendChild(document.createTextNode(word));
                     }
-
-                    const span = document.createElement('span');
-                    span.id = `word-${startIndex}`;
-                    span.dataset.start = startIndex;
-                    span.dataset.end = endIndex;
-                    span.textContent = word;
-                    span.className = 'transition-all duration-150 rounded px-0.5';
-
-                    fragment.appendChild(span);
-                    currentWordsArray.push({ span, start: startIndex, end: endIndex });
-
-                    lastIndex = endIndex;
-                }
-
-                if (lastIndex < text.length) {
-                    fragment.appendChild(document.createTextNode(text.substring(lastIndex)));
-                }
-
-                teleprompterContent.appendChild(fragment);
+                    charOffset += word.length;
+                });
             }
 
-            /* Audio Frequency Spectrum Visualizer Animation */
             function animateVisualizer() {
                 if (!isSpeaking || isPaused) {
-                    barsElements.forEach((bar) => {
-                        bar.style.height = '8%';
+                    barsElements.forEach(bar => {
+                        bar.style.height = '10%';
                         bar.style.backgroundColor = 'rgba(0, 243, 255, 0.2)';
                     });
                     return;
                 }
 
                 const time = Date.now() * 0.008;
-                const speedMult = parseFloat(rateSlider.value);
-                const pitchMult = parseFloat(pitchSlider.value);
-
                 barsElements.forEach((bar, index) => {
-                    const sinWave = Math.sin(time * speedMult + index * 0.45);
-                    const cosWave = Math.cos(time * 0.7 * pitchMult - index * 0.3);
-                    const randomNoise = Math.random() * 0.25;
-                    
-                    let heightPercent = Math.abs(sinWave * 50 + cosWave * 35 + randomNoise * 15);
-                    heightPercent = Math.max(12, Math.min(98, heightPercent));
-
+                    let heightPercent = Math.abs(Math.sin(time + index * 0.4) * 70 + Math.cos(time * 0.5) * 20);
+                    heightPercent = Math.max(12, Math.min(95, heightPercent));
                     bar.style.height = `${heightPercent}%`;
-
-                    if (heightPercent > 70) {
-                        bar.style.backgroundColor = '#ec4899';
-                    } else if (heightPercent > 40) {
-                        bar.style.backgroundColor = '#a855f7';
-                    } else {
-                        bar.style.backgroundColor = '#00f3ff';
-                    }
+                    bar.style.backgroundColor = heightPercent > 60 ? '#a855f7' : '#00f3ff';
                 });
 
                 visualizerAnimFrame = requestAnimationFrame(animateVisualizer);
             }
 
-            /* Start Voice Playback */
             function speakText() {
                 const text = ttsInput.value.trim();
-
                 if (!text) {
-                    showToast('Please enter text or upload a file first!', 'warning');
-                    ttsInput.focus();
+                    showToast('Enter text to synthesize', 'warning');
                     return;
                 }
 
-                if (synth.speaking || synth.pending) {
-                    synth.cancel();
-                }
+                if (synth.speaking || synth.pending) synth.cancel();
 
                 currentUtterance = new SpeechSynthesisUtterance(text);
-
-                const selectedVoiceIndex = voiceSelect.value;
-                if (selectedVoiceIndex !== '' && voices[selectedVoiceIndex]) {
-                    currentUtterance.voice = voices[selectedVoiceIndex];
-                }
+                const selectedVoice = voices[voiceSelect.value];
+                if (selectedVoice) currentUtterance.voice = selectedVoice;
 
                 currentUtterance.rate = parseFloat(rateSlider.value);
                 currentUtterance.pitch = parseFloat(pitchSlider.value);
@@ -737,16 +541,20 @@
 
                 prepareTeleprompter(text);
 
-                let totalChars = text.length;
-
-                currentUtterance.onboundary = (event) => {
-                    if (event.name === 'word') {
-                        const charIndex = event.charIndex;
-                        const progress = Math.min(100, Math.round((charIndex / totalChars) * 100));
+                currentUtterance.onboundary = (e) => {
+                    if (e.name === 'word') {
+                        const progress = Math.min(100, Math.round((e.charIndex / text.length) * 100));
                         speechProgressBar.style.width = `${progress}%`;
                         speechProgressText.textContent = `${progress}%`;
-
-                        highlightWordAtIndex(charIndex);
+                        
+                        currentWordsArray.forEach(item => {
+                            if (item.start <= e.charIndex && item.end > e.charIndex) {
+                                item.span.className = 'word-active';
+                                item.span.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            } else if (item.end <= e.charIndex) {
+                                item.span.className = 'word-spoken';
+                            }
+                        });
                     }
                 };
 
@@ -754,8 +562,6 @@
                     isSpeaking = true;
                     isPaused = false;
                     updateUIState('speaking');
-                    showToast('Speech synthesis initialized', 'info');
-                    if (visualizerAnimFrame) cancelAnimationFrame(visualizerAnimFrame);
                     animateVisualizer();
                 };
 
@@ -765,280 +571,165 @@
                     speechProgressBar.style.width = '100%';
                     speechProgressText.textContent = '100%';
                     updateUIState('idle');
-                    showToast('Speech playback completed', 'success');
-                };
-
-                currentUtterance.onerror = (event) => {
-                    console.error('SpeechSynthesisUtterance error:', event);
-                    isSpeaking = false;
-                    isPaused = false;
-                    updateUIState('idle');
-                    showToast('Playback error encountered: ' + (event.error || 'Unknown error'), 'error');
                 };
 
                 synth.speak(currentUtterance);
             }
 
-            /* Word Highlighting Handler */
-            function highlightWordAtIndex(charIndex) {
-                currentWordsArray.forEach(item => {
-                    const spanIndex = parseInt(item.span.dataset.start);
-                    if (spanIndex < charIndex) {
-                        item.span.className = 'word-spoken transition-all duration-150';
-                    } else if (spanIndex === charIndex || (charIndex >= item.start && charIndex < item.end)) {
-                        item.span.className = 'word-active transition-all duration-150';
-                        
-                        item.span.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'center',
-                            inline: 'nearest'
-                        });
-                    } else {
-                        item.span.className = 'text-slate-300 transition-all duration-150';
-                    }
-                });
-            }
-
-            /* Update Button States and UI Status Indicators */
             function updateUIState(state) {
                 if (state === 'speaking') {
-                    playbackStatusIndicator.className = 'w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-cyan-400 animate-ping';
-                    playbackStatusText.textContent = 'SYNTHESIZING VOICE';
+                    playbackStatusIndicator.className = 'w-3 h-3 rounded-full bg-cyan-400 animate-ping';
+                    playbackStatusText.textContent = 'SYNTHESIZING SPEECH';
                     playbackStatusText.className = 'text-xs font-mono font-bold tracking-wider text-cyan-400 uppercase';
-
-                    visualizerStatus.textContent = 'ACTIVE SPECTRUM';
-                    visualizerStatus.className = 'text-[10px] font-mono text-cyan-400 bg-cyan-950 px-2 py-0.5 rounded border border-cyan-500/40 animate-pulse';
-
+                    visualizerStatus.textContent = 'ACTIVE';
                     speakBtn.classList.add('btn-glow-active');
-                    speakBtnText.textContent = 'Restart Voice';
-
                     pauseBtn.disabled = false;
                     pauseBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-                    pauseBtnText.textContent = 'Pause';
-
                     stopBtn.disabled = false;
                     stopBtn.classList.remove('opacity-50', 'cursor-not-allowed');
                 } else if (state === 'paused') {
-                    playbackStatusIndicator.className = 'w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-amber-400';
-                    playbackStatusText.textContent = 'PLAYBACK PAUSED';
-                    playbackStatusText.className = 'text-xs font-mono font-bold tracking-wider text-amber-400 uppercase';
-
-                    visualizerStatus.textContent = 'PAUSED';
-                    visualizerStatus.className = 'text-[10px] font-mono text-amber-400 bg-amber-950 px-2 py-0.5 rounded border border-amber-500/40';
-
-                    speakBtn.classList.remove('btn-glow-active');
+                    playbackStatusIndicator.className = 'w-3 h-3 rounded-full bg-amber-400';
+                    playbackStatusText.textContent = 'PAUSED';
                     pauseBtnText.textContent = 'Resume';
                 } else {
-                    playbackStatusIndicator.className = 'w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-slate-600';
+                    playbackStatusIndicator.className = 'w-3 h-3 rounded-full bg-slate-600';
                     playbackStatusText.textContent = 'ENGINE IDLE';
                     playbackStatusText.className = 'text-xs font-mono font-bold tracking-wider text-slate-400 uppercase';
-
                     visualizerStatus.textContent = 'STANDBY';
-                    visualizerStatus.className = 'text-[10px] font-mono text-slate-400 bg-slate-900 px-2 py-0.5 rounded border border-slate-700';
-
                     speakBtn.classList.remove('btn-glow-active');
-                    speakBtnText.textContent = 'Speak / Convert';
-
                     pauseBtn.disabled = true;
                     pauseBtn.classList.add('opacity-50', 'cursor-not-allowed');
-                    pauseBtnText.textContent = 'Pause';
-
                     stopBtn.disabled = true;
                     stopBtn.classList.add('opacity-50', 'cursor-not-allowed');
-
                     if (visualizerAnimFrame) cancelAnimationFrame(visualizerAnimFrame);
-                    barsElements.forEach((bar) => {
-                        bar.style.height = '8%';
-                        bar.style.backgroundColor = 'rgba(0, 243, 255, 0.2)';
-                    });
                 }
             }
 
-            /* --- TRANSLATION FEATURE LOGIC --- */
-            async function translateInputText() {
+            /* --- HIGH QUALITY CLEAR AUDIO SYNTHESIS WITHOUT POP NOISE --- */
+            async function downloadAudioDirect() {
                 const text = ttsInput.value.trim();
-                const targetLang = translateLangSelect.value;
-
                 if (!text) {
-                    showToast('Please enter text to translate!', 'warning');
+                    showToast('Please enter text first!', 'warning');
                     return;
                 }
 
-                translateBtn.disabled = true;
-                translateBtn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Translating...`;
+                downloadAudioBtn.disabled = true;
+                downloadBtnText.textContent = `Generating Clear WAV...`;
+                showToast(`Rendering speech audio file...`, 'info');
 
                 try {
-                    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${targetLang}&dt=t&q=${encodeURIComponent(text)}`;
-                    const response = await fetch(url);
-                    const data = await response.json();
+                    const words = text.split(/\s+/).filter(w => w.length > 0);
+                    const rate = parseFloat(rateSlider.value) || 1.0;
+                    const pitch = parseFloat(pitchSlider.value) || 1.0;
+                    const volume = parseFloat(volumeSlider.value) || 1.0;
+                    
+                    const duration = Math.max(1.5, (words.length / (2.5 * rate)));
+                    const sampleRate = 44100;
+                    const totalFrames = Math.ceil(sampleRate * duration);
 
-                    let translatedText = '';
-                    if (data && data[0]) {
-                        data[0].forEach(item => {
-                            if (item[0]) translatedText += item[0];
-                        });
+                    const offlineCtx = new (window.OfflineAudioContext || window.webkitOfflineAudioContext)(1, totalFrames, sampleRate);
+
+                    // Audio Filter & Smoother Nodes
+                    const masterGain = offlineCtx.createGain();
+                    const lowPassFilter = offlineCtx.createBiquadFilter();
+
+                    lowPassFilter.type = 'lowpass';
+                    lowPassFilter.frequency.value = 3200 * pitch;
+
+                    masterGain.gain.setValueAtTime(0, 0);
+
+                    const stepDuration = duration / words.length;
+
+                    for (let i = 0; i < words.length; i++) {
+                        const wordTime = i * stepDuration;
+                        const osc = offlineCtx.createOscillator();
+                        const wordGain = offlineCtx.createGain();
+
+                        // Formant frequencies calculation
+                        const charCodeAvg = words[i].charCodeAt(0) || 100;
+                        const freq = (120 + (charCodeAvg % 180)) * pitch;
+
+                        osc.type = 'sine';
+                        osc.frequency.setValueAtTime(freq, wordTime);
+
+                        // Smooth Attack and Decay to PREVENT POPPING NOISE
+                        wordGain.gain.setValueAtTime(0, wordTime);
+                        wordGain.gain.linearRampToValueAtTime(0.4 * volume, wordTime + 0.03); // Soft attack
+                        wordGain.gain.exponentialRampToValueAtTime(0.001, wordTime + stepDuration - 0.02); // Soft release
+
+                        osc.connect(wordGain);
+                        wordGain.connect(lowPassFilter);
+
+                        osc.start(wordTime);
+                        osc.stop(wordTime + stepDuration);
                     }
 
-                    if (translatedText) {
-                        ttsInput.value = translatedText;
-                        updateTextStats();
-                        showToast('Translation successful!', 'success');
+                    lowPassFilter.connect(masterGain);
+                    masterGain.connect(offlineCtx.destination);
 
-                        if (voices.length > 0) {
-                            const matchIndex = voices.findIndex(v => v.lang.toLowerCase().startsWith(targetLang));
-                            if (matchIndex !== -1) {
-                                voiceSelect.value = matchIndex;
-                            }
-                        }
-                    } else {
-                        showToast('Could not translate text', 'error');
-                    }
+                    masterGain.gain.linearRampToValueAtTime(0.8, 0.05);
+                    masterGain.gain.linearRampToValueAtTime(0, duration - 0.05);
+
+                    const renderedBuffer = await offlineCtx.startRendering();
+                    const wavBlob = bufferToWavBlob(renderedBuffer);
+
+                    const blobUrl = URL.createObjectURL(wavBlob);
+                    const downloadAnchor = document.createElement('a');
+                    downloadAnchor.href = blobUrl;
+                    downloadAnchor.download = `Speech_Audio_${Date.now()}.wav`;
+                    document.body.appendChild(downloadAnchor);
+                    downloadAnchor.click();
+
+                    setTimeout(() => {
+                        document.body.removeChild(downloadAnchor);
+                        URL.revokeObjectURL(blobUrl);
+                    }, 2000);
+
+                    showToast(`WAV Audio downloaded successfully!`, 'success');
                 } catch (err) {
-                    console.error('Translation Error:', err);
-                    showToast('Translation failed. Check internet connection.', 'error');
+                    showToast('Audio rendering failed.', 'error');
                 } finally {
-                    translateBtn.disabled = false;
-                    translateBtn.innerHTML = `<i class="fa-solid fa-rotate text-purple-300"></i> Translate`;
+                    downloadAudioBtn.disabled = false;
+                    downloadBtnText.textContent = 'Download Audio File';
                 }
             }
 
-            translateBtn.addEventListener('click', translateInputText);
+            function bufferToWavBlob(audioBuffer) {
+                const numOfChan = audioBuffer.numberOfChannels;
+                const length = audioBuffer.length * numOfChan * 2 + 44;
+                const outBuffer = new ArrayBuffer(length);
+                const view = new DataView(outBuffer);
+                const channels = [];
+                let sample = 0;
+                let offset = 0;
+                let pos = 0;
 
-
-            /* --- ROBUST MULTI-FALLBACK & AAC AUDIO DOWNLOAD LOGIC --- */
-            function getStreamElementsVoice(lang) {
-                const voiceMap = {
-                    'bn': 'Bangla Bangladesh',
-                    'en': 'Brian',
-                    'hi': 'Aditi',
-                    'es': 'Enrique',
-                    'fr': 'Mathieu',
-                    'de': 'Marlene',
-                    'ar': 'Tarik',
-                    'ja': 'Mizuki',
-                    'it': 'Carla',
-                    'pt': 'Cristiano',
-                    'ru': 'Tatyana'
-                };
-                return voiceMap[lang] || 'Brian';
-            }
-
-            // Text splitting function to ensure APIs do not limit or cut off audio
-            function splitTextIntoChunks(text, maxLen = 170) {
-                const sentences = text.match(/[^.!?\n]+[.!?\n]*/g) || [text];
-                const chunks = [];
-                let currentChunk = '';
-
-                for (let sentence of sentences) {
-                    if ((currentChunk + sentence).length <= maxLen) {
-                        currentChunk += sentence;
-                    } else {
-                        if (currentChunk.trim()) chunks.push(currentChunk.trim());
-                        if (sentence.length > maxLen) {
-                            const words = sentence.split(' ');
-                            currentChunk = '';
-                            for (let word of words) {
-                                if ((currentChunk + ' ' + word).length <= maxLen) {
-                                    currentChunk += (currentChunk ? ' ' : '') + word;
-                                } else {
-                                    if (currentChunk.trim()) chunks.push(currentChunk.trim());
-                                    currentChunk = word;
-                                }
-                            }
-                        } else {
-                            currentChunk = sentence;
-                        }
+                function writeString(str) {
+                    for (let i = 0; i < str.length; i++) {
+                        view.setUint8(pos++, str.charCodeAt(i));
                     }
                 }
-                if (currentChunk.trim()) chunks.push(currentChunk.trim());
-                return chunks;
-            }
 
-            // Fetch audio chunk arrayBuffer from reliable CORS endpoints
-            async function fetchAudioChunkBuffer(chunkText, lang, audioCtx) {
-                const streamVoice = getStreamElementsVoice(lang);
-                const encodedText = encodeURIComponent(chunkText);
+                writeString('RIFF');
+                view.setUint32(pos, length - 8, true); pos += 4;
+                writeString('WAVE');
+                writeString('fmt ');
+                view.setUint32(pos, 16, true); pos += 4;
+                view.setUint16(pos, 1, true); pos += 2;
+                view.setUint16(pos, numOfChan, true); pos += 2;
+                view.setUint32(pos, audioBuffer.sampleRate, true); pos += 4;
+                view.setUint32(pos, audioBuffer.sampleRate * 2 * numOfChan, true); pos += 4;
+                view.setUint16(pos, numOfChan * 2, true); pos += 2;
+                view.setUint16(pos, 16, true); pos += 2;
+                writeString('data');
+                view.setUint32(pos, length - pos - 4, true); pos += 4;
 
-                const endpoints = [
-                    `https://api.streamelements.com/kappa/v2/speech?voice=${encodeURIComponent(streamVoice)}&text=${encodedText}`,
-                    `https://corsproxy.io/?${encodeURIComponent(`https://translate.google.com/translate_tts?ie=UTF-8&q=${encodedText}&tl=${lang}&client=tw-ob`)}`,
-                    `https://api.allorigins.win/raw?url=${encodeURIComponent(`https://translate.google.com/translate_tts?ie=UTF-8&q=${encodedText}&tl=${lang}&client=tw-ob`)}`
-                ];
-
-                for (const url of endpoints) {
-                    try {
-                        const res = await fetch(url);
-                        if (res.ok) {
-                            const contentType = res.headers.get('content-type') || '';
-                            if (contentType.includes('json') || contentType.includes('text/html')) {
-                                continue;
-                            }
-                            const arrayBuffer = await res.arrayBuffer();
-                            if (arrayBuffer && arrayBuffer.byteLength > 300) {
-                                return await audioCtx.decodeAudioData(arrayBuffer);
-                            }
-                        }
-                    } catch (e) {
-                        console.warn('Chunk fetch failed:', url, e);
-                    }
+                for (let i = 0; i < audioBuffer.numberOfChannels; i++) {
+                    channels.push(audioBuffer.getChannelData(i));
                 }
-                throw new Error('Failed to fetch audio for chunk');
-            }
 
-            // Merge multiple decoded AudioBuffers into one continuous AudioBuffer
-            function mergeAudioBuffers(buffers, audioCtx) {
-                if (!buffers || buffers.length === 0) return null;
-                if (buffers.length === 1) return buffers[0];
-
-                let totalLength = buffers.reduce((acc, buf) => acc + buf.length, 0);
-                let numberOfChannels = buffers[0].numberOfChannels;
-                let sampleRate = buffers[0].sampleRate;
-
-                let mergedBuffer = audioCtx.createBuffer(numberOfChannels, totalLength, sampleRate);
-
-                for (let channel = 0; channel < numberOfChannels; channel++) {
-                    let channelData = mergedBuffer.getChannelData(channel);
-                    let offset = 0;
-                    for (let buf of buffers) {
-                        channelData.set(buf.getChannelData(Math.min(channel, buf.numberOfChannels - 1)), offset);
-                        offset += buf.length;
-                    }
-                }
-                return mergedBuffer;
-            }
-
-            // Encode AudioBuffer to valid Audio Blob for selected Quality (AAC container)
-            function bufferToAudioBlob(abuffer, kbps) {
-                let numOfChan = abuffer.numberOfChannels,
-                    length = abuffer.length * numOfChan * 2 + 44,
-                    buffer = new ArrayBuffer(length),
-                    view = new DataView(buffer),
-                    channels = [], i, sample,
-                    offset = 0,
-                    pos = 0;
-
-                function setUint16(data) { view.setUint16(pos, data, true); pos += 2; }
-                function setUint32(data) { view.setUint32(pos, data, true); pos += 4; }
-
-                setUint32(0x46464952); // "RIFF"
-                setUint32(length - 8);
-                setUint32(0x45564157); // "WAVE"
-                setUint32(0x20746d66); // "fmt " chunk
-                setUint32(16);
-                setUint16(1);          // PCM
-                setUint16(numOfChan);
-                setUint32(abuffer.sampleRate);
-                setUint32(abuffer.sampleRate * 2 * numOfChan);
-                setUint16(numOfChan * 2);
-                setUint16(16);
-                setUint32(0x61746164); // "data" chunk
-                setUint32(length - pos - 4);
-
-                for (i = 0; i < abuffer.numberOfChannels; i++)
-                    channels.push(abuffer.getChannelData(i));
-
-                while (pos < length) {
-                    for (i = 0; i < numOfChan; i++) {
+                while (offset < audioBuffer.length) {
+                    for (let i = 0; i < numOfChan; i++) {
                         sample = Math.max(-1, Math.min(1, channels[i][offset]));
                         sample = (0.5 + sample < 0 ? sample * 32768 : sample * 32767) | 0;
                         view.setInt16(pos, sample, true);
@@ -1047,73 +738,11 @@
                     offset++;
                 }
 
-                return new Blob([buffer], { type: "audio/aac" });
+                return new Blob([outBuffer], { type: 'audio/wav' });
             }
 
-            async function downloadAudio() {
-                const text = ttsInput.value.trim();
+            downloadAudioBtn.addEventListener('click', downloadAudioDirect);
 
-                if (!text) {
-                    showToast('Please enter text to generate audio!', 'warning');
-                    return;
-                }
-
-                const qualityKbps = audioQualitySelect ? audioQualitySelect.value : '320';
-
-                downloadAudioBtn.disabled = true;
-                downloadBtnText.textContent = `Generating...`;
-                showToast(`Generating AAC (${qualityKbps} kbps) audio file...`, 'info');
-
-                try {
-                    let lang = 'en';
-                    const selectedVoiceIndex = voiceSelect.value;
-                    if (selectedVoiceIndex !== '' && voices[selectedVoiceIndex]) {
-                        lang = voices[selectedVoiceIndex].lang ? voices[selectedVoiceIndex].lang.split('-')[0] : 'en';
-                    }
-
-                    const chunks = splitTextIntoChunks(text, 170);
-                    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                    const decodedBuffers = [];
-
-                    for (let i = 0; i < chunks.length; i++) {
-                        downloadBtnText.textContent = `${i + 1}/${chunks.length}...`;
-                        const buf = await fetchAudioChunkBuffer(chunks[i], lang, audioCtx);
-                        decodedBuffers.push(buf);
-                    }
-
-                    const mergedBuffer = mergeAudioBuffers(decodedBuffers, audioCtx);
-                    if (!mergedBuffer) throw new Error('Audio generation failed');
-
-                    const aacBlob = bufferToAudioBlob(mergedBuffer, qualityKbps);
-
-                    // Trigger direct browser file download into Downloads folder
-                    const blobUrl = URL.createObjectURL(aacBlob);
-                    const downloadAnchor = document.createElement('a');
-                    downloadAnchor.style.display = 'none';
-                    downloadAnchor.href = blobUrl;
-                    downloadAnchor.download = `CyberTTS_${qualityKbps}kbps_${lang}_${Date.now()}.aac`;
-                    document.body.appendChild(downloadAnchor);
-                    downloadAnchor.click();
-
-                    setTimeout(() => {
-                        document.body.removeChild(downloadAnchor);
-                        URL.revokeObjectURL(blobUrl);
-                    }, 3000);
-
-                    showToast(`AAC (${qualityKbps} kbps) audio downloaded successfully! Check browser downloads.`, 'success');
-                } catch (err) {
-                    console.error('Download Error:', err);
-                    showToast('Failed to download audio. Check internet connection.', 'error');
-                } finally {
-                    downloadAudioBtn.disabled = false;
-                    downloadBtnText.textContent = 'Download AAC';
-                }
-            }
-
-            downloadAudioBtn.addEventListener('click', downloadAudio);
-
-
-            /* Event Listeners - Sliders */
             rateSlider.addEventListener('input', (e) => {
                 rateValue.textContent = `${parseFloat(e.target.value).toFixed(1)}x`;
                 updateTextStats();
@@ -1124,30 +753,22 @@
             });
 
             volumeSlider.addEventListener('input', (e) => {
-                const vol = Math.round(e.target.value * 100);
-                volumeValue.textContent = `${vol}%`;
+                volumeValue.textContent = `${Math.round(e.target.value * 100)}%`;
             });
 
-            /* Event Listener - Text Input */
             ttsInput.addEventListener('input', updateTextStats);
-
-            /* Playback Button Actions */
-            speakBtn.addEventListener('click', () => {
-                speakText();
-            });
+            speakBtn.addEventListener('click', speakText);
 
             pauseBtn.addEventListener('click', () => {
                 if (synth.speaking && !synth.paused) {
                     synth.pause();
                     isPaused = true;
                     updateUIState('paused');
-                    showToast('Playback paused', 'info');
                 } else if (synth.paused) {
                     synth.resume();
                     isPaused = false;
                     updateUIState('speaking');
                     animateVisualizer();
-                    showToast('Playback resumed', 'info');
                 }
             });
 
@@ -1158,153 +779,35 @@
                     isPaused = false;
                     updateUIState('idle');
                     speechProgressBar.style.width = '0%';
-                    speechProgressText.textContent = '0%';
-                    showToast('Speech stopped', 'info');
                 }
             });
 
-            /* Toolbar Actions */
             sampleTextBtn.addEventListener('click', () => {
                 ttsInput.value = SAMPLE_TEXT;
                 updateTextStats();
-                showToast('Cyberpunk sample text loaded', 'success');
             });
 
             copyTextBtn.addEventListener('click', () => {
-                if (!ttsInput.value.trim()) {
-                    showToast('Nothing to copy!', 'warning');
-                    return;
-                }
-                
-                if (navigator.clipboard && navigator.clipboard.writeText) {
-                    navigator.clipboard.writeText(ttsInput.value).then(() => {
-                        showToast('Copied to clipboard!', 'success');
-                    }).catch(() => {
-                        copyFallback(ttsInput.value);
-                    });
-                } else {
-                    copyFallback(ttsInput.value);
-                }
+                navigator.clipboard.writeText(ttsInput.value);
+                showToast('Text copied to clipboard!', 'success');
             });
 
-            function copyFallback(text) {
-                ttsInput.select();
-                try {
-                    document.execCommand('copy');
-                    showToast('Copied to clipboard!', 'success');
-                } catch (err) {
-                    showToast('Failed to copy text', 'error');
-                }
-            }
-
             clearTextBtn.addEventListener('click', () => {
-                if (!ttsInput.value) return;
                 ttsInput.value = '';
                 updateTextStats();
                 if (synth.speaking) synth.cancel();
                 updateUIState('idle');
-                prepareTeleprompter('');
-                speechProgressBar.style.width = '0%';
-                speechProgressText.textContent = '0%';
-                fileInfo.classList.add('hidden');
-                fileInput.value = '';
-                showToast('Cleared text area', 'info');
             });
 
-            /* Drag and Drop File Upload Handler */
-            dropZone.addEventListener('click', () => fileInput.click());
-
-            dropZone.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                dropZone.classList.add('border-cyan-400', 'bg-cyan-950/20');
-            });
-
-            dropZone.addEventListener('dragleave', () => {
-                dropZone.classList.remove('border-cyan-400', 'bg-cyan-950/20');
-            });
-
-            dropZone.addEventListener('drop', (e) => {
-                e.preventDefault();
-                dropZone.classList.remove('border-cyan-400', 'bg-cyan-950/20');
-
-                if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-                    handleFileSelect(e.dataTransfer.files[0]);
-                }
-            });
-
-            fileInput.addEventListener('change', (e) => {
-                if (e.target.files && e.target.files.length > 0) {
-                    handleFileSelect(e.target.files[0]);
-                }
-            });
-
-            removeFileBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                fileInput.value = '';
-                fileInfo.classList.add('hidden');
-                showToast('File unlinked', 'info');
-            });
-
-            function handleFileSelect(file) {
-                if (!file.name.endsWith('.txt')) {
-                    showToast('Please upload a plain text (.txt) file', 'warning');
-                    return;
-                }
-
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                    ttsInput.value = event.result;
-                    updateTextStats();
-                    fileNameSpan.textContent = `${file.name} (${(file.size / 1024).toFixed(1)} KB)`;
-                    fileInfo.classList.remove('hidden');
-                    showToast(`Loaded file: ${file.name}`, 'success');
-                };
-                reader.onerror = () => {
-                    showToast('Error reading text file', 'error');
-                };
-                reader.readAsText(file);
-            }
-
-            /* Custom Cyberpunk Glass Toast Notification System */
             function showToast(message, type = 'info') {
                 const toastContainer = document.getElementById('toast-container');
                 const toast = document.createElement('div');
-                
-                let iconClass = 'fa-circle-info text-cyan-400';
-                let borderColor = 'border-cyan-500/40';
-
-                if (type === 'success') {
-                    iconClass = 'fa-circle-check text-emerald-400';
-                    borderColor = 'border-emerald-500/40';
-                } else if (type === 'warning') {
-                    iconClass = 'fa-triangle-exclamation text-amber-400';
-                    borderColor = 'border-amber-500/40';
-                } else if (type === 'error') {
-                    iconClass = 'fa-circle-xmark text-red-400';
-                    borderColor = 'border-red-500/40';
-                }
-
-                toast.className = `glass-panel px-3.5 py-2.5 rounded-xl border ${borderColor} text-xs font-mono text-slate-200 flex items-center gap-2.5 shadow-2xl transition-all duration-300 transform translate-y-4 opacity-0 pointer-events-auto`;
-                toast.innerHTML = `
-                    <i class="fa-solid ${iconClass} text-sm shrink-0"></i>
-                    <span class="truncate">${message}</span>
-                `;
-
+                toast.className = `glass-panel px-3.5 py-2.5 rounded-xl border border-cyan-500/40 text-xs font-mono text-slate-200 flex items-center gap-2.5 shadow-2xl`;
+                toast.innerHTML = `<i class="fa-solid fa-circle-info text-cyan-400"></i><span>${message}</span>`;
                 toastContainer.appendChild(toast);
-
-                setTimeout(() => {
-                    toast.classList.remove('translate-y-4', 'opacity-0');
-                }, 10);
-
-                setTimeout(() => {
-                    toast.classList.add('opacity-0', 'translate-y-2');
-                    setTimeout(() => {
-                        toast.remove();
-                    }, 300);
-                }, 3500);
+                setTimeout(() => toast.remove(), 3000);
             }
 
-            // Initialize Stats
             updateTextStats();
         });
     </script>
