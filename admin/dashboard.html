@@ -374,7 +374,7 @@
 
         .chart-container {
             position: relative;
-            height: 300px;
+            height: 320px;
             width: 100%;
         }
 
@@ -510,6 +510,8 @@
             box-shadow: var(--shadow);
             transform: scale(0.9);
             transition: var(--transition);
+            max-height: 90vh;
+            overflow-y: auto;
         }
 
         .modal-overlay.active .modal {
@@ -623,7 +625,6 @@
                 </div>
                 <div class="header-controls">
                     <button class="btn btn-outline" onclick="exportData()"><i class="fa-solid fa-download"></i> Export</button>
-                    <!-- Global reset removed from here per instructions -->
                     <button class="btn btn-primary" onclick="openAdminModal()"><i class="fa-solid fa-plus"></i> Add Campaign Data</button>
                 </div>
             </header>
@@ -632,14 +633,14 @@
             <section class="filter-bar">
                 <div class="filter-group">
                     <i class="fa-solid fa-filter" style="color: var(--text-muted);"></i>
-                    <!-- Filter dynamic dropown handled by JS -->
+                    <!-- Filter dynamic dropdown handled by JS -->
                     <select class="select-input" id="channelFilter" onchange="applyFilters()">
                         <option value="all">All Channels</option>
                     </select>
 
                     <select class="select-input" id="periodFilter" onchange="applyFilters()">
+                        <option value="monthly">This Month (Daily Breakdown)</option>
                         <option value="all_time">All Time</option>
-                        <option value="monthly">Monthly</option>
                         <option value="yearly">Yearly</option>
                     </select>
                 </div>
@@ -669,12 +670,12 @@
                     <div class="kpi-trend trend-neutral"><i class="fa-solid fa-minus"></i> Live Data</div>
                 </div>
 
-                <div class="kpi-card" title="The total cost spent on marketing to gain a new customer">
+                <div class="kpi-card" title="Total enrolled members / students">
                     <div class="kpi-header">
-                        <span class="kpi-title">Customer Acq. Cost (CAC)</span>
-                        <div class="kpi-icon" style="background: rgba(245, 158, 11, 0.15); color: var(--warning);"><i class="fa-solid fa-hand-holding-dollar"></i></div>
+                        <span class="kpi-title">Total Members</span>
+                        <div class="kpi-icon" style="background: rgba(245, 158, 11, 0.15); color: var(--warning);"><i class="fa-solid fa-user-group"></i></div>
                     </div>
-                    <div class="kpi-value" id="kpiCAC">$0</div>
+                    <div class="kpi-value" id="kpiMembers">0</div>
                     <div class="kpi-trend trend-neutral"><i class="fa-solid fa-minus"></i> Live Data</div>
                 </div>
 
@@ -695,7 +696,7 @@
             <section class="charts-grid">
                 <div class="chart-card">
                     <div class="chart-header">
-                        <div class="chart-title">Revenue vs Spent Analysis</div>
+                        <div class="chart-title" id="revenueChartTitle">Daily Revenue vs Spent Analysis (1 - 30 Days)</div>
                     </div>
                     <div class="chart-container">
                         <canvas id="revenueChart"></canvas>
@@ -718,7 +719,7 @@
                     <div class="chart-title">Active Marketing Campaigns</div>
                     <div class="search-box">
                         <i class="fa-solid fa-magnifying-glass"></i>
-                        <input type="text" id="tableSearch" placeholder="Search campaign..." onkeyup="searchTable()">
+                        <input type="text" id="tableSearch" placeholder="Search campaign or date..." onkeyup="searchTable()">
                     </div>
                 </div>
 
@@ -729,6 +730,7 @@
                                 <th>Company Name</th>
                                 <th>Channel</th>
                                 <th>Course</th>
+                                <th>Date</th>
                                 <th>Investment</th>
                                 <th>Income</th>
                                 <th>Total Students</th>
@@ -824,6 +826,10 @@
                     <input type="text" class="form-control" id="inputCourse" placeholder="e.g. Microsoft Office, Graphic Design" required>
                 </div>
                 <div class="form-group">
+                    <label>Transaction Date (টাকা পাওয়ার তারিখ)</label>
+                    <input type="date" class="form-control" id="inputDate" required>
+                </div>
+                <div class="form-group">
                     <label>Total Investment ($)</label>
                     <input type="number" class="form-control" id="inputSpend" placeholder="e.g. 500" required>
                 </div>
@@ -852,7 +858,7 @@
     <!-- JAVASCRIPT SYSTEM LOGIC -->
     <script>
         // ==========================================
-        // 1. JSONBIN API CREDENTIALS (REPLACE THESE)
+        // 1. JSONBIN API CREDENTIALS
         // ==========================================
         const JSONBIN_BIN_ID = "6aba0fcbac6210605afd0b26"; 
         const JSONBIN_API_KEY = "$2a$10$NdVprjNSRs1iJOzSyH896.6YYu87qOoZC5AH5WZsi99PacsVRU7AS"; 
@@ -902,6 +908,11 @@
         let revenueChartInstance = null;
         let channelChartInstance = null;
         let trafficOffset = 0; // For resetting traffic feature
+
+        // Helper: Calculate total days in a month (e.g., 28, 29, 30, or 31)
+        function getDaysInMonth(year, monthIndex) {
+            return new Date(year, monthIndex + 1, 0).getDate();
+        }
 
         // Initialize Dashboard
         window.onload = function() {
@@ -1009,7 +1020,7 @@
             tbody.innerHTML = '';
 
             if (dataToRender.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; color: var(--text-muted); padding: 20px;">No campaigns found. Add data to begin.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; color: var(--text-muted); padding: 20px;">No campaigns found. Add data to begin.</td></tr>`;
                 return;
             }
 
@@ -1024,10 +1035,13 @@
                 else if(channelLower.includes('company')) iconClass = "fa-solid fa-building";
                 else if(channelLower.includes('work')) iconClass = "fa-solid fa-briefcase";
 
+                let displayDate = item.date ? item.date : new Date(item.id).toISOString().split('T')[0];
+
                 tr.innerHTML = `
                     <td style="font-weight: 700;">${item.name}</td>
                     <td><i class="${iconClass}"></i> ${item.channel}</td>
                     <td><span style="color: #3b82f6; font-weight: 600;">${item.course || 'N/A'}</span></td>
+                    <td><span style="color: #94a3b8; font-size: 0.82rem; font-weight: 600;">${displayDate}</span></td>
                     <td>$${item.spend.toLocaleString()}</td>
                     <td style="color: var(--success); font-weight: 700;">$${item.revenue.toLocaleString()}</td>
                     <td>${item.conversions}</td>
@@ -1065,12 +1079,11 @@
                             backgroundColor: goldGradient, 
                             fill: true, 
                             tension: 0.3,
-                            pointRadius: 6,
+                            pointRadius: 5,
                             pointHoverRadius: 8,
                             pointBackgroundColor: '#ffd700',
                             pointBorderColor: '#ffffff',
-                            pointBorderWidth: 2,
-                            pointStyle: 'circle'
+                            pointBorderWidth: 2
                         },
                         { 
                             label: 'Investment ($)', 
@@ -1079,23 +1092,34 @@
                             backgroundColor: redGradient, 
                             fill: true, 
                             tension: 0.3,
-                            pointRadius: 6,
+                            pointRadius: 5,
                             pointHoverRadius: 8,
                             pointBackgroundColor: '#ef4444',
                             pointBorderColor: '#ffffff',
-                            pointBorderWidth: 2,
-                            pointStyle: 'circle'
+                            pointBorderWidth: 2
                         }
                     ]
                 },
                 options: {
                     responsive: true, maintainAspectRatio: false,
-                    plugins: { legend: { labels: { color: '#94a3b8' } } },
+                    plugins: { 
+                        legend: { labels: { color: '#94a3b8' } },
+                        tooltip: {
+                            callbacks: {
+                                title: function(context) {
+                                    return 'Date: ' + context[0].label;
+                                }
+                            }
+                        }
+                    },
                     scales: {
-                        x: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+                        x: { 
+                            ticks: { color: '#94a3b8', font: { size: 11 } }, 
+                            grid: { color: 'rgba(255,255,255,0.05)' } 
+                        },
                         y: { 
                             min: 0,
-                            max: 100000, // 0 to 1 Lakh Limit
+                            suggestedMax: 10000, // Highest limit set to 10,000
                             ticks: { 
                                 color: '#94a3b8',
                                 callback: function(value) { return '$' + value.toLocaleString(); }
@@ -1124,10 +1148,11 @@
             });
         }
 
-        // --- UPDATE CHARTS DYNAMICALLY ---
+        // --- UPDATE CHARTS DYNAMICALLY (AUTO MONTH RECOGNITION & DAILY MAPPING) ---
         function updateCharts(data) {
             if (!revenueChartInstance || !channelChartInstance) return;
             
+            // 1. Update Channel Share Doughnut Chart
             let channelCounts = {};
             data.forEach(item => {
                 let ch = item.channel || 'Other';
@@ -1136,7 +1161,6 @@
             
             let chLabels = Object.keys(channelCounts);
             let chData = Object.values(channelCounts);
-            
             const chartColors = ['#1877f2', '#ea4335', '#ff0000', '#10b981', '#8b5cf6', '#f59e0b', '#3b82f6', '#ec4899', '#14b8a6'];
             let bgColors = chLabels.map((_, index) => chartColors[index % chartColors.length]);
 
@@ -1145,10 +1169,64 @@
             channelChartInstance.data.datasets[0].backgroundColor = bgColors;
             channelChartInstance.update();
             
-            let labels = data.map(item => item.name.substring(0, 10) + (item.name.length > 10 ? '..' : ''));
-            let revData = data.map(item => item.revenue);
-            let spendData = data.map(item => item.spend);
+            // 2. Update Daily Revenue Line Chart (Auto Month Recognition)
+            const period = document.getElementById('periodFilter').value;
+            const now = new Date();
             
+            let labels = [];
+            let revData = [];
+            let spendData = [];
+
+            if (period === 'monthly') {
+                const currentYear = now.getFullYear();
+                const currentMonth = now.getMonth(); // 0 - 11
+                const totalDays = getDaysInMonth(currentYear, currentMonth); // Auto recognizes 28, 29, 30 or 31 days
+                const monthName = now.toLocaleString('default', { month: 'long' });
+
+                document.getElementById('revenueChartTitle').innerText = `Daily Revenue vs Spent Analysis (${monthName}: 1 - ${totalDays} Days)`;
+
+                // Map data by day of the month
+                const dailyRev = Array(totalDays + 1).fill(0);
+                const dailySpend = Array(totalDays + 1).fill(0);
+
+                data.forEach(item => {
+                    const itemDate = item.date ? new Date(item.date) : new Date(item.id);
+                    if (!isNaN(itemDate.getTime()) && itemDate.getMonth() === currentMonth && itemDate.getFullYear() === currentYear) {
+                        const day = itemDate.getDate();
+                        if (day >= 1 && day <= totalDays) {
+                            dailyRev[day] += (item.revenue || 0);
+                            dailySpend[day] += (item.spend || 0);
+                        }
+                    }
+                });
+
+                for (let day = 1; day <= totalDays; day++) {
+                    labels.push(`${day} Date`);
+                    revData.push(dailyRev[day]);
+                    spendData.push(dailySpend[day]);
+                }
+            } else {
+                document.getElementById('revenueChartTitle').innerText = "Revenue vs Spent Analysis (By Date)";
+                
+                // Group items by their exact date string
+                const dateMap = {};
+                data.forEach(item => {
+                    const dStr = item.date ? item.date : new Date(item.id).toISOString().split('T')[0];
+                    if (!dateMap[dStr]) {
+                        dateMap[dStr] = { rev: 0, spend: 0 };
+                    }
+                    dateMap[dStr].rev += (item.revenue || 0);
+                    dateMap[dStr].spend += (item.spend || 0);
+                });
+
+                const sortedDates = Object.keys(dateMap).sort();
+                sortedDates.forEach(d => {
+                    labels.push(d);
+                    revData.push(dateMap[d].rev);
+                    spendData.push(dateMap[d].spend);
+                });
+            }
+
             revenueChartInstance.data.labels = labels.length ? labels : ['No Data'];
             revenueChartInstance.data.datasets[0].data = revData.length ? revData : [0];
             revenueChartInstance.data.datasets[1].data = spendData.length ? spendData : [0];
@@ -1163,15 +1241,15 @@
             let filtered = campaignData;
             const now = new Date();
 
-            // Apply Period Filter using ID timestamp
+            // Apply Period Filter using Date property or ID timestamp
             if (period === 'monthly') {
                 filtered = filtered.filter(item => {
-                    const itemDate = new Date(item.id);
+                    const itemDate = item.date ? new Date(item.date) : new Date(item.id);
                     return itemDate.getMonth() === now.getMonth() && itemDate.getFullYear() === now.getFullYear();
                 });
             } else if (period === 'yearly') {
                 filtered = filtered.filter(item => {
-                    const itemDate = new Date(item.id);
+                    const itemDate = item.date ? new Date(item.date) : new Date(item.id);
                     return itemDate.getFullYear() === now.getFullYear();
                 });
             }
@@ -1197,8 +1275,6 @@
                 totalSpend += item.spend || 0;
                 totalConversions += item.conversions || 0;
             });
-
-            let cac = totalConversions > 0 ? (totalSpend / totalConversions).toFixed(2) : 0;
             
             // Traffic Calculation with Reset Logic
             let mockTraffic = totalSpend * 3.5; 
@@ -1207,7 +1283,7 @@
 
             document.getElementById('kpiRevenue').innerText = `$${totalRevenue.toLocaleString()}`;
             document.getElementById('kpiConversion').innerText = `${conversionRate}%`;
-            document.getElementById('kpiCAC').innerText = `$${cac}`;
+            document.getElementById('kpiMembers').innerText = totalConversions.toLocaleString();
             document.getElementById('kpiTraffic').innerText = Math.floor(displayedTraffic).toLocaleString();
         }
         
@@ -1219,9 +1295,15 @@
             const now = new Date();
             
             if (period === 'monthly') {
-                filtered = filtered.filter(item => new Date(item.id).getMonth() === now.getMonth() && new Date(item.id).getFullYear() === now.getFullYear());
+                filtered = filtered.filter(item => {
+                    const d = item.date ? new Date(item.date) : new Date(item.id);
+                    return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+                });
             } else if (period === 'yearly') {
-                filtered = filtered.filter(item => new Date(item.id).getFullYear() === now.getFullYear());
+                filtered = filtered.filter(item => {
+                    const d = item.date ? new Date(item.date) : new Date(item.id);
+                    return d.getFullYear() === now.getFullYear();
+                });
             }
             if (channel !== 'all') {
                 filtered = filtered.filter(item => item.channel === channel);
@@ -1237,16 +1319,21 @@
         // --- SEARCH IN TABLE ---
         function searchTable() {
             const query = document.getElementById('tableSearch').value.toLowerCase();
-            const filtered = campaignData.filter(item => 
-                item.name.toLowerCase().includes(query) || 
-                item.channel.toLowerCase().includes(query) ||
-                (item.course && item.course.toLowerCase().includes(query))
-            );
+            const filtered = campaignData.filter(item => {
+                const itemDate = item.date ? item.date : new Date(item.id).toISOString().split('T')[0];
+                return item.name.toLowerCase().includes(query) || 
+                       item.channel.toLowerCase().includes(query) ||
+                       (item.course && item.course.toLowerCase().includes(query)) ||
+                       itemDate.includes(query);
+            });
             renderTable(filtered);
         }
 
         // --- MODAL CONTROLS ---
-        function openAdminModal() { document.getElementById('adminModal').classList.add('active'); }
+        function openAdminModal() { 
+            document.getElementById('inputDate').value = new Date().toISOString().split('T')[0];
+            document.getElementById('adminModal').classList.add('active'); 
+        }
         function closeAdminModal() { document.getElementById('adminModal').classList.remove('active'); }
 
         // --- ADD NEW DATA & SAVE TO API ---
@@ -1257,10 +1344,11 @@
             saveBtn.innerText = "Saving...";
 
             const newEntry = {
-                id: Date.now(), // IMPORTANT: Used for Monthly/Yearly Filtering
+                id: Date.now(),
                 name: document.getElementById('inputName').value,
                 channel: document.getElementById('inputChannel').value,
                 course: document.getElementById('inputCourse').value,
+                date: document.getElementById('inputDate').value,
                 spend: parseFloat(document.getElementById('inputSpend').value),
                 revenue: parseFloat(document.getElementById('inputRevenue').value),
                 conversions: parseInt(document.getElementById('inputConversions').value),
