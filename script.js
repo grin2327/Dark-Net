@@ -234,7 +234,7 @@ function getFilteredData() {
 }
 
 // ==========================================
-// RENDER LINKS LIST
+// RENDER LINKS LIST (WITH VIDEO WATCH BUTTON)
 // ==========================================
 
 function renderLinksList(records) {
@@ -277,7 +277,12 @@ function renderLinksList(records) {
                     ${displayMeta}
                 </span>
             </div>
-            ${deleteBtnHTML}
+            <div class="link-actions">
+                <a href="${displayUrl}" target="_blank" rel="noopener noreferrer" class="btn-watch-video" title="Watch Video">
+                    <i class="fa-solid fa-play"></i> Watch
+                </a>
+                ${deleteBtnHTML}
+            </div>
         `;
 
         container.appendChild(li);

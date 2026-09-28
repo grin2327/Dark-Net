@@ -52,7 +52,7 @@
             overflow-x: hidden;
             display: flex;
             flex-direction: column;
-            padding-bottom: 60px;
+            padding-bottom: 30px;
         }
 
         body::before, body::after {
@@ -290,7 +290,7 @@
             max-width: 1280px;
             width: 100%;
             margin: 0 auto;
-            padding: 40px 20px;
+            padding: 30px 20px;
             flex: 1;
             box-sizing: border-box;
         }
@@ -532,8 +532,8 @@
             background: var(--panel-bg);
             border: 1px solid var(--glass-border);
             border-radius: var(--radius-lg);
-            padding: 28px 24px;
-            margin-bottom: 40px;
+            padding: 24px 20px;
+            margin-bottom: 24px;
             width: 100%;
             box-sizing: border-box;
         }
@@ -541,7 +541,7 @@
         .os-heading {
             font-size: 1.1rem;
             font-weight: 800;
-            margin-bottom: 22px;
+            margin-bottom: 18px;
             text-transform: uppercase;
             text-align: center;
         }
@@ -550,7 +550,7 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 16px;
+            gap: 14px;
         }
 
         .os-card {
@@ -559,7 +559,7 @@
             background: rgba(13, 10, 25, 0.6);
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: var(--radius-sm);
-            padding: 20px 16px;
+            padding: 18px 14px;
             text-align: center;
             text-decoration: none;
             color: var(--text-main);
@@ -567,11 +567,11 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 8px;
             transition: var(--transition);
         }
 
-        .os-card:hover { transform: translateY(-5px); }
+        .os-card:hover { transform: translateY(-3px); }
 
         .os-card-win:hover { border-color: #00a4ef; background: rgba(0, 164, 239, 0.08); }
         .os-card-linux:hover { border-color: var(--neon-green); background: rgba(46, 255, 102, 0.08); }
@@ -585,7 +585,7 @@
         .os-card-world:hover { border-color: #06b6d4; background: rgba(6, 182, 212, 0.08); }
         .os-card-hack:hover { border-color: #ef4444; background: rgba(239, 68, 68, 0.08); }
 
-        .os-icon-wrapper { font-size: 2.2rem; }
+        .os-icon-wrapper { font-size: 2rem; }
 
         .win-glow { color: #00e5ff; }
         .linux-glow { color: var(--neon-green); }
@@ -601,7 +601,7 @@
 
         .os-title-text {
             font-family: 'Orbitron', sans-serif;
-            font-size: 1.05rem;
+            font-size: 1rem;
             font-weight: 800;
         }
 
@@ -622,19 +622,19 @@
             color: var(--text-muted);
             font-weight: 700;
             border-top: 1px solid rgba(255, 255, 255, 0.05);
-            padding-top: 8px;
+            padding-top: 6px;
             width: 100%;
         }
 
         /* --- QUICK TOOLS --- */
         .quick-tools-compact {
             padding: 16px 20px;
-            margin-bottom: 40px;
+            margin-bottom: 24px;
         }
 
         .quick-tools-compact .os-heading {
             font-size: 0.95rem;
-            margin-bottom: 16px;
+            margin-bottom: 14px;
             text-align: left;
         }
 
@@ -642,7 +642,7 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 12px;
+            gap: 10px;
         }
 
         .quick-tools-compact .os-card {
@@ -663,8 +663,8 @@
             background: var(--panel-bg);
             border: 1px solid var(--glass-border);
             border-radius: var(--radius-lg);
-            padding: 30px;
-            margin-bottom: 40px;
+            padding: 24px 20px;
+            margin-bottom: 24px;
             text-align: left;
             width: 100%;
             box-sizing: border-box;
@@ -673,7 +673,7 @@
         .section-heading {
             font-size: 1.1rem;
             font-weight: 800;
-            margin-bottom: 22px;
+            margin-bottom: 18px;
             text-transform: uppercase;
             text-align: left;
         }
@@ -681,13 +681,13 @@
         .input-stack {
             display: flex;
             flex-direction: column;
-            gap: 16px;
-            margin-bottom: 24px;
+            gap: 14px;
+            margin-bottom: 18px;
         }
 
         .input-inline-row {
             display: flex;
-            gap: 14px;
+            gap: 12px;
             width: 100%;
         }
 
@@ -695,7 +695,7 @@
             width: 100%;
             background: #0f0c1f;
             border: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 14px 20px;
+            padding: 12px 16px;
             border-radius: var(--radius-sm);
             color: var(--text-main);
             font-weight: 600;
@@ -713,7 +713,7 @@
             background: var(--text-main);
             color: var(--bg-base);
             border: none;
-            padding: 14px 28px;
+            padding: 12px 24px;
             border-radius: var(--radius-sm);
             font-weight: 700;
             cursor: pointer;
@@ -725,34 +725,39 @@
 
         .search-wrapper {
             border-top: 1px solid rgba(255, 255, 255, 0.06);
-            padding-top: 24px;
+            padding-top: 16px;
         }
 
         .links-list-group {
             list-style: none;
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            margin-top: 15px;
+            gap: 10px;
+            margin-top: 12px;
             text-align: left;
+            width: 100%;
         }
 
         .link-item {
             background: rgba(15, 12, 31, 0.6);
             border: 1px solid var(--glass-border);
-            padding: 16px 22px;
+            padding: 14px 18px;
             border-radius: var(--radius-sm);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 16px;
+            gap: 14px;
+            max-width: 100%;
+            overflow: hidden;
+            box-sizing: border-box;
         }
 
         .link-details {
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 4px;
             flex: 1;
+            min-width: 0;
             overflow: hidden;
             text-align: left;
         }
@@ -761,6 +766,8 @@
             font-weight: 700;
             font-size: 0.95rem;
             color: var(--cute-cyan);
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
 
         .link-url {
@@ -770,6 +777,62 @@
             text-overflow: ellipsis;
             overflow: hidden;
             white-space: nowrap;
+            display: block;
+            max-width: 100%;
+            word-break: break-all;
+        }
+
+        .link-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+
+        /* --- VIDEO WATCH BUTTON --- */
+        .btn-watch-video {
+            background: linear-gradient(135deg, var(--primary-hot), var(--accent-purple));
+            color: #ffffff;
+            text-decoration: none;
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: var(--transition);
+            box-shadow: 0 0 10px rgba(255, 51, 122, 0.4);
+            white-space: nowrap;
+        }
+
+        .btn-watch-video:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(255, 51, 122, 0.7);
+            color: #ffffff;
+        }
+
+        /* --- WEBSITE VISIT BUTTON (For Non-Video Links) --- */
+        .btn-visit-site {
+            background: linear-gradient(135deg, #00e5ff, #8a4fff);
+            color: #ffffff;
+            text-decoration: none;
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: var(--transition);
+            box-shadow: 0 0 10px rgba(0, 229, 255, 0.3);
+            white-space: nowrap;
+        }
+
+        .btn-visit-site:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(0, 229, 255, 0.6);
+            color: #ffffff;
         }
 
         .btn-delete-link {
@@ -793,56 +856,55 @@
             color: white;
         }
 
-        /* --- RESPONSIVE MEDIA QUERIES --- */
+        /* --- RESPONSIVE MEDIA QUERIES (MOBILE FIXES) --- */
         @media (max-width: 768px) {
+            body { padding-bottom: 20px; }
             header { 
-                flex-direction: column; 
-                gap: 12px; 
-                padding: 12px 14px; 
+                flex-direction: row; 
+                flex-wrap: wrap;
+                gap: 10px; 
+                padding: 10px 14px; 
             }
             .ms-nav-left { 
                 width: 100%; 
-                flex-direction: column; 
-                align-items: flex-start;
+                justify-content: space-between;
                 gap: 10px;
             }
             .ms-nav-right { 
                 width: 100%; 
                 justify-content: space-between; 
-                flex-wrap: wrap; 
                 gap: 8px;
             }
             .ms-menu-links { 
                 display: flex;
-                width: 100%;
                 overflow-x: auto;
-                padding: 6px 0;
-                gap: 16px;
+                padding: 4px 0;
+                gap: 14px;
                 white-space: nowrap;
                 -webkit-overflow-scrolling: touch;
-                border-top: 1px solid rgba(255, 255, 255, 0.05);
             }
             .ms-menu-links::-webkit-scrollbar { display: none; }
             
-            .main-layout-fullscreen { padding: 20px 12px; }
+            .main-layout-fullscreen { padding: 16px 12px; }
             .os-container, .form-container, .database-container { 
-                padding: 18px 14px; 
+                padding: 16px 12px; 
                 border-radius: 16px; 
-                margin-bottom: 24px; 
+                margin-bottom: 16px; 
             }
-            .os-grid { gap: 10px; justify-content: center; }
-            .os-card { flex: 0 1 calc(50% - 5px); min-width: 130px; max-width: 200px; padding: 16px 10px; }
+            .os-grid { gap: 8px; justify-content: center; }
+            .os-card { flex: 0 1 calc(50% - 6px); min-width: 120px; max-width: 180px; padding: 14px 8px; }
             .quick-tools-grid { gap: 8px; justify-content: center; }
-            .quick-tools-compact .os-card { flex: 0 1 calc(50% - 4px); min-width: 120px; padding: 12px 8px; }
+            .quick-tools-compact .os-card { flex: 0 1 calc(50% - 4px); min-width: 120px; padding: 10px 8px; }
             .input-inline-row { flex-direction: column; }
             .btn-add-link { width: 100%; }
-            .link-item { padding: 12px 14px; }
+            .link-item { padding: 12px 14px; flex-direction: column; align-items: flex-start; gap: 8px; }
+            .link-actions { width: 100%; justify-content: space-between; margin-top: 4px; }
         }
 
         @media (max-width: 420px) {
             .brand-text { font-size: 1rem; }
             .ms-search-btn span { display: none; }
-            .btn-youtube-hub, .btn-editor-hub { padding: 8px 12px; font-size: 0.8rem; }
+            .btn-youtube-hub, .btn-editor-hub { padding: 6px 10px; font-size: 0.78rem; }
             .quick-tools-compact .os-card { flex: 0 1 calc(50% - 4px); }
         }
     </style>
@@ -937,11 +999,11 @@
                 <i class="fa-solid fa-screwdriver-wrench"></i> Quick Access Tool
             </h3>
             <div class="quick-tools-grid">
-                <a href="https://www.idcreator.com/" class="os-card os-card-id"><div class="os-icon-wrapper id-glow"><i class="fa-solid fa-id-card"></i></div><span class="os-title-text id-title">ID Generator</span><span class="os-sub-text">Run Tool</span></a>
-                <a href="https://temp-mail.org/" class="os-card os-card-temp"><div class="os-icon-wrapper temp-glow"><i class="fa-solid fa-envelope-open-text"></i></div><span class="os-title-text temp-title">Temp Mail</span><span class="os-sub-text">Run Tool</span></a>
-                <a href="https://radio.garden/" class="os-card os-card-radio"><div class="os-icon-wrapper radio-glow"><i class="fa-solid fa-tower-cell"></i></div><span class="os-title-text radio-title">Live Radio</span><span class="os-sub-text">Run Tool</span></a>
-                <a href="https://www.croxyproxy.com/" class="os-card os-card-world"><div class="os-icon-wrapper world-glow"><i class="fa-solid fa-globe"></i></div><span class="os-title-text world-title">Web Proxy</span><span class="os-sub-text">Run Tool</span></a>
-                <a href="https://hackerai.co/" class="os-card os-card-hack"><div class="os-icon-wrapper hack-glow"><i class="fa-solid fa-terminal"></i></div><span class="os-title-text hack-title">Cyber Lab</span><span class="os-sub-text">Run Tool</span></a>
+                <a href="https://www.idcreator.com/" target="_blank" class="os-card os-card-id"><div class="os-icon-wrapper id-glow"><i class="fa-solid fa-id-card"></i></div><span class="os-title-text id-title">ID Generator</span><span class="os-sub-text">Run Tool</span></a>
+                <a href="https://temp-mail.org/" target="_blank" class="os-card os-card-temp"><div class="os-icon-wrapper temp-glow"><i class="fa-solid fa-envelope-open-text"></i></div><span class="os-title-text temp-title">Temp Mail</span><span class="os-sub-text">Run Tool</span></a>
+                <a href="https://radio.garden/" target="_blank" class="os-card os-card-radio"><div class="os-icon-wrapper radio-glow"><i class="fa-solid fa-tower-cell"></i></div><span class="os-title-text radio-title">Live Radio</span><span class="os-sub-text">Run Tool</span></a>
+                <a href="https://www.croxyproxy.com/" target="_blank" class="os-card os-card-world"><div class="os-icon-wrapper world-glow"><i class="fa-solid fa-globe"></i></div><span class="os-title-text world-title">Web Proxy</span><span class="os-sub-text">Run Tool</span></a>
+                <a href="https://hackerai.co/" target="_blank" class="os-card os-card-hack"><div class="os-icon-wrapper hack-glow"><i class="fa-solid fa-terminal"></i></div><span class="os-title-text hack-title">Cyber Lab</span><span class="os-sub-text">Run Tool</span></a>
             </div>
         </section>
 
@@ -1030,6 +1092,29 @@
 
     <!-- MAIN SYSTEM SCRIPT -->
     <script src="script.js"></script>
+
+    <!-- HELPER SCRIPT FOR SMART VIDEO DETECTOR -->
+    <script>
+        // Helper function to check if a URL is a video source
+        function isVideoUrl(url) {
+            if (!url) return false;
+            const videoRegex = /(youtube\.com|youtu\.be|vimeo\.com|\.mp4|\.mkv|\.webm|\.m3u8)/i;
+            return videoRegex.test(url);
+        }
+
+        // Render Button Generator for script.js integration
+        function getActionButtonHtml(url) {
+            if (isVideoUrl(url)) {
+                return `<a href="video.html" class="btn-watch-video" title="Watch Video">
+                            <i class="fa-solid fa-play"></i> Watch Video
+                        </a>`;
+            } else {
+                return `<a href="${url}" target="_blank" class="btn-visit-site" title="Visit Website">
+                            <i class="fa-solid fa-arrow-up-right-from-square"></i> Visit Site
+                        </a>`;
+            }
+        }
+    </script>
 
 </body>
 </html>

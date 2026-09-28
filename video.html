@@ -872,40 +872,34 @@
                 });
             });
 
+            // FIXED JAVASCRIPT FOR VIDEO PLAYING MODAL
             const videoCards = document.querySelectorAll('.video-card-item');
             const videoModal = document.getElementById('videoModal');
-            const closeModalBtn = document.getElementById('closeModalBtn');
             const mainVideoPlayer = document.getElementById('mainVideoPlayer');
             const modalVideoTitle = document.getElementById('modalVideoTitle');
+            const closeModalBtn = document.getElementById('closeModalBtn');
 
             videoCards.forEach(card => {
-                card.addEventListener('click', () => {
+                card.addEventListener('click', (e) => {
+                    e.preventDefault();
                     const videoSrc = card.getAttribute('data-video-src');
                     const videoTitle = card.getAttribute('data-title');
-
-                    if (videoSrc) {
+                    
+                    if (videoSrc && videoSrc.trim() !== '') {
                         mainVideoPlayer.src = videoSrc;
-                        modalVideoTitle.textContent = videoTitle || 'Playing Video';
+                        modalVideoTitle.textContent = videoTitle;
                         videoModal.classList.add('active');
-                        mainVideoPlayer.play();
+                        mainVideoPlayer.play().catch(err => console.log("Autoplay blocked:", err));
                     } else {
-                        alert('এই কার্ডে এখনো কোনো ভিডিও ফাইল সেট করা হয়নি! অনুগ্রহ করে data-video-src এ ফাইল পাথ বসাও।');
+                        alert("এই ভিডিওটির সোর্স লিংক এখনো দেওয়া হয়নি!");
                     }
                 });
             });
 
-            const closeModal = () => {
+            closeModalBtn.addEventListener('click', () => {
                 videoModal.classList.remove('active');
                 mainVideoPlayer.pause();
-                mainVideoPlayer.src = '';
-            };
-
-            closeModalBtn.addEventListener('click', closeModal);
-
-            videoModal.addEventListener('click', (e) => {
-                if (e.target === videoModal) {
-                    closeModal();
-                }
+                mainVideoPlayer.src = "";
             });
         });
     </script>
