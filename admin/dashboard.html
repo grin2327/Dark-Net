@@ -463,6 +463,7 @@
 
         .status-active { background: rgba(16, 185, 129, 0.15); color: var(--success); }
         .status-paused { background: rgba(245, 158, 11, 0.15); color: var(--warning); }
+        .status-accepted { background: rgba(59, 130, 246, 0.15); color: var(--primary); }
 
         .btn-action {
             background: transparent;
@@ -475,11 +476,16 @@
         }
 
         .btn-action:hover {
+            color: var(--primary);
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .btn-action.btn-delete:hover {
             color: var(--danger);
             background: rgba(239, 68, 68, 0.1);
         }
 
-        /* MODAL POPUP (ADMIN ADD DATA) */
+        /* MODAL POPUP (ADMIN ADD & EDIT DATA) */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0;
@@ -846,10 +852,63 @@
                     <select class="form-control" id="inputStatus">
                         <option value="Payment Received">Payment Received</option>
                         <option value="Payment Pending">Payment Pending</option>
+                        <option value="Accepted">Accepted</option>
                     </select>
                 </div>
                 <button type="submit" id="saveDataBtn" class="btn btn-primary" style="width: 100%; margin-top: 10px; justify-content: center;">
                     <i class="fa-solid fa-cloud-arrow-up"></i> Save to Database
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ADMIN EDIT DATA MODAL -->
+    <div class="modal-overlay" id="editModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Edit Campaign Data</h3>
+                <button class="btn-close" onclick="closeEditModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="editDataForm" onsubmit="handleEditFormSubmit(event)">
+                <input type="hidden" id="editInputId">
+                <div class="form-group">
+                    <label>Company Name</label>
+                    <input type="text" class="form-control" id="editInputName" required>
+                </div>
+                <div class="form-group">
+                    <label>Platform / Channel</label>
+                    <input list="channelOptions" class="form-control" id="editInputChannel" required>
+                </div>
+                <div class="form-group">
+                    <label>Course Name (e.g. Microsoft Office)</label>
+                    <input type="text" class="form-control" id="editInputCourse" required>
+                </div>
+                <div class="form-group">
+                    <label>Transaction Date</label>
+                    <input type="date" class="form-control" id="editInputDate" required>
+                </div>
+                <div class="form-group">
+                    <label>Total Investment ($)</label>
+                    <input type="number" class="form-control" id="editInputSpend" required>
+                </div>
+                <div class="form-group">
+                    <label>Income Received ($)</label>
+                    <input type="number" class="form-control" id="editInputRevenue" required>
+                </div>
+                <div class="form-group">
+                    <label>Total Student Number</label>
+                    <input type="number" class="form-control" id="editInputConversions" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label>Status</label>
+                    <select class="form-control" id="editInputStatus">
+                        <option value="Payment Received">Payment Received</option>
+                        <option value="Payment Pending">Payment Pending</option>
+                        <option value="Accepted">Accepted</option>
+                    </select>
+                </div>
+                <button type="submit" id="updateDataBtn" class="btn btn-primary" style="width: 100%; margin-top: 10px; justify-content: center;">
+                    <i class="fa-solid fa-pen-to-square"></i> Update Campaign
                 </button>
             </form>
         </div>
@@ -1037,6 +1096,10 @@
 
                 let displayDate = item.date ? item.date : new Date(item.id).toISOString().split('T')[0];
 
+                let statusBadgeClass = 'status-paused';
+                if (item.status === 'Payment Received') statusBadgeClass = 'status-active';
+                else if (item.status === 'Accepted') statusBadgeClass = 'status-accepted';
+
                 tr.innerHTML = `
                     <td style="font-weight: 700;">${item.name}</td>
                     <td><i class="${iconClass}"></i> ${item.channel}</td>
@@ -1045,9 +1108,10 @@
                     <td>$${item.spend.toLocaleString()}</td>
                     <td style="color: var(--success); font-weight: 700;">$${item.revenue.toLocaleString()}</td>
                     <td>${item.conversions}</td>
-                    <td><span class="status-badge ${item.status === 'Payment Received' ? 'status-active' : 'status-paused'}">${item.status}</span></td>
+                    <td><span class="status-badge ${statusBadgeClass}">${item.status}</span></td>
                     <td>
-                        <button class="btn-action" onclick="deleteData(${item.id})" title="Delete Data (Admin)"><i class="fa-solid fa-trash"></i></button>
+                        <button class="btn-action" onclick="editData(${item.id})" title="Edit Data (Admin)"><i class="fa-solid fa-pen-to-square"></i></button>
+                        <button class="btn-action btn-delete" onclick="deleteData(${item.id})" title="Delete Data (Admin)"><i class="fa-solid fa-trash"></i></button>
                     </td>
                 `;
                 tbody.appendChild(tr);
@@ -1335,6 +1399,66 @@
             document.getElementById('adminModal').classList.add('active'); 
         }
         function closeAdminModal() { document.getElementById('adminModal').classList.remove('active'); }
+
+        function closeEditModal() { document.getElementById('editModal').classList.remove('active'); }
+
+        // --- EDIT DATA LOGIC WITH PASSWORD VERIFICATION ---
+        function editData(id) {
+            const checkPass = prompt("Enter Admin Password to edit this entry:");
+            if (checkPass !== ADMIN_PASSWORD) {
+                alert("Incorrect Admin Password!");
+                return;
+            }
+
+            const item = campaignData.find(c => c.id === id);
+            if (!item) return;
+
+            document.getElementById('editInputId').value = item.id;
+            document.getElementById('editInputName').value = item.name || '';
+            document.getElementById('editInputChannel').value = item.channel || '';
+            document.getElementById('editInputCourse').value = item.course || '';
+            document.getElementById('editInputDate').value = item.date ? item.date : new Date(item.id).toISOString().split('T')[0];
+            document.getElementById('editInputSpend').value = item.spend || 0;
+            document.getElementById('editInputRevenue').value = item.revenue || 0;
+            document.getElementById('editInputConversions').value = item.conversions || 0;
+            document.getElementById('editInputStatus').value = item.status || 'Payment Pending';
+
+            document.getElementById('editModal').classList.add('active');
+        }
+
+        // --- SUBMIT EDIT DATA ---
+        async function handleEditFormSubmit(e) {
+            e.preventDefault();
+            const updateBtn = document.getElementById('updateDataBtn');
+            updateBtn.disabled = true;
+            updateBtn.innerText = "Updating...";
+
+            const id = parseInt(document.getElementById('editInputId').value);
+            const updatedEntry = {
+                id: id,
+                name: document.getElementById('editInputName').value,
+                channel: document.getElementById('editInputChannel').value,
+                course: document.getElementById('editInputCourse').value,
+                date: document.getElementById('editInputDate').value,
+                spend: parseFloat(document.getElementById('editInputSpend').value),
+                revenue: parseFloat(document.getElementById('editInputRevenue').value),
+                conversions: parseInt(document.getElementById('editInputConversions').value),
+                status: document.getElementById('editInputStatus').value
+            };
+
+            const updatedData = campaignData.map(item => item.id === id ? updatedEntry : item);
+            const success = await syncToJSONBin(updatedData);
+
+            if (success) {
+                campaignData = updatedData;
+                updateChannelDropdown();
+                applyFilters();
+                closeEditModal();
+            }
+
+            updateBtn.disabled = false;
+            updateBtn.innerHTML = '<i class="fa-solid fa-pen-to-square"></i> Update Campaign';
+        }
 
         // --- ADD NEW DATA & SAVE TO API ---
         async function handleFormSubmit(e) {
