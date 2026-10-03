@@ -655,8 +655,7 @@
                 const response = await fetch(`${API_URL}/latest?t=${Date.now()}`, {
                     method: "GET",
                     headers: {
-                        // REMOVED X-Access-Key to prevent header conflicts
-                        "X-Master-Key": JSONBIN_ACCESS_KEY
+                        "X-Access-Key": JSONBIN_ACCESS_KEY
                     },
                     cache: "no-store"
                 });
@@ -726,8 +725,7 @@
                     method: "PUT",
                     headers: {
                         "Content-Type": "application/json",
-                        // REMOVED X-Access-Key to fix HTTP 401 Unauthorized Issue
-                        "X-Master-Key": JSONBIN_ACCESS_KEY
+                        "X-Access-Key": JSONBIN_ACCESS_KEY
                     },
                     body: payloadStr
                 });
