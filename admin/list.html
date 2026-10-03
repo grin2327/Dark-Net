@@ -224,7 +224,7 @@
                         <!-- Cloud Sync Status Badge -->
                         <span id="cloudStatusBadge" class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-slate-800 text-slate-300 border border-slate-700">Cloud: Syncing...</span>
                     </div>
-                    <p class="text-[10px] sm:text-xs text-slate-400 hidden sm:block">Class Schedule & Student Directory (Cloud Synchronized)</p>
+                    <p class="text-[10px] sm:text-xs text-slate-400 hidden sm:block">Class Schedule & Student Directory (Real-time Cloud Sync)</p>
                 </div>
             </div>
 
@@ -465,7 +465,7 @@
         </div>
     </footer>
 
-    <!-- Pure Cloud JavaScript Integration Script -->
+    <!-- Robust JSONbin & Real-time Auto Sync JavaScript Integration -->
     <script>
         // ==========================================
         // JSONbin Configuration Credentials
@@ -485,11 +485,13 @@
         const EVENING_SLOTS = ["04 PM", "05 PM", "06 PM", "07 PM", "08 PM"];
         const ALL_SLOTS = [...MORNING_SLOTS, ...EVENING_SLOTS];
 
-        // Application State
+        // Application State Variables
         let instituteData = null;
         let activeEditLocation = null; // { isNew: boolean, targetId: string | null }
         let activeQuickTap = null;     // { group, slot, seatIdx }
         let currentTheme = "black";
+        let autoSyncInterval = null;
+        let lastSyncedJsonString = "";
 
         // Initialize Default Seed Data Structure
         function generateInitialSeedData() {
@@ -533,7 +535,7 @@
             };
         }
 
-        // Generate Guaranteed Unique Student ID
+        // Generate Unique Student ID
         function generateUniqueStudentId() {
             let existingIds = new Set();
             if (instituteData) {
@@ -560,7 +562,7 @@
             return newId;
         }
 
-        // Theme Switcher (In-Memory Only, No LocalStorage)
+        // Theme Switcher
         function setTheme(theme) {
             currentTheme = theme;
             document.body.className = `theme-${theme}`;
@@ -616,7 +618,7 @@
 
             setTimeout(() => {
                 toast.className = "fixed bottom-5 right-5 z-50 px-4 py-2.5 rounded-xl text-xs font-bold shadow-2xl transition-all duration-300 transform translate-y-10 opacity-0 pointer-events-none flex items-center gap-2";
-            }, 3000);
+            }, 3500);
         }
 
         // Normalize Data Object Structure
@@ -636,15 +638,18 @@
             return data;
         }
 
-        // Fetch Schedule Data Exclusively from JSONbin Cloud (NO LocalStorage)
-        async function fetchScheduleFromCloud() {
-            updateCloudStatus("Cloud: Fetching...", "syncing");
+        // Fetch Schedule Data Exclusively from JSONbin Cloud with Fallback
+        async function fetchScheduleFromCloud(isBackground = false) {
+            if (!isBackground) {
+                updateCloudStatus("Cloud: Fetching...", "syncing");
+            }
 
             try {
                 const response = await fetch(`${API_URL}/latest?t=${Date.now()}`, {
                     method: "GET",
                     headers: {
-                        "X-Master-Key": JSONBIN_ACCESS_KEY
+                        "X-Master-Key": JSONBIN_ACCESS_KEY,
+                        "X-Access-Key": JSONBIN_ACCESS_KEY
                     },
                     cache: "no-store"
                 });
@@ -652,29 +657,56 @@
                 if (response.ok) {
                     const result = await response.json();
                     if (result && result.record) {
-                        instituteData = normalizeInstituteData(result.record);
+                        const normalized = normalizeInstituteData(result.record);
+                        const newJsonStr = JSON.stringify(normalized);
+
+                        // Only re-render if data has actually changed on cloud
+                        if (newJsonStr !== lastSyncedJsonString) {
+                            instituteData = normalized;
+                            lastSyncedJsonString = newJsonStr;
+                            localStorage.setItem("apex_institute_backup", newJsonStr);
+                            renderAllViews();
+                        }
                         updateCloudStatus("Cloud: Synced", "success");
-                        renderAllViews();
                         return;
                     }
+                } else {
+                    const errText = await response.text();
+                    console.error(`JSONbin Fetch Error (${response.status}):`, errText);
+                    throw new Error(`Server returned status ${response.status}`);
                 }
-                throw new Error(`HTTP Status ${response.status}`);
             } catch (err) {
                 console.error("Cloud Fetch Error:", err);
-                updateCloudStatus("Cloud: Connection Error", "error");
-                showToast("ক্লাউড থেকে ডাটা লোড করতে ব্যর্থ হয়েছে! ইন্টারনেট চেক করুন।", true);
+                if (!isBackground) {
+                    updateCloudStatus("Cloud: Connection Error", "error");
+                    showToast(`ক্লাউড রিড এরর: ${err.message}`, true);
+                }
 
+                // LocalStorage Backup Fallback if initial load fails
                 if (!instituteData) {
-                    instituteData = normalizeInstituteData(generateInitialSeedData());
+                    const cached = localStorage.getItem("apex_institute_backup");
+                    if (cached) {
+                        try {
+                            instituteData = normalizeInstituteData(JSON.parse(cached));
+                        } catch(e) {
+                            instituteData = normalizeInstituteData(generateInitialSeedData());
+                        }
+                    } else {
+                        instituteData = normalizeInstituteData(generateInitialSeedData());
+                    }
                     renderAllViews();
                 }
             }
         }
 
-        // Save Schedule Data Exclusively to JSONbin Cloud (NO LocalStorage)
+        // Save Schedule Data Exclusively to JSONbin Cloud
         async function saveScheduleToCloud(showNotification = true) {
             if (!instituteData) return;
             instituteData = normalizeInstituteData(instituteData);
+
+            const payloadStr = JSON.stringify(instituteData);
+            lastSyncedJsonString = payloadStr;
+            localStorage.setItem("apex_institute_backup", payloadStr);
 
             renderAllViews();
             updateCloudStatus("Cloud: Saving...", "syncing");
@@ -684,9 +716,10 @@
                     method: "PUT",
                     headers: {
                         "Content-Type": "application/json",
-                        "X-Master-Key": JSONBIN_ACCESS_KEY
+                        "X-Master-Key": JSONBIN_ACCESS_KEY,
+                        "X-Access-Key": JSONBIN_ACCESS_KEY
                     },
-                    body: JSON.stringify(instituteData)
+                    body: payloadStr
                 });
 
                 if (response.ok) {
@@ -695,16 +728,34 @@
                         showToast("সকল পরিবর্তন ক্লাউডে সেভ করা হয়েছে!");
                     }
                 } else {
-                    throw new Error(`HTTP Status ${response.status}`);
+                    const errData = await response.text();
+                    console.error(`JSONbin Save Error (${response.status}):`, errData);
+                    throw new Error(`HTTP ${response.status}`);
                 }
             } catch (err) {
                 console.error("Cloud Save Error:", err);
                 updateCloudStatus("Cloud: Save Error", "error");
-                showToast("ক্লাউডে সেভ করতে ব্যর্থ হয়েছে! ইন্টারনেট সংযোগ চেক করুন।", true);
+                showToast(`ক্লাউডে সেভ হয়নি (${err.message})! অফলাইন ব্যাকআপ রাখা হয়েছে।`, true);
             }
         }
 
-        // Get Consolidated Student List (Deterministic & ID-backed)
+        // Background Real-Time Auto Polling
+        function startAutoSync() {
+            if (autoSyncInterval) clearInterval(autoSyncInterval);
+            
+            // Check cloud every 6 seconds for live updates from other tabs/devices
+            autoSyncInterval = setInterval(() => {
+                const isStudentModalOpen = !document.getElementById("studentModal")?.classList.contains("hidden");
+                const isQuickTapModalOpen = !document.getElementById("quickTapModal")?.classList.contains("hidden");
+
+                // Do not auto-update DOM if user is currently editing inside a modal
+                if (!isStudentModalOpen && !isQuickTapModalOpen) {
+                    fetchScheduleFromCloud(true);
+                }
+            }, 6000);
+        }
+
+        // Get Consolidated Student List
         function getAllStudentsList() {
             let list = [];
             if (!instituteData) return list;
@@ -1232,6 +1283,7 @@
         document.addEventListener("DOMContentLoaded", () => {
             setTheme("black");
             fetchScheduleFromCloud();
+            startAutoSync();
         });
     </script>
 </body>
