@@ -492,6 +492,10 @@
         let currentTheme = "black";
         let autoSyncInterval = null;
         let lastSyncedJsonString = "";
+        
+        // Anti-Overwrite & Sync States
+        let hasUnsavedChanges = false;
+        let isSaving = false;
 
         // Initialize Default Seed Data Structure
         function generateInitialSeedData() {
@@ -640,6 +644,9 @@
 
         // Fetch Schedule Data Exclusively from JSONbin Cloud with Fallback
         async function fetchScheduleFromCloud(isBackground = false) {
+            // Do not fetch and overwrite if a save operation is in progress or failed recently
+            if (isSaving || hasUnsavedChanges) return;
+
             if (!isBackground) {
                 updateCloudStatus("Cloud: Fetching...", "syncing");
             }
@@ -648,8 +655,8 @@
                 const response = await fetch(`${API_URL}/latest?t=${Date.now()}`, {
                     method: "GET",
                     headers: {
-                        "X-Master-Key": JSONBIN_ACCESS_KEY,
-                        "X-Access-Key": JSONBIN_ACCESS_KEY
+                        // REMOVED X-Access-Key to prevent header conflicts
+                        "X-Master-Key": JSONBIN_ACCESS_KEY
                     },
                     cache: "no-store"
                 });
@@ -702,12 +709,15 @@
         // Save Schedule Data Exclusively to JSONbin Cloud
         async function saveScheduleToCloud(showNotification = true) {
             if (!instituteData) return;
+            
+            isSaving = true;
+            hasUnsavedChanges = true; // Block incoming data syncs from overwriting our new changes
+            
             instituteData = normalizeInstituteData(instituteData);
-
             const payloadStr = JSON.stringify(instituteData);
-            lastSyncedJsonString = payloadStr;
+            
+            // Optimistic update locally immediately
             localStorage.setItem("apex_institute_backup", payloadStr);
-
             renderAllViews();
             updateCloudStatus("Cloud: Saving...", "syncing");
 
@@ -716,13 +726,15 @@
                     method: "PUT",
                     headers: {
                         "Content-Type": "application/json",
-                        "X-Master-Key": JSONBIN_ACCESS_KEY,
-                        "X-Access-Key": JSONBIN_ACCESS_KEY
+                        // REMOVED X-Access-Key to fix HTTP 401 Unauthorized Issue
+                        "X-Master-Key": JSONBIN_ACCESS_KEY
                     },
                     body: payloadStr
                 });
 
                 if (response.ok) {
+                    lastSyncedJsonString = payloadStr;
+                    hasUnsavedChanges = false; // Save successful, unlock sync
                     updateCloudStatus("Cloud: Synced", "success");
                     if (showNotification) {
                         showToast("সকল পরিবর্তন ক্লাউডে সেভ করা হয়েছে!");
@@ -735,7 +747,12 @@
             } catch (err) {
                 console.error("Cloud Save Error:", err);
                 updateCloudStatus("Cloud: Save Error", "error");
-                showToast(`ক্লাউডে সেভ হয়নি (${err.message})! অফলাইন ব্যাকআপ রাখা হয়েছে।`, true);
+                if (showNotification) {
+                    showToast(`ক্লাউডে সেভ হয়নি (${err.message})! অফলাইন ব্যাকআপ রাখা হয়েছে।`, true);
+                }
+                // Notice: hasUnsavedChanges remains true, so the background sync will keep retrying and won't overwrite the names.
+            } finally {
+                isSaving = false;
             }
         }
 
@@ -743,16 +760,22 @@
         function startAutoSync() {
             if (autoSyncInterval) clearInterval(autoSyncInterval);
             
-            // Check cloud every 6 seconds for live updates from other tabs/devices
+            // Check cloud every 8 seconds (optimized to prevent JSONBin Rate Limiting / 429/401 errors)
             autoSyncInterval = setInterval(() => {
                 const isStudentModalOpen = !document.getElementById("studentModal")?.classList.contains("hidden");
                 const isQuickTapModalOpen = !document.getElementById("quickTapModal")?.classList.contains("hidden");
 
                 // Do not auto-update DOM if user is currently editing inside a modal
                 if (!isStudentModalOpen && !isQuickTapModalOpen) {
-                    fetchScheduleFromCloud(true);
+                    if (hasUnsavedChanges) {
+                        // If previous save failed, try to save again in the background silently
+                        saveScheduleToCloud(false);
+                    } else {
+                        // Normal real-time data fetching
+                        fetchScheduleFromCloud(true);
+                    }
                 }
-            }, 6000);
+            }, 8000);
         }
 
         // Get Consolidated Student List
