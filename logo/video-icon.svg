@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <!-- ডাইনামিক রেড-পার্পল ভিডিও গ্রেডিয়েন্ট -->
+    <linearGradient id="videoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF0055"/>
+      <stop offset="100%" stop-color="#7A00FF"/>
+    </linearGradient>
+
+    <!-- প্লে বাটনের সফট গ্লো -->
+    <linearGradient id="playGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#EAEAEA"/>
+    </linearGradient>
+  </defs>
+
+  <!-- রাউন্ডেড স্কয়ার ক্যানভাস -->
+  <rect width="64" height="64" rx="18" fill="url(#videoGrad)"/>
+
+  <!-- ইনার সফট ফ্রেম border -->
+  <rect x="8" y="8" width="48" height="48" rx="14" fill="none" stroke="#FFFFFF" stroke-opacity="0.2" stroke-width="1.5"/>
+
+  <!-- স্মুথ প্লে ট্রায়াঙ্গেল (Play Icon) -->
+  <path d="M 26 20.5 C 26 18.7 28 17.6 29.5 18.5 L 45.5 29 C 46.8 29.9 46.8 32.1 45.5 33 L 29.5 43.5 C 28 44.4 26 43.3 26 41.5 Z" 
+        fill="url(#playGrad)"/>
+</svg>
