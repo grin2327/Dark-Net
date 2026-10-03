@@ -214,25 +214,36 @@
 
         <!-- Consolidated Infinite Student List Section -->
         <section class="card-bg rounded-2xl border shadow-xl p-4 sm:p-6 space-y-5 sm:space-y-6">
-            <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 border-b border-slate-800/60 pb-4">
+            <div class="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-4 border-b border-slate-800/60 pb-4">
                 <div>
                     <h2 class="text-lg sm:text-xl font-black text-amber-400 flex items-center gap-2">
                         <i class="fa-solid fa-users-rectangle"></i> Student List (স্টুডেন্ট লিস্ট)
                     </h2>
-                    <p class="text-xs text-slate-400 mt-1">এখানে সকল ভর্তি হওয়া স্টুডেন্টদের তালিকা ও স্ট্যাটাস একসঙ্গে দেখা ও ম্যানেজ করা যাবে (আনলিমিটেড স্টুডেন্ট এনরোল করার সুবিধা)</p>
                 </div>
 
-                <!-- Action Buttons: Enroll & Batch Delete -->
-                <div class="flex flex-wrap items-center gap-2 w-full lg:w-auto">
-                    <button id="btnBatchDelete" onclick="deleteSelectedStudents()" class="flex-1 lg:flex-initial px-3.5 py-2.5 bg-rose-600 hover:bg-rose-500 opacity-80 hover:opacity-100 text-white font-extrabold rounded-xl text-xs transition shadow-lg flex items-center justify-center gap-1.5">
-                        <i class="fa-solid fa-user-minus"></i>
-                        <span>Delete Selected (<span id="selectedCount">0</span>)</span>
-                    </button>
+                <!-- Contact Number / ID Search Box & Action Buttons -->
+                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full xl:w-auto">
+                    <!-- Quick Contact Search Input -->
+                    <div class="relative min-w-[260px] sm:min-w-[300px]">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                        <input type="text" id="studentSearchInput" oninput="renderMasterStudentList()" placeholder="মোবাইল নাম্বার বা আইডি দিয়ে খুঁজুন..." class="input-bg w-full pl-9 pr-8 py-2.5 rounded-xl text-xs outline-none focus:ring-2 focus:ring-amber-400 font-medium">
+                        <button onclick="clearSearchInput()" id="btnClearSearch" class="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white text-xs hidden">
+                            <i class="fa-solid fa-circle-xmark"></i>
+                        </button>
+                    </div>
 
-                    <button onclick="openEnrollModal()" class="flex-1 lg:flex-initial px-4 py-2.5 bg-amber-400 hover:bg-amber-300 text-slate-950 font-black rounded-xl text-xs transition shadow-lg flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-user-plus text-sm"></i>
-                        <span>Enroll New Student</span>
-                    </button>
+                    <!-- Action Buttons: Enroll & Batch Delete -->
+                    <div class="flex items-center gap-2">
+                        <button id="btnBatchDelete" onclick="deleteSelectedStudents()" class="px-3.5 py-2.5 bg-rose-600 hover:bg-rose-500 opacity-80 hover:opacity-100 text-white font-extrabold rounded-xl text-xs transition shadow-lg flex items-center justify-center gap-1.5 whitespace-nowrap">
+                            <i class="fa-solid fa-user-minus"></i>
+                            <span>Delete Selected (<span id="selectedCount">0</span>)</span>
+                        </button>
+
+                        <button onclick="openEnrollModal()" class="px-4 py-2.5 bg-amber-400 hover:bg-amber-300 text-slate-950 font-black rounded-xl text-xs transition shadow-lg flex items-center justify-center gap-2 whitespace-nowrap">
+                            <i class="fa-solid fa-user-plus text-sm"></i>
+                            <span>Enroll New Student</span>
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -414,30 +425,30 @@
                 "Sat-Mon-Wed": {
                     "09 AM": [],
                     "10 AM": [
-                        { id: "STU-2026-101", name: "NAHITA", course: "Basic Computer & MS Office", phone: "", status: "Active" },
-                        { id: "STU-2026-102", name: "TISHA", course: "Basic Computer & MS Office", phone: "", status: "Active" },
-                        { id: "STU-2026-103", name: "BUSHRA", course: "Basic Computer & MS Office", phone: "", status: "Active" },
-                        { id: "STU-2026-104", name: "SOMRAT", course: "Basic Computer & MS Office", phone: "", status: "Active" }
+                        { id: "STU-2026-101", name: "NAHITA", course: "Basic Computer & MS Office", phone: "01710000001", status: "Active" },
+                        { id: "STU-2026-102", name: "TISHA", course: "Basic Computer & MS Office", phone: "01710000002", status: "Active" },
+                        { id: "STU-2026-103", name: "BUSHRA", course: "Basic Computer & MS Office", phone: "01710000003", status: "Active" },
+                        { id: "STU-2026-104", name: "SOMRAT", course: "Basic Computer & MS Office", phone: "01710000004", status: "Active" }
                     ],
                     "11 AM": [
-                        { id: "STU-2026-105", name: "MEKLA", course: "Basic Computer & MS Office", phone: "", status: "Active" },
-                        { id: "STU-2026-106", name: "ILMI", course: "Basic Computer & MS Office", phone: "", status: "Active" },
-                        { id: "STU-2026-107", name: "TASFIA", course: "Basic Computer & MS Office", phone: "", status: "Active" }
+                        { id: "STU-2026-105", name: "MEKLA", course: "Basic Computer & MS Office", phone: "01710000005", status: "Active" },
+                        { id: "STU-2026-106", name: "ILMI", course: "Basic Computer & MS Office", phone: "01710000006", status: "Active" },
+                        { id: "STU-2026-107", name: "TASFIA", course: "Basic Computer & MS Office", phone: "01710000007", status: "Active" }
                     ],
                     "12 PM": [],
                     "01 PM": [],
                     "04 PM": [],
                     "05 PM": [
-                        { id: "STU-2026-108", name: "Anjuman", course: "Basic Computer & MS Office", phone: "", status: "Active" },
-                        { id: "STU-2026-109", name: "NAIM", course: "Basic Computer & MS Office", phone: "", status: "Active" },
-                        { id: "STU-2026-110", name: "MUNNA", course: "Basic Computer & MS Office", phone: "", status: "Active" },
-                        { id: "STU-2026-111", name: "Anik", course: "Basic Computer & MS Office", phone: "", status: "Active" }
+                        { id: "STU-2026-108", name: "Anjuman", course: "Basic Computer & MS Office", phone: "01710000008", status: "Active" },
+                        { id: "STU-2026-109", name: "NAIM", course: "Basic Computer & MS Office", phone: "01710000009", status: "Active" },
+                        { id: "STU-2026-110", name: "MUNNA", course: "Basic Computer & MS Office", phone: "01710000010", status: "Active" },
+                        { id: "STU-2026-111", name: "Anik", course: "Basic Computer & MS Office", phone: "01710000011", status: "Active" }
                     ],
                     "06 PM": [
-                        { id: "STU-2026-112", name: "Purnima", course: "Basic Computer & MS Office", phone: "", status: "Active" },
-                        { id: "STU-2026-113", name: "Shohag", course: "Basic Computer & MS Office", phone: "", status: "Active" },
-                        { id: "STU-2026-114", name: "Mimia", course: "Basic Computer & MS Office", phone: "", status: "Active" },
-                        { id: "STU-2026-115", name: "MohiUddin", course: "Basic Computer & MS Office", phone: "", status: "Active" }
+                        { id: "STU-2026-112", name: "Purnima", course: "Basic Computer & MS Office", phone: "01710000012", status: "Active" },
+                        { id: "STU-2026-113", name: "Shohag", course: "Basic Computer & MS Office", phone: "01710000013", status: "Active" },
+                        { id: "STU-2026-114", name: "Mimia", course: "Basic Computer & MS Office", phone: "01710000014", status: "Active" },
+                        { id: "STU-2026-115", name: "MohiUddin", course: "Basic Computer & MS Office", phone: "01710000015", status: "Active" }
                     ],
                     "07 PM": [],
                     "08 PM": []
@@ -468,8 +479,19 @@
             }
         }
 
-        // Fetch Schedule Data from JSONbin Cloud
+        // Fetch Schedule Data with LocalStorage Priority (Prevents Data Loss on Refresh)
         async function fetchScheduleFromCloud() {
+            // First Priority: Load instantly from LocalStorage to keep deleted/edited data intact
+            const localData = localStorage.getItem("instituteData_bw_backup");
+            if (localData) {
+                try {
+                    instituteData = JSON.parse(localData);
+                    renderAllViews();
+                } catch (e) {
+                    console.error("Localstorage parse error:", e);
+                }
+            }
+
             try {
                 const response = await fetch(`${API_URL}/latest`, {
                     method: "GET",
@@ -478,38 +500,36 @@
                     }
                 });
 
-                if (!response.ok) {
-                    throw new Error(`HTTP Error Status: ${response.status}`);
+                if (response.ok) {
+                    const result = await response.json();
+                    if (result.record && typeof result.record === "object" && result.record["Sat-Mon-Wed"]) {
+                        // Only set if localData was null to avoid reverting user deletions
+                        if (!localData) {
+                            instituteData = result.record;
+                            if (!instituteData.extraStudents) instituteData.extraStudents = [];
+                            localStorage.setItem("instituteData_bw_backup", JSON.stringify(instituteData));
+                            renderAllViews();
+                        }
+                    }
                 }
-
-                const result = await response.json();
-                
-                if (result.record && typeof result.record === "object" && result.record["Sat-Mon-Wed"]) {
-                    instituteData = result.record;
-                    if (!instituteData.extraStudents) instituteData.extraStudents = [];
-                    localStorage.setItem("instituteData_bw_backup", JSON.stringify(instituteData));
-                } else {
-                    instituteData = generateInitialSeedData();
-                    await saveScheduleToCloud(false);
-                }
-
-                renderAllViews();
             } catch (err) {
-                console.error("Fetch Error:", err);
-                const localData = localStorage.getItem("instituteData_bw_backup");
-                if (localData) {
-                    instituteData = JSON.parse(localData);
-                } else {
-                    instituteData = generateInitialSeedData();
-                }
+                console.error("Cloud Fetch Error:", err);
+            }
+
+            if (!instituteData) {
+                instituteData = generateInitialSeedData();
+                localStorage.setItem("instituteData_bw_backup", JSON.stringify(instituteData));
                 renderAllViews();
             }
         }
 
-        // Save Schedule Data to JSONbin Cloud
+        // Save Schedule Data (Guarantees immediate LocalStorage save & Background JSONbin Sync)
         async function saveScheduleToCloud(showToast = true) {
+            // 1. Immediately sync to LocalStorage
             localStorage.setItem("instituteData_bw_backup", JSON.stringify(instituteData));
+            renderAllViews();
 
+            // 2. Async sync to JSONbin cloud
             try {
                 await fetch(API_URL, {
                     method: "PUT",
@@ -519,10 +539,8 @@
                     },
                     body: JSON.stringify(instituteData)
                 });
-                renderAllViews();
             } catch (err) {
-                console.error("Save Error:", err);
-                renderAllViews();
+                console.error("Cloud Sync Error (Data safely stored in LocalStorage):", err);
             }
         }
 
@@ -535,6 +553,7 @@
         // Render Schedule Board
         function renderBoardOverview() {
             const container = document.getElementById("boardOverviewContainer");
+            if (!container) return;
             container.innerHTML = "";
 
             GROUPS.forEach(group => {
@@ -613,16 +632,35 @@
             `;
         }
 
-        // Render Consolidated Student List (Infinite Students)
+        // Clear Search Input
+        function clearSearchInput() {
+            const searchInput = document.getElementById("studentSearchInput");
+            if (searchInput) {
+                searchInput.value = "";
+                renderMasterStudentList();
+            }
+        }
+
+        // Render Consolidated Student List with Instant Mobile/ID Search Filtering
         function renderMasterStudentList() {
             const tbody = document.getElementById("studentMasterList");
+            if (!tbody) return;
             tbody.innerHTML = "";
+
+            const searchInput = document.getElementById("studentSearchInput");
+            const btnClearSearch = document.getElementById("btnClearSearch");
+            const searchQuery = searchInput ? searchInput.value.trim().toLowerCase() : "";
+
+            if (btnClearSearch) {
+                if (searchQuery.length > 0) btnClearSearch.classList.remove("hidden");
+                else btnClearSearch.classList.add("hidden");
+            }
 
             let allStudents = [];
 
             // Gather Board Students
             GROUPS.forEach(group => {
-                if (instituteData[group]) {
+                if (instituteData && instituteData[group]) {
                     Object.keys(instituteData[group]).forEach(slot => {
                         instituteData[group][slot].forEach((stu, idx) => {
                             allStudents.push({ ...stu, group, slot, isBoard: true, boardIndex: idx });
@@ -632,7 +670,7 @@
             });
 
             // Gather Extra Infinite Students
-            if (instituteData.extraStudents) {
+            if (instituteData && instituteData.extraStudents) {
                 instituteData.extraStudents.forEach((stu, idx) => {
                     allStudents.push({ ...stu, group: stu.group || "General", slot: "Custom", isBoard: false, extraIndex: idx });
                 });
@@ -644,9 +682,43 @@
                 return;
             }
 
-            allStudents.forEach((stu, idx) => {
+            // Index mapping for modification stability
+            let displayStudents = allStudents.map((stu, originalIndex) => ({ ...stu, originalIndex }));
+
+            // Apply Search Filter (Filter by Mobile Contact, ID, or Name)
+            if (searchQuery) {
+                displayStudents = displayStudents.filter(stu => {
+                    const phone = (stu.phone || "").toLowerCase();
+                    const id = (stu.id || "").toLowerCase();
+                    const name = (stu.name || "").toLowerCase();
+                    return phone.includes(searchQuery) || id.includes(searchQuery) || name.includes(searchQuery);
+                });
+
+                // Prioritize Mobile Number exact/start match at the VERY TOP
+                displayStudents.sort((a, b) => {
+                    const phoneA = (a.phone || "").toLowerCase();
+                    const phoneB = (b.phone || "").toLowerCase();
+                    const aMatch = phoneA.startsWith(searchQuery);
+                    const bMatch = phoneB.startsWith(searchQuery);
+                    if (aMatch && !bMatch) return -1;
+                    if (!aMatch && bMatch) return 1;
+                    return 0;
+                });
+            }
+
+            if (displayStudents.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="9" class="text-center py-8 text-rose-400 font-semibold italic"><i class="fa-solid fa-circle-exclamation mr-1"></i> "${searchQuery}" এর সাথে মিলে এমন কোনো স্টুডেন্ট পাওয়া যায়নি।</td></tr>`;
+                updateSelectedCount();
+                return;
+            }
+
+            displayStudents.forEach((stu, viewIndex) => {
                 const tr = document.createElement("tr");
-                tr.className = "hover:bg-slate-800/40 transition-colors";
+                const isSearchedMatch = searchQuery.length > 0;
+                
+                tr.className = isSearchedMatch 
+                    ? "bg-amber-400/10 hover:bg-amber-400/20 transition-colors border-l-4 border-amber-400" 
+                    : "hover:bg-slate-800/40 transition-colors";
 
                 let statusBadge = "bg-emerald-950 text-emerald-300 border-emerald-800";
                 if (stu.status === "On Leave") statusBadge = "bg-amber-950 text-amber-300 border-amber-800";
@@ -654,20 +726,20 @@
 
                 tr.innerHTML = `
                     <td class="py-3 px-3 text-center">
-                        <input type="checkbox" class="student-select-cb rounded accent-amber-400 cursor-pointer w-4 h-4" data-flat-index="${idx}" onchange="updateSelectedCount()">
+                        <input type="checkbox" class="student-select-cb rounded accent-amber-400 cursor-pointer w-4 h-4" data-original-index="${stu.originalIndex}" onchange="updateSelectedCount()">
                     </td>
-                    <td class="py-3 px-3 font-bold text-slate-500">${idx + 1 < 10 ? '0' + (idx + 1) : idx + 1}</td>
-                    <td class="py-3 px-4 font-mono font-semibold text-slate-400">${stu.id}</td>
-                    <td class="py-3 px-4 font-extrabold text-amber-400 text-sm">${stu.name}</td>
+                    <td class="py-3 px-3 font-bold text-slate-500">${viewIndex + 1 < 10 ? '0' + (viewIndex + 1) : viewIndex + 1}</td>
+                    <td class="py-3 px-4 font-mono font-bold text-amber-400 bg-amber-400/5 px-2 py-1 rounded inline-block my-2 border border-amber-400/20">${stu.id}</td>
+                    <td class="py-3 px-4 font-extrabold text-slate-200 text-sm">${stu.name}</td>
                     <td class="py-3 px-4 text-slate-300 font-medium">${GROUP_LABELS[stu.group] || stu.group}</td>
                     <td class="py-3 px-4 text-slate-300">${stu.course || 'Basic Computer & MS Office'}</td>
-                    <td class="py-3 px-4 text-slate-400 font-mono">${stu.phone || '--'}</td>
+                    <td class="py-3 px-4 font-mono font-bold text-emerald-400">${stu.phone || '--'}</td>
                     <td class="py-3 px-4"><span class="px-2 py-0.5 border rounded text-[11px] font-bold ${statusBadge}">${stu.status || 'Active'}</span></td>
                     <td class="py-3 px-4 text-right space-x-2 whitespace-nowrap">
-                        <button onclick="editMasterStudent(${idx})" class="text-amber-400 hover:text-amber-300 bg-slate-800 hover:bg-slate-700 px-2.5 py-1 rounded transition text-xs font-bold">
+                        <button onclick="editMasterStudent(${stu.originalIndex})" class="text-amber-400 hover:text-amber-300 bg-slate-800 hover:bg-slate-700 px-2.5 py-1 rounded transition text-xs font-bold">
                             <i class="fa-solid fa-pen"></i> Edit
                         </button>
-                        <button onclick="deleteMasterStudent(${idx})" class="text-rose-400 hover:text-rose-300 bg-rose-950 hover:bg-rose-900 px-2.5 py-1 rounded transition text-xs font-bold">
+                        <button onclick="deleteMasterStudent(${stu.originalIndex})" class="text-rose-400 hover:text-rose-300 bg-rose-950 hover:bg-rose-900 px-2.5 py-1 rounded transition text-xs font-bold">
                             <i class="fa-solid fa-trash"></i> Delete
                         </button>
                     </td>
@@ -695,12 +767,14 @@
             
             if (countSpan) countSpan.textContent = selected.length;
             
-            if (selected.length > 0) {
-                btnBatchDelete.classList.remove('opacity-80');
-                btnBatchDelete.classList.add('ring-2', 'ring-rose-400');
-            } else {
-                btnBatchDelete.classList.add('opacity-80');
-                btnBatchDelete.classList.remove('ring-2', 'ring-rose-400');
+            if (btnBatchDelete) {
+                if (selected.length > 0) {
+                    btnBatchDelete.classList.remove('opacity-80');
+                    btnBatchDelete.classList.add('ring-2', 'ring-rose-400');
+                } else {
+                    btnBatchDelete.classList.add('opacity-80');
+                    btnBatchDelete.classList.remove('ring-2', 'ring-rose-400');
+                }
             }
 
             const allCheckboxes = document.querySelectorAll('.student-select-cb');
@@ -719,7 +793,7 @@
             }
 
             const count = selectedCheckboxes.length;
-            if (!confirm(`আপনি কি নিশ্চিত যে বাছাইকৃত ${count} জন স্টুডেন্টকে লিস্টিং থেকে ডিলিট করতে চান?`)) {
+            if (!confirm(`আপনি কি নিশ্চিত যে বাছাইকৃত ${count} জন স্টুডেন্টকে সম্পূর্ণভাবে ডিলিট করতে চান?`)) {
                 return;
             }
 
@@ -742,7 +816,7 @@
 
             const selectedIds = new Set(
                 selectedCheckboxes.map(cb => {
-                    const idx = parseInt(cb.getAttribute('data-flat-index'));
+                    const idx = parseInt(cb.getAttribute('data-original-index'));
                     return allStudents[idx] ? allStudents[idx].id : null;
                 }).filter(id => id !== null)
             );
@@ -844,7 +918,7 @@
             activeQuickTap = null;
         }
 
-        // Master Student List Actions (Unlimited Students)
+        // Master Student List Actions
         function openEnrollModal() {
             activeEditLocation = { isNew: true };
             const randomNum = Math.floor(1000 + Math.random() * 9000);
@@ -859,7 +933,7 @@
             document.getElementById("studentModal").classList.remove("hidden");
         }
 
-        function editMasterStudent(flatIndex) {
+        function editMasterStudent(originalIndex) {
             let allStudents = [];
             GROUPS.forEach(group => {
                 if (instituteData[group]) {
@@ -876,7 +950,7 @@
                 });
             }
 
-            const student = allStudents[flatIndex];
+            const student = allStudents[originalIndex];
             if (!student) return;
 
             activeEditLocation = { isNew: false, targetStudent: student };
@@ -923,7 +997,7 @@
             await saveScheduleToCloud(true);
         }
 
-        async function deleteMasterStudent(flatIndex) {
+        async function deleteMasterStudent(originalIndex) {
             let allStudents = [];
             GROUPS.forEach(group => {
                 if (instituteData[group]) {
@@ -940,10 +1014,10 @@
                 });
             }
 
-            const target = allStudents[flatIndex];
+            const target = allStudents[originalIndex];
             if (!target) return;
 
-            if (confirm(`Are you sure you want to delete ${target.name} (${target.id})?`)) {
+            if (confirm(`আপনি কি নিশ্চিত যে ${target.name} (${target.id}) কে সম্পূর্ণ ডিলিট করতে চান?`)) {
                 if (target.isBoard) {
                     instituteData[target.group][target.slot].splice(target.boardIndex, 1);
                 } else {
