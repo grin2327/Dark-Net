@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <!-- ব্যাকগ্রাউন্ড ডার্ক ক্যানভাস -->
+  <rect width="64" height="64" rx="18" fill="#071722"/>
+
+  <!-- আউটার বর্ডার / ফ্রেম -->
+  <rect x="2" y="2" width="60" height="60" rx="17" fill="none" stroke="#00D2EE" stroke-opacity="0.35" stroke-width="1.5"/>
+
+  <!-- সায়ান পিক্সেল স্মুথ সাউন্ড/পালস ওয়েভলাইন -->
+  <path d="M 16 32 H 24 V 20 H 32 V 44 H 40 V 32 H 48" 
+        fill="none" 
+        stroke="#00D2EE" 
+        stroke-width="5" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"/>
+</svg>
