@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Student Batch Listing & Schedule | Computer Training Institute</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -11,18 +11,46 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
+        /* Base Page Layout Setup for Sticky/Stable Footer */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
             font-family: 'Inter', sans-serif;
             transition: background-color 0.3s ease, color 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
-        
+
+        main {
+            flex: 1 0 auto;
+        }
+
+        footer {
+            flex-shrink: 0;
+        }
+
+        /* Prevent Auto-Zoom on iOS/Mobile Inputs */
+        input, select, textarea {
+            font-size: 16px !important;
+        }
+        @media (min-width: 640px) {
+            input, select, textarea {
+                font-size: 0.875rem !important; /* text-sm */
+            }
+        }
+
         /* Custom Theme Styles */
         body.theme-black {
             background-color: #000000;
             color: #ffffff;
         }
         body.theme-white {
-            background-color: #f1f5f9;
+            background-color: #f8fafc;
             color: #0f172a;
         }
 
@@ -40,6 +68,9 @@
             border-color: #333333;
             color: #ffffff;
         }
+        body.theme-black .input-bg::placeholder {
+            color: #737373;
+        }
         body.theme-black .table-head {
             background-color: #171717;
             color: #d4d4d4;
@@ -50,21 +81,34 @@
             border-color: #1c1c1c;
             color: #525252;
         }
+        body.theme-black .student-name-text {
+            color: #f8fafc;
+        }
+        body.theme-black .footer-bg {
+            background-color: #050505;
+            border-color: #1e1e1e;
+            color: #737373;
+        }
 
-        /* White Theme High Contrast Components */
+        /* White Theme High Contrast Components (Deep Dark Text Fix) */
         body.theme-white .card-bg {
             background-color: #ffffff;
             border-color: #cbd5e1;
-            box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.06);
         }
         body.theme-white .header-bg {
             background-color: #0f172a;
             border-color: #1e293b;
         }
         body.theme-white .input-bg {
-            background-color: #ffffff;
-            border-color: #94a3b8;
-            color: #0f172a;
+            background-color: #ffffff !important;
+            border-color: #64748b !important;
+            color: #0f172a !important;
+            font-weight: 700 !important;
+        }
+        body.theme-white .input-bg::placeholder {
+            color: #64748b !important;
+            font-weight: 500 !important;
         }
         body.theme-white .table-head {
             background-color: #e2e8f0;
@@ -74,7 +118,7 @@
         body.theme-white .table-cell-empty {
             background-color: #f8fafc;
             border-color: #cbd5e1;
-            color: #64748b;
+            color: #475569;
         }
         body.theme-white .table-cell-empty:hover {
             background-color: #f1f5f9;
@@ -84,6 +128,16 @@
             background-color: #fef3c7 !important;
             color: #78350f !important;
             border-color: #fcd34d !important;
+            font-weight: 800 !important;
+        }
+        body.theme-white .student-name-text {
+            color: #0f172a !important;
+            font-weight: 800 !important;
+        }
+        body.theme-white .footer-bg {
+            background-color: #ffffff;
+            border-color: #e2e8f0;
+            color: #475569;
         }
 
         /* White Theme High Contrast Color Overrides */
@@ -91,16 +145,19 @@
             color: #b45309 !important;
         }
         body.theme-white .text-indigo-400 {
-            color: #4338ca !important;
+            color: #3730a3 !important;
         }
         body.theme-white .text-slate-400 {
-            color: #475569 !important;
+            color: #334155 !important;
         }
         body.theme-white .text-slate-300 {
-            color: #1e293b !important;
+            color: #0f172a !important;
+        }
+        body.theme-white .text-slate-200 {
+            color: #0f172a !important;
         }
         body.theme-white .text-slate-500 {
-            color: #64748b !important;
+            color: #475569 !important;
         }
         body.theme-white .border-slate-800,
         body.theme-white .border-slate-800\/60 {
@@ -121,6 +178,7 @@
         body.theme-white .bg-slate-950 {
             background-color: #ffffff !important;
             color: #0f172a !important;
+            border-color: #cbd5e1 !important;
         }
         body.theme-white tr:hover {
             background-color: #f1f5f9 !important;
@@ -151,37 +209,37 @@
         }
     </style>
 </head>
-<body class="theme-black min-h-screen pb-16">
+<body class="theme-black">
 
     <!-- Top Navigation Header -->
     <header class="header-bg text-white border-b shadow-xl sticky top-0 z-30">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-col sm:flex-row justify-between items-center gap-3">
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-3 flex flex-row justify-between items-center gap-2">
             <!-- Title Section -->
-            <div class="flex items-center space-x-3 text-center sm:text-left">
-                <i class="fa-solid fa-chalkboard-user text-amber-400 text-2xl sm:text-3xl"></i>
+            <div class="flex items-center space-x-2 sm:space-x-3">
+                <i class="fa-solid fa-chalkboard-user text-amber-400 text-xl sm:text-3xl"></i>
                 <div>
-                    <h1 class="text-lg sm:text-2xl font-black tracking-wide text-amber-400">Apex Computer Training Institute</h1>
-                    <p class="text-[11px] sm:text-xs text-slate-400">Class Schedule & Student Directory</p>
+                    <h1 class="text-sm sm:text-2xl font-black tracking-wide text-amber-400 leading-tight">Apex Computer Training</h1>
+                    <p class="text-[10px] sm:text-xs text-slate-400 hidden sm:block">Class Schedule & Student Directory</p>
                 </div>
             </div>
 
             <!-- Controls: Home Button & Theme Switcher -->
-            <div class="flex items-center space-x-2 sm:space-x-3">
+            <div class="flex items-center space-x-1.5 sm:space-x-3">
                 <!-- Home Button -->
-                <a href="../admin/dashboard.html" class="flex items-center space-x-1.5 bg-slate-800 hover:bg-slate-700 text-amber-400 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs font-bold border border-slate-700 transition shadow-sm">
+                <a href="../admin/dashboard.html" class="flex items-center space-x-1 bg-slate-800 hover:bg-slate-700 text-amber-400 px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs font-bold border border-slate-700 transition shadow-sm">
                     <i class="fa-solid fa-house text-xs"></i>
-                    <span>Home</span>
+                    <span class="hidden sm:inline">Home</span>
                 </a>
 
                 <!-- Theme Switcher Buttons -->
-                <div class="flex items-center bg-slate-900 border border-slate-800 p-1 rounded-xl space-x-1">
-                    <button onclick="setTheme('black')" id="btnThemeBlack" class="flex items-center space-x-1 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg text-xs font-bold transition bg-amber-400 text-slate-950">
-                        <i class="fa-solid fa-moon"></i>
-                        <span>Black</span>
+                <div class="flex items-center bg-slate-900 border border-slate-800 p-0.5 sm:p-1 rounded-xl space-x-0.5 sm:space-x-1">
+                    <button onclick="setTheme('black')" id="btnThemeBlack" class="flex items-center space-x-1 px-2 py-1 sm:px-3 sm:py-1.5 rounded-lg text-xs font-bold transition bg-amber-400 text-slate-950">
+                        <i class="fa-solid fa-moon text-xs"></i>
+                        <span class="hidden sm:inline">Black</span>
                     </button>
-                    <button onclick="setTheme('white')" id="btnThemeWhite" class="flex items-center space-x-1 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg text-xs font-bold transition text-slate-400 hover:text-white">
-                        <i class="fa-solid fa-sun"></i>
-                        <span>White</span>
+                    <button onclick="setTheme('white')" id="btnThemeWhite" class="flex items-center space-x-1 px-2 py-1 sm:px-3 sm:py-1.5 rounded-lg text-xs font-bold transition text-slate-400 hover:text-white">
+                        <i class="fa-solid fa-sun text-xs"></i>
+                        <span class="hidden sm:inline">White</span>
                     </button>
                 </div>
             </div>
@@ -189,59 +247,61 @@
     </header>
 
     <!-- Main Container -->
-    <main class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-5 sm:py-8 space-y-6 sm:space-y-8">
+    <main class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8 space-y-5 sm:space-y-8 w-full">
 
         <!-- Whiteboard Style Weekly Class Schedule Overview Section -->
-        <section class="card-bg rounded-2xl border shadow-2xl p-4 sm:p-6 space-y-5 sm:space-y-6">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 border-b border-slate-800/60 pb-4">
+        <section class="card-bg rounded-2xl border shadow-2xl p-3.5 sm:p-6 space-y-4 sm:space-y-6">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b border-slate-800/60 pb-3">
                 <div>
-                    <h2 class="text-lg sm:text-xl font-black text-amber-400 flex items-center gap-2">
+                    <h2 class="text-base sm:text-xl font-black text-amber-400 flex items-center gap-2">
                         <i class="fa-solid fa-pen-ruler"></i> Weekly Class Schedule Board Overview
                     </h2>
-                    <p class="text-xs text-slate-400 mt-1">হোয়াইটবোর্ডের ডিজাইনে তৈরি। সরাসরি যেকোনো স্টুডেন্টের নামের ওপর বা খালি ঘরে ট্যাপ করে নাম পরিবর্তন বা নতুন নাম সেভ করুন।</p>
+                    <p class="text-[11px] sm:text-xs text-slate-400 mt-0.5">হোয়াইটবোর্ডের ডিজাইনে তৈরি। সরাসরি যেকোনো স্টুডেন্টের নামের ওপর বা খালি ঘরে ট্যাপ করে নাম পরিবর্তন বা নতুন নাম সেভ করুন।</p>
                 </div>
-                <div class="flex items-center space-x-2 bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-700 text-xs text-amber-400 font-bold self-start md:self-auto">
+                <div class="flex items-center space-x-1.5 bg-slate-800 px-2.5 py-1 rounded-lg border border-slate-700 text-[11px] sm:text-xs text-amber-400 font-bold self-start sm:self-auto">
                     <i class="fa-solid fa-hand-pointer"></i>
-                    <span>Tap any cell to Edit</span>
+                    <span>Tap cell to Edit</span>
                 </div>
             </div>
 
             <!-- Dynamic Board Overview Container -->
-            <div id="boardOverviewContainer" class="space-y-6 sm:space-y-8">
-                <p class="text-center py-12 text-slate-500">Loading schedule board...</p>
+            <div id="boardOverviewContainer" class="space-y-5 sm:space-y-8">
+                <p class="text-center py-10 text-slate-500 text-xs">Loading schedule board...</p>
             </div>
         </section>
 
         <!-- Consolidated Infinite Student List Section -->
-        <section class="card-bg rounded-2xl border shadow-xl p-4 sm:p-6 space-y-5 sm:space-y-6">
-            <div class="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-4 border-b border-slate-800/60 pb-4">
-                <div>
-                    <h2 class="text-lg sm:text-xl font-black text-amber-400 flex items-center gap-2">
+        <section class="card-bg rounded-2xl border shadow-xl p-3.5 sm:p-6 space-y-4 sm:space-y-6">
+            
+            <div class="flex flex-col gap-3 border-b border-slate-800/60 pb-4">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-base sm:text-xl font-black text-amber-400 flex items-center gap-2">
                         <i class="fa-solid fa-users-rectangle"></i> Student List (স্টুডেন্ট লিস্ট)
                     </h2>
                 </div>
 
-                <!-- Contact Number / ID Search Box & Action Buttons -->
-                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full xl:w-auto">
-                    <!-- Quick Contact Search Input -->
-                    <div class="relative min-w-[260px] sm:min-w-[300px]">
-                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
-                        <input type="text" id="studentSearchInput" oninput="renderMasterStudentList()" placeholder="মোবাইল নাম্বার বা আইডি দিয়ে খুঁজুন..." class="input-bg w-full pl-9 pr-8 py-2.5 rounded-xl text-xs outline-none focus:ring-2 focus:ring-amber-400 font-medium">
-                        <button onclick="clearSearchInput()" id="btnClearSearch" class="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white text-xs hidden">
+                <!-- Mobile Optimized Touch-Friendly Search & Actions Container -->
+                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 w-full">
+                    
+                    <!-- Mobile Optimized Search Field -->
+                    <div class="relative flex-1 w-full">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                        <input type="text" id="studentSearchInput" oninput="renderMasterStudentList()" placeholder="মোবাইল নাম্বার বা আইডি দিয়ে খুঁজুন..." class="input-bg w-full pl-10 pr-10 py-3 sm:py-2.5 rounded-xl text-sm font-semibold outline-none focus:ring-2 focus:ring-amber-400 shadow-inner">
+                        <button onclick="clearSearchInput()" id="btnClearSearch" class="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-rose-400 p-2 text-base hidden" title="Clear Search">
                             <i class="fa-solid fa-circle-xmark"></i>
                         </button>
                     </div>
 
-                    <!-- Action Buttons: Enroll & Batch Delete -->
-                    <div class="flex items-center gap-2">
-                        <button id="btnBatchDelete" onclick="deleteSelectedStudents()" class="px-3.5 py-2.5 bg-rose-600 hover:bg-rose-500 opacity-80 hover:opacity-100 text-white font-extrabold rounded-xl text-xs transition shadow-lg flex items-center justify-center gap-1.5 whitespace-nowrap">
+                    <!-- Action Buttons: Mobile Touch Friendly -->
+                    <div class="grid grid-cols-2 sm:flex items-center gap-2 w-full sm:w-auto">
+                        <button id="btnBatchDelete" onclick="deleteSelectedStudents()" class="px-3 py-2.5 bg-rose-600 hover:bg-rose-500 opacity-80 hover:opacity-100 text-white font-extrabold rounded-xl text-xs transition shadow-md flex items-center justify-center gap-1.5 whitespace-nowrap">
                             <i class="fa-solid fa-user-minus"></i>
-                            <span>Delete Selected (<span id="selectedCount">0</span>)</span>
+                            <span>Delete (<span id="selectedCount">0</span>)</span>
                         </button>
 
-                        <button onclick="openEnrollModal()" class="px-4 py-2.5 bg-amber-400 hover:bg-amber-300 text-slate-950 font-black rounded-xl text-xs transition shadow-lg flex items-center justify-center gap-2 whitespace-nowrap">
+                        <button onclick="openEnrollModal()" class="px-3.5 py-2.5 bg-amber-400 hover:bg-amber-300 text-slate-950 font-black rounded-xl text-xs transition shadow-md flex items-center justify-center gap-1.5 whitespace-nowrap">
                             <i class="fa-solid fa-user-plus text-sm"></i>
-                            <span>Enroll New Student</span>
+                            <span>Enroll Student</span>
                         </button>
                     </div>
                 </div>
@@ -249,20 +309,20 @@
 
             <!-- Student Master Table -->
             <div class="overflow-x-auto custom-scrollbar rounded-xl border border-slate-800">
-                <table class="w-full text-left border-collapse text-xs min-w-[700px]">
+                <table class="w-full text-left border-collapse text-xs min-w-[650px]">
                     <thead>
                         <tr class="table-head uppercase font-extrabold border-b border-slate-800">
-                            <th class="py-3.5 px-3 text-center w-10">
+                            <th class="py-3 px-3 text-center w-10">
                                 <input type="checkbox" id="selectAllCheckbox" onchange="toggleSelectAllStudents(this)" class="rounded accent-amber-400 cursor-pointer w-4 h-4" title="Select All Students">
                             </th>
-                            <th class="py-3.5 px-3">#</th>
-                            <th class="py-3.5 px-4">Student ID</th>
-                            <th class="py-3.5 px-4">Student Name</th>
-                            <th class="py-3.5 px-4">Routine / Group</th>
-                            <th class="py-3.5 px-4">Course Name</th>
-                            <th class="py-3.5 px-4">Contact No.</th>
-                            <th class="py-3.5 px-4">Status</th>
-                            <th class="py-3.5 px-4 text-right">Actions</th>
+                            <th class="py-3 px-2">#</th>
+                            <th class="py-3 px-3">Student ID</th>
+                            <th class="py-3 px-3">Student Name</th>
+                            <th class="py-3 px-3">Routine / Group</th>
+                            <th class="py-3 px-3">Course Name</th>
+                            <th class="py-3 px-3">Contact No.</th>
+                            <th class="py-3 px-3">Status</th>
+                            <th class="py-3 px-3 text-right">Actions</th>
                         </tr>
                     </thead>
                     <tbody id="studentMasterList" class="divide-y divide-slate-800">
@@ -278,12 +338,12 @@
 
     <!-- Quick Tap-To-Edit Modal for Whiteboard -->
     <div id="quickTapModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-3 hidden">
-        <div class="card-bg rounded-2xl shadow-2xl border w-full max-w-md overflow-hidden max-h-[90vh] overflow-y-auto">
-            <div class="bg-slate-900 text-amber-400 px-5 py-3.5 border-b border-slate-800 flex justify-between items-center sticky top-0 z-10">
+        <div class="card-bg rounded-2xl shadow-2xl border w-full max-w-md overflow-hidden max-h-[92vh] overflow-y-auto">
+            <div class="bg-slate-900 text-amber-400 px-4 py-3 border-b border-slate-800 flex justify-between items-center sticky top-0 z-10">
                 <h3 class="font-extrabold text-sm sm:text-base flex items-center"><i class="fa-solid fa-bolt mr-2"></i> Quick Name Edit</h3>
-                <button onclick="closeQuickTapModal()" class="text-slate-400 hover:text-white text-lg px-2"><i class="fa-solid fa-xmark"></i></button>
+                <button onclick="closeQuickTapModal()" class="text-slate-400 hover:text-white text-lg p-1.5"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <div class="p-5 space-y-4">
+            <div class="p-4 sm:p-5 space-y-4">
                 <div class="bg-slate-950 p-3 rounded-lg border border-slate-800 text-xs space-y-1">
                     <p class="text-slate-400">Routine: <span id="quickTapGroupLabel" class="font-bold text-amber-400">--</span></p>
                     <p class="text-slate-400">Time Slot: <span id="quickTapSlotLabel" class="font-bold text-emerald-400">--</span></p>
@@ -291,12 +351,12 @@
 
                 <div>
                     <label class="block text-xs font-semibold text-slate-300 mb-1">Student Name (স্টুডেন্টের নাম)</label>
-                    <input type="text" id="quickTapName" class="input-bg w-full rounded-lg text-sm px-4 py-2.5 font-bold outline-none placeholder-slate-600 focus:ring-2 focus:ring-amber-400">
+                    <input type="text" id="quickTapName" class="input-bg w-full rounded-lg text-sm px-3.5 py-2.5 font-bold outline-none placeholder-slate-500 focus:ring-2 focus:ring-amber-400">
                 </div>
 
                 <div>
                     <label class="block text-xs font-semibold text-slate-300 mb-1">Assigned Course</label>
-                    <select id="quickTapCourse" class="input-bg w-full rounded-lg text-xs px-3 py-2 outline-none">
+                    <select id="quickTapCourse" class="input-bg w-full rounded-lg text-xs px-3 py-2.5 outline-none font-medium">
                         <option value="Basic Computer & MS Office">Basic Computer & MS Office (বেসিক কম্পিউটার ও এমএস অফিস)</option>
                         <option value="Graphic Design">Graphic Design (গ্রাফিক ডিজাইন)</option>
                         <option value="Video Editing">Video Editing (ভিডিও এডিটিং)</option>
@@ -307,16 +367,16 @@
 
                 <div>
                     <label class="block text-xs font-semibold text-slate-300 mb-1">Contact No. (Optional)</label>
-                    <input type="text" id="quickTapPhone" class="input-bg w-full rounded-lg text-xs px-3 py-2 outline-none" placeholder="e.g. 01700000000">
+                    <input type="text" id="quickTapPhone" class="input-bg w-full rounded-lg text-xs px-3 py-2.5 outline-none font-medium" placeholder="e.g. 01700000000">
                 </div>
 
-                <div class="flex justify-between items-center pt-4 border-t border-slate-800">
+                <div class="flex justify-between items-center pt-3 border-t border-slate-800">
                     <button id="btnDeleteQuickTap" type="button" onclick="deleteQuickTap()" class="px-3 py-2 bg-rose-950 text-rose-300 border border-rose-800 rounded-lg text-xs font-semibold hover:bg-rose-900 transition flex items-center gap-1 hidden">
                         <i class="fa-solid fa-trash"></i> Remove
                     </button>
                     <div class="flex space-x-2 ml-auto">
-                        <button type="button" onclick="closeQuickTapModal()" class="px-4 py-2 bg-slate-800 text-slate-300 rounded-lg text-xs font-semibold hover:bg-slate-700 transition">Cancel</button>
-                        <button type="button" onclick="saveQuickTap()" class="px-5 py-2 bg-amber-400 text-slate-950 font-black rounded-lg text-xs hover:bg-amber-300 shadow-lg transition flex items-center">
+                        <button type="button" onclick="closeQuickTapModal()" class="px-3.5 py-2 bg-slate-800 text-slate-300 rounded-lg text-xs font-semibold hover:bg-slate-700 transition">Cancel</button>
+                        <button type="button" onclick="saveQuickTap()" class="px-4 py-2 bg-amber-400 text-slate-950 font-black rounded-lg text-xs hover:bg-amber-300 shadow-lg transition flex items-center">
                             <i class="fa-solid fa-floppy-disk mr-1.5"></i> Save Changes
                         </button>
                     </div>
@@ -327,27 +387,27 @@
 
     <!-- Modal for Edit Student Status & Details -->
     <div id="studentModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-3 hidden">
-        <div class="card-bg rounded-2xl shadow-2xl border w-full max-w-md overflow-hidden max-h-[90vh] overflow-y-auto">
-            <div class="bg-slate-900 text-amber-400 px-5 py-3.5 flex justify-between items-center border-b border-slate-800 sticky top-0 z-10">
+        <div class="card-bg rounded-2xl shadow-2xl border w-full max-w-md overflow-hidden max-h-[92vh] overflow-y-auto">
+            <div class="bg-slate-900 text-amber-400 px-4 py-3 flex justify-between items-center border-b border-slate-800 sticky top-0 z-10">
                 <h3 id="modalTitle" class="font-extrabold text-sm sm:text-base flex items-center text-amber-400">
-                    <i class="fa-solid fa-user-gear mr-2"></i> Student Status & Details
+                    <i class="fa-solid fa-user-gear mr-2"></i> Student Details & Status
                 </h3>
-                <button onclick="closeModal()" class="text-slate-400 hover:text-white text-lg px-2"><i class="fa-solid fa-xmark"></i></button>
+                <button onclick="closeModal()" class="text-slate-400 hover:text-white text-lg p-1.5"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <form id="studentForm" onsubmit="handleFormSubmit(event)" class="p-5 space-y-4">
+            <form id="studentForm" onsubmit="handleFormSubmit(event)" class="p-4 sm:p-5 space-y-3.5">
                 <div>
                     <label class="block text-xs font-semibold text-slate-300 mb-1">Student ID</label>
-                    <input type="text" id="modalStudentId" required class="input-bg w-full rounded-lg text-xs px-3 py-2 font-mono outline-none">
+                    <input type="text" id="modalStudentId" required class="input-bg w-full rounded-lg text-xs px-3 py-2.5 font-mono outline-none">
                 </div>
 
                 <div>
                     <label class="block text-xs font-semibold text-slate-300 mb-1">Student Name (নাম)</label>
-                    <input type="text" id="modalStudentName" required class="input-bg w-full rounded-lg text-xs px-3 py-2 font-bold outline-none">
+                    <input type="text" id="modalStudentName" required class="input-bg w-full rounded-lg text-xs px-3 py-2.5 font-bold outline-none">
                 </div>
 
                 <div>
                     <label class="block text-xs font-semibold text-slate-300 mb-1">Routine / Group</label>
-                    <select id="modalStudentGroup" class="input-bg w-full rounded-lg text-xs px-3 py-2 outline-none">
+                    <select id="modalStudentGroup" class="input-bg w-full rounded-lg text-xs px-3 py-2.5 outline-none font-medium">
                         <option value="Sat-Mon-Wed">শনি, সোম, বুধ (Sat, Mon, Wed)</option>
                         <option value="Sun-Tue-Thu">রবি, মঙ্গল, বৃহঃ (Sun, Tue, Thu)</option>
                         <option value="General">General / Custom Group</option>
@@ -356,7 +416,7 @@
 
                 <div>
                     <label class="block text-xs font-semibold text-slate-300 mb-1">Assigned Course</label>
-                    <select id="modalStudentCourse" class="input-bg w-full rounded-lg text-xs px-3 py-2 outline-none">
+                    <select id="modalStudentCourse" class="input-bg w-full rounded-lg text-xs px-3 py-2.5 outline-none font-medium">
                         <option value="Basic Computer & MS Office">Basic Computer & MS Office (বেসিক কম্পিউটার ও এমএস অফিস)</option>
                         <option value="Graphic Design">Graphic Design (গ্রাফিক ডিজাইন)</option>
                         <option value="Video Editing">Video Editing (ভিডিও এডিটিং)</option>
@@ -367,21 +427,21 @@
 
                 <div>
                     <label class="block text-xs font-semibold text-slate-300 mb-1">Contact No.</label>
-                    <input type="text" id="modalStudentPhone" class="input-bg w-full rounded-lg text-xs px-3 py-2 outline-none" placeholder="e.g. 01700000000">
+                    <input type="text" id="modalStudentPhone" class="input-bg w-full rounded-lg text-xs px-3 py-2.5 outline-none font-medium" placeholder="e.g. 01700000000">
                 </div>
 
                 <div>
                     <label class="block text-xs font-semibold text-slate-300 mb-1">Student Status (স্টুডেন্ট স্ট্যাটাস)</label>
-                    <select id="modalStudentStatus" class="input-bg w-full rounded-lg text-xs px-3 py-2 outline-none font-bold">
+                    <select id="modalStudentStatus" class="input-bg w-full rounded-lg text-xs px-3 py-2.5 outline-none font-bold">
                         <option value="Active">Active (সক্রিয়)</option>
                         <option value="On Leave">On Leave (ছুটিতে)</option>
                         <option value="Completed">Completed (সম্পন্ন)</option>
                     </select>
                 </div>
 
-                <div class="flex justify-end space-x-3 pt-4 border-t border-slate-800">
-                    <button type="button" onclick="closeModal()" class="px-4 py-2 bg-slate-800 text-slate-300 rounded-lg text-xs font-semibold hover:bg-slate-700 transition">Cancel</button>
-                    <button type="submit" class="px-5 py-2 bg-amber-400 text-slate-950 font-black rounded-lg text-xs hover:bg-amber-300 shadow-md transition flex items-center">
+                <div class="flex justify-end space-x-2 pt-3 border-t border-slate-800">
+                    <button type="button" onclick="closeModal()" class="px-3.5 py-2 bg-slate-800 text-slate-300 rounded-lg text-xs font-semibold hover:bg-slate-700 transition">Cancel</button>
+                    <button type="submit" class="px-4 py-2 bg-amber-400 text-slate-950 font-black rounded-lg text-xs hover:bg-amber-300 shadow-md transition flex items-center">
                         <i class="fa-solid fa-floppy-disk mr-1.5"></i> Save Details
                     </button>
                 </div>
@@ -389,9 +449,11 @@
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="card-bg border-t text-slate-500 py-6 text-center text-xs mt-12">
-        <p>&copy; 2026 Apex Computer Training Institute. All rights reserved.</p>
+    <!-- Footer: Clean & Stable Layout -->
+    <footer class="footer-bg border-t py-4 text-center text-xs w-full transition-colors">
+        <div class="max-w-7xl mx-auto px-4">
+            <p>&copy; 2026 Apex Computer Training Institute. All rights reserved.</p>
+        </div>
     </footer>
 
     <!-- JavaScript Integration Script -->
@@ -464,24 +526,23 @@
         // Theme Toggle
         function setTheme(theme) {
             currentTheme = theme;
-            document.body.className = `theme-${theme} min-h-screen pb-16`;
+            document.body.className = `theme-${theme}`;
             localStorage.setItem("app_theme_pref", theme);
 
             const btnBlack = document.getElementById("btnThemeBlack");
             const btnWhite = document.getElementById("btnThemeWhite");
 
             if (theme === "black") {
-                btnBlack.className = "flex items-center space-x-1 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg text-xs font-bold transition bg-amber-400 text-slate-950";
-                btnWhite.className = "flex items-center space-x-1 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg text-xs font-bold transition text-slate-400 hover:text-white";
+                btnBlack.className = "flex items-center space-x-1 px-2 py-1 sm:px-3 sm:py-1.5 rounded-lg text-xs font-bold transition bg-amber-400 text-slate-950";
+                btnWhite.className = "flex items-center space-x-1 px-2 py-1 sm:px-3 sm:py-1.5 rounded-lg text-xs font-bold transition text-slate-400 hover:text-white";
             } else {
-                btnWhite.className = "flex items-center space-x-1 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg text-xs font-bold transition bg-amber-400 text-slate-950";
-                btnBlack.className = "flex items-center space-x-1 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg text-xs font-bold transition text-slate-400 hover:text-white";
+                btnWhite.className = "flex items-center space-x-1 px-2 py-1 sm:px-3 sm:py-1.5 rounded-lg text-xs font-bold transition bg-amber-400 text-slate-950";
+                btnBlack.className = "flex items-center space-x-1 px-2 py-1 sm:px-3 sm:py-1.5 rounded-lg text-xs font-bold transition text-slate-400 hover:text-white";
             }
         }
 
-        // Fetch Schedule Data with LocalStorage Priority (Prevents Data Loss on Refresh)
+        // Fetch Schedule Data with LocalStorage Priority
         async function fetchScheduleFromCloud() {
-            // First Priority: Load instantly from LocalStorage to keep deleted/edited data intact
             const localData = localStorage.getItem("instituteData_bw_backup");
             if (localData) {
                 try {
@@ -503,7 +564,6 @@
                 if (response.ok) {
                     const result = await response.json();
                     if (result.record && typeof result.record === "object" && result.record["Sat-Mon-Wed"]) {
-                        // Only set if localData was null to avoid reverting user deletions
                         if (!localData) {
                             instituteData = result.record;
                             if (!instituteData.extraStudents) instituteData.extraStudents = [];
@@ -523,13 +583,11 @@
             }
         }
 
-        // Save Schedule Data (Guarantees immediate LocalStorage save & Background JSONbin Sync)
+        // Save Schedule Data
         async function saveScheduleToCloud(showToast = true) {
-            // 1. Immediately sync to LocalStorage
             localStorage.setItem("instituteData_bw_backup", JSON.stringify(instituteData));
             renderAllViews();
 
-            // 2. Async sync to JSONbin cloud
             try {
                 await fetch(API_URL, {
                     method: "PUT",
@@ -559,15 +617,15 @@
             GROUPS.forEach(group => {
                 const groupLabel = GROUP_LABELS[group];
                 const section = document.createElement("div");
-                section.className = "card-bg border rounded-2xl p-4 sm:p-5 shadow-xl space-y-4";
+                section.className = "card-bg border rounded-2xl p-3.5 sm:p-5 shadow-xl space-y-3.5 sm:space-y-4";
 
                 section.innerHTML = `
-                    <div class="flex items-center justify-between border-b border-slate-800/60 pb-3">
-                        <span class="bg-amber-400 text-slate-950 font-black px-3.5 py-1 sm:px-4 sm:py-1.5 rounded-lg text-sm sm:text-base tracking-wide shadow-md">${groupLabel}</span>
-                        <span class="text-[11px] sm:text-xs text-slate-400">ট্যাপ করে নাম এডিট করুন</span>
+                    <div class="flex items-center justify-between border-b border-slate-800/60 pb-2.5">
+                        <span class="bg-amber-400 text-slate-950 font-black px-3 py-1 sm:px-4 sm:py-1.5 rounded-lg text-xs sm:text-base tracking-wide shadow-md">${groupLabel}</span>
+                        <span class="text-[10px] sm:text-xs text-slate-400">ট্যাপ করে নাম এডিট করুন</span>
                     </div>
 
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-6">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
                         <div class="space-y-2">
                             <h3 class="text-xs font-extrabold text-amber-400 uppercase tracking-wider flex items-center">
                                 <i class="fa-solid fa-sun mr-1.5"></i> সকাল / দুপুর স্লট (Morning & Midday)
@@ -589,7 +647,7 @@
         }
 
         function renderSlotTableHTML(group, slots) {
-            let headerCols = slots.map(slot => `<th class="py-2.5 px-2 text-center text-[11px] sm:text-xs font-extrabold border border-slate-700/80 table-head min-w-[75px] sm:min-w-[85px]">${slot}</th>`).join("");
+            let headerCols = slots.map(slot => `<th class="py-2 px-1 text-center text-[10px] sm:text-xs font-extrabold border border-slate-700/80 table-head min-w-[65px] sm:min-w-[85px]">${slot}</th>`).join("");
 
             let bodyRows = "";
             for (let rowIdx = 0; rowIdx < 5; rowIdx++) {
@@ -600,14 +658,14 @@
 
                     if (student && student.name) {
                         rowCells += `
-                            <td onclick="openQuickTapEdit('${group}', '${slot}', ${rowIdx})" class="board-cell py-2 sm:py-2.5 px-1.5 sm:px-2 text-center border border-slate-700/80 bg-amber-400/10 board-cell-filled hover:bg-amber-400 hover:text-slate-950 transition-all cursor-pointer font-bold text-[11px] sm:text-xs text-amber-400 hover:font-black rounded-sm group relative" title="ট্যাপ করে এডিট করুন">
+                            <td onclick="openQuickTapEdit('${group}', '${slot}', ${rowIdx})" class="board-cell py-2 px-1 sm:px-2 text-center border border-slate-700/80 bg-amber-400/10 board-cell-filled hover:bg-amber-400 hover:text-slate-950 transition-all cursor-pointer font-bold text-[11px] sm:text-xs text-amber-400 hover:font-black rounded-sm group relative" title="ট্যাপ করে এডিট করুন">
                                 ${student.name}
                                 <i class="fa-solid fa-pen text-[9px] opacity-0 group-hover:opacity-100 ml-1"></i>
                             </td>
                         `;
                     } else {
                         rowCells += `
-                            <td onclick="openQuickTapEdit('${group}', '${slot}', ${rowIdx})" class="board-cell py-2 sm:py-2.5 px-1.5 sm:px-2 text-center border border-slate-800/80 table-cell-empty hover:bg-slate-800 hover:text-amber-400 transition-all cursor-pointer text-[10px] sm:text-[11px] font-normal italic group" title="নাম যোগ করুন">
+                            <td onclick="openQuickTapEdit('${group}', '${slot}', ${rowIdx})" class="board-cell py-2 px-1 sm:px-2 text-center border border-slate-800/80 table-cell-empty hover:bg-slate-800 hover:text-amber-400 transition-all cursor-pointer text-[10px] sm:text-[11px] font-normal italic group" title="নাম যোগ করুন">
                                 <span class="group-hover:hidden">-</span>
                                 <span class="hidden group-hover:inline-block text-amber-400 font-semibold">+ যোগ</span>
                             </td>
@@ -632,16 +690,17 @@
             `;
         }
 
-        // Clear Search Input
+        // Clear Mobile Search Input
         function clearSearchInput() {
             const searchInput = document.getElementById("studentSearchInput");
             if (searchInput) {
                 searchInput.value = "";
                 renderMasterStudentList();
+                searchInput.focus();
             }
         }
 
-        // Render Consolidated Student List with Instant Mobile/ID Search Filtering
+        // Render Master Student Directory
         function renderMasterStudentList() {
             const tbody = document.getElementById("studentMasterList");
             if (!tbody) return;
@@ -677,15 +736,14 @@
             }
 
             if (allStudents.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="9" class="text-center py-8 text-slate-500 italic">No students currently enrolled. Click "Enroll New Student" to add.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="9" class="text-center py-8 text-slate-500 italic">No students currently enrolled. Click "Enroll Student" to add.</td></tr>`;
                 updateSelectedCount();
                 return;
             }
 
-            // Index mapping for modification stability
             let displayStudents = allStudents.map((stu, originalIndex) => ({ ...stu, originalIndex }));
 
-            // Apply Search Filter (Filter by Mobile Contact, ID, or Name)
+            // Apply Mobile Search Filter (Mobile Contact, ID, Name)
             if (searchQuery) {
                 displayStudents = displayStudents.filter(stu => {
                     const phone = (stu.phone || "").toLowerCase();
@@ -694,7 +752,7 @@
                     return phone.includes(searchQuery) || id.includes(searchQuery) || name.includes(searchQuery);
                 });
 
-                // Prioritize Mobile Number exact/start match at the VERY TOP
+                // Prioritize Exact/Prefix Contact Matches
                 displayStudents.sort((a, b) => {
                     const phoneA = (a.phone || "").toLowerCase();
                     const phoneB = (b.phone || "").toLowerCase();
@@ -728,14 +786,14 @@
                     <td class="py-3 px-3 text-center">
                         <input type="checkbox" class="student-select-cb rounded accent-amber-400 cursor-pointer w-4 h-4" data-original-index="${stu.originalIndex}" onchange="updateSelectedCount()">
                     </td>
-                    <td class="py-3 px-3 font-bold text-slate-500">${viewIndex + 1 < 10 ? '0' + (viewIndex + 1) : viewIndex + 1}</td>
-                    <td class="py-3 px-4 font-mono font-bold text-amber-400 bg-amber-400/5 px-2 py-1 rounded inline-block my-2 border border-amber-400/20">${stu.id}</td>
-                    <td class="py-3 px-4 font-extrabold text-slate-200 text-sm">${stu.name}</td>
-                    <td class="py-3 px-4 text-slate-300 font-medium">${GROUP_LABELS[stu.group] || stu.group}</td>
-                    <td class="py-3 px-4 text-slate-300">${stu.course || 'Basic Computer & MS Office'}</td>
-                    <td class="py-3 px-4 font-mono font-bold text-emerald-400">${stu.phone || '--'}</td>
-                    <td class="py-3 px-4"><span class="px-2 py-0.5 border rounded text-[11px] font-bold ${statusBadge}">${stu.status || 'Active'}</span></td>
-                    <td class="py-3 px-4 text-right space-x-2 whitespace-nowrap">
+                    <td class="py-3 px-2 font-bold text-slate-500">${viewIndex + 1 < 10 ? '0' + (viewIndex + 1) : viewIndex + 1}</td>
+                    <td class="py-3 px-3 font-mono font-bold text-amber-400 bg-amber-400/5 px-2 py-1 rounded inline-block my-1 border border-amber-400/20">${stu.id}</td>
+                    <td class="py-3 px-3 font-extrabold student-name-text text-sm">${stu.name}</td>
+                    <td class="py-3 px-3 text-slate-300 font-medium">${GROUP_LABELS[stu.group] || stu.group}</td>
+                    <td class="py-3 px-3 text-slate-300">${stu.course || 'Basic Computer & MS Office'}</td>
+                    <td class="py-3 px-3 font-mono font-bold text-emerald-400">${stu.phone || '--'}</td>
+                    <td class="py-3 px-3"><span class="px-2 py-0.5 border rounded text-[11px] font-bold ${statusBadge}">${stu.status || 'Active'}</span></td>
+                    <td class="py-3 px-3 text-right space-x-1.5 whitespace-nowrap">
                         <button onclick="editMasterStudent(${stu.originalIndex})" class="text-amber-400 hover:text-amber-300 bg-slate-800 hover:bg-slate-700 px-2.5 py-1 rounded transition text-xs font-bold">
                             <i class="fa-solid fa-pen"></i> Edit
                         </button>
@@ -797,7 +855,6 @@
                 return;
             }
 
-            // Collect all student IDs that are currently selected
             let allStudents = [];
             GROUPS.forEach(group => {
                 if (instituteData[group]) {
@@ -821,7 +878,6 @@
                 }).filter(id => id !== null)
             );
 
-            // 1. Delete selected students from board groups
             GROUPS.forEach(group => {
                 if (instituteData[group]) {
                     Object.keys(instituteData[group]).forEach(slot => {
@@ -830,7 +886,6 @@
                 }
             });
 
-            // 2. Delete selected students from extraStudents list
             if (instituteData.extraStudents) {
                 instituteData.extraStudents = instituteData.extraStudents.filter(stu => !selectedIds.has(stu.id));
             }
@@ -863,7 +918,7 @@
             }
 
             document.getElementById("quickTapModal").classList.remove("hidden");
-            setTimeout(() => document.getElementById("quickTapName").focus(), 100);
+            setTimeout(() => document.getElementById("quickTapName").focus(), 150);
         }
 
         async function saveQuickTap() {
@@ -918,7 +973,7 @@
             activeQuickTap = null;
         }
 
-        // Master Student List Actions
+        // Master Student Actions
         function openEnrollModal() {
             activeEditLocation = { isNew: true };
             const randomNum = Math.floor(1000 + Math.random() * 9000);
@@ -931,6 +986,7 @@
             document.getElementById("modalStudentStatus").value = "Active";
 
             document.getElementById("studentModal").classList.remove("hidden");
+            setTimeout(() => document.getElementById("modalStudentName").focus(), 150);
         }
 
         function editMasterStudent(originalIndex) {
