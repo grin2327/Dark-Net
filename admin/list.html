@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Batch Listing & Schedule | Computer Training Institute</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome CDN for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        
+        /* Custom Theme Styles */
+        body.theme-black {
+            background-color: #000000;
+            color: #ffffff;
+        }
+        body.theme-white {
+            background-color: #f1f5f9;
+            color: #0f172a;
+        }
+
+        /* Black Theme Components */
+        body.theme-black .card-bg {
+            background-color: #0b0b0b;
+            border-color: #262626;
+        }
+        body.theme-black .header-bg {
+            background-color: #050505;
+            border-color: #1e1e1e;
+        }
+        body.theme-black .input-bg {
+            background-color: #121212;
+            border-color: #333333;
+            color: #ffffff;
+        }
+        body.theme-black .table-head {
+            background-color: #171717;
+            color: #d4d4d4;
+            border-color: #262626;
+        }
+        body.theme-black .table-cell-empty {
+            background-color: #080808;
+            border-color: #1c1c1c;
+            color: #525252;
+        }
+
+        /* White Theme High Contrast Components */
+        body.theme-white .card-bg {
+            background-color: #ffffff;
+            border-color: #cbd5e1;
+            box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.05);
+        }
+        body.theme-white .header-bg {
+            background-color: #0f172a;
+            border-color: #1e293b;
+        }
+        body.theme-white .input-bg {
+            background-color: #ffffff;
+            border-color: #94a3b8;
+            color: #0f172a;
+        }
+        body.theme-white .table-head {
+            background-color: #e2e8f0;
+            color: #0f172a;
+            border-color: #cbd5e1;
+        }
+        body.theme-white .table-cell-empty {
+            background-color: #f8fafc;
+            border-color: #cbd5e1;
+            color: #64748b;
+        }
+        body.theme-white .table-cell-empty:hover {
+            background-color: #f1f5f9;
+            color: #b45309;
+        }
+        body.theme-white .board-cell-filled {
+            background-color: #fef3c7 !important;
+            color: #78350f !important;
+            border-color: #fcd34d !important;
+        }
+
+        /* White Theme High Contrast Color Overrides */
+        body.theme-white .text-amber-400 {
+            color: #b45309 !important;
+        }
+        body.theme-white .text-indigo-400 {
+            color: #4338ca !important;
+        }
+        body.theme-white .text-slate-400 {
+            color: #475569 !important;
+        }
+        body.theme-white .text-slate-300 {
+            color: #1e293b !important;
+        }
+        body.theme-white .text-slate-500 {
+            color: #64748b !important;
+        }
+        body.theme-white .border-slate-800,
+        body.theme-white .border-slate-800\/60 {
+            border-color: #cbd5e1 !important;
+        }
+        body.theme-white .border-slate-700,
+        body.theme-white .border-slate-700\/80 {
+            border-color: #94a3b8 !important;
+        }
+        body.theme-white .bg-slate-800 {
+            background-color: #f1f5f9 !important;
+            color: #0f172a !important;
+        }
+        body.theme-white .bg-slate-900 {
+            background-color: #e2e8f0 !important;
+            color: #0f172a !important;
+        }
+        body.theme-white .bg-slate-950 {
+            background-color: #ffffff !important;
+            color: #0f172a !important;
+        }
+        body.theme-white tr:hover {
+            background-color: #f1f5f9 !important;
+        }
+
+        .board-cell {
+            transition: all 0.15s ease-in-out;
+        }
+        .board-cell:hover {
+            transform: scale(1.02);
+            z-index: 10;
+        }
+
+        /* Smooth Custom Scrollbar for Mobile Tables */
+        .custom-scrollbar::-webkit-scrollbar {
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        body.theme-black .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #334155;
+        }
+    </style>
+</head>
+<body class="theme-black min-h-screen pb-16">
+
+    <!-- Top Navigation Header -->
+    <header class="header-bg text-white border-b shadow-xl sticky top-0 z-30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-col sm:flex-row justify-between items-center gap-3">
+            <!-- Title Section -->
+            <div class="flex items-center space-x-3 text-center sm:text-left">
+                <i class="fa-solid fa-chalkboard-user text-amber-400 text-2xl sm:text-3xl"></i>
+                <div>
+                    <h1 class="text-lg sm:text-2xl font-black tracking-wide text-amber-400">Apex Computer Training Institute</h1>
+                    <p class="text-[11px] sm:text-xs text-slate-400">Class Schedule & Student Directory</p>
+                </div>
+            </div>
+
+            <!-- Controls: Home Button & Theme Switcher -->
+            <div class="flex items-center space-x-2 sm:space-x-3">
+                <!-- Home Button -->
+                <a href="../admin/dashboard.html" class="flex items-center space-x-1.5 bg-slate-800 hover:bg-slate-700 text-amber-400 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs font-bold border border-slate-700 transition shadow-sm">
+                    <i class="fa-solid fa-house text-xs"></i>
+                    <span>Home</span>
+                </a>
+
+                <!-- Theme Switcher Buttons -->
+                <div class="flex items-center bg-slate-900 border border-slate-800 p-1 rounded-xl space-x-1">
+                    <button onclick="setTheme('black')" id="btnThemeBlack" class="flex items-center space-x-1 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg text-xs font-bold transition bg-amber-400 text-slate-950">
+                        <i class="fa-solid fa-moon"></i>
+                        <span>Black</span>
+                    </button>
+                    <button onclick="setTheme('white')" id="btnThemeWhite" class="flex items-center space-x-1 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg text-xs font-bold transition text-slate-400 hover:text-white">
+                        <i class="fa-solid fa-sun"></i>
+                        <span>White</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-5 sm:py-8 space-y-6 sm:space-y-8">
+
+        <!-- Whiteboard Style Weekly Class Schedule Overview Section -->
+        <section class="card-bg rounded-2xl border shadow-2xl p-4 sm:p-6 space-y-5 sm:space-y-6">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 border-b border-slate-800/60 pb-4">
+                <div>
+                    <h2 class="text-lg sm:text-xl font-black text-amber-400 flex items-center gap-2">
+                        <i class="fa-solid fa-pen-ruler"></i> Weekly Class Schedule Board Overview
+                    </h2>
+                    <p class="text-xs text-slate-400 mt-1">হোয়াইটবোর্ডের ডিজাইনে তৈরি। সরাসরি যেকোনো স্টুডেন্টের নামের ওপর বা খালি ঘরে ট্যাপ করে নাম পরিবর্তন বা নতুন নাম সেভ করুন।</p>
+                </div>
+                <div class="flex items-center space-x-2 bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-700 text-xs text-amber-400 font-bold self-start md:self-auto">
+                    <i class="fa-solid fa-hand-pointer"></i>
+                    <span>Tap any cell to Edit</span>
+                </div>
+            </div>
+
+            <!-- Dynamic Board Overview Container -->
+            <div id="boardOverviewContainer" class="space-y-6 sm:space-y-8">
+                <p class="text-center py-12 text-slate-500">Loading schedule board...</p>
+            </div>
+        </section>
+
+        <!-- Consolidated Infinite Student List Section -->
+        <section class="card-bg rounded-2xl border shadow-xl p-4 sm:p-6 space-y-5 sm:space-y-6">
+            <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 border-b border-slate-800/60 pb-4">
+                <div>
+                    <h2 class="text-lg sm:text-xl font-black text-amber-400 flex items-center gap-2">
+                        <i class="fa-solid fa-users-rectangle"></i> Student List (স্টুডেন্ট লিস্ট)
+                    </h2>
+                    <p class="text-xs text-slate-400 mt-1">এখানে সকল ভর্তি হওয়া স্টুডেন্টদের তালিকা ও স্ট্যাটাস একসঙ্গে দেখা ও ম্যানেজ করা যাবে (আনলিমিটেড স্টুডেন্ট এনরোল করার সুবিধা)</p>
+                </div>
+
+                <!-- Action Buttons: Enroll & Batch Delete -->
+                <div class="flex flex-wrap items-center gap-2 w-full lg:w-auto">
+                    <button id="btnBatchDelete" onclick="deleteSelectedStudents()" class="flex-1 lg:flex-initial px-3.5 py-2.5 bg-rose-600 hover:bg-rose-500 opacity-80 hover:opacity-100 text-white font-extrabold rounded-xl text-xs transition shadow-lg flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-user-minus"></i>
+                        <span>Delete Selected (<span id="selectedCount">0</span>)</span>
+                    </button>
+
+                    <button onclick="openEnrollModal()" class="flex-1 lg:flex-initial px-4 py-2.5 bg-amber-400 hover:bg-amber-300 text-slate-950 font-black rounded-xl text-xs transition shadow-lg flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-user-plus text-sm"></i>
+                        <span>Enroll New Student</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Student Master Table -->
+            <div class="overflow-x-auto custom-scrollbar rounded-xl border border-slate-800">
+                <table class="w-full text-left border-collapse text-xs min-w-[700px]">
+                    <thead>
+                        <tr class="table-head uppercase font-extrabold border-b border-slate-800">
+                            <th class="py-3.5 px-3 text-center w-10">
+                                <input type="checkbox" id="selectAllCheckbox" onchange="toggleSelectAllStudents(this)" class="rounded accent-amber-400 cursor-pointer w-4 h-4" title="Select All Students">
+                            </th>
+                            <th class="py-3.5 px-3">#</th>
+                            <th class="py-3.5 px-4">Student ID</th>
+                            <th class="py-3.5 px-4">Student Name</th>
+                            <th class="py-3.5 px-4">Routine / Group</th>
+                            <th class="py-3.5 px-4">Course Name</th>
+                            <th class="py-3.5 px-4">Contact No.</th>
+                            <th class="py-3.5 px-4">Status</th>
+                            <th class="py-3.5 px-4 text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="studentMasterList" class="divide-y divide-slate-800">
+                        <tr>
+                            <td colspan="9" class="text-center py-10 text-slate-500">Loading student directory...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Quick Tap-To-Edit Modal for Whiteboard -->
+    <div id="quickTapModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-3 hidden">
+        <div class="card-bg rounded-2xl shadow-2xl border w-full max-w-md overflow-hidden max-h-[90vh] overflow-y-auto">
+            <div class="bg-slate-900 text-amber-400 px-5 py-3.5 border-b border-slate-800 flex justify-between items-center sticky top-0 z-10">
+                <h3 class="font-extrabold text-sm sm:text-base flex items-center"><i class="fa-solid fa-bolt mr-2"></i> Quick Name Edit</h3>
+                <button onclick="closeQuickTapModal()" class="text-slate-400 hover:text-white text-lg px-2"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="p-5 space-y-4">
+                <div class="bg-slate-950 p-3 rounded-lg border border-slate-800 text-xs space-y-1">
+                    <p class="text-slate-400">Routine: <span id="quickTapGroupLabel" class="font-bold text-amber-400">--</span></p>
+                    <p class="text-slate-400">Time Slot: <span id="quickTapSlotLabel" class="font-bold text-emerald-400">--</span></p>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Student Name (স্টুডেন্টের নাম)</label>
+                    <input type="text" id="quickTapName" class="input-bg w-full rounded-lg text-sm px-4 py-2.5 font-bold outline-none placeholder-slate-600 focus:ring-2 focus:ring-amber-400">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Assigned Course</label>
+                    <select id="quickTapCourse" class="input-bg w-full rounded-lg text-xs px-3 py-2 outline-none">
+                        <option value="Basic Computer & MS Office">Basic Computer & MS Office (বেসিক কম্পিউটার ও এমএস অফিস)</option>
+                        <option value="Graphic Design">Graphic Design (গ্রাফিক ডিজাইন)</option>
+                        <option value="Video Editing">Video Editing (ভিডিও এডিটিং)</option>
+                        <option value="Web Development">Web Development (ওয়েব ডেভেলপমেন্ট)</option>
+                        <option value="Ethical Hacking">Ethical Hacking (ইথিক্যাল হ্যাকিং)</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Contact No. (Optional)</label>
+                    <input type="text" id="quickTapPhone" class="input-bg w-full rounded-lg text-xs px-3 py-2 outline-none" placeholder="e.g. 01700000000">
+                </div>
+
+                <div class="flex justify-between items-center pt-4 border-t border-slate-800">
+                    <button id="btnDeleteQuickTap" type="button" onclick="deleteQuickTap()" class="px-3 py-2 bg-rose-950 text-rose-300 border border-rose-800 rounded-lg text-xs font-semibold hover:bg-rose-900 transition flex items-center gap-1 hidden">
+                        <i class="fa-solid fa-trash"></i> Remove
+                    </button>
+                    <div class="flex space-x-2 ml-auto">
+                        <button type="button" onclick="closeQuickTapModal()" class="px-4 py-2 bg-slate-800 text-slate-300 rounded-lg text-xs font-semibold hover:bg-slate-700 transition">Cancel</button>
+                        <button type="button" onclick="saveQuickTap()" class="px-5 py-2 bg-amber-400 text-slate-950 font-black rounded-lg text-xs hover:bg-amber-300 shadow-lg transition flex items-center">
+                            <i class="fa-solid fa-floppy-disk mr-1.5"></i> Save Changes
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Edit Student Status & Details -->
+    <div id="studentModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-3 hidden">
+        <div class="card-bg rounded-2xl shadow-2xl border w-full max-w-md overflow-hidden max-h-[90vh] overflow-y-auto">
+            <div class="bg-slate-900 text-amber-400 px-5 py-3.5 flex justify-between items-center border-b border-slate-800 sticky top-0 z-10">
+                <h3 id="modalTitle" class="font-extrabold text-sm sm:text-base flex items-center text-amber-400">
+                    <i class="fa-solid fa-user-gear mr-2"></i> Student Status & Details
+                </h3>
+                <button onclick="closeModal()" class="text-slate-400 hover:text-white text-lg px-2"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="studentForm" onsubmit="handleFormSubmit(event)" class="p-5 space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Student ID</label>
+                    <input type="text" id="modalStudentId" required class="input-bg w-full rounded-lg text-xs px-3 py-2 font-mono outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Student Name (নাম)</label>
+                    <input type="text" id="modalStudentName" required class="input-bg w-full rounded-lg text-xs px-3 py-2 font-bold outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Routine / Group</label>
+                    <select id="modalStudentGroup" class="input-bg w-full rounded-lg text-xs px-3 py-2 outline-none">
+                        <option value="Sat-Mon-Wed">শনি, সোম, বুধ (Sat, Mon, Wed)</option>
+                        <option value="Sun-Tue-Thu">রবি, মঙ্গল, বৃহঃ (Sun, Tue, Thu)</option>
+                        <option value="General">General / Custom Group</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Assigned Course</label>
+                    <select id="modalStudentCourse" class="input-bg w-full rounded-lg text-xs px-3 py-2 outline-none">
+                        <option value="Basic Computer & MS Office">Basic Computer & MS Office (বেসিক কম্পিউটার ও এমএস অফিস)</option>
+                        <option value="Graphic Design">Graphic Design (গ্রাফিক ডিজাইন)</option>
+                        <option value="Video Editing">Video Editing (ভিডিও এডিটিং)</option>
+                        <option value="Web Development">Web Development (ওয়েব ডেভেলপমেন্ট)</option>
+                        <option value="Ethical Hacking">Ethical Hacking (ইথিক্যাল হ্যাকিং)</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Contact No.</label>
+                    <input type="text" id="modalStudentPhone" class="input-bg w-full rounded-lg text-xs px-3 py-2 outline-none" placeholder="e.g. 01700000000">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Student Status (স্টুডেন্ট স্ট্যাটাস)</label>
+                    <select id="modalStudentStatus" class="input-bg w-full rounded-lg text-xs px-3 py-2 outline-none font-bold">
+                        <option value="Active">Active (সক্রিয়)</option>
+                        <option value="On Leave">On Leave (ছুটিতে)</option>
+                        <option value="Completed">Completed (সম্পন্ন)</option>
+                    </select>
+                </div>
+
+                <div class="flex justify-end space-x-3 pt-4 border-t border-slate-800">
+                    <button type="button" onclick="closeModal()" class="px-4 py-2 bg-slate-800 text-slate-300 rounded-lg text-xs font-semibold hover:bg-slate-700 transition">Cancel</button>
+                    <button type="submit" class="px-5 py-2 bg-amber-400 text-slate-950 font-black rounded-lg text-xs hover:bg-amber-300 shadow-md transition flex items-center">
+                        <i class="fa-solid fa-floppy-disk mr-1.5"></i> Save Details
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="card-bg border-t text-slate-500 py-6 text-center text-xs mt-12">
+        <p>&copy; 2026 Apex Computer Training Institute. All rights reserved.</p>
+    </footer>
+
+    <!-- JavaScript Integration Script -->
+    <script>
+        // ==========================================
+        // JSONbin Configuration Credentials
+        // ==========================================
+        const JSONBIN_BIN_ID = "6ABE63F8AC6210605A092487"; 
+        const JSONBIN_ACCESS_KEY = "$2a$10$aKJS9Iiv9FqjDRYcYa8LhOGaNakQxgLKGExraXsH7x1GwVrBrCxFG";
+        const API_URL = `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`;
+
+        const GROUPS = ["Sat-Mon-Wed", "Sun-Tue-Thu"];
+        const GROUP_LABELS = {
+            "Sat-Mon-Wed": "শনি, সোম, বুধ",
+            "Sun-Tue-Thu": "রবি, মঙ্গল, বৃহঃ",
+            "General": "General"
+        };
+
+        const MORNING_SLOTS = ["09 AM", "10 AM", "11 AM", "12 PM", "01 PM"];
+        const EVENING_SLOTS = ["04 PM", "05 PM", "06 PM", "07 PM", "08 PM"];
+
+        // Application State
+        let instituteData = null;
+        let activeEditLocation = null;
+        let activeQuickTap = null;
+        let currentTheme = "black";
+
+        // Initialize Whiteboard Seed Data
+        function generateInitialSeedData() {
+            return {
+                "Sat-Mon-Wed": {
+                    "09 AM": [],
+                    "10 AM": [
+                        { id: "STU-2026-101", name: "NAHITA", course: "Basic Computer & MS Office", phone: "", status: "Active" },
+                        { id: "STU-2026-102", name: "TISHA", course: "Basic Computer & MS Office", phone: "", status: "Active" },
+                        { id: "STU-2026-103", name: "BUSHRA", course: "Basic Computer & MS Office", phone: "", status: "Active" },
+                        { id: "STU-2026-104", name: "SOMRAT", course: "Basic Computer & MS Office", phone: "", status: "Active" }
+                    ],
+                    "11 AM": [
+                        { id: "STU-2026-105", name: "MEKLA", course: "Basic Computer & MS Office", phone: "", status: "Active" },
+                        { id: "STU-2026-106", name: "ILMI", course: "Basic Computer & MS Office", phone: "", status: "Active" },
+                        { id: "STU-2026-107", name: "TASFIA", course: "Basic Computer & MS Office", phone: "", status: "Active" }
+                    ],
+                    "12 PM": [],
+                    "01 PM": [],
+                    "04 PM": [],
+                    "05 PM": [
+                        { id: "STU-2026-108", name: "Anjuman", course: "Basic Computer & MS Office", phone: "", status: "Active" },
+                        { id: "STU-2026-109", name: "NAIM", course: "Basic Computer & MS Office", phone: "", status: "Active" },
+                        { id: "STU-2026-110", name: "MUNNA", course: "Basic Computer & MS Office", phone: "", status: "Active" },
+                        { id: "STU-2026-111", name: "Anik", course: "Basic Computer & MS Office", phone: "", status: "Active" }
+                    ],
+                    "06 PM": [
+                        { id: "STU-2026-112", name: "Purnima", course: "Basic Computer & MS Office", phone: "", status: "Active" },
+                        { id: "STU-2026-113", name: "Shohag", course: "Basic Computer & MS Office", phone: "", status: "Active" },
+                        { id: "STU-2026-114", name: "Mimia", course: "Basic Computer & MS Office", phone: "", status: "Active" },
+                        { id: "STU-2026-115", name: "MohiUddin", course: "Basic Computer & MS Office", phone: "", status: "Active" }
+                    ],
+                    "07 PM": [],
+                    "08 PM": []
+                },
+                "Sun-Tue-Thu": {
+                    "09 AM": [], "10 AM": [], "11 AM": [], "12 PM": [], "01 PM": [],
+                    "04 PM": [], "05 PM": [], "06 PM": [], "07 PM": [], "08 PM": []
+                },
+                "extraStudents": []
+            };
+        }
+
+        // Theme Toggle
+        function setTheme(theme) {
+            currentTheme = theme;
+            document.body.className = `theme-${theme} min-h-screen pb-16`;
+            localStorage.setItem("app_theme_pref", theme);
+
+            const btnBlack = document.getElementById("btnThemeBlack");
+            const btnWhite = document.getElementById("btnThemeWhite");
+
+            if (theme === "black") {
+                btnBlack.className = "flex items-center space-x-1 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg text-xs font-bold transition bg-amber-400 text-slate-950";
+                btnWhite.className = "flex items-center space-x-1 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg text-xs font-bold transition text-slate-400 hover:text-white";
+            } else {
+                btnWhite.className = "flex items-center space-x-1 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg text-xs font-bold transition bg-amber-400 text-slate-950";
+                btnBlack.className = "flex items-center space-x-1 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg text-xs font-bold transition text-slate-400 hover:text-white";
+            }
+        }
+
+        // Fetch Schedule Data from JSONbin Cloud
+        async function fetchScheduleFromCloud() {
+            try {
+                const response = await fetch(`${API_URL}/latest`, {
+                    method: "GET",
+                    headers: {
+                        "X-Master-Key": JSONBIN_ACCESS_KEY
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP Error Status: ${response.status}`);
+                }
+
+                const result = await response.json();
+                
+                if (result.record && typeof result.record === "object" && result.record["Sat-Mon-Wed"]) {
+                    instituteData = result.record;
+                    if (!instituteData.extraStudents) instituteData.extraStudents = [];
+                    localStorage.setItem("instituteData_bw_backup", JSON.stringify(instituteData));
+                } else {
+                    instituteData = generateInitialSeedData();
+                    await saveScheduleToCloud(false);
+                }
+
+                renderAllViews();
+            } catch (err) {
+                console.error("Fetch Error:", err);
+                const localData = localStorage.getItem("instituteData_bw_backup");
+                if (localData) {
+                    instituteData = JSON.parse(localData);
+                } else {
+                    instituteData = generateInitialSeedData();
+                }
+                renderAllViews();
+            }
+        }
+
+        // Save Schedule Data to JSONbin Cloud
+        async function saveScheduleToCloud(showToast = true) {
+            localStorage.setItem("instituteData_bw_backup", JSON.stringify(instituteData));
+
+            try {
+                await fetch(API_URL, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-Master-Key": JSONBIN_ACCESS_KEY
+                    },
+                    body: JSON.stringify(instituteData)
+                });
+                renderAllViews();
+            } catch (err) {
+                console.error("Save Error:", err);
+                renderAllViews();
+            }
+        }
+
+        // Render Manager
+        function renderAllViews() {
+            renderBoardOverview();
+            renderMasterStudentList();
+        }
+
+        // Render Schedule Board
+        function renderBoardOverview() {
+            const container = document.getElementById("boardOverviewContainer");
+            container.innerHTML = "";
+
+            GROUPS.forEach(group => {
+                const groupLabel = GROUP_LABELS[group];
+                const section = document.createElement("div");
+                section.className = "card-bg border rounded-2xl p-4 sm:p-5 shadow-xl space-y-4";
+
+                section.innerHTML = `
+                    <div class="flex items-center justify-between border-b border-slate-800/60 pb-3">
+                        <span class="bg-amber-400 text-slate-950 font-black px-3.5 py-1 sm:px-4 sm:py-1.5 rounded-lg text-sm sm:text-base tracking-wide shadow-md">${groupLabel}</span>
+                        <span class="text-[11px] sm:text-xs text-slate-400">ট্যাপ করে নাম এডিট করুন</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-6">
+                        <div class="space-y-2">
+                            <h3 class="text-xs font-extrabold text-amber-400 uppercase tracking-wider flex items-center">
+                                <i class="fa-solid fa-sun mr-1.5"></i> সকাল / দুপুর স্লট (Morning & Midday)
+                            </h3>
+                            ${renderSlotTableHTML(group, MORNING_SLOTS)}
+                        </div>
+
+                        <div class="space-y-2">
+                            <h3 class="text-xs font-extrabold text-indigo-400 uppercase tracking-wider flex items-center">
+                                <i class="fa-solid fa-moon mr-1.5"></i> বিকাল / রাত স্লট (Afternoon & Evening)
+                            </h3>
+                            ${renderSlotTableHTML(group, EVENING_SLOTS)}
+                        </div>
+                    </div>
+                `;
+
+                container.appendChild(section);
+            });
+        }
+
+        function renderSlotTableHTML(group, slots) {
+            let headerCols = slots.map(slot => `<th class="py-2.5 px-2 text-center text-[11px] sm:text-xs font-extrabold border border-slate-700/80 table-head min-w-[75px] sm:min-w-[85px]">${slot}</th>`).join("");
+
+            let bodyRows = "";
+            for (let rowIdx = 0; rowIdx < 5; rowIdx++) {
+                let rowCells = "";
+                slots.forEach(slot => {
+                    const students = (instituteData[group] && instituteData[group][slot]) ? instituteData[group][slot] : [];
+                    const student = students[rowIdx];
+
+                    if (student && student.name) {
+                        rowCells += `
+                            <td onclick="openQuickTapEdit('${group}', '${slot}', ${rowIdx})" class="board-cell py-2 sm:py-2.5 px-1.5 sm:px-2 text-center border border-slate-700/80 bg-amber-400/10 board-cell-filled hover:bg-amber-400 hover:text-slate-950 transition-all cursor-pointer font-bold text-[11px] sm:text-xs text-amber-400 hover:font-black rounded-sm group relative" title="ট্যাপ করে এডিট করুন">
+                                ${student.name}
+                                <i class="fa-solid fa-pen text-[9px] opacity-0 group-hover:opacity-100 ml-1"></i>
+                            </td>
+                        `;
+                    } else {
+                        rowCells += `
+                            <td onclick="openQuickTapEdit('${group}', '${slot}', ${rowIdx})" class="board-cell py-2 sm:py-2.5 px-1.5 sm:px-2 text-center border border-slate-800/80 table-cell-empty hover:bg-slate-800 hover:text-amber-400 transition-all cursor-pointer text-[10px] sm:text-[11px] font-normal italic group" title="নাম যোগ করুন">
+                                <span class="group-hover:hidden">-</span>
+                                <span class="hidden group-hover:inline-block text-amber-400 font-semibold">+ যোগ</span>
+                            </td>
+                        `;
+                    }
+                });
+
+                bodyRows += `<tr>${rowCells}</tr>`;
+            }
+
+            return `
+                <div class="overflow-x-auto custom-scrollbar rounded-xl border border-slate-800 p-1 shadow-inner">
+                    <table class="w-full border-collapse">
+                        <thead>
+                            <tr>${headerCols}</tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-800">
+                            ${bodyRows}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+
+        // Render Consolidated Student List (Infinite Students)
+        function renderMasterStudentList() {
+            const tbody = document.getElementById("studentMasterList");
+            tbody.innerHTML = "";
+
+            let allStudents = [];
+
+            // Gather Board Students
+            GROUPS.forEach(group => {
+                if (instituteData[group]) {
+                    Object.keys(instituteData[group]).forEach(slot => {
+                        instituteData[group][slot].forEach((stu, idx) => {
+                            allStudents.push({ ...stu, group, slot, isBoard: true, boardIndex: idx });
+                        });
+                    });
+                }
+            });
+
+            // Gather Extra Infinite Students
+            if (instituteData.extraStudents) {
+                instituteData.extraStudents.forEach((stu, idx) => {
+                    allStudents.push({ ...stu, group: stu.group || "General", slot: "Custom", isBoard: false, extraIndex: idx });
+                });
+            }
+
+            if (allStudents.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="9" class="text-center py-8 text-slate-500 italic">No students currently enrolled. Click "Enroll New Student" to add.</td></tr>`;
+                updateSelectedCount();
+                return;
+            }
+
+            allStudents.forEach((stu, idx) => {
+                const tr = document.createElement("tr");
+                tr.className = "hover:bg-slate-800/40 transition-colors";
+
+                let statusBadge = "bg-emerald-950 text-emerald-300 border-emerald-800";
+                if (stu.status === "On Leave") statusBadge = "bg-amber-950 text-amber-300 border-amber-800";
+                if (stu.status === "Completed") statusBadge = "bg-blue-950 text-blue-300 border-blue-800";
+
+                tr.innerHTML = `
+                    <td class="py-3 px-3 text-center">
+                        <input type="checkbox" class="student-select-cb rounded accent-amber-400 cursor-pointer w-4 h-4" data-flat-index="${idx}" onchange="updateSelectedCount()">
+                    </td>
+                    <td class="py-3 px-3 font-bold text-slate-500">${idx + 1 < 10 ? '0' + (idx + 1) : idx + 1}</td>
+                    <td class="py-3 px-4 font-mono font-semibold text-slate-400">${stu.id}</td>
+                    <td class="py-3 px-4 font-extrabold text-amber-400 text-sm">${stu.name}</td>
+                    <td class="py-3 px-4 text-slate-300 font-medium">${GROUP_LABELS[stu.group] || stu.group}</td>
+                    <td class="py-3 px-4 text-slate-300">${stu.course || 'Basic Computer & MS Office'}</td>
+                    <td class="py-3 px-4 text-slate-400 font-mono">${stu.phone || '--'}</td>
+                    <td class="py-3 px-4"><span class="px-2 py-0.5 border rounded text-[11px] font-bold ${statusBadge}">${stu.status || 'Active'}</span></td>
+                    <td class="py-3 px-4 text-right space-x-2 whitespace-nowrap">
+                        <button onclick="editMasterStudent(${idx})" class="text-amber-400 hover:text-amber-300 bg-slate-800 hover:bg-slate-700 px-2.5 py-1 rounded transition text-xs font-bold">
+                            <i class="fa-solid fa-pen"></i> Edit
+                        </button>
+                        <button onclick="deleteMasterStudent(${idx})" class="text-rose-400 hover:text-rose-300 bg-rose-950 hover:bg-rose-900 px-2.5 py-1 rounded transition text-xs font-bold">
+                            <i class="fa-solid fa-trash"></i> Delete
+                        </button>
+                    </td>
+                `;
+
+                tbody.appendChild(tr);
+            });
+
+            updateSelectedCount();
+        }
+
+        // Selection & Batch Delete Logic
+        function toggleSelectAllStudents(masterCheckbox) {
+            const checkboxes = document.querySelectorAll('.student-select-cb');
+            checkboxes.forEach(cb => {
+                cb.checked = masterCheckbox.checked;
+            });
+            updateSelectedCount();
+        }
+
+        function updateSelectedCount() {
+            const selected = document.querySelectorAll('.student-select-cb:checked');
+            const countSpan = document.getElementById('selectedCount');
+            const btnBatchDelete = document.getElementById('btnBatchDelete');
+            
+            if (countSpan) countSpan.textContent = selected.length;
+            
+            if (selected.length > 0) {
+                btnBatchDelete.classList.remove('opacity-80');
+                btnBatchDelete.classList.add('ring-2', 'ring-rose-400');
+            } else {
+                btnBatchDelete.classList.add('opacity-80');
+                btnBatchDelete.classList.remove('ring-2', 'ring-rose-400');
+            }
+
+            const allCheckboxes = document.querySelectorAll('.student-select-cb');
+            const masterCb = document.getElementById('selectAllCheckbox');
+            if (masterCb && allCheckboxes.length > 0) {
+                masterCb.checked = (selected.length === allCheckboxes.length);
+            }
+        }
+
+        async function deleteSelectedStudents() {
+            const selectedCheckboxes = Array.from(document.querySelectorAll('.student-select-cb:checked'));
+            
+            if (selectedCheckboxes.length === 0) {
+                alert("অনুগ্রহ করে ডিলিট করার জন্য অন্তত একজন স্টুডেন্ট চেক বক্স (Checkbox) দিয়ে বাছাই করুন।");
+                return;
+            }
+
+            const count = selectedCheckboxes.length;
+            if (!confirm(`আপনি কি নিশ্চিত যে বাছাইকৃত ${count} জন স্টুডেন্টকে লিস্টিং থেকে ডিলিট করতে চান?`)) {
+                return;
+            }
+
+            // Collect all student IDs that are currently selected
+            let allStudents = [];
+            GROUPS.forEach(group => {
+                if (instituteData[group]) {
+                    Object.keys(instituteData[group]).forEach(slot => {
+                        instituteData[group][slot].forEach(stu => {
+                            allStudents.push(stu);
+                        });
+                    });
+                }
+            });
+            if (instituteData.extraStudents) {
+                instituteData.extraStudents.forEach(stu => {
+                    allStudents.push(stu);
+                });
+            }
+
+            const selectedIds = new Set(
+                selectedCheckboxes.map(cb => {
+                    const idx = parseInt(cb.getAttribute('data-flat-index'));
+                    return allStudents[idx] ? allStudents[idx].id : null;
+                }).filter(id => id !== null)
+            );
+
+            // 1. Delete selected students from board groups
+            GROUPS.forEach(group => {
+                if (instituteData[group]) {
+                    Object.keys(instituteData[group]).forEach(slot => {
+                        instituteData[group][slot] = instituteData[group][slot].filter(stu => !selectedIds.has(stu.id));
+                    });
+                }
+            });
+
+            // 2. Delete selected students from extraStudents list
+            if (instituteData.extraStudents) {
+                instituteData.extraStudents = instituteData.extraStudents.filter(stu => !selectedIds.has(stu.id));
+            }
+
+            const masterCb = document.getElementById('selectAllCheckbox');
+            if (masterCb) masterCb.checked = false;
+
+            await saveScheduleToCloud(true);
+        }
+
+        // Quick Tap Name Edit Functions
+        function openQuickTapEdit(group, slot, seatIdx) {
+            activeQuickTap = { group, slot, seatIdx };
+            const students = (instituteData[group] && instituteData[group][slot]) ? instituteData[group][slot] : [];
+            const currentStudent = students[seatIdx] || null;
+
+            document.getElementById("quickTapGroupLabel").textContent = GROUP_LABELS[group] || group;
+            document.getElementById("quickTapSlotLabel").textContent = `${slot} (Seat #${seatIdx + 1})`;
+
+            if (currentStudent) {
+                document.getElementById("quickTapName").value = currentStudent.name || "";
+                document.getElementById("quickTapPhone").value = currentStudent.phone || "";
+                document.getElementById("quickTapCourse").value = currentStudent.course || "Basic Computer & MS Office";
+                document.getElementById("btnDeleteQuickTap").classList.remove("hidden");
+            } else {
+                document.getElementById("quickTapName").value = "";
+                document.getElementById("quickTapPhone").value = "";
+                document.getElementById("quickTapCourse").value = "Basic Computer & MS Office";
+                document.getElementById("btnDeleteQuickTap").classList.add("hidden");
+            }
+
+            document.getElementById("quickTapModal").classList.remove("hidden");
+            setTimeout(() => document.getElementById("quickTapName").focus(), 100);
+        }
+
+        async function saveQuickTap() {
+            if (!activeQuickTap) return;
+            const { group, slot, seatIdx } = activeQuickTap;
+            const nameInput = document.getElementById("quickTapName").value.trim();
+
+            if (!instituteData[group]) instituteData[group] = {};
+            if (!instituteData[group][slot]) instituteData[group][slot] = [];
+
+            if (!nameInput) {
+                if (instituteData[group][slot][seatIdx]) {
+                    instituteData[group][slot].splice(seatIdx, 1);
+                }
+            } else {
+                const phoneInput = document.getElementById("quickTapPhone").value.trim();
+                const courseInput = document.getElementById("quickTapCourse").value;
+
+                if (instituteData[group][slot][seatIdx]) {
+                    instituteData[group][slot][seatIdx].name = nameInput;
+                    instituteData[group][slot][seatIdx].phone = phoneInput;
+                    instituteData[group][slot][seatIdx].course = courseInput;
+                } else {
+                    const randomNum = Math.floor(1000 + Math.random() * 9000);
+                    instituteData[group][slot].push({
+                        id: `STU-2026-${randomNum}`,
+                        name: nameInput,
+                        course: courseInput,
+                        phone: phoneInput,
+                        status: "Active"
+                    });
+                }
+            }
+
+            closeQuickTapModal();
+            await saveScheduleToCloud(true);
+        }
+
+        async function deleteQuickTap() {
+            if (!activeQuickTap) return;
+            const { group, slot, seatIdx } = activeQuickTap;
+
+            if (instituteData[group] && instituteData[group][slot] && instituteData[group][slot][seatIdx]) {
+                instituteData[group][slot].splice(seatIdx, 1);
+                closeQuickTapModal();
+                await saveScheduleToCloud(true);
+            }
+        }
+
+        function closeQuickTapModal() {
+            document.getElementById("quickTapModal").classList.add("hidden");
+            activeQuickTap = null;
+        }
+
+        // Master Student List Actions (Unlimited Students)
+        function openEnrollModal() {
+            activeEditLocation = { isNew: true };
+            const randomNum = Math.floor(1000 + Math.random() * 9000);
+            
+            document.getElementById("modalStudentId").value = `STU-2026-${randomNum}`;
+            document.getElementById("modalStudentName").value = "";
+            document.getElementById("modalStudentGroup").value = "Sat-Mon-Wed";
+            document.getElementById("modalStudentCourse").value = "Basic Computer & MS Office";
+            document.getElementById("modalStudentPhone").value = "";
+            document.getElementById("modalStudentStatus").value = "Active";
+
+            document.getElementById("studentModal").classList.remove("hidden");
+        }
+
+        function editMasterStudent(flatIndex) {
+            let allStudents = [];
+            GROUPS.forEach(group => {
+                if (instituteData[group]) {
+                    Object.keys(instituteData[group]).forEach(slot => {
+                        instituteData[group][slot].forEach((stu, idx) => {
+                            allStudents.push({ ...stu, group, slot, isBoard: true, boardIndex: idx });
+                        });
+                    });
+                }
+            });
+            if (instituteData.extraStudents) {
+                instituteData.extraStudents.forEach((stu, idx) => {
+                    allStudents.push({ ...stu, group: stu.group || "General", slot: "Custom", isBoard: false, extraIndex: idx });
+                });
+            }
+
+            const student = allStudents[flatIndex];
+            if (!student) return;
+
+            activeEditLocation = { isNew: false, targetStudent: student };
+
+            document.getElementById("modalStudentId").value = student.id;
+            document.getElementById("modalStudentName").value = student.name;
+            document.getElementById("modalStudentGroup").value = student.group || "Sat-Mon-Wed";
+            document.getElementById("modalStudentCourse").value = student.course || "Basic Computer & MS Office";
+            document.getElementById("modalStudentPhone").value = student.phone || "";
+            document.getElementById("modalStudentStatus").value = student.status || "Active";
+
+            document.getElementById("studentModal").classList.remove("hidden");
+        }
+
+        async function handleFormSubmit(event) {
+            event.preventDefault();
+            if (!activeEditLocation) return;
+
+            const studentData = {
+                id: document.getElementById("modalStudentId").value.trim(),
+                name: document.getElementById("modalStudentName").value.trim(),
+                group: document.getElementById("modalStudentGroup").value,
+                course: document.getElementById("modalStudentCourse").value,
+                phone: document.getElementById("modalStudentPhone").value.trim(),
+                status: document.getElementById("modalStudentStatus").value
+            };
+
+            if (activeEditLocation.isNew) {
+                if (!instituteData.extraStudents) instituteData.extraStudents = [];
+                instituteData.extraStudents.push(studentData);
+            } else if (activeEditLocation.targetStudent) {
+                const target = activeEditLocation.targetStudent;
+                if (target.isBoard) {
+                    instituteData[target.group][target.slot][target.boardIndex] = {
+                        ...instituteData[target.group][target.slot][target.boardIndex],
+                        ...studentData
+                    };
+                } else {
+                    instituteData.extraStudents[target.extraIndex] = studentData;
+                }
+            }
+
+            closeModal();
+            await saveScheduleToCloud(true);
+        }
+
+        async function deleteMasterStudent(flatIndex) {
+            let allStudents = [];
+            GROUPS.forEach(group => {
+                if (instituteData[group]) {
+                    Object.keys(instituteData[group]).forEach(slot => {
+                        instituteData[group][slot].forEach((stu, idx) => {
+                            allStudents.push({ ...stu, group, slot, isBoard: true, boardIndex: idx });
+                        });
+                    });
+                }
+            });
+            if (instituteData.extraStudents) {
+                instituteData.extraStudents.forEach((stu, idx) => {
+                    allStudents.push({ ...stu, group: stu.group || "General", slot: "Custom", isBoard: false, extraIndex: idx });
+                });
+            }
+
+            const target = allStudents[flatIndex];
+            if (!target) return;
+
+            if (confirm(`Are you sure you want to delete ${target.name} (${target.id})?`)) {
+                if (target.isBoard) {
+                    instituteData[target.group][target.slot].splice(target.boardIndex, 1);
+                } else {
+                    instituteData.extraStudents.splice(target.extraIndex, 1);
+                }
+                await saveScheduleToCloud(true);
+            }
+        }
+
+        function closeModal() {
+            document.getElementById("studentModal").classList.add("hidden");
+            activeEditLocation = null;
+        }
+
+        // Initialize Application
+        window.addEventListener("DOMContentLoaded", () => {
+            const savedTheme = localStorage.getItem("app_theme_pref") || "black";
+            setTheme(savedTheme);
+            fetchScheduleFromCloud();
+        });
+    </script>
+</body>
+</html>
