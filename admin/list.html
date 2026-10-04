@@ -151,9 +151,7 @@
         body.theme-white .text-slate-400 {
             color: #334155 !important;
         }
-        body.theme-white .text-slate-300 {
-            color: #0f172a !important;
-        }
+        body.theme-white .text-slate-300,
         body.theme-white .text-slate-200 {
             color: #0f172a !important;
         }
@@ -188,10 +186,14 @@
         .board-cell {
             transition: all 0.15s ease-in-out;
         }
-        .board-cell:hover {
+        .board-cell:not(.drag-target-highlight):hover {
             transform: scale(1.02);
             z-index: 10;
         }
+        
+        /* Drag & Drop Visuals */
+        .cursor-grab { cursor: grab; }
+        .cursor-grab:active { cursor: grabbing; }
 
         /* Smooth Custom Scrollbar for Mobile Tables */
         .custom-scrollbar::-webkit-scrollbar {
@@ -259,13 +261,13 @@
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b border-slate-800/60 pb-3">
                 <div>
                     <h2 class="text-base sm:text-xl font-black text-amber-400 flex items-center gap-2">
-                        <i class="fa-solid fa-pen-ruler"></i> Weekly Class Schedule Board Overview
+                        <i class="fa-solid fa-pen-ruler"></i> Weekly Class Schedule Board
                     </h2>
-                    <p class="text-[11px] sm:text-xs text-slate-400 mt-0.5">হোয়াইটবোর্ডের ডিজাইনে তৈরি। সরাসরি যেকোনো স্টুডেন্টের নামের ওপর বা খালি ঘরে ট্যাপ করে নাম পরিবর্তন বা নতুন নাম সেভ করুন।</p>
+                    <p class="text-[11px] sm:text-xs text-slate-400 mt-0.5">ট্যাপ করে এডিট করুন অথবা নাম চেপে ধরে টেনে (Drag & Drop) একই স্লটের মধ্যে সিরিয়াল পরিবর্তন করুন।</p>
                 </div>
                 <div class="flex items-center space-x-1.5 bg-slate-800 px-2.5 py-1 rounded-lg border border-slate-700 text-[11px] sm:text-xs text-amber-400 font-bold self-start sm:self-auto">
                     <i class="fa-solid fa-hand-pointer"></i>
-                    <span>Tap cell to Edit</span>
+                    <span>Tap or Drag</span>
                 </div>
             </div>
 
@@ -325,7 +327,7 @@
                             <th class="py-3 px-2">#</th>
                             <th class="py-3 px-3">Student ID</th>
                             <th class="py-3 px-3">Student Name</th>
-                            <th class="py-3 px-3">Routine / Group</th>
+                            <th class="py-3 px-3">Routine & Time</th>
                             <th class="py-3 px-3">Course Name</th>
                             <th class="py-3 px-3">Contact No.</th>
                             <th class="py-3 px-3">Status</th>
@@ -349,13 +351,34 @@
     <div id="quickTapModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-3 hidden">
         <div class="card-bg rounded-2xl shadow-2xl border w-full max-w-md overflow-hidden max-h-[92vh] overflow-y-auto">
             <div class="bg-slate-900 text-amber-400 px-4 py-3 border-b border-slate-800 flex justify-between items-center sticky top-0 z-10">
-                <h3 class="font-extrabold text-sm sm:text-base flex items-center"><i class="fa-solid fa-bolt mr-2"></i> Quick Name Edit</h3>
+                <h3 class="font-extrabold text-sm sm:text-base flex items-center"><i class="fa-solid fa-bolt mr-2"></i> Quick Edit & Move</h3>
                 <button onclick="closeQuickTapModal()" class="text-slate-400 hover:text-white text-lg p-1.5"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="p-4 sm:p-5 space-y-4">
-                <div class="bg-slate-950 p-3 rounded-lg border border-slate-800 text-xs space-y-1">
-                    <p class="text-slate-400">Routine: <span id="quickTapGroupLabel" class="font-bold text-amber-400">--</span></p>
-                    <p class="text-slate-400">Time Slot: <span id="quickTapSlotLabel" class="font-bold text-emerald-400">--</span></p>
+                
+                <div class="bg-slate-950 p-3 rounded-lg border border-slate-800 text-xs grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Routine / Group</label>
+                        <select id="quickTapGroup" class="input-bg w-full rounded-lg text-xs px-2 py-2 outline-none font-medium">
+                            <option value="Sat-Mon-Wed">শনি, সোম, বুধ (Sat, Mon, Wed)</option>
+                            <option value="Sun-Tue-Thu">রবি, মঙ্গল, বৃহঃ (Sun, Tue, Thu)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Time Slot</label>
+                        <select id="quickTapSlot" class="input-bg w-full rounded-lg text-xs px-2 py-2 outline-none font-medium">
+                            <option value="09 AM">09 AM</option>
+                            <option value="10 AM">10 AM</option>
+                            <option value="11 AM">11 AM</option>
+                            <option value="12 PM">12 PM</option>
+                            <option value="01 PM">01 PM</option>
+                            <option value="04 PM">04 PM</option>
+                            <option value="05 PM">05 PM</option>
+                            <option value="06 PM">06 PM</option>
+                            <option value="07 PM">07 PM</option>
+                            <option value="08 PM">08 PM</option>
+                        </select>
+                    </div>
                 </div>
 
                 <div>
@@ -414,13 +437,31 @@
                     <input type="text" id="modalStudentName" required class="input-bg w-full rounded-lg text-xs px-3 py-2.5 font-bold outline-none">
                 </div>
 
-                <div>
-                    <label class="block text-xs font-semibold text-slate-300 mb-1">Routine / Group</label>
-                    <select id="modalStudentGroup" class="input-bg w-full rounded-lg text-xs px-3 py-2.5 outline-none font-medium">
-                        <option value="Sat-Mon-Wed">শনি, সোম, বুধ (Sat, Mon, Wed)</option>
-                        <option value="Sun-Tue-Thu">রবি, মঙ্গল, বৃহঃ (Sun, Tue, Thu)</option>
-                        <option value="General">General / Custom Group</option>
-                    </select>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Routine / Group</label>
+                        <select id="modalStudentGroup" class="input-bg w-full rounded-lg text-xs px-3 py-2.5 outline-none font-medium">
+                            <option value="Sat-Mon-Wed">শনি, সোম, বুধ (Sat, Mon, Wed)</option>
+                            <option value="Sun-Tue-Thu">রবি, মঙ্গল, বৃহঃ (Sun, Tue, Thu)</option>
+                            <option value="General">General / Custom Group</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Time Slot (স্লট)</label>
+                        <select id="modalStudentSlot" class="input-bg w-full rounded-lg text-xs px-3 py-2.5 outline-none font-medium">
+                            <option value="09 AM">09 AM</option>
+                            <option value="10 AM">10 AM</option>
+                            <option value="11 AM">11 AM</option>
+                            <option value="12 PM">12 PM</option>
+                            <option value="01 PM">01 PM</option>
+                            <option value="04 PM">04 PM</option>
+                            <option value="05 PM">05 PM</option>
+                            <option value="06 PM">06 PM</option>
+                            <option value="07 PM">07 PM</option>
+                            <option value="08 PM">08 PM</option>
+                            <option value="Custom">Custom / No Slot</option>
+                        </select>
+                    </div>
                 </div>
 
                 <div>
@@ -487,13 +528,13 @@
 
         // Application State Variables
         let instituteData = null;
-        let activeEditLocation = null; // { isNew: boolean, targetId: string | null }
-        let activeQuickTap = null;     // { group, slot, seatIdx }
+        let activeEditLocation = null;
+        let activeQuickTap = null;
         let currentTheme = "black";
         let autoSyncInterval = null;
         let lastSyncedJsonString = "";
+        let draggedItemInfo = null; // Drag & Drop State
         
-        // Anti-Overwrite & Sync States
         let hasUnsavedChanges = false;
         let isSaving = false;
 
@@ -501,35 +542,8 @@
         function generateInitialSeedData() {
             return {
                 "Sat-Mon-Wed": {
-                    "09 AM": [],
-                    "10 AM": [
-                        { id: "STU-2026-101", name: "NAHITA", course: "Basic Computer & MS Office", phone: "01710000001", status: "Active" },
-                        { id: "STU-2026-102", name: "TISHA", course: "Basic Computer & MS Office", phone: "01710000002", status: "Active" },
-                        { id: "STU-2026-103", name: "BUSHRA", course: "Basic Computer & MS Office", phone: "01710000003", status: "Active" },
-                        { id: "STU-2026-104", name: "SOMRAT", course: "Basic Computer & MS Office", phone: "01710000004", status: "Active" }
-                    ],
-                    "11 AM": [
-                        { id: "STU-2026-105", name: "MEKLA", course: "Basic Computer & MS Office", phone: "01710000005", status: "Active" },
-                        { id: "STU-2026-106", name: "ILMI", course: "Basic Computer & MS Office", phone: "01710000006", status: "Active" },
-                        { id: "STU-2026-107", name: "TASFIA", course: "Basic Computer & MS Office", phone: "01710000007", status: "Active" }
-                    ],
-                    "12 PM": [],
-                    "01 PM": [],
-                    "04 PM": [],
-                    "05 PM": [
-                        { id: "STU-2026-108", name: "Anjuman", course: "Basic Computer & MS Office", phone: "01710000008", status: "Active" },
-                        { id: "STU-2026-109", name: "NAIM", course: "Basic Computer & MS Office", phone: "01710000009", status: "Active" },
-                        { id: "STU-2026-110", name: "MUNNA", course: "Basic Computer & MS Office", phone: "01710000010", status: "Active" },
-                        { id: "STU-2026-111", name: "Anik", course: "Basic Computer & MS Office", phone: "01710000011", status: "Active" }
-                    ],
-                    "06 PM": [
-                        { id: "STU-2026-112", name: "Purnima", course: "Basic Computer & MS Office", phone: "01710000012", status: "Active" },
-                        { id: "STU-2026-113", name: "Shohag", course: "Basic Computer & MS Office", phone: "01710000013", status: "Active" },
-                        { id: "STU-2026-114", name: "Mimia", course: "Basic Computer & MS Office", phone: "01710000014", status: "Active" },
-                        { id: "STU-2026-115", name: "MohiUddin", course: "Basic Computer & MS Office", phone: "01710000015", status: "Active" }
-                    ],
-                    "07 PM": [],
-                    "08 PM": []
+                    "09 AM": [], "10 AM": [], "11 AM": [], "12 PM": [], "01 PM": [],
+                    "04 PM": [], "05 PM": [], "06 PM": [], "07 PM": [], "08 PM": []
                 },
                 "Sun-Tue-Thu": {
                     "09 AM": [], "10 AM": [], "11 AM": [], "12 PM": [], "01 PM": [],
@@ -585,7 +599,6 @@
             }
         }
 
-        // Update Header Cloud Status Badge
         function updateCloudStatus(statusText, type = "normal") {
             const badge = document.getElementById("cloudStatusBadge");
             if (!badge) return;
@@ -602,7 +615,6 @@
             }
         }
 
-        // Toast Notification System
         function showToast(message, isError = false) {
             let toast = document.getElementById("toastNotification");
             if (!toast) {
@@ -625,38 +637,27 @@
             }, 3500);
         }
 
-        // Normalize Data Object Structure
         function normalizeInstituteData(data) {
-            if (!data || typeof data !== "object") {
-                data = generateInitialSeedData();
-            }
+            if (!data || typeof data !== "object") data = generateInitialSeedData();
             GROUPS.forEach(g => {
                 if (!data[g]) data[g] = {};
                 ALL_SLOTS.forEach(s => {
                     if (!Array.isArray(data[g][s])) data[g][s] = [];
                 });
             });
-            if (!Array.isArray(data.extraStudents)) {
-                data.extraStudents = [];
-            }
+            if (!Array.isArray(data.extraStudents)) data.extraStudents = [];
             return data;
         }
 
-        // Fetch Schedule Data Exclusively from JSONbin Cloud with Fallback
         async function fetchScheduleFromCloud(isBackground = false) {
-            // Do not fetch and overwrite if a save operation is in progress or failed recently
             if (isSaving || hasUnsavedChanges) return;
 
-            if (!isBackground) {
-                updateCloudStatus("Cloud: Fetching...", "syncing");
-            }
+            if (!isBackground) updateCloudStatus("Cloud: Fetching...", "syncing");
 
             try {
                 const response = await fetch(`${API_URL}/latest?t=${Date.now()}`, {
                     method: "GET",
-                    headers: {
-                        "X-Access-Key": JSONBIN_ACCESS_KEY
-                    },
+                    headers: { "X-Access-Key": JSONBIN_ACCESS_KEY },
                     cache: "no-store"
                 });
 
@@ -665,8 +666,6 @@
                     if (result && result.record) {
                         const normalized = normalizeInstituteData(result.record);
                         const newJsonStr = JSON.stringify(normalized);
-
-                        // Only re-render if data has actually changed on cloud
                         if (newJsonStr !== lastSyncedJsonString) {
                             instituteData = normalized;
                             lastSyncedJsonString = newJsonStr;
@@ -677,8 +676,6 @@
                         return;
                     }
                 } else {
-                    const errText = await response.text();
-                    console.error(`JSONbin Fetch Error (${response.status}):`, errText);
                     throw new Error(`Server returned status ${response.status}`);
                 }
             } catch (err) {
@@ -687,16 +684,11 @@
                     updateCloudStatus("Cloud: Connection Error", "error");
                     showToast(`ক্লাউড রিড এরর: ${err.message}`, true);
                 }
-
-                // LocalStorage Backup Fallback if initial load fails
                 if (!instituteData) {
                     const cached = localStorage.getItem("apex_institute_backup");
                     if (cached) {
-                        try {
-                            instituteData = normalizeInstituteData(JSON.parse(cached));
-                        } catch(e) {
-                            instituteData = normalizeInstituteData(generateInitialSeedData());
-                        }
+                        try { instituteData = normalizeInstituteData(JSON.parse(cached)); } 
+                        catch(e) { instituteData = normalizeInstituteData(generateInitialSeedData()); }
                     } else {
                         instituteData = normalizeInstituteData(generateInitialSeedData());
                     }
@@ -705,17 +697,14 @@
             }
         }
 
-        // Save Schedule Data Exclusively to JSONbin Cloud
         async function saveScheduleToCloud(showNotification = true) {
             if (!instituteData) return;
-            
             isSaving = true;
-            hasUnsavedChanges = true; // Block incoming data syncs from overwriting our new changes
+            hasUnsavedChanges = true;
             
             instituteData = normalizeInstituteData(instituteData);
             const payloadStr = JSON.stringify(instituteData);
             
-            // Optimistic update locally immediately
             localStorage.setItem("apex_institute_backup", payloadStr);
             renderAllViews();
             updateCloudStatus("Cloud: Saving...", "syncing");
@@ -732,51 +721,117 @@
 
                 if (response.ok) {
                     lastSyncedJsonString = payloadStr;
-                    hasUnsavedChanges = false; // Save successful, unlock sync
+                    hasUnsavedChanges = false;
                     updateCloudStatus("Cloud: Synced", "success");
-                    if (showNotification) {
-                        showToast("সকল পরিবর্তন ক্লাউডে সেভ করা হয়েছে!");
-                    }
+                    if (showNotification) showToast("সকল পরিবর্তন ক্লাউডে সেভ করা হয়েছে!");
                 } else {
-                    const errData = await response.text();
-                    console.error(`JSONbin Save Error (${response.status}):`, errData);
                     throw new Error(`HTTP ${response.status}`);
                 }
             } catch (err) {
                 console.error("Cloud Save Error:", err);
                 updateCloudStatus("Cloud: Save Error", "error");
-                if (showNotification) {
-                    showToast(`ক্লাউডে সেভ হয়নি (${err.message})! অফলাইন ব্যাকআপ রাখা হয়েছে।`, true);
-                }
-                // Notice: hasUnsavedChanges remains true, so the background sync will keep retrying and won't overwrite the names.
+                if (showNotification) showToast(`ক্লাউডে সেভ হয়নি! অফলাইন ব্যাকআপ রাখা হয়েছে।`, true);
             } finally {
                 isSaving = false;
             }
         }
 
-        // Background Real-Time Auto Polling
         function startAutoSync() {
             if (autoSyncInterval) clearInterval(autoSyncInterval);
-            
-            // Check cloud every 8 seconds (optimized to prevent JSONBin Rate Limiting / 429/401 errors)
             autoSyncInterval = setInterval(() => {
                 const isStudentModalOpen = !document.getElementById("studentModal")?.classList.contains("hidden");
                 const isQuickTapModalOpen = !document.getElementById("quickTapModal")?.classList.contains("hidden");
-
-                // Do not auto-update DOM if user is currently editing inside a modal
-                if (!isStudentModalOpen && !isQuickTapModalOpen) {
+                if (!isStudentModalOpen && !isQuickTapModalOpen && !draggedItemInfo) {
                     if (hasUnsavedChanges) {
-                        // If previous save failed, try to save again in the background silently
                         saveScheduleToCloud(false);
                     } else {
-                        // Normal real-time data fetching
                         fetchScheduleFromCloud(true);
                     }
                 }
             }, 8000);
         }
 
-        // Get Consolidated Student List
+        // ==========================================
+        // Drag and Drop Logic for Whiteboard Reordering
+        // ==========================================
+
+        function handleDragStart(e, group, slot, index) {
+            draggedItemInfo = { group, slot, index };
+            e.dataTransfer.effectAllowed = "move";
+            e.dataTransfer.setData("text/plain", JSON.stringify(draggedItemInfo));
+            // Slight delay so the element being dragged doesn't visually disappear entirely
+            setTimeout(() => {
+                e.target.style.opacity = "0.3";
+                e.target.style.transform = "scale(0.95)";
+            }, 0);
+        }
+
+        function handleDragEnd(e) {
+            e.target.style.opacity = "1";
+            e.target.style.transform = "scale(1)";
+            document.querySelectorAll('.drag-target-highlight').forEach(el => el.classList.remove('bg-amber-400/20', 'drag-target-highlight'));
+            draggedItemInfo = null;
+        }
+
+        function handleDragOver(e, group, slot) {
+            e.preventDefault(); // allow drop
+            e.dataTransfer.dropEffect = "move";
+        }
+
+        function handleDragEnter(e, group, slot) {
+            e.preventDefault();
+            // Highlight only if it's the valid restricted slot (same slot & group)
+            if (draggedItemInfo && draggedItemInfo.group === group && draggedItemInfo.slot === slot) {
+                const td = e.target.closest('td');
+                if (td) td.classList.add('bg-amber-400/20', 'drag-target-highlight');
+            }
+        }
+
+        function handleDragLeave(e) {
+            const td = e.target.closest('td');
+            if (td) td.classList.remove('bg-amber-400/20', 'drag-target-highlight');
+        }
+
+        async function handleDrop(e, targetGroup, targetSlot, targetIndex) {
+            e.preventDefault();
+            const td = e.target.closest('td');
+            if (td) td.classList.remove('bg-amber-400/20', 'drag-target-highlight');
+
+            if (!draggedItemInfo) return;
+
+            const { group: sourceGroup, slot: sourceSlot, index: sourceIndex } = draggedItemInfo;
+
+            // Strict Restriction: Only allow reorder within the identical Group and Slot
+            if (sourceGroup !== targetGroup || sourceSlot !== targetSlot) {
+                showToast("ভুল স্লটে ড্র্যাগ করা যাবে না! শুধুমাত্র একই স্লটের ভেতরে মুভ করতে পারবেন।", true);
+                draggedItemInfo = null;
+                return;
+            }
+
+            if (sourceIndex === targetIndex) {
+                draggedItemInfo = null;
+                return;
+            }
+
+            const slotArray = instituteData[sourceGroup][sourceSlot];
+            if (!slotArray || sourceIndex >= slotArray.length) {
+                draggedItemInfo = null;
+                return;
+            }
+
+            // Standard array reordering logic (removes from source, inserts at target, inherently shifts others)
+            const [movedStudent] = slotArray.splice(sourceIndex, 1);
+            slotArray.splice(targetIndex, 0, movedStudent);
+
+            draggedItemInfo = null;
+            renderAllViews();
+            await saveScheduleToCloud(true);
+        }
+
+        // ==========================================
+        // Render Functions
+        // ==========================================
+
         function getAllStudentsList() {
             let list = [];
             if (!instituteData) return list;
@@ -787,13 +842,7 @@
                         if (Array.isArray(instituteData[group][slot])) {
                             instituteData[group][slot].forEach((stu, seatIdx) => {
                                 if (stu && stu.name) {
-                                    list.push({
-                                        ...stu,
-                                        group,
-                                        slot,
-                                        isBoard: true,
-                                        seatIdx
-                                    });
+                                    list.push({ ...stu, group, slot, isBoard: true, seatIdx });
                                 }
                             });
                         }
@@ -804,21 +853,13 @@
             if (Array.isArray(instituteData.extraStudents)) {
                 instituteData.extraStudents.forEach((stu, extraIdx) => {
                     if (stu && stu.name) {
-                        list.push({
-                            ...stu,
-                            group: stu.group || "General",
-                            slot: "Custom",
-                            isBoard: false,
-                            extraIdx
-                        });
+                        list.push({ ...stu, group: stu.group || "General", slot: stu.slot || "Custom", isBoard: false, extraIdx });
                     }
                 });
             }
-
             return list;
         }
 
-        // Render Master Student List Table
         function renderMasterStudentList() {
             const tbody = document.getElementById("studentMasterList");
             if (!tbody) return;
@@ -843,7 +884,6 @@
 
             let displayStudents = allStudents;
 
-            // Search Filtering
             if (searchQuery) {
                 displayStudents = displayStudents.filter(stu => {
                     const phone = (stu.phone || "").toLowerCase();
@@ -851,20 +891,10 @@
                     const name = (stu.name || "").toLowerCase();
                     return phone.includes(searchQuery) || id.includes(searchQuery) || name.includes(searchQuery);
                 });
-
-                displayStudents.sort((a, b) => {
-                    const phoneA = (a.phone || "").toLowerCase();
-                    const phoneB = (b.phone || "").toLowerCase();
-                    const aMatch = phoneA.startsWith(searchQuery);
-                    const bMatch = phoneB.startsWith(searchQuery);
-                    if (aMatch && !bMatch) return -1;
-                    if (!aMatch && bMatch) return 1;
-                    return 0;
-                });
             }
 
             if (displayStudents.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="9" class="text-center py-8 text-rose-400 font-semibold italic"><i class="fa-solid fa-circle-exclamation mr-1"></i> "${searchQuery}" এর সাথে মিলে এমন কোনো স্টুডেন্ট পাওয়া যায়নি।</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="9" class="text-center py-8 text-rose-400 font-semibold italic">"${searchQuery}" এর সাথে মিলে এমন কোনো স্টুডেন্ট পাওয়া যায়নি।</td></tr>`;
                 updateSelectedCount();
                 return;
             }
@@ -873,43 +903,34 @@
                 const tr = document.createElement("tr");
                 const isSearchedMatch = searchQuery.length > 0;
                 
-                tr.className = isSearchedMatch 
-                    ? "bg-amber-400/10 hover:bg-amber-400/20 transition-colors border-l-4 border-amber-400" 
-                    : "hover:bg-slate-800/40 transition-colors";
+                tr.className = isSearchedMatch ? "bg-amber-400/10 hover:bg-amber-400/20 transition-colors border-l-4 border-amber-400" : "hover:bg-slate-800/40 transition-colors";
 
                 let statusBadge = "bg-emerald-950 text-emerald-300 border-emerald-800";
                 if (stu.status === "On Leave") statusBadge = "bg-amber-950 text-amber-300 border-amber-800";
                 if (stu.status === "Completed") statusBadge = "bg-blue-950 text-blue-300 border-blue-800";
 
                 const safeId = stu.id.replace(/"/g, '&quot;');
+                const displaySlot = (stu.slot && stu.slot !== "Custom") ? `<span class="text-[10px] text-emerald-400 font-bold block mt-0.5"><i class="fa-regular fa-clock"></i> ${stu.slot}</span>` : `<span class="text-[10px] text-slate-500 font-bold block mt-0.5">No Slot</span>`;
 
                 tr.innerHTML = `
-                    <td class="py-3 px-3 text-center">
-                        <input type="checkbox" class="student-select-cb rounded accent-amber-400 cursor-pointer w-4 h-4" data-student-id="${safeId}" onchange="updateSelectedCount()">
-                    </td>
+                    <td class="py-3 px-3 text-center"><input type="checkbox" class="student-select-cb rounded accent-amber-400 cursor-pointer w-4 h-4" data-student-id="${safeId}" onchange="updateSelectedCount()"></td>
                     <td class="py-3 px-2 font-bold text-slate-500">${viewIndex + 1 < 10 ? '0' + (viewIndex + 1) : viewIndex + 1}</td>
                     <td class="py-3 px-3 font-mono font-bold text-amber-400 bg-amber-400/5 px-2 py-1 rounded inline-block my-1 border border-amber-400/20">${stu.id}</td>
                     <td class="py-3 px-3 font-extrabold student-name-text text-sm">${stu.name}</td>
-                    <td class="py-3 px-3 text-slate-300 font-medium">${GROUP_LABELS[stu.group] || stu.group}</td>
+                    <td class="py-3 px-3 text-slate-300 font-medium">${GROUP_LABELS[stu.group] || stu.group} ${displaySlot}</td>
                     <td class="py-3 px-3 text-slate-300">${stu.course || 'Basic Computer & MS Office'}</td>
                     <td class="py-3 px-3 font-mono font-bold text-emerald-400">${stu.phone || '--'}</td>
                     <td class="py-3 px-3"><span class="px-2 py-0.5 border rounded text-[11px] font-bold ${statusBadge}">${stu.status || 'Active'}</span></td>
                     <td class="py-3 px-3 text-right space-x-1.5 whitespace-nowrap">
-                        <button onclick="editMasterStudent('${safeId}')" class="text-amber-400 hover:text-amber-300 bg-slate-800 hover:bg-slate-700 px-2.5 py-1 rounded transition text-xs font-bold">
-                            <i class="fa-solid fa-pen"></i> Edit
-                        </button>
-                        <button onclick="deleteMasterStudent('${safeId}')" class="text-rose-400 hover:text-rose-300 bg-rose-950 hover:bg-rose-900 px-2.5 py-1 rounded transition text-xs font-bold">
-                            <i class="fa-solid fa-trash"></i> Delete
-                        </button>
+                        <button onclick="editMasterStudent('${safeId}')" class="text-amber-400 hover:text-amber-300 bg-slate-800 hover:bg-slate-700 px-2.5 py-1 rounded transition text-xs font-bold"><i class="fa-solid fa-pen"></i> Edit</button>
+                        <button onclick="deleteMasterStudent('${safeId}')" class="text-rose-400 hover:text-rose-300 bg-rose-950 hover:bg-rose-900 px-2.5 py-1 rounded transition text-xs font-bold"><i class="fa-solid fa-trash"></i> Delete</button>
                     </td>
                 `;
                 tbody.appendChild(tr);
             });
-
             updateSelectedCount();
         }
 
-        // Clear Search Bar
         function clearSearchInput() {
             const input = document.getElementById("studentSearchInput");
             if (input) {
@@ -919,104 +940,78 @@
             }
         }
 
-        // Toggle Select All Checkbox
         function toggleSelectAllStudents(masterCb) {
-            const cbs = document.querySelectorAll(".student-select-cb");
-            cbs.forEach(cb => cb.checked = masterCb.checked);
+            document.querySelectorAll(".student-select-cb").forEach(cb => cb.checked = masterCb.checked);
             updateSelectedCount();
         }
 
-        // Update Selected Student Counter
         function updateSelectedCount() {
             const checked = document.querySelectorAll(".student-select-cb:checked");
             const countSpan = document.getElementById("selectedCount");
             const selectAllCb = document.getElementById("selectAllCheckbox");
             if (countSpan) countSpan.textContent = checked.length;
-
             const allCbs = document.querySelectorAll(".student-select-cb");
-            if (selectAllCb && allCbs.length > 0) {
-                selectAllCb.checked = (checked.length === allCbs.length);
-            }
+            if (selectAllCb && allCbs.length > 0) selectAllCb.checked = (checked.length === allCbs.length);
         }
 
-        // Remove Student Helper by Unique ID
         function removeStudentFromInstituteData(studentId) {
             if (!instituteData) return false;
             let removed = false;
-
             GROUPS.forEach(group => {
                 if (instituteData[group]) {
                     ALL_SLOTS.forEach(slot => {
                         if (Array.isArray(instituteData[group][slot])) {
                             const originalLength = instituteData[group][slot].length;
                             instituteData[group][slot] = instituteData[group][slot].filter(stu => stu && stu.id !== studentId);
-                            if (instituteData[group][slot].length < originalLength) {
-                                removed = true;
-                            }
+                            if (instituteData[group][slot].length < originalLength) removed = true;
                         }
                     });
                 }
             });
-
             if (Array.isArray(instituteData.extraStudents)) {
                 const originalLength = instituteData.extraStudents.length;
                 instituteData.extraStudents = instituteData.extraStudents.filter(stu => stu && stu.id !== studentId);
-                if (instituteData.extraStudents.length < originalLength) {
-                    removed = true;
-                }
+                if (instituteData.extraStudents.length < originalLength) removed = true;
             }
-
             return removed;
         }
 
-        // Batch Delete Selected Students
         async function deleteSelectedStudents() {
             const checkedCbs = document.querySelectorAll(".student-select-cb:checked");
             if (checkedCbs.length === 0) {
                 alert("অনুগ্রহ করে ডিলিট করার জন্য অন্তত একজন স্টুডেন্ট সিলেক্ট করুন।");
                 return;
             }
-
-            if (!confirm(`আপনি কি নিশ্চিত যে সিলেক্ট করা ${checkedCbs.length} জন স্টুডেন্টকে ডিলিট করতে চান?`)) {
-                return;
-            }
+            if (!confirm(`আপনি কি নিশ্চিত যে সিলেক্ট করা ${checkedCbs.length} জন স্টুডেন্টকে ডিলিট করতে চান?`)) return;
 
             checkedCbs.forEach(cb => {
                 const studentId = cb.getAttribute("data-student-id");
-                if (studentId) {
-                    removeStudentFromInstituteData(studentId);
-                }
+                if (studentId) removeStudentFromInstituteData(studentId);
             });
 
             const selectAllCb = document.getElementById("selectAllCheckbox");
             if (selectAllCb) selectAllCb.checked = false;
-
             await saveScheduleToCloud(true);
         }
 
-        // Single Student Delete
         async function deleteMasterStudent(studentId) {
             const allStudents = getAllStudentsList();
             const student = allStudents.find(s => s.id === studentId);
             const studentName = student ? student.name : "এই স্টুডেন্ট";
 
-            if (!confirm(`আপনি কি নিশ্চিত যে "${studentName}" (ID: ${studentId}) কে ডিলিট করতে চান?`)) {
-                return;
-            }
-
+            if (!confirm(`আপনি কি নিশ্চিত যে "${studentName}" কে ডিলিট করতে চান?`)) return;
             removeStudentFromInstituteData(studentId);
             await saveScheduleToCloud(true);
         }
 
-        // Open Enroll Modal
         function openEnrollModal() {
             activeEditLocation = { isNew: true, targetId: null };
-
             document.getElementById("modalTitle").innerHTML = '<i class="fa-solid fa-user-plus mr-2"></i> Enroll New Student';
             document.getElementById("modalStudentId").value = generateUniqueStudentId();
             document.getElementById("modalStudentId").readOnly = true;
             document.getElementById("modalStudentName").value = "";
             document.getElementById("modalStudentGroup").value = "Sat-Mon-Wed";
+            document.getElementById("modalStudentSlot").value = "09 AM";
             document.getElementById("modalStudentCourse").value = "Basic Computer & MS Office";
             document.getElementById("modalStudentPhone").value = "";
             document.getElementById("modalStudentStatus").value = "Active";
@@ -1025,22 +1020,18 @@
             if (modal) modal.classList.remove("hidden");
         }
 
-        // Open Edit Student Modal
         function editMasterStudent(studentId) {
             const allStudents = getAllStudentsList();
             const student = allStudents.find(s => s.id === studentId);
-            if (!student) {
-                alert("স্টুডেন্ট তথ্য খুঁজে পাওয়া যায়নি।");
-                return;
-            }
+            if (!student) return;
 
             activeEditLocation = { isNew: false, targetId: studentId };
-
             document.getElementById("modalTitle").innerHTML = '<i class="fa-solid fa-user-gear mr-2"></i> Student Details & Status';
             document.getElementById("modalStudentId").value = student.id;
             document.getElementById("modalStudentId").readOnly = true;
             document.getElementById("modalStudentName").value = student.name || "";
             document.getElementById("modalStudentGroup").value = student.group || "Sat-Mon-Wed";
+            document.getElementById("modalStudentSlot").value = student.slot || "09 AM";
             document.getElementById("modalStudentCourse").value = student.course || "Basic Computer & MS Office";
             document.getElementById("modalStudentPhone").value = student.phone || "";
             document.getElementById("modalStudentStatus").value = student.status || "Active";
@@ -1049,58 +1040,43 @@
             if (modal) modal.classList.remove("hidden");
         }
 
-        // Close Student Modal
         function closeModal() {
             const modal = document.getElementById("studentModal");
             if (modal) modal.classList.add("hidden");
             activeEditLocation = null;
         }
 
-        // Submit Form (Enroll / Edit Student with Group Assignment)
         async function handleFormSubmit(e) {
             e.preventDefault();
-
             const studentId = document.getElementById("modalStudentId").value.trim();
             const name = document.getElementById("modalStudentName").value.trim();
             const group = document.getElementById("modalStudentGroup").value;
+            const slot = document.getElementById("modalStudentSlot").value;
             const course = document.getElementById("modalStudentCourse").value;
             const phone = document.getElementById("modalStudentPhone").value.trim();
             const status = document.getElementById("modalStudentStatus").value;
 
-            if (!name) {
-                alert("অনুগ্রহ করে স্টুডেন্টের নাম লিখুন।");
-                return;
-            }
+            if (!name) return;
 
-            const updatedStudent = {
-                id: studentId,
-                name: name,
-                group: group,
-                course: course,
-                phone: phone,
-                status: status
-            };
+            const updatedStudent = { id: studentId, name, group, slot, course, phone, status };
 
             if (activeEditLocation && !activeEditLocation.isNew) {
-                // Remove existing entry to safely place in updated routine/group
                 removeStudentFromInstituteData(activeEditLocation.targetId);
             }
 
             let placedInBoard = false;
-
-            // Place in Routine Group Slot if available (Up to 5 seats per slot)
-            if (GROUPS.includes(group)) {
-                for (let slot of ALL_SLOTS) {
-                    if (instituteData[group][slot].length < 5) {
-                        instituteData[group][slot].push(updatedStudent);
-                        placedInBoard = true;
-                        break;
-                    }
+            if (GROUPS.includes(group) && ALL_SLOTS.includes(slot)) {
+                if (instituteData[group][slot].length < 5) {
+                    instituteData[group][slot].push(updatedStudent);
+                    placedInBoard = true;
+                } else {
+                    alert(`দুঃখিত, ব্যাচে ৫ জন পূর্ণ হয়ে গেছে। স্টুডেন্টকে 'General' লিস্টে রাখা হলো।`);
                 }
             }
 
             if (!placedInBoard) {
                 if (!Array.isArray(instituteData.extraStudents)) instituteData.extraStudents = [];
+                updatedStudent.group = "General";
                 instituteData.extraStudents.push(updatedStudent);
             }
 
@@ -1108,15 +1084,13 @@
             await saveScheduleToCloud(true);
         }
 
-        // Quick Tap Modal Controls (Whiteboard Seat Edit)
         function openQuickTapEdit(group, slot, seatIdx) {
             activeQuickTap = { group, slot, seatIdx };
-
             const students = (instituteData[group] && instituteData[group][slot]) ? instituteData[group][slot] : [];
             const student = students[seatIdx];
 
-            document.getElementById("quickTapGroupLabel").textContent = GROUP_LABELS[group] || group;
-            document.getElementById("quickTapSlotLabel").textContent = slot;
+            document.getElementById("quickTapGroup").value = group;
+            document.getElementById("quickTapSlot").value = slot;
 
             const btnDelete = document.getElementById("btnDeleteQuickTap");
 
@@ -1149,11 +1123,10 @@
             const name = document.getElementById("quickTapName").value.trim();
             const course = document.getElementById("quickTapCourse").value;
             const phone = document.getElementById("quickTapPhone").value.trim();
+            const newGroup = document.getElementById("quickTapGroup").value;
+            const newSlot = document.getElementById("quickTapSlot").value;
 
-            if (!name) {
-                alert("অনুগ্রহ করে স্টুডেন্টের নাম দিন।");
-                return;
-            }
+            if (!name) return;
 
             if (!instituteData[group]) instituteData[group] = {};
             if (!Array.isArray(instituteData[group][slot])) instituteData[group][slot] = [];
@@ -1162,19 +1135,25 @@
             const studentId = existingStudent ? existingStudent.id : generateUniqueStudentId();
             const studentStatus = existingStudent ? (existingStudent.status || "Active") : "Active";
 
-            const studentData = {
-                id: studentId,
-                name: name,
-                group: group,
-                course: course,
-                phone: phone,
-                status: studentStatus
-            };
+            const studentData = { id: studentId, name, group: newGroup, slot: newSlot, course, phone, status: studentStatus };
 
-            if (seatIdx < instituteData[group][slot].length) {
-                instituteData[group][slot][seatIdx] = studentData;
+            if (newGroup !== group || newSlot !== slot) {
+                if (!instituteData[newGroup]) instituteData[newGroup] = {};
+                if (!Array.isArray(instituteData[newGroup][newSlot])) instituteData[newGroup][newSlot] = [];
+                
+                if (instituteData[newGroup][newSlot].length >= 5) {
+                    alert(`দুঃখিত, ব্যাচে ৫ জন পূর্ণ হয়ে গেছে।`);
+                    return;
+                }
+
+                if (existingStudent) instituteData[group][slot].splice(seatIdx, 1);
+                instituteData[newGroup][newSlot].push(studentData);
             } else {
-                instituteData[group][slot].push(studentData);
+                if (seatIdx < instituteData[group][slot].length) {
+                    instituteData[group][slot][seatIdx] = studentData;
+                } else {
+                    instituteData[group][slot].push(studentData);
+                }
             }
 
             closeQuickTapModal();
@@ -1184,7 +1163,6 @@
         async function deleteQuickTap() {
             if (!activeQuickTap) return;
             const { group, slot, seatIdx } = activeQuickTap;
-
             if (instituteData[group] && Array.isArray(instituteData[group][slot]) && instituteData[group][slot][seatIdx]) {
                 instituteData[group][slot].splice(seatIdx, 1);
                 closeQuickTapModal();
@@ -1192,7 +1170,6 @@
             }
         }
 
-        // Render Whiteboard Overview
         function renderBoardOverview() {
             const container = document.getElementById("boardOverviewContainer");
             if (!container) return;
@@ -1203,7 +1180,6 @@
             }
 
             let html = "";
-
             GROUPS.forEach(group => {
                 const groupTitle = GROUP_LABELS[group] || group;
                 html += `
@@ -1235,11 +1211,10 @@
                     </div>
                 `;
             });
-
             container.innerHTML = html;
         }
 
-        // Render Slot Table Component HTML
+        // Updated Table Component with Drag & Drop Event Listeners
         function renderSlotTableHTML(group, slots) {
             let tableHtml = `
                 <table class="w-full text-center border-collapse text-xs">
@@ -1257,24 +1232,36 @@
                     const students = (instituteData[group] && instituteData[group][slot]) ? instituteData[group][slot] : [];
                     const student = students[rowIdx];
 
+                    // Make the TD a Drop Zone
+                    tableHtml += `
+                        <td class="p-1 border-r border-slate-800/60 board-cell transition-colors duration-200 h-[38px]"
+                            ondragover="handleDragOver(event, '${group}', '${slot}')"
+                            ondragenter="handleDragEnter(event, '${group}', '${slot}')"
+                            ondragleave="handleDragLeave(event)"
+                            ondrop="handleDrop(event, '${group}', '${slot}', ${rowIdx})">
+                    `;
+
                     if (student && student.name) {
                         tableHtml += `
-                            <td class="p-1 border-r border-slate-800/60 font-bold board-cell cursor-pointer">
-                                <div onclick="openQuickTapEdit('${group}', '${slot}', ${rowIdx})" class="board-cell-filled rounded py-1 px-1 text-[11px] truncate shadow-sm transition" title="${student.name} (${student.course || 'Basic Computer'})">
-                                    ${student.name}
-                                </div>
-                            </td>
+                            <div draggable="true"
+                                 ondragstart="handleDragStart(event, '${group}', '${slot}', ${rowIdx})"
+                                 ondragend="handleDragEnd(event)"
+                                 onclick="openQuickTapEdit('${group}', '${slot}', ${rowIdx})"
+                                 class="board-cell-filled rounded py-1.5 px-1 text-[11px] font-bold truncate shadow-sm transition cursor-grab active:cursor-grabbing hover:ring-2 hover:ring-amber-400"
+                                 title="${student.name} (${student.course || 'Basic Computer'})">
+                                ${student.name}
+                            </div>
                         `;
                     } else {
                         tableHtml += `
-                            <td class="p-1 border-r border-slate-800/60 board-cell cursor-pointer">
-                                <div onclick="openQuickTapEdit('${group}', '${slot}', ${rowIdx})" class="table-cell-empty rounded py-1 px-1 text-[11px] font-medium border border-dashed transition flex items-center justify-center gap-1 hover:border-amber-400/50">
-                                    <i class="fa-solid fa-plus text-[9px] opacity-40"></i>
-                                    <span class="opacity-40">Empty</span>
-                                </div>
-                            </td>
+                            <div onclick="openQuickTapEdit('${group}', '${slot}', ${rowIdx})" 
+                                 class="table-cell-empty rounded h-full flex items-center justify-center gap-1 text-[11px] font-medium border border-dashed transition hover:border-amber-400/50">
+                                <i class="fa-solid fa-plus text-[9px] opacity-40"></i>
+                                <span class="opacity-40">Empty</span>
+                            </div>
                         `;
                     }
+                    tableHtml += `</td>`;
                 });
                 tableHtml += `</tr>`;
             }
@@ -1286,13 +1273,11 @@
             return tableHtml;
         }
 
-        // Render All UI Components
         function renderAllViews() {
             renderBoardOverview();
             renderMasterStudentList();
         }
 
-        // Escape Key Modal Close Handler
         window.addEventListener("keydown", (e) => {
             if (e.key === "Escape") {
                 closeModal();
@@ -1300,7 +1285,6 @@
             }
         });
 
-        // Initialize Application
         document.addEventListener("DOMContentLoaded", () => {
             setTheme("black");
             fetchScheduleFromCloud();
