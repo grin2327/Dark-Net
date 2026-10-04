@@ -5,11 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Student Batch Listing & Schedule | Computer Training Institute</title>
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome CDN for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         html, body { height: 100%; margin: 0; padding: 0; }
@@ -74,14 +71,20 @@
                 <div>
                     <div class="flex items-center gap-2">
                         <h1 class="text-sm sm:text-2xl font-black tracking-wide text-amber-400 leading-tight">Apex Computer Training</h1>
-                        <span id="cloudStatusBadge" class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-slate-800 text-slate-300 border border-slate-700">Cloud: Syncing...</span>
+                        <span id="cloudStatusBadge" class="hidden sm:inline-block px-2 py-0.5 rounded text-[10px] font-extrabold bg-slate-800 text-slate-300 border border-slate-700">Cloud: Syncing...</span>
                     </div>
                     <p class="text-[10px] sm:text-xs text-slate-400 hidden sm:block">Class Schedule & Active Student Directory</p>
                 </div>
             </div>
 
             <div class="flex items-center space-x-1.5 sm:space-x-3">
-                <!-- Navigation to Archive updated here -->
+                <!-- Temp List Button -->
+                <a href="studentlist.html" class="flex items-center space-x-1 bg-slate-800 hover:bg-slate-700 text-emerald-400 px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs font-bold border border-slate-700 transition shadow-sm">
+                    <i class="fa-solid fa-clipboard-user text-xs"></i>
+                    <span class="hidden sm:inline">Temp List</span>
+                </a>
+
+                <!-- Archive Button -->
                 <a href="archive.html" class="flex items-center space-x-1 bg-slate-800 hover:bg-slate-700 text-amber-400 px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs font-bold border border-slate-700 transition shadow-sm">
                     <i class="fa-solid fa-box-archive text-xs"></i>
                     <span class="hidden sm:inline">Archive</span>
@@ -343,7 +346,8 @@
                 "Sat-Mon-Wed": { "09 AM": [], "10 AM": [], "11 AM": [], "12 PM": [], "01 PM": [], "04 PM": [], "05 PM": [], "06 PM": [], "07 PM": [], "08 PM": [] },
                 "Sun-Tue-Thu": { "09 AM": [], "10 AM": [], "11 AM": [], "12 PM": [], "01 PM": [], "04 PM": [], "05 PM": [], "06 PM": [], "07 PM": [], "08 PM": [] },
                 "extraStudents": [],
-                "archivedStudents": []
+                "archivedStudents": [],
+                "tempStudents": []
             };
         }
 
@@ -379,10 +383,10 @@
             const badge = document.getElementById("cloudStatusBadge");
             if (!badge) return;
             badge.textContent = statusText;
-            if (type === "syncing") badge.className = "px-2 py-0.5 rounded text-[10px] font-extrabold bg-amber-500/20 text-amber-400 border border-amber-500/40 animate-pulse";
-            else if (type === "success") badge.className = "px-2 py-0.5 rounded text-[10px] font-extrabold bg-emerald-500/20 text-emerald-400 border border-emerald-500/40";
-            else if (type === "error") badge.className = "px-2 py-0.5 rounded text-[10px] font-extrabold bg-rose-500/20 text-rose-400 border border-rose-500/40";
-            else badge.className = "px-2 py-0.5 rounded text-[10px] font-extrabold bg-slate-800 text-slate-300 border border-slate-700";
+            if (type === "syncing") badge.className = "hidden sm:inline-block px-2 py-0.5 rounded text-[10px] font-extrabold bg-amber-500/20 text-amber-400 border border-amber-500/40 animate-pulse";
+            else if (type === "success") badge.className = "hidden sm:inline-block px-2 py-0.5 rounded text-[10px] font-extrabold bg-emerald-500/20 text-emerald-400 border border-emerald-500/40";
+            else if (type === "error") badge.className = "hidden sm:inline-block px-2 py-0.5 rounded text-[10px] font-extrabold bg-rose-500/20 text-rose-400 border border-rose-500/40";
+            else badge.className = "hidden sm:inline-block px-2 py-0.5 rounded text-[10px] font-extrabold bg-slate-800 text-slate-300 border border-slate-700";
         }
 
         function showToast(message, isError = false) {
@@ -410,6 +414,7 @@
             });
             if (!Array.isArray(data.extraStudents)) data.extraStudents = [];
             if (!Array.isArray(data.archivedStudents)) data.archivedStudents = [];
+            if (!Array.isArray(data.tempStudents)) data.tempStudents = []; // Added for Temp Students
             return data;
         }
 

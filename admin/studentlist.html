@@ -4,7 +4,7 @@
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='16' fill='%23090D16'/><rect x='22' y='12' width='36' height='26' rx='5' fill='%23F59E0B'/><rect x='26' y='16' width='28' height='18' rx='2.5' fill='%23090D16'/><rect x='36' y='30' width='10' height='2.5' rx='1' fill='%23F59E0B'/><circle cx='21' cy='22' r='7.5' fill='%23FBBF24'/><path d='M 8,46 C 8,36 13.8,31.5 21,31.5 C 28.2,31.5 34,36 34,46 C 34,47.1 33.1,48 32,48 L 10,48 C 8.9,48 8,47.1 8,46 Z' fill='%23FBBF24'/></svg>">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Student Archive & Alumni | Computer Training Institute</title>
+    <title>Temporary Inquiries | Computer Training Institute</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -35,6 +35,7 @@
         body.theme-white .student-name-text { color: #0f172a !important; font-weight: 800 !important; }
         body.theme-white .footer-bg { background-color: #ffffff; border-color: #e2e8f0; color: #475569; }
 
+        body.theme-white .text-emerald-400 { color: #059669 !important; }
         body.theme-white .text-amber-400 { color: #b45309 !important; }
         body.theme-white .text-slate-400 { color: #334155 !important; }
         body.theme-white .text-slate-300, body.theme-white .text-slate-200 { color: #0f172a !important; }
@@ -55,23 +56,17 @@
     <header class="header-bg text-white border-b shadow-xl sticky top-0 z-30">
         <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-3 flex flex-row justify-between items-center gap-2">
             <div class="flex items-center space-x-2 sm:space-x-3">
-                <i class="fa-solid fa-box-archive text-amber-400 text-xl sm:text-3xl"></i>
+                <i class="fa-solid fa-clipboard-user text-emerald-400 text-xl sm:text-3xl"></i>
                 <div>
                     <div class="flex items-center gap-2">
-                        <h1 class="text-sm sm:text-2xl font-black tracking-wide text-amber-400 leading-tight">Apex Archive Center</h1>
+                        <h1 class="text-sm sm:text-2xl font-black tracking-wide text-emerald-400 leading-tight">Temporary Students</h1>
                         <span id="cloudStatusBadge" class="hidden sm:inline-block px-2 py-0.5 rounded text-[10px] font-extrabold bg-slate-800 text-slate-300 border border-slate-700">Cloud: Syncing...</span>
                     </div>
-                    <p class="text-[10px] sm:text-xs text-slate-400 hidden sm:block">Alumni & Archived Student Database</p>
+                    <p class="text-[10px] sm:text-xs text-slate-400 hidden sm:block">Lead Management & Pre-enrollment List</p>
                 </div>
             </div>
 
             <div class="flex items-center space-x-1.5 sm:space-x-3">
-                <!-- Temp List Button -->
-                <a href="studentlist.html" class="flex items-center space-x-1 bg-slate-800 hover:bg-slate-700 text-emerald-400 px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs font-bold border border-slate-700 transition shadow-sm">
-                    <i class="fa-solid fa-clipboard-user text-xs"></i>
-                    <span class="hidden sm:inline">Temp List</span>
-                </a>
-
                 <!-- Navigation back to Active Student List -->
                 <a href="list.html" class="flex items-center space-x-1 bg-slate-800 hover:bg-slate-700 text-amber-400 px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs font-bold border border-slate-700 transition shadow-sm">
                     <i class="fa-solid fa-users-rectangle text-xs"></i>
@@ -79,7 +74,7 @@
                 </a>
 
                 <div class="flex items-center bg-slate-900 border border-slate-800 p-0.5 sm:p-1 rounded-xl space-x-0.5 sm:space-x-1">
-                    <button onclick="setTheme('black')" id="btnThemeBlack" class="flex items-center space-x-1 px-2 py-1 sm:px-3 sm:py-1.5 rounded-lg text-xs font-bold transition bg-amber-400 text-slate-950">
+                    <button onclick="setTheme('black')" id="btnThemeBlack" class="flex items-center space-x-1 px-2 py-1 sm:px-3 sm:py-1.5 rounded-lg text-xs font-bold transition bg-emerald-400 text-slate-950">
                         <i class="fa-solid fa-moon text-xs"></i>
                         <span class="hidden sm:inline">Black</span>
                     </button>
@@ -97,17 +92,24 @@
         <section class="card-bg rounded-2xl border shadow-xl p-3.5 sm:p-6 space-y-4 sm:space-y-6 min-h-[70vh]">
             <div class="flex flex-col gap-3 border-b border-slate-800/60 pb-4">
                 <div class="flex items-center justify-between">
-                    <h2 class="text-base sm:text-xl font-black text-amber-400 flex items-center gap-2">
-                        <i class="fa-solid fa-database"></i> Archived Students (স্টুডেন্ট আর্কাইভ)
+                    <h2 class="text-base sm:text-xl font-black text-emerald-400 flex items-center gap-2">
+                        <i class="fa-solid fa-address-book"></i> Inquiries & Leads (যারা কথা বলতে এসেছে)
                     </h2>
                 </div>
 
                 <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 w-full">
-                    <div class="relative w-full">
+                    <div class="relative flex-1 w-full">
                         <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
-                        <input type="text" id="archiveSearchInput" oninput="renderArchiveList()" placeholder="নাম, মোবাইল নাম্বার বা আইডি দিয়ে খুঁজুন..." class="input-bg w-full pl-10 pr-10 py-3 sm:py-2.5 rounded-xl text-sm font-semibold outline-none focus:ring-2 focus:ring-amber-400 shadow-inner">
+                        <input type="text" id="tempSearchInput" oninput="renderTempList()" placeholder="নাম বা মোবাইল নাম্বার দিয়ে খুঁজুন..." class="input-bg w-full pl-10 pr-10 py-3 sm:py-2.5 rounded-xl text-sm font-semibold outline-none focus:ring-2 focus:ring-emerald-400 shadow-inner">
                         <button onclick="clearSearchInput()" id="btnClearSearch" class="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-rose-400 p-2 text-base hidden" title="Clear Search">
                             <i class="fa-solid fa-circle-xmark"></i>
+                        </button>
+                    </div>
+
+                    <div class="flex items-center w-full sm:w-auto">
+                        <button onclick="openTempModal()" class="w-full sm:w-auto px-4 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black rounded-xl text-sm transition shadow-md flex items-center justify-center gap-1.5 whitespace-nowrap">
+                            <i class="fa-solid fa-user-plus text-sm"></i>
+                            <span>Add New Inquiry</span>
                         </button>
                     </div>
                 </div>
@@ -117,19 +119,18 @@
                 <table class="w-full text-left border-collapse text-xs min-w-[650px]">
                     <thead>
                         <tr class="table-head uppercase font-extrabold border-b border-slate-800">
-                            <th class="py-3 px-4">Student ID</th>
+                            <th class="py-3 px-3">Date</th>
                             <th class="py-3 px-3">Student Name</th>
-                            <th class="py-3 px-3">Contact No.</th>
-                            <th class="py-3 px-3">Course Name</th>
-                            <th class="py-3 px-3">Previous Routine & Time</th>
-                            <th class="py-3 px-3 text-center">Archived Date</th>
+                            <th class="py-3 px-3">Contact Number</th>
+                            <th class="py-3 px-3">Address / Location</th>
+                            <th class="py-3 px-3">Interested Course</th>
                             <th class="py-3 px-3 text-right">Actions</th>
                         </tr>
                     </thead>
-                    <tbody id="archiveMasterList" class="divide-y divide-slate-800">
+                    <tbody id="tempMasterList" class="divide-y divide-slate-800">
                         <tr>
-                            <td colspan="7" class="text-center py-10 text-slate-500">
-                                <i class="fa-solid fa-spinner fa-spin mr-2 text-amber-400"></i> Loading archived records...
+                            <td colspan="6" class="text-center py-10 text-slate-500">
+                                <i class="fa-solid fa-spinner fa-spin mr-2 text-emerald-400"></i> Loading temporary list...
                             </td>
                         </tr>
                     </tbody>
@@ -138,6 +139,48 @@
         </section>
 
     </main>
+
+    <!-- Modal for Adding/Editing Temp Student -->
+    <div id="tempModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-3 hidden">
+        <div class="card-bg rounded-2xl shadow-2xl border w-full max-w-md overflow-hidden max-h-[92vh] overflow-y-auto">
+            <div class="bg-slate-900 text-emerald-400 px-4 py-3 flex justify-between items-center border-b border-slate-800 sticky top-0 z-10">
+                <h3 id="modalTitle" class="font-extrabold text-sm sm:text-base flex items-center text-emerald-400">
+                    <i class="fa-solid fa-clipboard-user mr-2"></i> Inquiry Details
+                </h3>
+                <button onclick="closeModal()" class="text-slate-400 hover:text-white text-lg p-1.5"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="tempForm" onsubmit="handleTempSubmit(event)" class="p-4 sm:p-5 space-y-3.5">
+                <input type="hidden" id="modalTempId">
+                
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Student Name (নাম)</label>
+                    <input type="text" id="modalTempName" required class="input-bg w-full rounded-lg text-sm px-3 py-2.5 font-bold outline-none focus:ring-2 focus:ring-emerald-400">
+                </div>
+                
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Contact No. (ফোন নাম্বার)</label>
+                    <input type="text" id="modalTempPhone" required class="input-bg w-full rounded-lg text-sm px-3 py-2.5 outline-none font-bold text-amber-400 focus:ring-2 focus:ring-emerald-400" placeholder="e.g. 01700000000">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Address (কোথায় থাকে)</label>
+                    <input type="text" id="modalTempAddress" class="input-bg w-full rounded-lg text-sm px-3 py-2.5 outline-none font-medium focus:ring-2 focus:ring-emerald-400" placeholder="e.g. Mirpur 10, Dhaka">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Interested Course (কি শিখতে চাচ্ছে)</label>
+                    <input type="text" id="modalTempCourse" class="input-bg w-full rounded-lg text-sm px-3 py-2.5 outline-none font-medium focus:ring-2 focus:ring-emerald-400" placeholder="e.g. Web Development or Graphic Design">
+                </div>
+
+                <div class="flex justify-end space-x-2 pt-3 border-t border-slate-800">
+                    <button type="button" onclick="closeModal()" class="px-3.5 py-2 bg-slate-800 text-slate-300 rounded-lg text-xs font-semibold hover:bg-slate-700 transition">Cancel</button>
+                    <button type="submit" class="px-4 py-2 bg-emerald-500 text-slate-950 font-black rounded-lg text-xs hover:bg-emerald-400 shadow-md transition flex items-center">
+                        <i class="fa-solid fa-floppy-disk mr-1.5"></i> Save Details
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <footer class="footer-bg border-t py-4 text-center text-xs w-full transition-colors mt-auto">
         <div class="max-w-7xl mx-auto px-4"><p>&copy; 2026 Apex Computer Training Institute. All rights reserved.</p></div>
@@ -149,7 +192,6 @@
         const API_URL = `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`;
 
         const GROUPS = ["Sat-Mon-Wed", "Sun-Tue-Thu"];
-        const GROUP_LABELS = { "Sat-Mon-Wed": "শনি, সোম, বুধ", "Sun-Tue-Thu": "রবি, মঙ্গল, বৃহঃ", "General": "General" };
         const ALL_SLOTS = ["09 AM", "10 AM", "11 AM", "12 PM", "01 PM", "04 PM", "05 PM", "06 PM", "07 PM", "08 PM"];
 
         let instituteData = null;
@@ -157,6 +199,7 @@
         let autoSyncInterval = null;
         let lastSyncedJsonString = "";
         let isSaving = false;
+        let editTargetId = null;
 
         function setTheme(theme) {
             currentTheme = theme;
@@ -165,10 +208,10 @@
             const btnWhite = document.getElementById("btnThemeWhite");
             if (btnBlack && btnWhite) {
                 if (theme === "black") {
-                    btnBlack.className = "flex items-center space-x-1 px-2 py-1 sm:px-3 sm:py-1.5 rounded-lg text-xs font-bold transition bg-amber-400 text-slate-950";
+                    btnBlack.className = "flex items-center space-x-1 px-2 py-1 sm:px-3 sm:py-1.5 rounded-lg text-xs font-bold transition bg-emerald-400 text-slate-950";
                     btnWhite.className = "flex items-center space-x-1 px-2 py-1 sm:px-3 sm:py-1.5 rounded-lg text-xs font-bold transition text-slate-400 hover:text-white";
                 } else {
-                    btnWhite.className = "flex items-center space-x-1 px-2 py-1 sm:px-3 sm:py-1.5 rounded-lg text-xs font-bold transition bg-amber-400 text-slate-950";
+                    btnWhite.className = "flex items-center space-x-1 px-2 py-1 sm:px-3 sm:py-1.5 rounded-lg text-xs font-bold transition bg-emerald-400 text-slate-950";
                     btnBlack.className = "flex items-center space-x-1 px-2 py-1 sm:px-3 sm:py-1.5 rounded-lg text-xs font-bold transition text-slate-400 hover:text-white";
                 }
             }
@@ -206,7 +249,7 @@
             GROUPS.forEach(g => { if (!data[g]) data[g] = {}; ALL_SLOTS.forEach(s => { if (!Array.isArray(data[g][s])) data[g][s] = []; }); });
             if (!Array.isArray(data.extraStudents)) data.extraStudents = [];
             if (!Array.isArray(data.archivedStudents)) data.archivedStudents = [];
-            if (!Array.isArray(data.tempStudents)) data.tempStudents = []; // Added for Temp Students
+            if (!Array.isArray(data.tempStudents)) data.tempStudents = []; // Crucial for this page
             return data;
         }
 
@@ -224,7 +267,7 @@
                             instituteData = normalized;
                             lastSyncedJsonString = newJsonStr;
                             localStorage.setItem("apex_institute_backup", newJsonStr);
-                            renderArchiveList();
+                            renderTempList();
                         }
                         updateCloudStatus("Cloud: Synced", "success");
                         return;
@@ -237,7 +280,7 @@
                     const cached = localStorage.getItem("apex_institute_backup");
                     if (cached) { try { instituteData = normalizeInstituteData(JSON.parse(cached)); } catch(e) { instituteData = normalizeInstituteData(); } }
                     else instituteData = normalizeInstituteData();
-                    renderArchiveList();
+                    renderTempList();
                 }
             }
         }
@@ -248,7 +291,7 @@
             instituteData = normalizeInstituteData(instituteData);
             const payloadStr = JSON.stringify(instituteData);
             localStorage.setItem("apex_institute_backup", payloadStr);
-            renderArchiveList();
+            renderTempList();
             updateCloudStatus("Cloud: Saving...", "syncing");
             try {
                 const response = await fetch(API_URL, { method: "PUT", headers: { "Content-Type": "application/json", "X-Access-Key": JSONBIN_ACCESS_KEY }, body: payloadStr });
@@ -268,108 +311,137 @@
             autoSyncInterval = setInterval(() => { fetchScheduleFromCloud(true); }, 8000);
         }
 
-        function renderArchiveList() {
-            const tbody = document.getElementById("archiveMasterList"); if (!tbody) return;
+        function generateTempId() {
+            return `TEMP-${Date.now().toString().slice(-6)}`;
+        }
+
+        function renderTempList() {
+            const tbody = document.getElementById("tempMasterList"); if (!tbody) return;
             tbody.innerHTML = "";
-            const searchInput = document.getElementById("archiveSearchInput");
+            const searchInput = document.getElementById("tempSearchInput");
             const btnClearSearch = document.getElementById("btnClearSearch");
             const searchQuery = searchInput ? searchInput.value.trim().toLowerCase() : "";
 
             if (btnClearSearch) { if (searchQuery.length > 0) btnClearSearch.classList.remove("hidden"); else btnClearSearch.classList.add("hidden"); }
 
-            let archived = (instituteData && Array.isArray(instituteData.archivedStudents)) ? instituteData.archivedStudents : [];
-            let displayStudents = [...archived].reverse();
+            let tempStudents = (instituteData && Array.isArray(instituteData.tempStudents)) ? instituteData.tempStudents : [];
+            let displayStudents = [...tempStudents].reverse(); // Newest first
 
             if (displayStudents.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" class="text-center py-10 text-slate-500 italic">No archived records found.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="6" class="text-center py-10 text-slate-500 italic">No temporary inquiries found. Click "Add New Inquiry" to create one.</td></tr>`;
                 return;
             }
 
             if (searchQuery) {
                 displayStudents = displayStudents.filter(stu => {
-                    const phone = (stu.phone || "").toLowerCase(); const id = (stu.id || "").toLowerCase(); const name = (stu.name || "").toLowerCase();
-                    return phone.includes(searchQuery) || id.includes(searchQuery) || name.includes(searchQuery);
+                    const phone = (stu.phone || "").toLowerCase(); const name = (stu.name || "").toLowerCase();
+                    return phone.includes(searchQuery) || name.includes(searchQuery);
                 });
             }
 
             if (displayStudents.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" class="text-center py-10 text-rose-400 font-semibold italic">"${searchQuery}" এর সাথে মিলে এমন কোনো রেকর্ড আর্কাইভে পাওয়া যায়নি।</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="6" class="text-center py-10 text-rose-400 font-semibold italic">"${searchQuery}" এর সাথে মিলে এমন কোনো ডাটা পাওয়া যায়নি।</td></tr>`;
                 return;
             }
 
             displayStudents.forEach((stu) => {
                 const tr = document.createElement("tr");
-                tr.className = searchQuery.length > 0 ? "bg-amber-400/10 hover:bg-amber-400/20 transition-colors border-l-4 border-amber-400" : "hover:bg-slate-800/40 transition-colors";
+                tr.className = searchQuery.length > 0 ? "bg-emerald-400/10 hover:bg-emerald-400/20 transition-colors border-l-4 border-emerald-400" : "hover:bg-slate-800/40 transition-colors";
                 const safeId = stu.id.replace(/"/g, '&quot;');
-                const displaySlot = (stu.slot && stu.slot !== "Custom") ? `<span class="text-[10px] text-emerald-400 font-bold block mt-0.5"><i class="fa-regular fa-clock"></i> ${stu.slot}</span>` : `<span class="text-[10px] text-slate-500 font-bold block mt-0.5">No Slot</span>`;
 
                 tr.innerHTML = `
-                    <td class="py-3 px-4 font-mono font-bold text-amber-400 bg-amber-400/5 px-2 py-1 rounded inline-block my-2 border border-amber-400/20">${stu.id}</td>
+                    <td class="py-3 px-3 text-[11px] font-bold text-slate-400 whitespace-nowrap"><i class="fa-regular fa-calendar-days mr-1 text-slate-500"></i> ${stu.date || '--'}</td>
                     <td class="py-3 px-3 font-extrabold student-name-text text-sm">${stu.name}</td>
-                    <td class="py-3 px-3 font-mono font-bold text-emerald-400">${stu.phone || '--'}</td>
-                    <td class="py-3 px-3 text-slate-300">${stu.course || 'Basic Computer & MS Office'}</td>
-                    <td class="py-3 px-3 text-slate-300 font-medium">${GROUP_LABELS[stu.group] || stu.group} ${displaySlot}</td>
-                    <td class="py-3 px-3 text-center text-[11px] font-bold text-slate-400 bg-slate-900/50 rounded-md border border-slate-800">${stu.archivedAt || 'Unknown Date'}</td>
+                    <td class="py-3 px-3 font-mono font-bold text-amber-400 text-sm tracking-wider">${stu.phone || '--'}</td>
+                    <td class="py-3 px-3 text-slate-300 font-medium">${stu.address || '--'}</td>
+                    <td class="py-3 px-3 text-emerald-400 font-semibold">${stu.course || '--'}</td>
                     <td class="py-3 px-3 text-right space-x-1.5 whitespace-nowrap">
-                        <button onclick="restoreStudent('${safeId}')" class="text-emerald-400 hover:text-emerald-300 bg-emerald-950 hover:bg-emerald-900 px-2.5 py-1.5 rounded transition text-xs font-bold border border-emerald-800"><i class="fa-solid fa-rotate-left"></i> Restore</button>
-                        <button onclick="permanentDeleteStudent('${safeId}')" class="text-rose-400 hover:text-rose-300 bg-rose-950 hover:bg-rose-900 px-2.5 py-1.5 rounded transition text-xs font-bold border border-rose-800"><i class="fa-solid fa-trash-can"></i> Delete</button>
+                        <a href="tel:${stu.phone}" class="inline-block text-blue-400 hover:text-blue-300 bg-blue-950 hover:bg-blue-900 px-2.5 py-1.5 rounded transition text-xs font-bold border border-blue-800" title="Call Student"><i class="fa-solid fa-phone"></i></a>
+                        <button onclick="editTempStudent('${safeId}')" class="text-amber-400 hover:text-amber-300 bg-amber-950 hover:bg-amber-900 px-2.5 py-1.5 rounded transition text-xs font-bold border border-amber-800"><i class="fa-solid fa-pen"></i> Edit</button>
+                        <button onclick="deleteTempStudent('${safeId}')" class="text-rose-400 hover:text-rose-300 bg-rose-950 hover:bg-rose-900 px-2.5 py-1.5 rounded transition text-xs font-bold border border-rose-800"><i class="fa-solid fa-trash-can"></i></button>
                     </td>
                 `;
                 tbody.appendChild(tr);
             });
         }
 
-        function clearSearchInput() { const input = document.getElementById("archiveSearchInput"); if (input) { input.value = ""; renderArchiveList(); input.focus(); } }
+        function clearSearchInput() { const input = document.getElementById("tempSearchInput"); if (input) { input.value = ""; renderTempList(); input.focus(); } }
 
-        async function restoreStudent(studentId) {
-            if (!instituteData || !Array.isArray(instituteData.archivedStudents)) return;
-            const index = instituteData.archivedStudents.findIndex(s => s.id === studentId);
-            if (index === -1) return;
+        function openTempModal() {
+            editTargetId = null;
+            document.getElementById("modalTitle").innerHTML = '<i class="fa-solid fa-user-plus mr-2"></i> Add New Inquiry';
+            document.getElementById("modalTempId").value = generateTempId();
+            document.getElementById("modalTempName").value = "";
+            document.getElementById("modalTempPhone").value = "";
+            document.getElementById("modalTempAddress").value = "";
+            document.getElementById("modalTempCourse").value = "";
+            const modal = document.getElementById("tempModal"); if (modal) modal.classList.remove("hidden");
+        }
 
-            const studentName = instituteData.archivedStudents[index].name;
-            if (!confirm(`আপনি কি নিশ্চিত যে "${studentName}" কে পুনরায় অ্যাক্টিভ লিস্টে রিস্টোর করতে চান?`)) return;
-
-            const student = instituteData.archivedStudents.splice(index, 1)[0];
-            student.status = "Active";
-            delete student.archivedAt;
-
-            let placed = false;
-            const group = student.group; const slot = student.slot;
-
-            if (GROUPS.includes(group) && ALL_SLOTS.includes(slot)) {
-                if (!instituteData[group]) instituteData[group] = {};
-                if (!Array.isArray(instituteData[group][slot])) instituteData[group][slot] = [];
-                if (instituteData[group][slot].length < 5) {
-                    instituteData[group][slot].push(student);
-                    placed = true;
-                }
-            }
-
-            if (!placed) {
-                if (!Array.isArray(instituteData.extraStudents)) instituteData.extraStudents = [];
-                student.group = "General"; 
-                instituteData.extraStudents.push(student);
-                showToast("আগের ব্যাচ ফুল থাকায় স্টুডেন্টকে 'General' লিস্টে রিস্টোর করা হয়েছে।");
-            } else {
-                showToast(`"${studentName}" কে সফলভাবে আগের ব্যাচে রিস্টোর করা হয়েছে।`);
-            }
+        function editTempStudent(id) {
+            const tempStudents = instituteData.tempStudents || [];
+            const student = tempStudents.find(s => s.id === id);
+            if (!student) return;
             
+            editTargetId = id;
+            document.getElementById("modalTitle").innerHTML = '<i class="fa-solid fa-pen-to-square mr-2"></i> Edit Inquiry Details';
+            document.getElementById("modalTempId").value = student.id;
+            document.getElementById("modalTempName").value = student.name || "";
+            document.getElementById("modalTempPhone").value = student.phone || "";
+            document.getElementById("modalTempAddress").value = student.address || "";
+            document.getElementById("modalTempCourse").value = student.course || "";
+            
+            const modal = document.getElementById("tempModal"); if (modal) modal.classList.remove("hidden");
+        }
+
+        function closeModal() {
+            const modal = document.getElementById("tempModal"); if (modal) modal.classList.add("hidden"); editTargetId = null;
+        }
+
+        async function handleTempSubmit(e) {
+            e.preventDefault();
+            const id = document.getElementById("modalTempId").value;
+            const name = document.getElementById("modalTempName").value.trim();
+            const phone = document.getElementById("modalTempPhone").value.trim();
+            const address = document.getElementById("modalTempAddress").value.trim();
+            const course = document.getElementById("modalTempCourse").value.trim();
+
+            if (!name || !phone) return;
+
+            if (!Array.isArray(instituteData.tempStudents)) instituteData.tempStudents = [];
+
+            const today = new Date();
+            const dateStr = `${String(today.getDate()).padStart(2, '0')}-${String(today.getMonth() + 1).padStart(2, '0')}-${today.getFullYear()}`;
+
+            if (editTargetId) {
+                const index = instituteData.tempStudents.findIndex(s => s.id === editTargetId);
+                if (index !== -1) {
+                    instituteData.tempStudents[index] = { ...instituteData.tempStudents[index], name, phone, address, course };
+                    showToast("তথ্য আপডেট করা হয়েছে।");
+                }
+            } else {
+                instituteData.tempStudents.push({ id, name, phone, address, course, date: dateStr });
+                showToast("নতুন স্টুডেন্ট লিস্টে যোগ করা হয়েছে।");
+            }
+
+            closeModal();
             await saveScheduleToCloud(true);
         }
 
-        async function permanentDeleteStudent(studentId) {
-            if (!instituteData || !Array.isArray(instituteData.archivedStudents)) return;
-            const index = instituteData.archivedStudents.findIndex(s => s.id === studentId);
+        async function deleteTempStudent(id) {
+            if (!instituteData || !Array.isArray(instituteData.tempStudents)) return;
+            const index = instituteData.tempStudents.findIndex(s => s.id === id);
             if (index === -1) return;
 
-            const studentName = instituteData.archivedStudents[index].name;
-            if (!confirm(`সতর্কতা: আপনি কি নিশ্চিত যে "${studentName}" এর রেকর্ড ডাটাবেজ থেকে চিরতরে মুছে ফেলতে চান? এই অ্যাকশনটি আর ফেরানো যাবে না।`)) return;
+            const name = instituteData.tempStudents[index].name;
+            if (!confirm(`আপনি কি নিশ্চিত যে "${name}" এর রেকর্ড চিরতরে মুছে ফেলতে চান?`)) return;
 
-            instituteData.archivedStudents.splice(index, 1);
-            showToast(`"${studentName}" এর ডাটা চিরতরে মুছে ফেলা হয়েছে।`);
+            instituteData.tempStudents.splice(index, 1);
+            showToast(`"${name}" ডিলিট করা হয়েছে।`);
             await saveScheduleToCloud(true);
         }
 
+        window.addEventListener("keydown", (e) => { if (e.key === "Escape") closeModal(); });
         document.addEventListener("DOMContentLoaded", () => { setTheme("black"); fetchScheduleFromCloud(); startAutoSync(); });
     </script>
 </body>
