@@ -164,7 +164,7 @@
             flex-wrap: wrap;
         }
 
-        /* --- VIDEO EDITOR HUB BUTTON --- */
+        /* --- BUTTONS --- */
         .btn-editor-hub {
             background: linear-gradient(135deg, var(--accent-purple), var(--primary-hot));
             color: #ffffff;
@@ -249,28 +249,6 @@
             flex-shrink: 0;
         }
 
-        .ms-profile-avatar.admin-active {
-            border-color: #ff0055 !important;
-            box-shadow: 0 0 12px #ff0055, 0 0 20px rgba(255, 0, 85, 0.8) !important;
-            animation: pulseRed 2s infinite alternate;
-        }
-
-        .ms-profile-avatar.public-active {
-            border-color: #00e5ff !important;
-            box-shadow: 0 0 12px #00e5ff, 0 0 20px rgba(0, 229, 255, 0.8) !important;
-            animation: pulseBlue 2s infinite alternate;
-        }
-
-        @keyframes pulseRed {
-            0% { box-shadow: 0 0 8px #ff0055, 0 0 15px rgba(255, 0, 85, 0.6); }
-            100% { box-shadow: 0 0 16px #ff0000, 0 0 28px rgba(255, 0, 0, 0.9); }
-        }
-
-        @keyframes pulseBlue {
-            0% { box-shadow: 0 0 8px #00e5ff, 0 0 15px rgba(0, 229, 255, 0.6); }
-            100% { box-shadow: 0 0 16px #007aff, 0 0 28px rgba(0, 122, 255, 0.9); }
-        }
-
         .ms-profile-avatar:hover {
             transform: scale(1.08);
         }
@@ -286,6 +264,7 @@
             text-shadow: 0 0 8px rgba(0, 230, 118, 0.2);
         }
         .txt-pink-neon { color: var(--primary-hot); font-weight: 800; }
+        .txt-purple-neon { color: var(--accent-purple); font-weight: 800; text-shadow: 0 0 8px rgba(138, 79, 255, 0.2); }
 
         .main-layout-fullscreen {
             max-width: 1280px;
@@ -296,7 +275,7 @@
             box-sizing: border-box;
         }
 
-        /* --- MODAL BASE --- */
+        /* --- MODALS --- */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0;
@@ -341,7 +320,7 @@
             transform: rotate(90deg);
         }
 
-        /* --- PROFILE MODAL --- */
+        /* Profile Modal */
         .profile-modal {
             background: linear-gradient(145deg, rgba(23, 19, 41, 0.95), rgba(13, 10, 24, 0.98));
             border: 1px solid rgba(255, 255, 255, 0.15);
@@ -359,7 +338,6 @@
         }
 
         .modal-overlay.active .profile-modal { transform: scale(1); }
-
         .profile-modal-header { text-align: center; margin-bottom: 24px; }
 
         .profile-avatar-large {
@@ -411,16 +389,6 @@
             transform: translateY(-2px);
         }
 
-        .profile-action-btn.admin-btn:hover {
-            border-color: #ff337a;
-            color: #ff337a;
-        }
-
-        .profile-action-btn.public-btn:hover {
-            border-color: var(--neon-green);
-            color: var(--neon-green);
-        }
-
         .profile-action-btn.donate-btn {
             border-color: rgba(226, 19, 110, 0.3);
             color: #ff3399;
@@ -437,18 +405,13 @@
             color: var(--primary-hot);
         }
 
-        .profile-action-btn.web-link-btn:hover {
-            background: rgba(255, 51, 122, 0.12);
-            border-color: var(--primary-hot);
-        }
-
         .profile-divider {
             height: 1px;
             background: rgba(255, 255, 255, 0.08);
             margin: 6px 0;
         }
 
-        /* --- BKASH MODAL --- */
+        /* Bkash Modal */
         .bkash-modal {
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(226, 19, 110, 0.15));
             border: 1px solid rgba(255, 255, 255, 0.2);
@@ -528,7 +491,7 @@
             transform: scale(1.05);
         }
 
-        /* --- OS HUB & CATEGORY CONTAINERS --- */
+        /* --- OS HUB & CATEGORIES --- */
         .os-container {
             background: var(--panel-bg);
             border: 1px solid var(--glass-border);
@@ -627,6 +590,134 @@
             width: 100%;
         }
 
+        /* --- OFFLINE DATA BOX SYSTEM (NEW DESIGN) --- */
+        .offline-box-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .btn-expand-offline {
+            background: rgba(138, 79, 255, 0.15);
+            border: 1px solid var(--accent-purple);
+            color: var(--cute-cyan);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-expand-offline:hover {
+            background: var(--accent-purple);
+            color: white;
+            box-shadow: 0 0 10px rgba(138, 79, 255, 0.5);
+        }
+
+        .offline-add-form {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        /* 1-50 Column Grid System */
+        .offline-data-grid {
+            display: grid;
+            gap: 8px;
+            transition: var(--transition);
+            width: 100%;
+        }
+
+        /* Collapsed / Normal Compact View */
+        .offline-data-grid.collapsed {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            max-height: 220px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        /* Expanded Multi-Column View (1-10 in Col 1, 11-20 in Col 2, up to 50 in Col 5) */
+        .offline-data-grid.expanded {
+            grid-auto-flow: column;
+            grid-template-rows: repeat(10, auto);
+            overflow-x: auto;
+            max-height: none;
+            padding-bottom: 10px;
+            justify-content: start;
+        }
+
+        .offline-data-grid::-webkit-scrollbar {
+            height: 6px;
+            width: 6px;
+        }
+        .offline-data-grid::-webkit-scrollbar-thumb {
+            background: var(--accent-purple);
+            border-radius: 10px;
+        }
+
+        .offline-item {
+            background: rgba(13, 10, 25, 0.7);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 0.83rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            min-width: 190px;
+            max-width: 250px;
+            transition: var(--transition);
+        }
+
+        .offline-item:hover {
+            border-color: var(--cute-cyan);
+            background: rgba(23, 19, 41, 0.9);
+        }
+
+        .offline-item .item-num {
+            color: var(--cute-cyan);
+            font-weight: 800;
+            font-family: 'Orbitron', monospace;
+            font-size: 0.75rem;
+            flex-shrink: 0;
+            background: rgba(0, 229, 255, 0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .offline-item .item-text {
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            color: var(--text-main);
+        }
+
+        .offline-item .btn-del-offline {
+            background: none;
+            border: none;
+            color: var(--primary-hot);
+            cursor: pointer;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+            padding: 2px 4px;
+            transition: var(--transition);
+        }
+
+        .offline-item .btn-del-offline:hover {
+            transform: scale(1.2);
+            color: #ff0055;
+        }
+
         /* --- QUICK TOOLS --- */
         .quick-tools-compact {
             padding: 16px 20px;
@@ -658,9 +749,8 @@
         .quick-tools-compact .os-title-text { font-size: 0.85rem; }
         .quick-tools-compact .os-sub-text { font-size: 0.65rem; padding-top: 4px; }
 
-        /* FORM & INPUT STYLES */
-        .form-container,
-        .database-container {
+        /* --- RESOURCE MANAGER --- */
+        .resource-manager-container {
             background: var(--panel-bg);
             border: 1px solid var(--glass-border);
             border-radius: var(--radius-lg);
@@ -679,11 +769,25 @@
             text-align: left;
         }
 
+        .add-link-box {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: var(--radius-sm);
+            padding: 18px;
+            margin-bottom: 20px;
+        }
+
+        .add-link-box-title {
+            font-size: 0.9rem;
+            color: var(--cute-cyan);
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
         .input-stack {
             display: flex;
             flex-direction: column;
             gap: 14px;
-            margin-bottom: 18px;
         }
 
         .input-inline-row {
@@ -703,6 +807,11 @@
             outline: none;
             transition: var(--transition);
             text-align: left;
+        }
+        
+        select.custom-input option {
+            background: #0f0c1f;
+            color: var(--text-main);
         }
 
         .custom-input:focus {
@@ -724,33 +833,76 @@
 
         .btn-add-link:hover { background: var(--cute-cyan); }
 
+        .hidden { display: none !important; }
+
         .search-wrapper {
             border-top: 1px solid rgba(255, 255, 255, 0.06);
             padding-top: 16px;
+            margin-bottom: 16px;
         }
 
-        .links-list-group {
-            list-style: none;
+        /* FOLDER SYSTEM STYLES */
+        .database-folders {
             display: flex;
             flex-direction: column;
+            gap: 12px;
+        }
+
+        .category-folder {
+            background: rgba(15, 12, 31, 0.6);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .folder-header {
+            padding: 14px 18px;
+            background: rgba(255, 255, 255, 0.03);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 700;
+            user-select: none;
+            transition: var(--transition);
+        }
+
+        .folder-header:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .folder-header .folder-title-wrap {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-main);
+        }
+
+        .folder-content {
+            display: none;
+            padding: 14px 18px;
+            flex-direction: column;
             gap: 10px;
-            margin-top: 12px;
-            text-align: left;
-            width: 100%;
+            border-top: 1px solid var(--glass-border);
+            background: rgba(0, 0, 0, 0.15);
+        }
+
+        .folder-content.active {
+            display: flex;
         }
 
         .link-item {
-            background: rgba(15, 12, 31, 0.6);
-            border: 1px solid var(--glass-border);
-            padding: 14px 18px;
-            border-radius: var(--radius-sm);
+            background: rgba(23, 19, 41, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 12px 16px;
+            border-radius: 8px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             gap: 14px;
             max-width: 100%;
             overflow: hidden;
-            box-sizing: border-box;
         }
 
         .link-details {
@@ -760,88 +912,76 @@
             flex: 1;
             min-width: 0;
             overflow: hidden;
-            text-align: left;
         }
 
         .link-title {
             font-weight: 700;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             color: var(--cute-cyan);
             word-wrap: break-word;
-            overflow-wrap: break-word;
         }
 
         .link-url {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: var(--text-muted);
             text-decoration: none;
             text-overflow: ellipsis;
             overflow: hidden;
             white-space: nowrap;
             display: block;
-            max-width: 100%;
-            word-break: break-all;
         }
 
         .link-actions {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             flex-shrink: 0;
         }
 
-        /* --- VIDEO WATCH BUTTON --- */
         .btn-watch-video {
             background: linear-gradient(135deg, var(--primary-hot), var(--accent-purple));
             color: #ffffff;
             text-decoration: none;
-            padding: 6px 14px;
+            padding: 6px 12px;
             border-radius: 50px;
-            font-size: 0.78rem;
+            font-size: 0.75rem;
             font-weight: 700;
             display: inline-flex;
             align-items: center;
             gap: 6px;
             transition: var(--transition);
-            box-shadow: 0 0 10px rgba(255, 51, 122, 0.4);
-            white-space: nowrap;
         }
 
         .btn-watch-video:hover {
             transform: scale(1.05);
-            box-shadow: 0 0 15px rgba(255, 51, 122, 0.7);
-            color: #ffffff;
+            box-shadow: 0 0 12px rgba(255, 51, 122, 0.6);
         }
 
-        /* --- WEBSITE VISIT BUTTON (For Non-Video Links) --- */
         .btn-visit-site {
             background: linear-gradient(135deg, #00e5ff, #8a4fff);
             color: #ffffff;
             text-decoration: none;
-            padding: 6px 14px;
+            padding: 6px 12px;
             border-radius: 50px;
-            font-size: 0.78rem;
+            font-size: 0.75rem;
             font-weight: 700;
             display: inline-flex;
             align-items: center;
             gap: 6px;
             transition: var(--transition);
-            box-shadow: 0 0 10px rgba(0, 229, 255, 0.3);
-            white-space: nowrap;
         }
 
         .btn-visit-site:hover {
             transform: scale(1.05);
-            box-shadow: 0 0 15px rgba(0, 229, 255, 0.6);
-            color: #ffffff;
+            box-shadow: 0 0 12px rgba(0, 229, 255, 0.5);
         }
 
         .btn-delete-link {
             background: rgba(255, 51, 122, 0.1);
             color: var(--primary-hot);
             border: 1px solid rgba(255, 51, 122, 0.2);
-            width: 32px;
-            height: 32px;
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
             cursor: pointer;
             display: flex;
@@ -849,7 +989,6 @@
             justify-content: center;
             font-weight: bold;
             transition: var(--transition);
-            flex-shrink: 0;
         }
 
         .btn-delete-link:hover {
@@ -857,7 +996,7 @@
             color: white;
         }
 
-        /* --- RESPONSIVE MEDIA QUERIES (MOBILE FIXES) --- */
+        /* --- RESPONSIVE MEDIA QUERIES --- */
         @media (max-width: 768px) {
             body { padding-bottom: 20px; }
             header { 
@@ -887,7 +1026,7 @@
             .ms-menu-links::-webkit-scrollbar { display: none; }
             
             .main-layout-fullscreen { padding: 16px 12px; }
-            .os-container, .form-container, .database-container { 
+            .os-container, .resource-manager-container { 
                 padding: 16px 12px; 
                 border-radius: 16px; 
                 margin-bottom: 16px; 
@@ -900,6 +1039,9 @@
             .btn-add-link { width: 100%; }
             .link-item { padding: 12px 14px; flex-direction: column; align-items: flex-start; gap: 8px; }
             .link-actions { width: 100%; justify-content: space-between; margin-top: 4px; }
+            
+            .offline-add-form { flex-direction: column; }
+            .offline-item { max-width: 100%; }
         }
 
         @media (max-width: 420px) {
@@ -929,9 +1071,9 @@
             <!-- Mobile Touch-Scrollable Navigation -->
             <ul class="ms-menu-links">
                 <li><a href="#osSection">Apps</a></li>
+                <li><a href="#offlineInboxSection">Offline Data</a></li>
                 <li><a href="#quickToolsSection">Quick Tools</a></li>
-                <li><a href="#linkFormSection">Add Link</a></li>
-                <li><a href="#databaseSection">Database</a></li>
+                <li><a href="#resourceManagerSection">Manager</a></li>
             </ul>
         </div>
 
@@ -994,6 +1136,35 @@
             </div>
         </section>
 
+        <!-- OFFLINE DATA BOX SYSTEM (UPGRADED 1-50 LISTING & EXPAND OPTION) -->
+        <section class="os-container" id="offlineInboxSection">
+            <div class="offline-box-header">
+                <h3 class="os-heading txt-purple-neon" style="margin-bottom: 0; text-align: left; font-size: 1.05rem;">
+                    <i class="fa-solid fa-inbox"></i> Offline Data Box (<span id="offlineCount">0</span>/50)
+                </h3>
+                <button class="btn-expand-offline" id="toggleOfflineExpandBtn">
+                    <i class="fa-solid fa-expand" id="expandIcon"></i> <span id="expandText">Expand (1-50)</span>
+                </button>
+            </div>
+
+            <!-- Offline Add Input Form -->
+            <div class="offline-add-form">
+                <input type="text" id="offlineDataInput" class="custom-input" placeholder="Enter text/note/link for offline storage..." style="padding: 10px 14px;">
+                <button class="btn-add-link" onclick="addOfflineData()"><i class="fa-solid fa-plus"></i> Add Data</button>
+            </div>
+
+            <!-- Empty State Message -->
+            <div id="offlineEmptyMessage" style="background: rgba(0,0,0,0.25); border: 1px dashed var(--glass-border); border-radius: 12px; padding: 25px; text-align: center;">
+                <i class="fa-solid fa-box-open" style="font-size: 1.8rem; color: var(--text-muted); margin-bottom: 8px;"></i>
+                <p style="color: var(--text-muted); font-size: 0.85rem;">No offline data added yet. Use the input box above to save items locally.</p>
+            </div>
+
+            <!-- 1-50 Multi-Column Offline Item Grid Container -->
+            <div class="offline-data-grid collapsed" id="offlineDataGrid" style="display: none;">
+                <!-- JavaScript will populate 1-10 (Col 1), 11-20 (Col 2), 21-30 (Col 3)... up to 50 -->
+            </div>
+        </section>
+
         <!-- QUICK ACCESS TOOL SECTION -->
         <section class="os-container quick-tools-compact" id="quickToolsSection">
             <h3 class="os-heading txt-green-neon">
@@ -1008,32 +1179,188 @@
             </div>
         </section>
 
-        <!-- ADD LINK FORM SECTION -->
-        <section class="form-container" id="linkFormSection">
+        <!-- COMBINED RESOURCE MANAGER (ADD LINK + DATABASE FOLDERS WITH ALL RECOVERED LINKS) -->
+        <section class="resource-manager-container" id="resourceManagerSection">
             <h3 class="section-heading txt-pink-neon">
-                <i class="fa-solid fa-plus"></i> Add New Resource Link
+                <i class="fa-solid fa-folder-tree"></i> Resource Manager
             </h3>
-            <div class="input-stack">
-                <input type="text" id="titleInput" class="custom-input" placeholder="Enter Link Title (e.g., Google Drive)">
-                <div class="input-inline-row">
-                    <input type="url" id="linkInput" class="custom-input" placeholder="https://example.com">
-                    <button class="btn-add-link" id="addLinkBtn"><i class="fa-solid fa-paper-plane"></i> Save Link</button>
+            
+            <!-- Add Link Box with Category System -->
+            <div class="add-link-box">
+                <div class="add-link-box-title"><i class="fa-solid fa-plus-circle"></i> Add New Link to Folder</div>
+                <div class="input-stack">
+                    <input type="text" id="titleInput" class="custom-input" placeholder="Enter Link Title (e.g., Download File)">
+                    
+                    <div class="input-inline-row">
+                        <select id="categorySelect" class="custom-input" onchange="toggleCustomCategory()">
+                            <option value="" disabled selected>-- Select a Category --</option>
+                            <option value="YouTube">YouTube</option>
+                            <option value="Video Search">Video Search</option>
+                            <option value="Cracked Games">Cracked Games</option>
+                            <option value="Software/Apps">Software/Apps</option>
+                            <option value="custom">Custom Category...</option>
+                        </select>
+                        <input type="text" id="customCategoryInput" class="custom-input hidden" placeholder="Type Custom Category Name">
+                    </div>
+
+                    <div class="input-inline-row">
+                        <input type="url" id="linkInput" class="custom-input" placeholder="https://example.com">
+                        <button class="btn-add-link" id="addLinkBtn"><i class="fa-solid fa-save"></i> Save to Database</button>
+                    </div>
                 </div>
             </div>
 
+            <!-- Search Area -->
             <div class="search-wrapper">
-                <input type="text" id="searchInput" class="custom-input" placeholder="Search saved links...">
+                <input type="text" id="searchInput" class="custom-input" placeholder="Search in your folders...">
             </div>
-        </section>
 
-        <!-- DATABASE SECTION -->
-        <section class="database-container" id="databaseSection">
-            <h3 class="section-heading txt-cyan-neon">
-                <i class="fa-solid fa-database"></i> Saved Links Database
-            </h3>
-            <ul class="links-list-group" id="linkList">
-                <!-- Dynamically populated from script.js -->
-            </ul>
+            <!-- Database Folders Area (RECOVERED LINKS RESTORED) -->
+            <div class="database-folders" id="databaseFolders">
+                
+                <!-- Folder 1: YouTube -->
+                <div class="category-folder">
+                    <div class="folder-header" onclick="toggleFolderContent(this)">
+                        <div class="folder-title-wrap">
+                            <i class="fa-brands fa-youtube" style="color: #FF0000; font-size: 1.2rem;"></i>
+                            <span>YouTube</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down txt-muted"></i>
+                    </div>
+                    <div class="folder-content active">
+                        <div class="link-item">
+                            <div class="link-details">
+                                <span class="link-title">Face crime home</span>
+                                <a href="https://youtube.com/shorts/Q2ItkHzJitw?si=uWXp2KItdx_ao0n" target="_blank" class="link-url">https://youtube.com/shorts/Q2ItkHzJitw?si=uWXp2KItdx_ao0n</a>
+                            </div>
+                            <div class="link-actions">
+                                <a href="video.html" class="btn-watch-video" title="Watch Video">
+                                    <i class="fa-solid fa-play"></i> Watch
+                                </a>
+                                <button class="btn-delete-link" title="Delete"><i class="fa-solid fa-trash"></i></button>
+                            </div>
+                        </div>
+
+                        <div class="link-item">
+                            <div class="link-details">
+                                <span class="link-title">World reality</span>
+                                <a href="https://youtube.com/shorts/8ATL3uoxXGM?si=IzSlcKOckWsRksHS" target="_blank" class="link-url">https://youtube.com/shorts/8ATL3uoxXGM?si=IzSlcKOckWsRksHS</a>
+                            </div>
+                            <div class="link-actions">
+                                <a href="video.html" class="btn-watch-video" title="Watch Video">
+                                    <i class="fa-solid fa-play"></i> Watch
+                                </a>
+                                <button class="btn-delete-link" title="Delete"><i class="fa-solid fa-trash"></i></button>
+                            </div>
+                        </div>
+
+                        <div class="link-item">
+                            <div class="link-details">
+                                <span class="link-title">google sheet without coding | HINDI</span>
+                                <a href="https://www.youtube.com/watch?v=HkrTEgz25vs" target="_blank" class="link-url">https://www.youtube.com/watch?v=HkrTEgz25vs</a>
+                            </div>
+                            <div class="link-actions">
+                                <a href="video.html" class="btn-watch-video" title="Watch Video">
+                                    <i class="fa-solid fa-play"></i> Watch
+                                </a>
+                                <button class="btn-delete-link" title="Delete"><i class="fa-solid fa-trash"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Folder 2: Video Search / Social Videos -->
+                <div class="category-folder">
+                    <div class="folder-header" onclick="toggleFolderContent(this)">
+                        <div class="folder-title-wrap">
+                            <i class="fa-solid fa-video" style="color: var(--cute-cyan); font-size: 1.2rem;"></i>
+                            <span>Video Search & Social Videos</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down txt-muted"></i>
+                    </div>
+                    <div class="folder-content">
+                        <div class="link-item">
+                            <div class="link-details">
+                                <span class="link-title">দেশেও যাব না রেমিট্যান্স ও পাঠাবো না পারলে ঠেকা #Remittance #DeshiStyle #fypシ #fypシ゚viralシ #BNP</span>
+                                <a href="https://www.facebook.com/share/r/1HXBzhzhEc/" target="_blank" class="link-url">https://www.facebook.com/share/r/1HXBzhzhEc/</a>
+                            </div>
+                            <div class="link-actions">
+                                <a href="https://www.facebook.com/share/r/1HXBzhzhEc/" target="_blank" class="btn-visit-site" title="Visit Link">
+                                    <i class="fa-solid fa-arrow-up-right-from-square"></i> Visit
+                                </a>
+                                <button class="btn-delete-link" title="Delete"><i class="fa-solid fa-trash"></i></button>
+                            </div>
+                        </div>
+
+                        <div class="link-item">
+                            <div class="link-details">
+                                <span class="link-title">Mentalit hospital 🥴</span>
+                                <a href="https://www.facebook.com/share/v/1DuKd9Jdbf/" target="_blank" class="link-url">https://www.facebook.com/share/v/1DuKd9Jdbf/</a>
+                            </div>
+                            <div class="link-actions">
+                                <a href="https://www.facebook.com/share/v/1DuKd9Jdbf/" target="_blank" class="btn-visit-site" title="Visit Link">
+                                    <i class="fa-solid fa-arrow-up-right-from-square"></i> Visit
+                                </a>
+                                <button class="btn-delete-link" title="Delete"><i class="fa-solid fa-trash"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Folder 3: Cracked Games -->
+                <div class="category-folder">
+                    <div class="folder-header" onclick="toggleFolderContent(this)">
+                        <div class="folder-title-wrap">
+                            <i class="fa-solid fa-gamepad" style="color: var(--neon-green); font-size: 1.2rem;"></i>
+                            <span>Cracked Games</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down txt-muted"></i>
+                    </div>
+                    <div class="folder-content">
+                        <div class="link-item">
+                            <div class="link-details">
+                                <span class="link-title">crack games</span>
+                                <a href="https://steamrip.com/" target="_blank" class="link-url">https://steamrip.com/</a>
+                            </div>
+                            <div class="link-actions">
+                                <a href="https://steamrip.com/" target="_blank" class="btn-visit-site" title="Visit Link">
+                                    <i class="fa-solid fa-arrow-up-right-from-square"></i> Visit
+                                </a>
+                                <button class="btn-delete-link" title="Delete"><i class="fa-solid fa-trash"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Folder 4: Software/Apps & Educational -->
+                <div class="category-folder">
+                    <div class="folder-header" onclick="toggleFolderContent(this)">
+                        <div class="folder-title-wrap">
+                            <i class="fa-solid fa-graduation-cap" style="color: var(--accent-purple); font-size: 1.2rem;"></i>
+                            <span>Software/Apps & Learning</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down txt-muted"></i>
+                    </div>
+                    <div class="folder-content">
+                        <div class="link-item">
+                            <div class="link-details">
+                                <span class="link-title">Hidden Website Has Nearly 1,000 Free Courses</span>
+                                <a href="https://www.open.edu/openlearn/" target="_blank" class="link-url">https://www.open.edu/openlearn/</a>
+                            </div>
+                            <div class="link-actions">
+                                <a href="https://www.open.edu/openlearn/" target="_blank" class="btn-visit-site" title="Visit Link">
+                                    <i class="fa-solid fa-arrow-up-right-from-square"></i> Visit
+                                </a>
+                                <button class="btn-delete-link" title="Delete"><i class="fa-solid fa-trash"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hidden List for script.js compatibility -->
+                <ul id="linkList" style="display: none;"></ul>
+
+            </div>
         </section>
 
     </main>
@@ -1050,24 +1377,19 @@
                 <span id="profileRoleBadge" class="bkash-badge-tag" style="background: rgba(0, 229, 255, 0.1); color: #00e5ff; border: 1px solid rgba(0, 229, 255, 0.2);">Public Guest</span>
             </div>
             <div class="profile-actions-list">
-                <!-- Admin Login Option -->
                 <button class="profile-action-btn admin-btn" id="adminAuthBtn">
                     <i class="fa-solid fa-user-shield"></i> <span id="adminAuthText">Admin Login</span>
                 </button>
-                
-                <!-- Public Login Option -->
                 <button class="profile-action-btn public-btn" id="publicLoginBtn">
                     <i class="fa-solid fa-user-check"></i> <span>Public Guest Mode</span>
                 </button>
 
                 <div class="profile-divider"></div>
 
-                <!-- Support via bKash -->
                 <button class="profile-action-btn donate-btn" id="profileDonateBtn">
                     <i class="fa-solid fa-heart"></i> Support dev bKash
                 </button>
 
-                <!-- GitHub Repository -->
                 <a href="https://github.com/grin2327/Dark-Net" target="_blank" class="profile-action-btn web-link-btn">
                     <i class="fa-brands fa-github"></i> GitHub Repository
                 </a>
@@ -1094,27 +1416,131 @@
     <!-- MAIN SYSTEM SCRIPT -->
     <script src="script.js"></script>
 
-    <!-- HELPER SCRIPT FOR SMART VIDEO DETECTOR -->
+    <!-- HELPER SCRIPTS: OFFLINE DATA SYSTEM & UI HELPERS -->
     <script>
-        // Helper function to check if a URL is a video source
-        function isVideoUrl(url) {
-            if (!url) return false;
-            const videoRegex = /(youtube\.com|youtu\.be|vimeo\.com|\.mp4|\.mkv|\.webm|\.m3u8)/i;
-            return videoRegex.test(url);
+        // --- OFFLINE DATA STORAGE SYSTEM (MAX 50 ITEMS) ---
+        let offlineData = JSON.parse(localStorage.getItem('darknet_offline_data')) || [];
+
+        function renderOfflineData() {
+            const container = document.getElementById('offlineDataGrid');
+            const countSpan = document.getElementById('offlineCount');
+            const emptyBox = document.getElementById('offlineEmptyMessage');
+            
+            if (!container) return;
+            
+            container.innerHTML = '';
+            if (countSpan) countSpan.textContent = offlineData.length;
+
+            if (offlineData.length === 0) {
+                if (emptyBox) emptyBox.style.display = 'block';
+                container.style.display = 'none';
+                return;
+            }
+
+            if (emptyBox) emptyBox.style.display = 'none';
+            container.style.display = 'grid';
+
+            offlineData.forEach((item, index) => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'offline-item';
+                itemDiv.innerHTML = `
+                    <span class="item-num">#${index + 1}</span>
+                    <span class="item-text" title="${escapeHtml(item)}">${escapeHtml(item)}</span>
+                    <button class="btn-del-offline" onclick="deleteOfflineData(${index})" title="Delete Item"><i class="fa-solid fa-xmark"></i></button>
+                `;
+                container.appendChild(itemDiv);
+            });
         }
 
-        // Render Button Generator for script.js integration
-        function getActionButtonHtml(url) {
-            if (isVideoUrl(url)) {
-                return `<a href="video.html" class="btn-watch-video" title="Watch Video">
-                            <i class="fa-solid fa-play"></i> Watch Video
-                        </a>`;
+        function addOfflineData() {
+            const input = document.getElementById('offlineDataInput');
+            if (!input) return;
+            const val = input.value.trim();
+            if (!val) return;
+
+            if (offlineData.length >= 50) {
+                alert('অফলাইন ডাটা বক্সে সর্বোচ্চ ৫০টি আইটেম যোগ করা যাবে!');
+                return;
+            }
+
+            offlineData.push(val);
+            localStorage.setItem('darknet_offline_data', JSON.stringify(offlineData));
+            input.value = '';
+            renderOfflineData();
+        }
+
+        function deleteOfflineData(index) {
+            offlineData.splice(index, 1);
+            localStorage.setItem('darknet_offline_data', JSON.stringify(offlineData));
+            renderOfflineData();
+        }
+
+        function toggleOfflineExpand() {
+            const grid = document.getElementById('offlineDataGrid');
+            const btnText = document.getElementById('expandText');
+            const btnIcon = document.getElementById('expandIcon');
+
+            if (grid.classList.contains('collapsed')) {
+                grid.classList.remove('collapsed');
+                grid.classList.add('expanded');
+                if (btnText) btnText.textContent = 'Collapse View';
+                if (btnIcon) btnIcon.className = 'fa-solid fa-compress';
             } else {
-                return `<a href="${url}" target="_blank" class="btn-visit-site" title="Visit Website">
-                            <i class="fa-solid fa-arrow-up-right-from-square"></i> Visit Site
-                        </a>`;
+                grid.classList.remove('expanded');
+                grid.classList.add('collapsed');
+                if (btnText) btnText.textContent = 'Expand (1-50)';
+                if (btnIcon) btnIcon.className = 'fa-solid fa-expand';
             }
         }
+
+        function escapeHtml(str) {
+            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+        }
+
+        // --- FOLDER & CATEGORY HELPERS ---
+        function toggleCustomCategory() {
+            const selectBox = document.getElementById('categorySelect');
+            const customInput = document.getElementById('customCategoryInput');
+            
+            if (selectBox.value === 'custom') {
+                customInput.classList.remove('hidden');
+                customInput.focus();
+            } else {
+                customInput.classList.add('hidden');
+                customInput.value = '';
+            }
+        }
+
+        function toggleFolderContent(headerElement) {
+            const content = headerElement.nextElementSibling;
+            const icon = headerElement.querySelector('.fa-chevron-down');
+            
+            content.classList.toggle('active');
+            if (content.classList.contains('active')) {
+                icon.style.transform = 'rotate(180deg)';
+                icon.style.transition = 'transform 0.3s ease';
+            } else {
+                icon.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        // --- INIT ON LOAD ---
+        document.addEventListener('DOMContentLoaded', function() {
+            renderOfflineData();
+            
+            const expandBtn = document.getElementById('toggleOfflineExpandBtn');
+            if (expandBtn) {
+                expandBtn.addEventListener('click', toggleOfflineExpand);
+            }
+
+            // Enter key listener for offline input
+            const offlineInput = document.getElementById('offlineDataInput');
+            if (offlineInput) {
+                offlineInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') addOfflineData();
+                });
+            }
+        });
     </script>
 
 </body>
