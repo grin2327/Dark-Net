@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800;900&family=Rajdhani:wght@600;700&family=Hind+Siliguri:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
     
     <!-- Firebase SDK (v8 Compat) -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -29,7 +29,7 @@
             --text-main: #f4f2f7;
             --text-muted: #857da1;
             --panel-bg: rgba(23, 19, 41, 0.75); 
-            --glass-border: rgba(255, 255, 255, 0.05); 
+            --glass-border: rgba(255, 255, 255, 0.08); 
             --radius-lg: 20px;
             --radius-sm: 12px;
             --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
@@ -41,7 +41,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', 'Hind Siliguri', system-ui, -apple-system, sans-serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             -webkit-tap-highlight-color: transparent;
         }
 
@@ -78,6 +78,24 @@
             background: var(--accent-purple);
             bottom: -10%;
             right: -5%;
+        }
+
+        /* --- ADMIN RESTRICTION RULE (HIDE DELETE BUTTONS FOR NON-ADMINS) --- */
+        body:not(.is-admin) .btn-delete-folder,
+        body:not(.is-admin) .btn-delete-link,
+        body:not(.is-admin) .btn-slot-icon.del {
+            display: none !important;
+        }
+
+        /* SHOW DELETE BUTTONS SPECIFICALLY FOR ADMIN */
+        body.is-admin .btn-delete-folder {
+            display: inline-flex !important;
+        }
+        body.is-admin .btn-delete-link {
+            display: flex !important;
+        }
+        body.is-admin .btn-slot-icon.del {
+            display: inline-block !important;
         }
 
         /* --- TOP NAV HEADER --- */
@@ -231,26 +249,83 @@
             border-color: var(--cute-cyan);
         }
 
-        /* Profile Avatar Glow Effects */
+        /* Profile Avatar Base */
         .ms-profile-avatar {
-            width: 36px;
-            height: 36px;
+            width: 38px;
+            height: 38px;
             border-radius: 50%;
             background: linear-gradient(135deg, var(--accent-purple), var(--primary-hot));
             color: #ffffff;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.9rem;
+            font-size: 1rem;
             font-weight: 700;
             cursor: pointer;
-            border: 2px solid rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.25);
             transition: var(--transition);
             flex-shrink: 0;
+            position: relative;
+        }
+
+        /* PUBLIC MODE BLUE GLOW & VIBRATE ANIMATION */
+        @keyframes bluePulseVibrate {
+            0% { 
+                box-shadow: 0 0 8px rgba(0, 229, 255, 0.8), 0 0 18px rgba(0, 150, 255, 0.5); 
+                transform: scale(1) rotate(0deg); 
+            }
+            25% { 
+                transform: scale(1.04) rotate(-2deg); 
+            }
+            50% { 
+                box-shadow: 0 0 20px rgba(0, 229, 255, 1), 0 0 30px rgba(0, 140, 255, 0.8); 
+                transform: scale(1) rotate(2deg); 
+            }
+            75% { 
+                transform: scale(1.04) rotate(-1deg); 
+            }
+            100% { 
+                box-shadow: 0 0 8px rgba(0, 229, 255, 0.8), 0 0 18px rgba(0, 150, 255, 0.5); 
+                transform: scale(1) rotate(0deg); 
+            }
+        }
+
+        .ms-profile-avatar.public-mode {
+            animation: bluePulseVibrate 2.2s infinite ease-in-out;
+            border-color: var(--cute-cyan) !important;
+            background: linear-gradient(135deg, #0055ff, var(--cute-cyan)) !important;
+        }
+
+        /* ADMIN MODE RED GLOW & VIBRATE ANIMATION */
+        @keyframes redPulseVibrate {
+            0% { 
+                box-shadow: 0 0 10px rgba(255, 51, 122, 0.9), 0 0 20px rgba(255, 0, 80, 0.6); 
+                transform: scale(1) rotate(0deg); 
+            }
+            25% { 
+                transform: scale(1.05) rotate(-2deg); 
+            }
+            50% { 
+                box-shadow: 0 0 22px rgba(255, 51, 122, 1), 0 0 35px rgba(255, 0, 50, 0.9); 
+                transform: scale(1) rotate(2deg); 
+            }
+            75% { 
+                transform: scale(1.05) rotate(-1deg); 
+            }
+            100% { 
+                box-shadow: 0 0 10px rgba(255, 51, 122, 0.9), 0 0 20px rgba(255, 0, 80, 0.6); 
+                transform: scale(1) rotate(0deg); 
+            }
+        }
+
+        .ms-profile-avatar.admin-mode {
+            animation: redPulseVibrate 2s infinite ease-in-out;
+            border-color: var(--primary-hot) !important;
+            background: linear-gradient(135deg, #ff0055, var(--primary-hot)) !important;
         }
 
         .ms-profile-avatar:hover {
-            transform: scale(1.08);
+            transform: scale(1.1) !important;
         }
 
         .txt-cyan-neon {
@@ -280,7 +355,7 @@
             position: fixed;
             top: 0; left: 0;
             width: 100vw; height: 100vh;
-            background: rgba(5, 3, 10, 0.85);
+            background: rgba(5, 3, 10, 0.88);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             z-index: 1000;
@@ -298,40 +373,49 @@
             pointer-events: auto;
         }
 
+        /* VISIBLE CLOSE CROSS ICON BUTTON */
         .btn-close-modal {
             position: absolute;
-            top: 16px; right: 18px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            color: white;
-            font-size: 1.2rem;
-            width: 32px; height: 32px;
+            top: 14px; right: 16px;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            color: #ffffff !important;
+            font-size: 1.1rem;
+            width: 34px; height: 34px;
             border-radius: 50%;
             cursor: pointer;
             transition: var(--transition);
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 10;
+            z-index: 20;
+        }
+
+        .btn-close-modal i {
+            color: #ffffff;
+            font-size: 1rem;
+            display: block;
         }
 
         .btn-close-modal:hover {
             background: var(--primary-hot);
+            border-color: var(--primary-hot);
+            color: #ffffff;
             transform: rotate(90deg);
         }
 
         /* Profile Modal */
         .profile-modal {
-            background: linear-gradient(145deg, rgba(23, 19, 41, 0.95), rgba(13, 10, 24, 0.98));
+            background: linear-gradient(145deg, rgba(23, 19, 41, 0.96), rgba(13, 10, 24, 0.98));
             border: 1px solid rgba(255, 255, 255, 0.15);
             border-radius: 24px;
             padding: 32px 28px;
-            max-width: 400px;
+            max-width: 420px;
             width: 100%;
             max-height: 90vh;
             overflow-y: auto;
             position: relative;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(20px);
             transform: scale(0.85);
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -341,7 +425,7 @@
         .profile-modal-header { text-align: center; margin-bottom: 24px; }
 
         .profile-avatar-large {
-            width: 64px; height: 64px;
+            width: 68px; height: 68px;
             border-radius: 50%;
             background: linear-gradient(135deg, var(--accent-purple), var(--primary-hot));
             color: #ffffff;
@@ -350,8 +434,9 @@
             justify-content: center;
             font-size: 1.8rem;
             margin: 0 auto 12px auto;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 0 15px rgba(138, 79, 255, 0.4);
+            border: 2px solid rgba(255, 255, 255, 0.25);
+            box-shadow: 0 0 20px rgba(138, 79, 255, 0.5);
+            transition: var(--transition);
         }
 
         .profile-title {
@@ -390,14 +475,14 @@
         }
 
         .profile-action-btn.donate-btn {
-            border-color: rgba(226, 19, 110, 0.3);
+            border-color: rgba(226, 19, 110, 0.4);
             color: #ff3399;
         }
 
         .profile-action-btn.donate-btn:hover {
-            background: rgba(226, 19, 110, 0.15);
+            background: rgba(226, 19, 110, 0.18);
             border-color: var(--bkash-pink);
-            box-shadow: 0 0 12px rgba(226, 19, 110, 0.3);
+            box-shadow: 0 0 14px rgba(226, 19, 110, 0.4);
         }
 
         .profile-action-btn.web-link-btn {
@@ -413,7 +498,7 @@
 
         /* Bkash Modal */
         .bkash-modal {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(226, 19, 110, 0.15));
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(226, 19, 110, 0.18));
             border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 28px;
             padding: 36px 30px;
@@ -422,7 +507,7 @@
             max-height: 90vh;
             overflow-y: auto;
             position: relative;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
             backdrop-filter: blur(20px);
             transform: scale(0.85);
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -434,7 +519,7 @@
         .bkash-modal-subtext { font-size: 0.9rem; color: rgba(255, 255, 255, 0.85); margin-bottom: 22px; }
 
         .bkash-card-box {
-            background: rgba(15, 8, 22, 0.5);
+            background: rgba(15, 8, 22, 0.6);
             border: 1px solid rgba(255, 255, 255, 0.15);
             border-radius: 18px;
             padding: 20px;
@@ -445,9 +530,9 @@
             display: inline-block;
             background: linear-gradient(135deg, var(--bkash-pink), #ff2a8d);
             color: white;
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             font-weight: 800;
-            padding: 4px 12px;
+            padding: 4px 14px;
             border-radius: 12px;
             text-transform: uppercase;
             margin-bottom: 12px;
@@ -590,133 +675,125 @@
             width: 100%;
         }
 
-        /* --- OFFLINE DATA BOX SYSTEM (NEW DESIGN) --- */
+        /* --- OFFLINE 1-50 LISTING SYSTEM --- */
         .offline-box-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 14px;
+            margin-bottom: 12px;
             flex-wrap: wrap;
             gap: 10px;
         }
 
-        .btn-expand-offline {
-            background: rgba(138, 79, 255, 0.15);
-            border: 1px solid var(--accent-purple);
-            color: var(--cute-cyan);
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: var(--transition);
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .btn-expand-offline:hover {
-            background: var(--accent-purple);
-            color: white;
-            box-shadow: 0 0 10px rgba(138, 79, 255, 0.5);
-        }
-
-        .offline-add-form {
+        .offline-header-right {
             display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .offline-50-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
             gap: 10px;
-            margin-bottom: 16px;
-        }
-
-        /* 1-50 Column Grid System */
-        .offline-data-grid {
-            display: grid;
-            gap: 8px;
-            transition: var(--transition);
-            width: 100%;
-        }
-
-        /* Collapsed / Normal Compact View */
-        .offline-data-grid.collapsed {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            max-height: 220px;
+            max-height: 520px;
             overflow-y: auto;
-            padding-right: 4px;
+            padding-right: 6px;
+            margin-top: 14px;
+            transition: var(--transition);
         }
 
-        /* Expanded Multi-Column View (1-10 in Col 1, 11-20 in Col 2, up to 50 in Col 5) */
-        .offline-data-grid.expanded {
-            grid-auto-flow: column;
-            grid-template-rows: repeat(10, auto);
-            overflow-x: auto;
-            max-height: none;
-            padding-bottom: 10px;
-            justify-content: start;
-        }
-
-        .offline-data-grid::-webkit-scrollbar {
-            height: 6px;
+        .offline-50-grid::-webkit-scrollbar {
             width: 6px;
         }
-        .offline-data-grid::-webkit-scrollbar-thumb {
+        .offline-50-grid::-webkit-scrollbar-thumb {
             background: var(--accent-purple);
             border-radius: 10px;
         }
 
-        .offline-item {
-            background: rgba(13, 10, 25, 0.7);
+        .offline-slot-card {
+            background: rgba(13, 10, 25, 0.75);
             border: 1px solid var(--glass-border);
-            border-radius: 8px;
-            padding: 8px 12px;
-            font-size: 0.83rem;
+            border-radius: 10px;
+            padding: 10px 12px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             gap: 8px;
-            min-width: 190px;
-            max-width: 250px;
             transition: var(--transition);
         }
 
-        .offline-item:hover {
+        .offline-slot-card:hover {
             border-color: var(--cute-cyan);
             background: rgba(23, 19, 41, 0.9);
         }
 
-        .offline-item .item-num {
-            color: var(--cute-cyan);
-            font-weight: 800;
+        .slot-badge {
             font-family: 'Orbitron', monospace;
             font-size: 0.75rem;
+            font-weight: 800;
+            color: var(--cute-cyan);
+            background: rgba(0, 229, 255, 0.12);
+            padding: 4px 8px;
+            border-radius: 6px;
             flex-shrink: 0;
-            background: rgba(0, 229, 255, 0.1);
-            padding: 2px 6px;
-            border-radius: 4px;
         }
 
-        .offline-item .item-text {
+        .slot-content {
             flex: 1;
+            min-width: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .slot-link {
+            color: var(--text-main);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.88rem;
+            white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            white-space: nowrap;
-            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            width: 100%;
         }
 
-        .offline-item .btn-del-offline {
-            background: none;
-            border: none;
-            color: var(--primary-hot);
+        .slot-link:hover {
+            color: var(--cute-cyan);
+            text-decoration: underline;
+        }
+
+        .slot-empty {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            font-style: italic;
             cursor: pointer;
-            font-size: 0.85rem;
-            flex-shrink: 0;
-            padding: 2px 4px;
             transition: var(--transition);
         }
 
-        .offline-item .btn-del-offline:hover {
-            transform: scale(1.2);
-            color: #ff0055;
+        .slot-empty:hover {
+            color: var(--cute-cyan);
         }
+
+        .slot-actions {
+            display: flex;
+            gap: 4px;
+            flex-shrink: 0;
+        }
+
+        .btn-slot-icon {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 0.85rem;
+            padding: 4px;
+            transition: var(--transition);
+        }
+
+        .btn-slot-icon:hover { color: var(--cute-cyan); }
+        .btn-slot-icon.del:hover { color: var(--primary-hot); }
 
         /* --- QUICK TOOLS --- */
         .quick-tools-compact {
@@ -749,7 +826,7 @@
         .quick-tools-compact .os-title-text { font-size: 0.85rem; }
         .quick-tools-compact .os-sub-text { font-size: 0.65rem; padding-top: 4px; }
 
-        /* --- RESOURCE MANAGER --- */
+        /* --- ONLINE RESOURCE MANAGER --- */
         .resource-manager-container {
             background: var(--panel-bg);
             border: 1px solid var(--glass-border);
@@ -770,7 +847,7 @@
         }
 
         .add-link-box {
-            background: rgba(0, 0, 0, 0.2);
+            background: rgba(0, 0, 0, 0.25);
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: var(--radius-sm);
             padding: 18px;
@@ -782,6 +859,9 @@
             color: var(--cute-cyan);
             margin-bottom: 12px;
             font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .input-stack {
@@ -799,7 +879,7 @@
         .custom-input {
             width: 100%;
             background: #0f0c1f;
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.12);
             padding: 12px 16px;
             border-radius: var(--radius-sm);
             color: var(--text-main);
@@ -820,8 +900,8 @@
         }
 
         .btn-add-link {
-            background: var(--text-main);
-            color: var(--bg-base);
+            background: linear-gradient(135deg, var(--cute-cyan), var(--accent-purple));
+            color: #ffffff;
             border: none;
             padding: 12px 24px;
             border-radius: var(--radius-sm);
@@ -829,9 +909,13 @@
             cursor: pointer;
             transition: var(--transition);
             white-space: nowrap;
+            box-shadow: 0 0 12px rgba(0, 229, 255, 0.3);
         }
 
-        .btn-add-link:hover { background: var(--cute-cyan); }
+        .btn-add-link:hover { 
+            transform: translateY(-2px);
+            box-shadow: 0 0 18px rgba(0, 229, 255, 0.5);
+        }
 
         .hidden { display: none !important; }
 
@@ -879,13 +963,39 @@
             color: var(--text-main);
         }
 
+        .folder-header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-delete-folder {
+            background: rgba(255, 51, 122, 0.15);
+            color: var(--primary-hot);
+            border: 1px solid rgba(255, 51, 122, 0.3);
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            transition: var(--transition);
+        }
+
+        .btn-delete-folder:hover {
+            background: var(--primary-hot);
+            color: #ffffff;
+        }
+
         .folder-content {
             display: none;
             padding: 14px 18px;
             flex-direction: column;
             gap: 10px;
             border-top: 1px solid var(--glass-border);
-            background: rgba(0, 0, 0, 0.15);
+            background: rgba(0, 0, 0, 0.18);
         }
 
         .folder-content.active {
@@ -893,16 +1003,35 @@
         }
 
         .link-item {
-            background: rgba(23, 19, 41, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(23, 19, 41, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.06);
             padding: 12px 16px;
-            border-radius: 8px;
+            border-radius: 10px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             gap: 14px;
             max-width: 100%;
             overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .link-item:hover {
+            border-color: rgba(0, 229, 255, 0.3);
+            background: rgba(30, 25, 52, 0.95);
+        }
+
+        .link-icon-badge {
+            width: 38px;
+            height: 38px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .link-details {
@@ -916,9 +1045,12 @@
 
         .link-title {
             font-weight: 700;
-            font-size: 0.9rem;
+            font-size: 0.92rem;
             color: var(--cute-cyan);
             word-wrap: break-word;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .link-url {
@@ -942,7 +1074,7 @@
             background: linear-gradient(135deg, var(--primary-hot), var(--accent-purple));
             color: #ffffff;
             text-decoration: none;
-            padding: 6px 12px;
+            padding: 6px 14px;
             border-radius: 50px;
             font-size: 0.75rem;
             font-weight: 700;
@@ -961,7 +1093,7 @@
             background: linear-gradient(135deg, #00e5ff, #8a4fff);
             color: #ffffff;
             text-decoration: none;
-            padding: 6px 12px;
+            padding: 6px 14px;
             border-radius: 50px;
             font-size: 0.75rem;
             font-weight: 700;
@@ -977,11 +1109,11 @@
         }
 
         .btn-delete-link {
-            background: rgba(255, 51, 122, 0.1);
+            background: rgba(255, 51, 122, 0.12);
             color: var(--primary-hot);
-            border: 1px solid rgba(255, 51, 122, 0.2);
-            width: 28px;
-            height: 28px;
+            border: 1px solid rgba(255, 51, 122, 0.25);
+            width: 30px;
+            height: 30px;
             border-radius: 50%;
             cursor: pointer;
             display: flex;
@@ -1037,11 +1169,8 @@
             .quick-tools-compact .os-card { flex: 0 1 calc(50% - 4px); min-width: 120px; padding: 10px 8px; }
             .input-inline-row { flex-direction: column; }
             .btn-add-link { width: 100%; }
-            .link-item { padding: 12px 14px; flex-direction: column; align-items: flex-start; gap: 8px; }
+            .link-item { padding: 12px 14px; flex-direction: column; align-items: flex-start; gap: 10px; }
             .link-actions { width: 100%; justify-content: space-between; margin-top: 4px; }
-            
-            .offline-add-form { flex-direction: column; }
-            .offline-item { max-width: 100%; }
         }
 
         @media (max-width: 420px) {
@@ -1049,6 +1178,7 @@
             .ms-search-btn span { display: none; }
             .btn-youtube-hub, .btn-editor-hub { padding: 6px 10px; font-size: 0.78rem; }
             .quick-tools-compact .os-card { flex: 0 1 calc(50% - 4px); }
+            .offline-50-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -1068,7 +1198,7 @@
                 <span class="brand-text">DARK 365</span>
             </a>
 
-            <!-- Mobile Touch-Scrollable Navigation -->
+            <!-- Navigation Links -->
             <ul class="ms-menu-links">
                 <li><a href="#osSection">Apps</a></li>
                 <li><a href="#offlineInboxSection">Offline Data</a></li>
@@ -1093,7 +1223,7 @@
                 <i class="fa-solid fa-magnifying-glass"></i>
             </button>
 
-            <!-- Profile Avatar Icon -->
+            <!-- Profile Avatar Icon with Dynamic Blue/Red Glow & Vibrate -->
             <div class="ms-profile-avatar" id="loginBtn" title="Account / Profile Options">
                 <i class="fa-solid fa-user" id="userIcon"></i>
             </div>
@@ -1136,32 +1266,27 @@
             </div>
         </section>
 
-        <!-- OFFLINE DATA BOX SYSTEM (UPGRADED 1-50 LISTING & EXPAND OPTION) -->
+        <!-- OFFLINE DATA BOX SYSTEM (1 TO 50 WITH COLLAPSIBLE TOGGLE) -->
         <section class="os-container" id="offlineInboxSection">
             <div class="offline-box-header">
                 <h3 class="os-heading txt-purple-neon" style="margin-bottom: 0; text-align: left; font-size: 1.05rem;">
-                    <i class="fa-solid fa-inbox"></i> Offline Data Box (<span id="offlineCount">0</span>/50)
+                    <i class="fa-solid fa-inbox"></i> Personal Offline Data Box (1-50)
                 </h3>
-                <button class="btn-expand-offline" id="toggleOfflineExpandBtn">
-                    <i class="fa-solid fa-expand" id="expandIcon"></i> <span id="expandText">Expand (1-50)</span>
-                </button>
+                <div class="offline-header-right">
+                    <span style="font-size: 0.8rem; color: var(--text-muted);">
+                        Saved Links: <strong id="offlineCount" style="color: var(--cute-cyan);">0</strong>/50
+                    </span>
+                    <!-- Toggle Show/Hide Button -->
+                    <button type="button" class="ms-search-btn" id="toggleOfflineBtn" onclick="toggleOfflineGrid()">
+                        <i class="fa-solid fa-chevron-down" id="offlineToggleIcon"></i>
+                        <span id="offlineToggleText">Show List</span>
+                    </button>
+                </div>
             </div>
 
-            <!-- Offline Add Input Form -->
-            <div class="offline-add-form">
-                <input type="text" id="offlineDataInput" class="custom-input" placeholder="Enter text/note/link for offline storage..." style="padding: 10px 14px;">
-                <button class="btn-add-link" onclick="addOfflineData()"><i class="fa-solid fa-plus"></i> Add Data</button>
-            </div>
-
-            <!-- Empty State Message -->
-            <div id="offlineEmptyMessage" style="background: rgba(0,0,0,0.25); border: 1px dashed var(--glass-border); border-radius: 12px; padding: 25px; text-align: center;">
-                <i class="fa-solid fa-box-open" style="font-size: 1.8rem; color: var(--text-muted); margin-bottom: 8px;"></i>
-                <p style="color: var(--text-muted); font-size: 0.85rem;">No offline data added yet. Use the input box above to save items locally.</p>
-            </div>
-
-            <!-- 1-50 Multi-Column Offline Item Grid Container -->
-            <div class="offline-data-grid collapsed" id="offlineDataGrid" style="display: none;">
-                <!-- JavaScript will populate 1-10 (Col 1), 11-20 (Col 2), 21-30 (Col 3)... up to 50 -->
+            <!-- 1 to 50 Grid Container (Hidden by Default) -->
+            <div class="offline-50-grid hidden" id="offlineDataGrid">
+                <!-- JavaScript will populate 1 to 50 slots -->
             </div>
         </section>
 
@@ -1179,202 +1304,107 @@
             </div>
         </section>
 
-        <!-- COMBINED RESOURCE MANAGER (ADD LINK + DATABASE FOLDERS WITH ALL RECOVERED LINKS) -->
+        <!-- ONLINE PUBLIC RESOURCE MANAGER -->
         <section class="resource-manager-container" id="resourceManagerSection">
             <h3 class="section-heading txt-pink-neon">
-                <i class="fa-solid fa-folder-tree"></i> Resource Manager
+                <i class="fa-solid fa-folder-tree"></i> Online Resource Manager (Publicly Open)
             </h3>
             
-            <!-- Add Link Box with Category System -->
+            <!-- Add Link Box with Custom Category & Dynamic Icon Selector Support -->
             <div class="add-link-box">
-                <div class="add-link-box-title"><i class="fa-solid fa-plus-circle"></i> Add New Link to Folder</div>
+                <div class="add-link-box-title">
+                    <i class="fa-solid fa-plus-circle"></i> Add New Link to Public Resource Manager
+                </div>
                 <div class="input-stack">
-                    <input type="text" id="titleInput" class="custom-input" placeholder="Enter Link Title (e.g., Download File)">
+                    <input type="text" id="titleInput" class="custom-input" placeholder="Enter Link Title (e.g., Download File or YouTube Video)">
                     
                     <div class="input-inline-row">
                         <select id="categorySelect" class="custom-input" onchange="toggleCustomCategory()">
                             <option value="" disabled selected>-- Select a Category --</option>
-                            <option value="YouTube">YouTube</option>
-                            <option value="Video Search">Video Search</option>
+                            <option value="YouTube">YouTube Videos</option>
+                            <option value="Video Search">Video Search & Social Videos</option>
                             <option value="Cracked Games">Cracked Games</option>
-                            <option value="Software/Apps">Software/Apps</option>
-                            <option value="custom">Custom Category...</option>
+                            <option value="Software/Apps">Software/Apps & Learning</option>
+                            <option value="custom">+ Custom Category</option>
                         </select>
                         <input type="text" id="customCategoryInput" class="custom-input hidden" placeholder="Type Custom Category Name">
                     </div>
 
+                    <!-- Custom Icon Selection -->
                     <div class="input-inline-row">
-                        <input type="url" id="linkInput" class="custom-input" placeholder="https://example.com">
-                        <button class="btn-add-link" id="addLinkBtn"><i class="fa-solid fa-save"></i> Save to Database</button>
+                        <select id="iconSelect" class="custom-input">
+                            <option value="auto">✨ Auto-Detect Icon (YouTube, Games, App, etc.)</option>
+                            <option value="fa-brands fa-youtube">🔴 YouTube Logo</option>
+                            <option value="fa-solid fa-gamepad">🎮 Cracked Game Icon</option>
+                            <option value="fa-solid fa-laptop-code">💻 Software / Coding</option>
+                            <option value="fa-solid fa-video">🎬 Video / Movie</option>
+                            <option value="fa-solid fa-download">📥 Download File</option>
+                            <option value="fa-solid fa-globe">🌐 Website / Globe</option>
+                            <option value="fa-solid fa-shield-halved">🛡️ Cyber / Security</option>
+                        </select>
+                    </div>
+
+                    <div class="input-inline-row">
+                        <input type="url" id="linkInput" class="custom-input" placeholder="https://example.com or YouTube link">
+                        <button class="btn-add-link" id="addLinkBtn" onclick="addOnlineLink()"><i class="fa-solid fa-cloud-arrow-up"></i> Add Public Link</button>
                     </div>
                 </div>
             </div>
 
             <!-- Search Area -->
             <div class="search-wrapper">
-                <input type="text" id="searchInput" class="custom-input" placeholder="Search in your folders...">
+                <input type="text" id="searchInput" class="custom-input" placeholder="Search in public folders..." onkeyup="filterLinks()">
             </div>
 
-            <!-- Database Folders Area (RECOVERED LINKS RESTORED) -->
+            <!-- Database Folders Area -->
             <div class="database-folders" id="databaseFolders">
-                
-                <!-- Folder 1: YouTube -->
-                <div class="category-folder">
-                    <div class="folder-header" onclick="toggleFolderContent(this)">
-                        <div class="folder-title-wrap">
-                            <i class="fa-brands fa-youtube" style="color: #FF0000; font-size: 1.2rem;"></i>
-                            <span>YouTube</span>
-                        </div>
-                        <i class="fa-solid fa-chevron-down txt-muted"></i>
-                    </div>
-                    <div class="folder-content active">
-                        <div class="link-item">
-                            <div class="link-details">
-                                <span class="link-title">Face crime home</span>
-                                <a href="https://youtube.com/shorts/Q2ItkHzJitw?si=uWXp2KItdx_ao0n" target="_blank" class="link-url">https://youtube.com/shorts/Q2ItkHzJitw?si=uWXp2KItdx_ao0n</a>
-                            </div>
-                            <div class="link-actions">
-                                <a href="video.html" class="btn-watch-video" title="Watch Video">
-                                    <i class="fa-solid fa-play"></i> Watch
-                                </a>
-                                <button class="btn-delete-link" title="Delete"><i class="fa-solid fa-trash"></i></button>
-                            </div>
-                        </div>
-
-                        <div class="link-item">
-                            <div class="link-details">
-                                <span class="link-title">World reality</span>
-                                <a href="https://youtube.com/shorts/8ATL3uoxXGM?si=IzSlcKOckWsRksHS" target="_blank" class="link-url">https://youtube.com/shorts/8ATL3uoxXGM?si=IzSlcKOckWsRksHS</a>
-                            </div>
-                            <div class="link-actions">
-                                <a href="video.html" class="btn-watch-video" title="Watch Video">
-                                    <i class="fa-solid fa-play"></i> Watch
-                                </a>
-                                <button class="btn-delete-link" title="Delete"><i class="fa-solid fa-trash"></i></button>
-                            </div>
-                        </div>
-
-                        <div class="link-item">
-                            <div class="link-details">
-                                <span class="link-title">google sheet without coding | HINDI</span>
-                                <a href="https://www.youtube.com/watch?v=HkrTEgz25vs" target="_blank" class="link-url">https://www.youtube.com/watch?v=HkrTEgz25vs</a>
-                            </div>
-                            <div class="link-actions">
-                                <a href="video.html" class="btn-watch-video" title="Watch Video">
-                                    <i class="fa-solid fa-play"></i> Watch
-                                </a>
-                                <button class="btn-delete-link" title="Delete"><i class="fa-solid fa-trash"></i></button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Folder 2: Video Search / Social Videos -->
-                <div class="category-folder">
-                    <div class="folder-header" onclick="toggleFolderContent(this)">
-                        <div class="folder-title-wrap">
-                            <i class="fa-solid fa-video" style="color: var(--cute-cyan); font-size: 1.2rem;"></i>
-                            <span>Video Search & Social Videos</span>
-                        </div>
-                        <i class="fa-solid fa-chevron-down txt-muted"></i>
-                    </div>
-                    <div class="folder-content">
-                        <div class="link-item">
-                            <div class="link-details">
-                                <span class="link-title">দেশেও যাব না রেমিট্যান্স ও পাঠাবো না পারলে ঠেকা #Remittance #DeshiStyle #fypシ #fypシ゚viralシ #BNP</span>
-                                <a href="https://www.facebook.com/share/r/1HXBzhzhEc/" target="_blank" class="link-url">https://www.facebook.com/share/r/1HXBzhzhEc/</a>
-                            </div>
-                            <div class="link-actions">
-                                <a href="https://www.facebook.com/share/r/1HXBzhzhEc/" target="_blank" class="btn-visit-site" title="Visit Link">
-                                    <i class="fa-solid fa-arrow-up-right-from-square"></i> Visit
-                                </a>
-                                <button class="btn-delete-link" title="Delete"><i class="fa-solid fa-trash"></i></button>
-                            </div>
-                        </div>
-
-                        <div class="link-item">
-                            <div class="link-details">
-                                <span class="link-title">Mentalit hospital 🥴</span>
-                                <a href="https://www.facebook.com/share/v/1DuKd9Jdbf/" target="_blank" class="link-url">https://www.facebook.com/share/v/1DuKd9Jdbf/</a>
-                            </div>
-                            <div class="link-actions">
-                                <a href="https://www.facebook.com/share/v/1DuKd9Jdbf/" target="_blank" class="btn-visit-site" title="Visit Link">
-                                    <i class="fa-solid fa-arrow-up-right-from-square"></i> Visit
-                                </a>
-                                <button class="btn-delete-link" title="Delete"><i class="fa-solid fa-trash"></i></button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Folder 3: Cracked Games -->
-                <div class="category-folder">
-                    <div class="folder-header" onclick="toggleFolderContent(this)">
-                        <div class="folder-title-wrap">
-                            <i class="fa-solid fa-gamepad" style="color: var(--neon-green); font-size: 1.2rem;"></i>
-                            <span>Cracked Games</span>
-                        </div>
-                        <i class="fa-solid fa-chevron-down txt-muted"></i>
-                    </div>
-                    <div class="folder-content">
-                        <div class="link-item">
-                            <div class="link-details">
-                                <span class="link-title">crack games</span>
-                                <a href="https://steamrip.com/" target="_blank" class="link-url">https://steamrip.com/</a>
-                            </div>
-                            <div class="link-actions">
-                                <a href="https://steamrip.com/" target="_blank" class="btn-visit-site" title="Visit Link">
-                                    <i class="fa-solid fa-arrow-up-right-from-square"></i> Visit
-                                </a>
-                                <button class="btn-delete-link" title="Delete"><i class="fa-solid fa-trash"></i></button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Folder 4: Software/Apps & Educational -->
-                <div class="category-folder">
-                    <div class="folder-header" onclick="toggleFolderContent(this)">
-                        <div class="folder-title-wrap">
-                            <i class="fa-solid fa-graduation-cap" style="color: var(--accent-purple); font-size: 1.2rem;"></i>
-                            <span>Software/Apps & Learning</span>
-                        </div>
-                        <i class="fa-solid fa-chevron-down txt-muted"></i>
-                    </div>
-                    <div class="folder-content">
-                        <div class="link-item">
-                            <div class="link-details">
-                                <span class="link-title">Hidden Website Has Nearly 1,000 Free Courses</span>
-                                <a href="https://www.open.edu/openlearn/" target="_blank" class="link-url">https://www.open.edu/openlearn/</a>
-                            </div>
-                            <div class="link-actions">
-                                <a href="https://www.open.edu/openlearn/" target="_blank" class="btn-visit-site" title="Visit Link">
-                                    <i class="fa-solid fa-arrow-up-right-from-square"></i> Visit
-                                </a>
-                                <button class="btn-delete-link" title="Delete"><i class="fa-solid fa-trash"></i></button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Hidden List for script.js compatibility -->
-                <ul id="linkList" style="display: none;"></ul>
-
+                <!-- Javascript will load folders dynamically -->
             </div>
         </section>
 
     </main>
 
+    <!-- OFFLINE SLOT EDIT MODAL (FOR SLOTS 1 TO 50) -->
+    <div class="modal-overlay" id="slotModalOverlay">
+        <div class="profile-modal" style="max-width: 420px;">
+            <button class="btn-close-modal" onclick="closeSlotModal()" title="Close Modal">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="profile-modal-header">
+                <h4 class="profile-title" id="slotModalTitle">Setup Slot #1</h4>
+            </div>
+            <div class="input-stack" style="gap: 12px;">
+                <input type="hidden" id="slotModalIndex">
+                <div>
+                    <label style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 6px;">Website Title:</label>
+                    <input type="text" id="slotModalName" class="custom-input" placeholder="e.g. My Facebook">
+                </div>
+                <div>
+                    <label style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 6px;">Website URL:</label>
+                    <input type="url" id="slotModalUrl" class="custom-input" placeholder="https://example.com">
+                </div>
+                <div style="display: flex; gap: 10px; margin-top: 10px;">
+                    <button class="btn-add-link" style="flex: 1;" onclick="saveSlotFromModal()"><i class="fa-solid fa-check"></i> Save Slot</button>
+                    <button type="button" style="background: rgba(255,255,255,0.08); color: white; border: 1px solid var(--glass-border); padding: 10px 16px; border-radius: 12px; cursor: pointer;" onclick="closeSlotModal()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- PROFILE ACCOUNT MODAL -->
     <div class="modal-overlay" id="profileModalOverlay">
         <div class="profile-modal">
-            <button class="btn-close-modal" id="closeProfileModalBtn"><i class="fa-solid fa-xmark"></i></button>
+            <!-- VISIBLE CROSS ICON FOR CLOSE -->
+            <button class="btn-close-modal" id="closeProfileModalBtn" title="Close Modal">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            
             <div class="profile-modal-header">
                 <div class="profile-avatar-large" id="modalAvatar">
-                    <i class="fa-solid fa-user"></i>
+                    <i class="fa-solid fa-user-shield" id="modalAvatarIcon"></i>
                 </div>
-                <h4 class="profile-title" id="profileTitleText">User Account</h4>
-                <span id="profileRoleBadge" class="bkash-badge-tag" style="background: rgba(0, 229, 255, 0.1); color: #00e5ff; border: 1px solid rgba(0, 229, 255, 0.2);">Public Guest</span>
+                <h4 class="profile-title" id="profileTitleText">User Profile</h4>
+                <span id="profileRoleBadge" class="bkash-badge-tag" style="background: rgba(0, 229, 255, 0.1); color: #00e5ff; border: 1px solid rgba(0, 229, 255, 0.2);">Public Guest Mode</span>
             </div>
             <div class="profile-actions-list">
                 <button class="profile-action-btn admin-btn" id="adminAuthBtn">
@@ -1400,7 +1430,10 @@
     <!-- BKASH DONATE MODAL -->
     <div class="modal-overlay" id="bkashModalOverlay">
         <div class="bkash-modal">
-            <button class="btn-close-modal" id="closeBkashModalBtn"><i class="fa-solid fa-xmark"></i></button>
+            <!-- VISIBLE CROSS ICON FOR CLOSE -->
+            <button class="btn-close-modal" id="closeBkashModalBtn" title="Close Modal">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
             <h4 class="bkash-modal-title">Donate bKash</h4>
             <p class="bkash-modal-subtext">Support the DARK 365 development team!</p>
             <div class="bkash-card-box">
@@ -1416,80 +1449,196 @@
     <!-- MAIN SYSTEM SCRIPT -->
     <script src="script.js"></script>
 
-    <!-- HELPER SCRIPTS: OFFLINE DATA SYSTEM & UI HELPERS -->
+    <!-- SYSTEM FUNCTIONAL SCRIPT -->
     <script>
-        // --- OFFLINE DATA STORAGE SYSTEM (MAX 50 ITEMS) ---
-        let offlineData = JSON.parse(localStorage.getItem('darknet_offline_data')) || [];
+        // --- ADMIN AUTH & ROLE SYSTEM ---
+        let isAdmin = localStorage.getItem('darknet_is_admin') === 'true';
 
-        function renderOfflineData() {
-            const container = document.getElementById('offlineDataGrid');
-            const countSpan = document.getElementById('offlineCount');
-            const emptyBox = document.getElementById('offlineEmptyMessage');
-            
-            if (!container) return;
-            
-            container.innerHTML = '';
-            if (countSpan) countSpan.textContent = offlineData.length;
+        function updateAdminUI() {
+            const badge = document.getElementById('profileRoleBadge');
+            const adminText = document.getElementById('adminAuthText');
+            const navAvatar = document.getElementById('loginBtn');
+            const modalAvatar = document.getElementById('modalAvatar');
+            const modalAvatarIcon = document.getElementById('modalAvatarIcon');
 
-            if (offlineData.length === 0) {
-                if (emptyBox) emptyBox.style.display = 'block';
-                container.style.display = 'none';
-                return;
-            }
+            if (isAdmin) {
+                document.body.classList.add('is-admin');
+                
+                // Switch Nav Avatar to RED Glow Mode
+                if (navAvatar) {
+                    navAvatar.classList.remove('public-mode');
+                    navAvatar.classList.add('admin-mode');
+                }
 
-            if (emptyBox) emptyBox.style.display = 'none';
-            container.style.display = 'grid';
-
-            offlineData.forEach((item, index) => {
-                const itemDiv = document.createElement('div');
-                itemDiv.className = 'offline-item';
-                itemDiv.innerHTML = `
-                    <span class="item-num">#${index + 1}</span>
-                    <span class="item-text" title="${escapeHtml(item)}">${escapeHtml(item)}</span>
-                    <button class="btn-del-offline" onclick="deleteOfflineData(${index})" title="Delete Item"><i class="fa-solid fa-xmark"></i></button>
-                `;
-                container.appendChild(itemDiv);
-            });
-        }
-
-        function addOfflineData() {
-            const input = document.getElementById('offlineDataInput');
-            if (!input) return;
-            const val = input.value.trim();
-            if (!val) return;
-
-            if (offlineData.length >= 50) {
-                alert('অফলাইন ডাটা বক্সে সর্বোচ্চ ৫০টি আইটেম যোগ করা যাবে!');
-                return;
-            }
-
-            offlineData.push(val);
-            localStorage.setItem('darknet_offline_data', JSON.stringify(offlineData));
-            input.value = '';
-            renderOfflineData();
-        }
-
-        function deleteOfflineData(index) {
-            offlineData.splice(index, 1);
-            localStorage.setItem('darknet_offline_data', JSON.stringify(offlineData));
-            renderOfflineData();
-        }
-
-        function toggleOfflineExpand() {
-            const grid = document.getElementById('offlineDataGrid');
-            const btnText = document.getElementById('expandText');
-            const btnIcon = document.getElementById('expandIcon');
-
-            if (grid.classList.contains('collapsed')) {
-                grid.classList.remove('collapsed');
-                grid.classList.add('expanded');
-                if (btnText) btnText.textContent = 'Collapse View';
-                if (btnIcon) btnIcon.className = 'fa-solid fa-compress';
+                if (modalAvatar) {
+                    modalAvatar.style.background = 'linear-gradient(135deg, #ff0055, var(--primary-hot))';
+                    modalAvatar.style.boxShadow = '0 0 25px rgba(255, 51, 122, 0.8)';
+                }
+                if (modalAvatarIcon) {
+                    modalAvatarIcon.className = 'fa-solid fa-user-shield';
+                }
+                
+                if (badge) {
+                    badge.textContent = 'Admin Mode Active';
+                    badge.style.color = '#ff337a';
+                    badge.style.background = 'rgba(255, 51, 122, 0.15)';
+                    badge.style.borderColor = 'rgba(255, 51, 122, 0.4)';
+                }
+                if (adminText) adminText.textContent = 'Logout Admin Mode';
             } else {
-                grid.classList.remove('expanded');
-                grid.classList.add('collapsed');
-                if (btnText) btnText.textContent = 'Expand (1-50)';
-                if (btnIcon) btnIcon.className = 'fa-solid fa-expand';
+                document.body.classList.remove('is-admin');
+                
+                // Switch Nav Avatar to BLUE Glow Mode
+                if (navAvatar) {
+                    navAvatar.classList.remove('admin-mode');
+                    navAvatar.classList.add('public-mode');
+                }
+
+                if (modalAvatar) {
+                    modalAvatar.style.background = 'linear-gradient(135deg, var(--accent-purple), var(--primary-hot))';
+                    modalAvatar.style.boxShadow = '0 0 20px rgba(138, 79, 255, 0.5)';
+                }
+                if (modalAvatarIcon) {
+                    modalAvatarIcon.className = 'fa-solid fa-user';
+                }
+                
+                if (badge) {
+                    badge.textContent = 'Public Guest Mode';
+                    badge.style.color = '#00e5ff';
+                    badge.style.background = 'rgba(0, 229, 255, 0.1)';
+                    badge.style.borderColor = 'rgba(0, 229, 255, 0.2)';
+                }
+                if (adminText) adminText.textContent = 'Admin Login';
+            }
+
+            // Re-render components to show/hide delete buttons
+            renderOfflineSlots();
+            renderPublicResources();
+        }
+
+        function toggleAdminAuth() {
+            if (isAdmin) {
+                isAdmin = false;
+                localStorage.setItem('darknet_is_admin', 'false');
+                updateAdminUI();
+                alert('Switched to Public Guest Mode. Delete features are now restricted.');
+            } else {
+                const pass = prompt('Enter Admin Password to activate delete permissions:');
+                if (pass === 'admin123' || pass === 'admin') {
+                    isAdmin = true;
+                    localStorage.setItem('darknet_is_admin', 'true');
+                    updateAdminUI();
+                    alert('Admin access granted! Delete buttons are now active and profile glow turned RED.');
+                } else if (pass !== null) {
+                    alert('Incorrect password!');
+                }
+            }
+        }
+
+        // --- OFFLINE 1-50 LISTING SYSTEM ---
+        let offlineSlots = JSON.parse(localStorage.getItem('darknet_offline_slots_50')) || [];
+
+        while (offlineSlots.length < 50) {
+            offlineSlots.push({ name: '', url: '' });
+        }
+
+        function renderOfflineSlots() {
+            const container = document.getElementById('offlineDataGrid');
+            if (!container) return;
+            container.innerHTML = '';
+
+            let filledCount = 0;
+
+            for (let i = 0; i < 50; i++) {
+                const item = offlineSlots[i] || { name: '', url: '' };
+                const isFilled = item.name && item.url;
+                if (isFilled) filledCount++;
+
+                const slotDiv = document.createElement('div');
+                slotDiv.className = 'offline-slot-card';
+
+                slotDiv.innerHTML = `
+                    <span class="slot-badge">#${i + 1}</span>
+                    <div class="slot-content">
+                        ${isFilled ? `
+                            <a href="${escapeHtml(item.url)}" target="_blank" class="slot-link" title="${escapeHtml(item.url)}">
+                                <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.75rem; color:var(--cute-cyan);"></i>
+                                ${escapeHtml(item.name)}
+                            </a>
+                        ` : `
+                            <span class="slot-empty" onclick="openSlotModal(${i})">+ Add Name & URL</span>
+                        `}
+                    </div>
+                    <div class="slot-actions">
+                        <button class="btn-slot-icon" onclick="openSlotModal(${i})" title="Edit Slot"><i class="fa-solid fa-pen-to-square"></i></button>
+                        ${isFilled ? `<button class="btn-slot-icon del" onclick="clearSlot(${i})" title="Clear Slot"><i class="fa-solid fa-trash"></i></button>` : ''}
+                    </div>
+                `;
+                container.appendChild(slotDiv);
+            }
+
+            const countSpan = document.getElementById('offlineCount');
+            if (countSpan) countSpan.textContent = filledCount;
+        }
+
+        function toggleOfflineGrid() {
+            const grid = document.getElementById('offlineDataGrid');
+            const icon = document.getElementById('offlineToggleIcon');
+            const txt = document.getElementById('offlineToggleText');
+
+            if (grid.classList.contains('hidden')) {
+                grid.classList.remove('hidden');
+                icon.className = 'fa-solid fa-chevron-up';
+                txt.textContent = 'Hide List';
+            } else {
+                grid.classList.add('hidden');
+                icon.className = 'fa-solid fa-chevron-down';
+                txt.textContent = 'Show List';
+            }
+        }
+
+        function openSlotModal(index) {
+            document.getElementById('slotModalIndex').value = index;
+            document.getElementById('slotModalTitle').textContent = `Setup Slot #${index + 1}`;
+            const item = offlineSlots[index] || { name: '', url: '' };
+            document.getElementById('slotModalName').value = item.name || '';
+            document.getElementById('slotModalUrl').value = item.url || '';
+            document.getElementById('slotModalOverlay').classList.add('active');
+        }
+
+        function closeSlotModal() {
+            document.getElementById('slotModalOverlay').classList.remove('active');
+        }
+
+        function saveSlotFromModal() {
+            const index = parseInt(document.getElementById('slotModalIndex').value, 10);
+            const name = document.getElementById('slotModalName').value.trim();
+            let url = document.getElementById('slotModalUrl').value.trim();
+
+            if (!name || !url) {
+                alert('Please enter both Title and URL!');
+                return;
+            }
+
+            if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                url = 'https://' + url;
+            }
+
+            offlineSlots[index] = { name, url };
+            localStorage.setItem('darknet_offline_slots_50', JSON.stringify(offlineSlots));
+            closeSlotModal();
+            renderOfflineSlots();
+        }
+
+        function clearSlot(index) {
+            if (!isAdmin) {
+                alert('Only Admin can delete or clear slots!');
+                return;
+            }
+            if (confirm(`Are you sure you want to clear Slot #${index + 1}?`)) {
+                offlineSlots[index] = { name: '', url: '' };
+                localStorage.setItem('darknet_offline_slots_50', JSON.stringify(offlineSlots));
+                renderOfflineSlots();
             }
         }
 
@@ -1497,7 +1646,150 @@
             return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
         }
 
-        // --- FOLDER & CATEGORY HELPERS ---
+        // --- ONLINE PUBLIC RESOURCE MANAGER SYSTEM WITH DYNAMIC ICONS & PERSISTENCE ---
+        let defaultPublicData = [
+            {
+                category: "YouTube",
+                icon: "fa-brands fa-youtube",
+                color: "#FF0000",
+                links: [
+                    { title: "Face crime home", url: "https://youtube.com/shorts/Q2ItkHzJitw?si=uWXp2KItdx_ao0n", isVideo: true, icon: "fa-brands fa-youtube" },
+                    { title: "World reality", url: "https://youtube.com/shorts/8ATL3uoxXGM?si=IzSlcKOckWsRksHS", isVideo: true, icon: "fa-brands fa-youtube" },
+                    { title: "Google sheet without coding", url: "https://www.youtube.com/watch?v=HkrTEgz25vs", isVideo: true, icon: "fa-brands fa-youtube" }
+                ]
+            },
+            {
+                category: "Video Search",
+                icon: "fa-solid fa-video",
+                color: "#00e5ff",
+                links: [
+                    { title: "Remittance Video Share", url: "https://www.facebook.com/share/r/1HXBzhzhEc/", isVideo: false, icon: "fa-solid fa-video" }
+                ]
+            },
+            {
+                category: "Cracked Games",
+                icon: "fa-solid fa-gamepad",
+                color: "#2eff66",
+                links: [
+                    { title: "SteamRIP - Free PC Games", url: "https://steamrip.com/", isVideo: false, icon: "fa-solid fa-gamepad" }
+                ]
+            },
+            {
+                category: "Software/Apps",
+                icon: "fa-solid fa-laptop-code",
+                color: "#8a4fff",
+                links: [
+                    { title: "OpenLearn - Free Courses", url: "https://www.open.edu/openlearn/", isVideo: false, icon: "fa-solid fa-laptop-code" }
+                ]
+            }
+        ];
+
+        let publicResources = JSON.parse(localStorage.getItem('darknet_public_resources_data')) || defaultPublicData;
+
+        function savePublicResources() {
+            localStorage.setItem('darknet_public_resources_data', JSON.stringify(publicResources));
+        }
+
+        function getIconForCategoryOrUrl(category, url, selectedIcon) {
+            if (selectedIcon && selectedIcon !== 'auto') return selectedIcon;
+
+            const lUrl = url.toLowerCase();
+            const lCat = category.toLowerCase();
+
+            if (lUrl.includes('youtube.com') || lUrl.includes('youtu.be') || lCat.includes('youtube')) {
+                return 'fa-brands fa-youtube';
+            } else if (lCat.includes('game') || lUrl.includes('steam')) {
+                return 'fa-solid fa-gamepad';
+            } else if (lCat.includes('soft') || lCat.includes('app') || lCat.includes('code')) {
+                return 'fa-solid fa-laptop-code';
+            } else if (lUrl.includes('facebook') || lCat.includes('video')) {
+                return 'fa-solid fa-video';
+            }
+            return 'fa-solid fa-globe';
+        }
+
+        function renderPublicResources() {
+            const container = document.getElementById('databaseFolders');
+            if (!container) return;
+            container.innerHTML = '';
+
+            publicResources.forEach((catObj, catIdx) => {
+                const folderDiv = document.createElement('div');
+                folderDiv.className = 'category-folder';
+                folderDiv.setAttribute('data-category', catObj.category);
+
+                let linksHtml = '';
+                catObj.links.forEach((linkObj, linkIdx) => {
+                    const iconClass = linkObj.icon || getIconForCategoryOrUrl(catObj.category, linkObj.url, 'auto');
+                    const isYt = iconClass.includes('youtube') || linkObj.url.includes('youtube.com') || linkObj.url.includes('youtu.be');
+
+                    linksHtml += `
+                        <div class="link-item">
+                            <div class="link-icon-badge">
+                                <i class="${iconClass}" style="color: ${isYt ? '#FF0000' : 'var(--cute-cyan)'};"></i>
+                            </div>
+                            <div class="link-details">
+                                <span class="link-title">${escapeHtml(linkObj.title)}</span>
+                                <a href="${escapeHtml(linkObj.url)}" target="_blank" class="link-url">${escapeHtml(linkObj.url)}</a>
+                            </div>
+                            <div class="link-actions">
+                                ${isYt ? `
+                                    <a href="video.html" class="btn-watch-video" title="Watch Video">
+                                        <i class="fa-solid fa-play"></i> Watch
+                                    </a>
+                                ` : `
+                                    <a href="${escapeHtml(linkObj.url)}" target="_blank" class="btn-visit-site" title="Visit Link">
+                                        <i class="fa-solid fa-arrow-up-right-from-square"></i> Visit
+                                    </a>
+                                `}
+                                <button class="btn-delete-link" onclick="deleteLink(${catIdx}, ${linkIdx})" title="Delete Link"><i class="fa-solid fa-trash"></i></button>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                folderDiv.innerHTML = `
+                    <div class="folder-header" onclick="toggleFolderContent(this)">
+                        <div class="folder-title-wrap">
+                            <i class="${catObj.icon || 'fa-solid fa-folder-open'}" style="color: ${catObj.color || 'var(--cute-cyan)'}; font-size: 1.2rem;"></i>
+                            <span>${escapeHtml(catObj.category)}</span>
+                        </div>
+                        <div class="folder-header-actions">
+                            <button class="btn-delete-folder" onclick="deleteFolder(event, ${catIdx})" title="Delete Folder"><i class="fa-solid fa-trash"></i></button>
+                            <i class="fa-solid fa-chevron-down txt-muted"></i>
+                        </div>
+                    </div>
+                    <div class="folder-content ${catIdx === 0 ? 'active' : ''}">
+                        ${linksHtml}
+                    </div>
+                `;
+
+                container.appendChild(folderDiv);
+            });
+
+            syncCategoryOptions();
+        }
+
+        function syncCategoryOptions() {
+            const select = document.getElementById('categorySelect');
+            if (!select) return;
+
+            const currentVal = select.value;
+            select.innerHTML = `
+                <option value="" disabled selected>-- Select a Category --</option>
+                <option value="custom">+ Custom Category</option>
+            `;
+
+            publicResources.forEach(catObj => {
+                const opt = document.createElement('option');
+                opt.value = catObj.category;
+                opt.textContent = catObj.category;
+                select.insertBefore(opt, select.options[select.options.length - 1]);
+            });
+
+            if (currentVal) select.value = currentVal;
+        }
+
         function toggleCustomCategory() {
             const selectBox = document.getElementById('categorySelect');
             const customInput = document.getElementById('customCategoryInput');
@@ -1524,20 +1816,163 @@
             }
         }
 
-        // --- INIT ON LOAD ---
-        document.addEventListener('DOMContentLoaded', function() {
-            renderOfflineData();
-            
-            const expandBtn = document.getElementById('toggleOfflineExpandBtn');
-            if (expandBtn) {
-                expandBtn.addEventListener('click', toggleOfflineExpand);
+        function deleteFolder(event, catIdx) {
+            event.stopPropagation();
+            if (!isAdmin) {
+                alert('Only Admin can delete folders!');
+                return;
+            }
+            if (confirm('Are you sure you want to delete this folder and all its links?')) {
+                publicResources.splice(catIdx, 1);
+                savePublicResources();
+                renderPublicResources();
+            }
+        }
+
+        function deleteLink(catIdx, linkIdx) {
+            if (!isAdmin) {
+                alert('Only Admin can delete links!');
+                return;
+            }
+            publicResources[catIdx].links.splice(linkIdx, 1);
+            if (publicResources[catIdx].links.length === 0) {
+                publicResources.splice(catIdx, 1);
+            }
+            savePublicResources();
+            renderPublicResources();
+        }
+
+        // PUBLIC ACCESS: Anyone can add links!
+        function addOnlineLink() {
+            const titleInput = document.getElementById('titleInput');
+            const categorySelect = document.getElementById('categorySelect');
+            const customCategoryInput = document.getElementById('customCategoryInput');
+            const iconSelect = document.getElementById('iconSelect');
+            const linkInput = document.getElementById('linkInput');
+
+            const title = titleInput.value.trim();
+            let category = categorySelect.value;
+            let link = linkInput.value.trim();
+            const selectedIcon = iconSelect.value;
+
+            if (category === 'custom') {
+                category = customCategoryInput.value.trim();
             }
 
-            // Enter key listener for offline input
-            const offlineInput = document.getElementById('offlineDataInput');
-            if (offlineInput) {
-                offlineInput.addEventListener('keypress', function(e) {
-                    if (e.key === 'Enter') addOfflineData();
+            if (!title || !category || !link) {
+                alert('Please fill in all required fields (Title, Category, and URL)!');
+                return;
+            }
+
+            if (!link.startsWith('http://') && !link.startsWith('https://')) {
+                link = 'https://' + link;
+            }
+
+            const itemIcon = getIconForCategoryOrUrl(category, link, selectedIcon);
+
+            let targetCatObj = publicResources.find(
+                c => c.category.toLowerCase() === category.toLowerCase()
+            );
+
+            if (!targetCatObj) {
+                targetCatObj = {
+                    category: category,
+                    icon: itemIcon,
+                    color: "var(--cute-cyan)",
+                    links: []
+                };
+                publicResources.push(targetCatObj);
+            }
+
+            targetCatObj.links.push({
+                title: title,
+                url: link,
+                icon: itemIcon
+            });
+
+            savePublicResources();
+            renderPublicResources();
+
+            titleInput.value = '';
+            linkInput.value = '';
+            categorySelect.value = '';
+            customCategoryInput.value = '';
+            customCategoryInput.classList.add('hidden');
+
+            alert('New link added to Public Online Resource Manager!');
+        }
+
+        function filterLinks() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const items = document.querySelectorAll('.link-item');
+
+            items.forEach(item => {
+                const title = item.querySelector('.link-title').textContent.toLowerCase();
+                const url = item.querySelector('.link-url').textContent.toLowerCase();
+                if (title.includes(query) || url.includes(query)) {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        // --- INIT ON LOAD ---
+        document.addEventListener('DOMContentLoaded', function() {
+            updateAdminUI();
+
+            // Profile Modal triggers
+            const loginBtn = document.getElementById('loginBtn');
+            const profileModal = document.getElementById('profileModalOverlay');
+            const closeProfileModalBtn = document.getElementById('closeProfileModalBtn');
+            const adminAuthBtn = document.getElementById('adminAuthBtn');
+            const publicLoginBtn = document.getElementById('publicLoginBtn');
+
+            if (loginBtn && profileModal) {
+                loginBtn.addEventListener('click', () => profileModal.classList.add('active'));
+            }
+            if (closeProfileModalBtn && profileModal) {
+                closeProfileModalBtn.addEventListener('click', () => profileModal.classList.remove('active'));
+            }
+
+            if (adminAuthBtn) {
+                adminAuthBtn.addEventListener('click', () => {
+                    toggleAdminAuth();
+                    if (profileModal) profileModal.classList.remove('active');
+                });
+            }
+
+            if (publicLoginBtn) {
+                publicLoginBtn.addEventListener('click', () => {
+                    if (isAdmin) {
+                        isAdmin = false;
+                        localStorage.setItem('darknet_is_admin', 'false');
+                        updateAdminUI();
+                    }
+                    if (profileModal) profileModal.classList.remove('active');
+                });
+            }
+
+            // Bkash Modal triggers
+            const profileDonateBtn = document.getElementById('profileDonateBtn');
+            const bkashModal = document.getElementById('bkashModalOverlay');
+            const closeBkashModalBtn = document.getElementById('closeBkashModalBtn');
+            const copyBkashBtn = document.getElementById('copyBkashBtn');
+
+            if (profileDonateBtn && bkashModal) {
+                profileDonateBtn.addEventListener('click', () => {
+                    if (profileModal) profileModal.classList.remove('active');
+                    bkashModal.classList.add('active');
+                });
+            }
+            if (closeBkashModalBtn && bkashModal) {
+                closeBkashModalBtn.addEventListener('click', () => bkashModal.classList.remove('active'));
+            }
+            if (copyBkashBtn) {
+                copyBkashBtn.addEventListener('click', () => {
+                    const num = document.getElementById('bkashNumber').innerText;
+                    navigator.clipboard.writeText(num);
+                    alert('bKash Number Copied: ' + num);
                 });
             }
         });
