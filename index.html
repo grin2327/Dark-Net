@@ -26,6 +26,9 @@
             --neon-green: #2eff66;        
             --bkash-pink: #e2136e;
             --yt-red: #FF0000;
+            --gold-accent: #ffd700;
+            --gold-light: #ffecb3;
+            --gold-border: rgba(255, 215, 0, 0.35);
             --text-main: #f4f2f7;
             --text-muted: #857da1;
             --panel-bg: rgba(23, 19, 41, 0.75); 
@@ -339,7 +342,7 @@
             text-shadow: 0 0 8px rgba(0, 230, 118, 0.2);
         }
         .txt-pink-neon { color: var(--primary-hot); font-weight: 800; }
-        .txt-purple-neon { color: var(--accent-purple); font-weight: 800; text-shadow: 0 0 8px rgba(138, 79, 255, 0.2); }
+        .txt-purple-neon { color: var(--gold-accent); font-weight: 800; text-shadow: 0 0 8px rgba(255, 215, 0, 0.3); }
 
         .main-layout-fullscreen {
             max-width: 1280px;
@@ -675,7 +678,7 @@
             width: 100%;
         }
 
-        /* --- OFFLINE 1-50 LISTING SYSTEM --- */
+        /* --- OFFLINE 1-50 LISTING SYSTEM (GOLDEN THEME) --- */
         .offline-box-header {
             display: flex;
             justify-content: space-between;
@@ -706,13 +709,14 @@
             width: 6px;
         }
         .offline-50-grid::-webkit-scrollbar-thumb {
-            background: var(--accent-purple);
+            background: var(--gold-accent);
             border-radius: 10px;
         }
 
+        /* DEFAULT SLOTS: FULL GOLDEN STYLING */
         .offline-slot-card {
             background: rgba(13, 10, 25, 0.75);
-            border: 1px solid var(--glass-border);
+            border: 1px solid var(--gold-border);
             border-radius: 10px;
             padding: 10px 12px;
             display: flex;
@@ -722,20 +726,29 @@
             transition: var(--transition);
         }
 
+        /* FILLED SLOTS: LIGHT GOLDEN STYLING */
+        .offline-slot-card.filled {
+            border-color: rgba(255, 236, 179, 0.4);
+            background: rgba(28, 22, 12, 0.65);
+        }
+
         .offline-slot-card:hover {
-            border-color: var(--cute-cyan);
-            background: rgba(23, 19, 41, 0.9);
+            border-color: var(--gold-accent);
+            background: rgba(35, 28, 15, 0.85);
+            box-shadow: 0 0 14px rgba(255, 215, 0, 0.25);
         }
 
         .slot-badge {
             font-family: 'Orbitron', monospace;
             font-size: 0.75rem;
             font-weight: 800;
-            color: var(--cute-cyan);
-            background: rgba(0, 229, 255, 0.12);
+            color: var(--gold-accent);
+            background: rgba(255, 215, 0, 0.15);
+            border: 1px solid rgba(255, 215, 0, 0.3);
             padding: 4px 8px;
             border-radius: 6px;
             flex-shrink: 0;
+            transition: var(--transition);
         }
 
         .slot-content {
@@ -745,8 +758,9 @@
             align-items: center;
         }
 
+        /* SAVED LINK TEXT (LIGHT GOLDEN) */
         .slot-link {
-            color: var(--text-main);
+            color: var(--gold-light);
             text-decoration: none;
             font-weight: 600;
             font-size: 0.88rem;
@@ -757,23 +771,28 @@
             align-items: center;
             gap: 6px;
             width: 100%;
+            transition: var(--transition);
         }
 
         .slot-link:hover {
-            color: var(--cute-cyan);
+            color: #ffffff;
             text-decoration: underline;
+            text-shadow: 0 0 8px rgba(255, 236, 179, 0.8);
         }
 
+        /* EMPTY SLOT TEXT (GOLDEN) */
         .slot-empty {
-            color: var(--text-muted);
+            color: var(--gold-accent);
             font-size: 0.8rem;
             font-style: italic;
             cursor: pointer;
+            font-weight: 700;
             transition: var(--transition);
         }
 
         .slot-empty:hover {
-            color: var(--cute-cyan);
+            color: #ffffff;
+            text-shadow: 0 0 8px rgba(255, 215, 0, 0.8);
         }
 
         .slot-actions {
@@ -785,14 +804,14 @@
         .btn-slot-icon {
             background: none;
             border: none;
-            color: var(--text-muted);
+            color: var(--gold-accent);
             cursor: pointer;
             font-size: 0.85rem;
             padding: 4px;
             transition: var(--transition);
         }
 
-        .btn-slot-icon:hover { color: var(--cute-cyan); }
+        .btn-slot-icon:hover { color: #ffffff; }
         .btn-slot-icon.del:hover { color: var(--primary-hot); }
 
         /* --- QUICK TOOLS --- */
@@ -1274,7 +1293,7 @@
                 </h3>
                 <div class="offline-header-right">
                     <span style="font-size: 0.8rem; color: var(--text-muted);">
-                        Saved Links: <strong id="offlineCount" style="color: var(--cute-cyan);">0</strong>/50
+                        Saved Links: <strong id="offlineCount" style="color: var(--gold-accent);">0</strong>/50
                     </span>
                     <!-- Toggle Show/Hide Button -->
                     <button type="button" class="ms-search-btn" id="toggleOfflineBtn" onclick="toggleOfflineGrid()">
@@ -1523,14 +1542,19 @@
                 updateAdminUI();
                 alert('Switched to Public Guest Mode. Delete features are now restricted.');
             } else {
-                const pass = prompt('Enter Admin Password to activate delete permissions:');
-                if (pass === 'admin123' || pass === 'admin') {
-                    isAdmin = true;
-                    localStorage.setItem('darknet_is_admin', 'true');
-                    updateAdminUI();
-                    alert('Admin access granted! Delete buttons are now active and profile glow turned RED.');
-                } else if (pass !== null) {
-                    alert('Incorrect password!');
+                const passInput = prompt('Enter Admin Password to activate delete permissions:');
+                if (passInput !== null) {
+                    const pass = passInput.trim().toLowerCase();
+                    // Passwords supported: 123, admin123, admin, 01766393311, 01766393311c
+                    const validPasswords = ['123', 'admin123', 'admin', '01766393311', '01766393311c'];
+                    if (validPasswords.includes(pass)) {
+                        isAdmin = true;
+                        localStorage.setItem('darknet_is_admin', 'true');
+                        updateAdminUI();
+                        alert('Admin access granted! Delete buttons are now active and profile glow turned RED.');
+                    } else {
+                        alert('Incorrect password!');
+                    }
                 }
             }
         }
@@ -1555,14 +1579,14 @@
                 if (isFilled) filledCount++;
 
                 const slotDiv = document.createElement('div');
-                slotDiv.className = 'offline-slot-card';
+                slotDiv.className = `offline-slot-card ${isFilled ? 'filled' : ''}`;
 
                 slotDiv.innerHTML = `
                     <span class="slot-badge">#${i + 1}</span>
                     <div class="slot-content">
                         ${isFilled ? `
                             <a href="${escapeHtml(item.url)}" target="_blank" class="slot-link" title="${escapeHtml(item.url)}">
-                                <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.75rem; color:var(--cute-cyan);"></i>
+                                <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.75rem; color:var(--gold-light);"></i>
                                 ${escapeHtml(item.name)}
                             </a>
                         ` : `
@@ -1748,6 +1772,7 @@
                     `;
                 });
 
+                /* ALL FOLDERS CLOSED BY DEFAULT */
                 folderDiv.innerHTML = `
                     <div class="folder-header" onclick="toggleFolderContent(this)">
                         <div class="folder-title-wrap">
@@ -1759,7 +1784,7 @@
                             <i class="fa-solid fa-chevron-down txt-muted"></i>
                         </div>
                     </div>
-                    <div class="folder-content ${catIdx === 0 ? 'active' : ''}">
+                    <div class="folder-content">
                         ${linksHtml}
                     </div>
                 `;
@@ -1929,7 +1954,10 @@
             const publicLoginBtn = document.getElementById('publicLoginBtn');
 
             if (loginBtn && profileModal) {
-                loginBtn.addEventListener('click', () => profileModal.classList.add('active'));
+                loginBtn.addEventListener('click', () => {
+                    updateAdminUI();
+                    profileModal.classList.add('active');
+                });
             }
             if (closeProfileModalBtn && profileModal) {
                 closeProfileModalBtn.addEventListener('click', () => profileModal.classList.remove('active'));
@@ -1938,7 +1966,9 @@
             if (adminAuthBtn) {
                 adminAuthBtn.addEventListener('click', () => {
                     toggleAdminAuth();
-                    if (profileModal) profileModal.classList.remove('active');
+                    if (profileModal && !isAdmin) {
+                        profileModal.classList.remove('active');
+                    }
                 });
             }
 
