@@ -166,7 +166,7 @@
                                 <input type="checkbox" id="selectAllCheckbox" onchange="toggleSelectAllStudents(this)" class="rounded accent-amber-400 cursor-pointer w-4 h-4">
                             </th>
                             <th class="py-3 px-2">#</th>
-                            <th class="py-3 px-3">Student ID</th>
+                            <th class="py-3 px-3">Payment</th>
                             <th class="py-3 px-3">Student Name</th>
                             <th class="py-3 px-3">Routine & Time</th>
                             <th class="py-3 px-3">Course Name</th>
@@ -218,6 +218,17 @@
                     <input type="text" id="quickTapName" class="input-bg w-full rounded-lg text-sm px-3.5 py-2.5 font-bold outline-none placeholder-slate-500 focus:ring-2 focus:ring-amber-400">
                 </div>
 
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Course Fee (৳)</label>
+                        <input type="number" id="quickTapCourseFee" value="2500" class="input-bg w-full rounded-lg text-xs px-3 py-2 outline-none font-semibold">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Paid Amount (৳)</label>
+                        <input type="number" id="quickTapPaidFee" value="0" class="input-bg w-full rounded-lg text-xs px-3 py-2 outline-none font-semibold">
+                    </div>
+                </div>
+
                 <div>
                     <label class="block text-xs font-semibold text-slate-300 mb-1">Assigned Course</label>
                     <select id="quickTapCourse" class="input-bg w-full rounded-lg text-xs px-3 py-2.5 outline-none font-medium">
@@ -258,13 +269,20 @@
                 <button onclick="closeModal()" class="text-slate-400 hover:text-white text-lg p-1.5"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <form id="studentForm" onsubmit="handleFormSubmit(event)" class="p-4 sm:p-5 space-y-3.5">
-                <div>
-                    <label class="block text-xs font-semibold text-slate-300 mb-1">Student ID</label>
-                    <input type="text" id="modalStudentId" required class="input-bg w-full rounded-lg text-xs px-3 py-2.5 font-mono outline-none">
-                </div>
+                <input type="hidden" id="modalStudentId">
                 <div>
                     <label class="block text-xs font-semibold text-slate-300 mb-1">Student Name</label>
                     <input type="text" id="modalStudentName" required class="input-bg w-full rounded-lg text-xs px-3 py-2.5 font-bold outline-none">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Course Fee (৳)</label>
+                        <input type="number" id="modalCourseFee" required value="2500" class="input-bg w-full rounded-lg text-xs px-3 py-2.5 font-bold outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Paid Amount (৳)</label>
+                        <input type="number" id="modalPaidFee" required value="0" class="input-bg w-full rounded-lg text-xs px-3 py-2.5 font-bold outline-none">
+                    </div>
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
@@ -297,14 +315,6 @@
                 <div>
                     <label class="block text-xs font-semibold text-slate-300 mb-1">Contact No.</label>
                     <input type="text" id="modalStudentPhone" class="input-bg w-full rounded-lg text-xs px-3 py-2.5 outline-none font-medium" placeholder="e.g. 01700000000">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-slate-300 mb-1">Student Status</label>
-                    <select id="modalStudentStatus" class="input-bg w-full rounded-lg text-xs px-3 py-2.5 outline-none font-bold">
-                        <option value="Active">Active</option>
-                        <option value="On Leave">On Leave</option>
-                        <option value="Completed">Completed</option>
-                    </select>
                 </div>
                 <div class="flex justify-end space-x-2 pt-3 border-t border-slate-800">
                     <button type="button" onclick="closeModal()" class="px-3.5 py-2 bg-slate-800 text-slate-300 rounded-lg text-xs font-semibold hover:bg-slate-700 transition">Cancel</button>
@@ -414,7 +424,7 @@
             });
             if (!Array.isArray(data.extraStudents)) data.extraStudents = [];
             if (!Array.isArray(data.archivedStudents)) data.archivedStudents = [];
-            if (!Array.isArray(data.tempStudents)) data.tempStudents = []; // Added for Temp Students
+            if (!Array.isArray(data.tempStudents)) data.tempStudents = [];
             return data;
         }
 
@@ -563,21 +573,35 @@
             displayStudents.forEach((stu, viewIndex) => {
                 const tr = document.createElement("tr");
                 tr.className = searchQuery.length > 0 ? "bg-amber-400/10 hover:bg-amber-400/20 transition-colors border-l-4 border-amber-400" : "hover:bg-slate-800/40 transition-colors";
-                let statusBadge = "bg-emerald-950 text-emerald-300 border-emerald-800";
-                if (stu.status === "On Leave") statusBadge = "bg-amber-950 text-amber-300 border-amber-800";
-                if (stu.status === "Completed") statusBadge = "bg-blue-950 text-blue-300 border-blue-800";
-                const safeId = stu.id.replace(/"/g, '&quot;');
+                
+                const courseFee = Number(stu.courseFee !== undefined ? stu.courseFee : 2500);
+                const paidFee = Number(stu.paidFee !== undefined ? stu.paidFee : 0);
+                const dueFee = courseFee - paidFee;
+                const statusText = dueFee > 0 ? "Not Fully Complete" : "Completed";
+                
+                let statusBadge = "bg-rose-950 text-rose-300 border-rose-800";
+                if (statusText === "Completed") statusBadge = "bg-emerald-950 text-emerald-300 border-emerald-800";
+                
+                const safeId = (stu.id || "").replace(/"/g, '&quot;');
                 const displaySlot = (stu.slot && stu.slot !== "Custom") ? `<span class="text-[10px] text-emerald-400 font-bold block mt-0.5"><i class="fa-regular fa-clock"></i> ${stu.slot}</span>` : `<span class="text-[10px] text-slate-500 font-bold block mt-0.5">No Slot</span>`;
 
                 tr.innerHTML = `
                     <td class="py-3 px-3 text-center"><input type="checkbox" class="student-select-cb rounded accent-amber-400 cursor-pointer w-4 h-4" data-student-id="${safeId}" onchange="updateSelectedCount()"></td>
                     <td class="py-3 px-2 font-bold text-slate-500">${viewIndex + 1 < 10 ? '0' + (viewIndex + 1) : viewIndex + 1}</td>
-                    <td class="py-3 px-3 font-mono font-bold text-amber-400 bg-amber-400/5 px-2 py-1 rounded inline-block my-1 border border-amber-400/20">${stu.id}</td>
+                    <td class="py-3 px-3 font-mono">
+                        <div class="text-[11px] leading-tight">
+                            <div class="text-slate-300 font-semibold">৳${courseFee}</div>
+                            <div class="text-rose-400 font-semibold">${paidFee > 0 ? '-' : ''}৳${paidFee}</div>
+                            <div class="font-bold ${dueFee > 0 ? 'text-amber-400' : 'text-emerald-400'} border-t border-slate-700/60 pt-0.5 mt-0.5">
+                                ${dueFee > 0 ? `৳${dueFee} বাকি` : 'পরিশোধিত'}
+                            </div>
+                        </div>
+                    </td>
                     <td class="py-3 px-3 font-extrabold student-name-text text-sm">${stu.name}</td>
                     <td class="py-3 px-3 text-slate-300 font-medium">${GROUP_LABELS[stu.group] || stu.group} ${displaySlot}</td>
                     <td class="py-3 px-3 text-slate-300">${stu.course || 'Basic Computer & MS Office'}</td>
                     <td class="py-3 px-3 font-mono font-bold text-emerald-400">${stu.phone || '--'}</td>
-                    <td class="py-3 px-3"><span class="px-2 py-0.5 border rounded text-[11px] font-bold ${statusBadge}">${stu.status || 'Active'}</span></td>
+                    <td class="py-3 px-3"><span class="px-2 py-0.5 border rounded text-[11px] font-bold ${statusBadge}">${statusText}</span></td>
                     <td class="py-3 px-3 text-right space-x-1.5 whitespace-nowrap">
                         <button onclick="editMasterStudent('${safeId}')" class="text-amber-400 hover:text-amber-300 bg-slate-800 hover:bg-slate-700 px-2.5 py-1 rounded transition text-xs font-bold"><i class="fa-solid fa-pen"></i> Edit</button>
                         <button onclick="archiveStudentAction('${safeId}')" class="text-rose-400 hover:text-rose-300 bg-rose-950 hover:bg-rose-900 px-2.5 py-1 rounded transition text-xs font-bold"><i class="fa-solid fa-box-archive"></i> Archive</button>
@@ -663,13 +687,13 @@
             activeEditLocation = { isNew: true, targetId: null };
             document.getElementById("modalTitle").innerHTML = '<i class="fa-solid fa-user-plus mr-2"></i> Enroll New Student';
             document.getElementById("modalStudentId").value = generateUniqueStudentId();
-            document.getElementById("modalStudentId").readOnly = true;
             document.getElementById("modalStudentName").value = "";
+            document.getElementById("modalCourseFee").value = "2500";
+            document.getElementById("modalPaidFee").value = "0";
             document.getElementById("modalStudentGroup").value = "Sat-Mon-Wed";
             document.getElementById("modalStudentSlot").value = "09 AM";
             document.getElementById("modalStudentCourse").value = "Basic Computer & MS Office";
             document.getElementById("modalStudentPhone").value = "";
-            document.getElementById("modalStudentStatus").value = "Active";
             const modal = document.getElementById("studentModal"); if (modal) modal.classList.remove("hidden");
         }
 
@@ -680,13 +704,13 @@
             activeEditLocation = { isNew: false, targetId: studentId };
             document.getElementById("modalTitle").innerHTML = '<i class="fa-solid fa-user-gear mr-2"></i> Student Details';
             document.getElementById("modalStudentId").value = student.id;
-            document.getElementById("modalStudentId").readOnly = true;
             document.getElementById("modalStudentName").value = student.name || "";
+            document.getElementById("modalCourseFee").value = student.courseFee !== undefined ? student.courseFee : 2500;
+            document.getElementById("modalPaidFee").value = student.paidFee !== undefined ? student.paidFee : 0;
             document.getElementById("modalStudentGroup").value = student.group || "Sat-Mon-Wed";
             document.getElementById("modalStudentSlot").value = student.slot || "09 AM";
             document.getElementById("modalStudentCourse").value = student.course || "Basic Computer & MS Office";
             document.getElementById("modalStudentPhone").value = student.phone || "";
-            document.getElementById("modalStudentStatus").value = student.status || "Active";
             const modal = document.getElementById("studentModal"); if (modal) modal.classList.remove("hidden");
         }
 
@@ -694,12 +718,21 @@
 
         async function handleFormSubmit(e) {
             e.preventDefault();
-            const studentId = document.getElementById("modalStudentId").value.trim(); const name = document.getElementById("modalStudentName").value.trim();
-            const group = document.getElementById("modalStudentGroup").value; const slot = document.getElementById("modalStudentSlot").value;
-            const course = document.getElementById("modalStudentCourse").value; const phone = document.getElementById("modalStudentPhone").value.trim();
-            const status = document.getElementById("modalStudentStatus").value;
+            const studentId = document.getElementById("modalStudentId").value.trim();
+            const name = document.getElementById("modalStudentName").value.trim();
+            const courseFee = Number(document.getElementById("modalCourseFee").value) || 0;
+            const paidFee = Number(document.getElementById("modalPaidFee").value) || 0;
+            const group = document.getElementById("modalStudentGroup").value;
+            const slot = document.getElementById("modalStudentSlot").value;
+            const course = document.getElementById("modalStudentCourse").value;
+            const phone = document.getElementById("modalStudentPhone").value.trim();
+            
             if (!name) return;
-            const updatedStudent = { id: studentId, name, group, slot, course, phone, status };
+            
+            const dueFee = courseFee - paidFee;
+            const status = dueFee > 0 ? "Not Fully Complete" : "Completed";
+
+            const updatedStudent = { id: studentId, name, courseFee, paidFee, group, slot, course, phone, status };
 
             if (activeEditLocation && !activeEditLocation.isNew) removeStudentFromInstituteData(activeEditLocation.targetId);
 
@@ -723,11 +756,15 @@
             const btnArchive = document.getElementById("btnArchiveQuickTap");
             if (student && student.name) {
                 document.getElementById("quickTapName").value = student.name;
+                document.getElementById("quickTapCourseFee").value = student.courseFee !== undefined ? student.courseFee : 2500;
+                document.getElementById("quickTapPaidFee").value = student.paidFee !== undefined ? student.paidFee : 0;
                 document.getElementById("quickTapCourse").value = student.course || "Basic Computer & MS Office";
                 document.getElementById("quickTapPhone").value = student.phone || "";
                 if (btnArchive) btnArchive.classList.remove("hidden");
             } else {
                 document.getElementById("quickTapName").value = "";
+                document.getElementById("quickTapCourseFee").value = "2500";
+                document.getElementById("quickTapPaidFee").value = "0";
                 document.getElementById("quickTapCourse").value = "Basic Computer & MS Office";
                 document.getElementById("quickTapPhone").value = "";
                 if (btnArchive) btnArchive.classList.add("hidden");
@@ -740,16 +777,23 @@
         async function saveQuickTap() {
             if (!activeQuickTap) return;
             const { group, slot, seatIdx } = activeQuickTap;
-            const name = document.getElementById("quickTapName").value.trim(); const course = document.getElementById("quickTapCourse").value;
-            const phone = document.getElementById("quickTapPhone").value.trim(); const newGroup = document.getElementById("quickTapGroup").value;
+            const name = document.getElementById("quickTapName").value.trim();
+            const courseFee = Number(document.getElementById("quickTapCourseFee").value) || 0;
+            const paidFee = Number(document.getElementById("quickTapPaidFee").value) || 0;
+            const course = document.getElementById("quickTapCourse").value;
+            const phone = document.getElementById("quickTapPhone").value.trim();
+            const newGroup = document.getElementById("quickTapGroup").value;
             const newSlot = document.getElementById("quickTapSlot").value;
             if (!name) return;
             if (!instituteData[group]) instituteData[group] = {};
             if (!Array.isArray(instituteData[group][slot])) instituteData[group][slot] = [];
             const existingStudent = instituteData[group][slot][seatIdx];
             const studentId = existingStudent ? existingStudent.id : generateUniqueStudentId();
-            const studentStatus = existingStudent ? (existingStudent.status || "Active") : "Active";
-            const studentData = { id: studentId, name, group: newGroup, slot: newSlot, course, phone, status: studentStatus };
+            
+            const dueFee = courseFee - paidFee;
+            const studentStatus = dueFee > 0 ? "Not Fully Complete" : "Completed";
+
+            const studentData = { id: studentId, name, courseFee, paidFee, group: newGroup, slot: newSlot, course, phone, status: studentStatus };
 
             if (newGroup !== group || newSlot !== slot) {
                 if (!instituteData[newGroup]) instituteData[newGroup] = {}; if (!Array.isArray(instituteData[newGroup][newSlot])) instituteData[newGroup][newSlot] = [];
