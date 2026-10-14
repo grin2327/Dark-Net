@@ -28,9 +28,6 @@
             --neon-green: #2eff66;        
             --bkash-pink: #e2136e;
             --yt-red: #FF0000;
-            --gold-accent: #ffd700;
-            --gold-light: #ffecb3;
-            --gold-border: rgba(255, 215, 0, 0.35);
             --text-main: #f4f2f7;
             --text-muted: #857da1;
             --panel-bg: rgba(23, 19, 41, 0.75); 
@@ -233,12 +230,13 @@
             transform: translateY(-1px);
         }
 
-        .ms-search-btn {
+        /* Navigation Link Button */
+        .ms-nav-link-btn {
             background: rgba(255, 255, 255, 0.04);
             border: 1px solid rgba(255, 255, 255, 0.08);
             color: var(--text-muted);
             font-size: 0.88rem;
-            cursor: pointer;
+            text-decoration: none;
             display: flex;
             align-items: center;
             gap: 8px;
@@ -246,9 +244,10 @@
             border-radius: 20px;
             transition: var(--transition);
             white-space: nowrap;
+            cursor: pointer;
         }
 
-        .ms-search-btn:hover {
+        .ms-nav-link-btn:hover {
             background: rgba(255, 255, 255, 0.1);
             color: var(--text-main);
             border-color: var(--cute-cyan);
@@ -344,7 +343,7 @@
             text-shadow: 0 0 8px rgba(0, 230, 118, 0.2);
         }
         .txt-pink-neon { color: var(--primary-hot); font-weight: 800; }
-        .txt-purple-neon { color: var(--gold-accent); font-weight: 800; text-shadow: 0 0 8px rgba(255, 215, 0, 0.3); }
+        .txt-purple-neon { color: var(--cute-cyan); font-weight: 800; text-shadow: 0 0 8px rgba(0, 229, 255, 0.3); }
 
         .main-layout-fullscreen {
             max-width: 1280px;
@@ -680,7 +679,7 @@
             width: 100%;
         }
 
-        /* --- OFFLINE 1-50 LISTING SYSTEM (GOLDEN THEME) --- */
+        /* --- OFFLINE DATA BOX SYSTEM (5 COLUMNS PER ROW: 1-5 & 6-10 SERIES) --- */
         .offline-box-header {
             display: flex;
             justify-content: space-between;
@@ -694,13 +693,14 @@
             display: flex;
             align-items: center;
             gap: 12px;
+            flex-wrap: wrap;
         }
 
         .offline-50-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            grid-template-columns: repeat(5, 1fr); /* Exactly 5 items per row (1-5 in first row, 6-10 in second row, etc.) */
             gap: 10px;
-            max-height: 520px;
+            max-height: 380px; 
             overflow-y: auto;
             padding-right: 6px;
             margin-top: 14px;
@@ -711,14 +711,13 @@
             width: 6px;
         }
         .offline-50-grid::-webkit-scrollbar-thumb {
-            background: var(--gold-accent);
+            background: var(--cute-cyan);
             border-radius: 10px;
         }
 
-        /* DEFAULT SLOTS: FULL GOLDEN STYLING */
         .offline-slot-card {
             background: rgba(13, 10, 25, 0.75);
-            border: 1px solid var(--gold-border);
+            border: 1px solid var(--glass-border);
             border-radius: 10px;
             padding: 10px 12px;
             display: flex;
@@ -728,25 +727,24 @@
             transition: var(--transition);
         }
 
-        /* FILLED SLOTS: LIGHT GOLDEN STYLING */
         .offline-slot-card.filled {
-            border-color: rgba(255, 236, 179, 0.4);
-            background: rgba(28, 22, 12, 0.65);
+            border-color: rgba(0, 229, 255, 0.25);
+            background: rgba(18, 15, 35, 0.85);
         }
 
         .offline-slot-card:hover {
-            border-color: var(--gold-accent);
-            background: rgba(35, 28, 15, 0.85);
-            box-shadow: 0 0 14px rgba(255, 215, 0, 0.25);
+            border-color: var(--cute-cyan);
+            background: rgba(25, 20, 48, 0.95);
+            box-shadow: 0 0 14px rgba(0, 229, 255, 0.2);
         }
 
         .slot-badge {
             font-family: 'Orbitron', monospace;
             font-size: 0.75rem;
             font-weight: 800;
-            color: var(--gold-accent);
-            background: rgba(255, 215, 0, 0.15);
-            border: 1px solid rgba(255, 215, 0, 0.3);
+            color: var(--cute-cyan);
+            background: rgba(0, 229, 255, 0.12);
+            border: 1px solid rgba(0, 229, 255, 0.25);
             padding: 4px 8px;
             border-radius: 6px;
             flex-shrink: 0;
@@ -760,9 +758,8 @@
             align-items: center;
         }
 
-        /* SAVED LINK TEXT (LIGHT GOLDEN) */
         .slot-link {
-            color: var(--gold-light);
+            color: var(--text-main);
             text-decoration: none;
             font-weight: 600;
             font-size: 0.88rem;
@@ -777,14 +774,13 @@
         }
 
         .slot-link:hover {
-            color: #ffffff;
+            color: var(--cute-cyan);
             text-decoration: underline;
-            text-shadow: 0 0 8px rgba(255, 236, 179, 0.8);
+            text-shadow: 0 0 8px rgba(0, 229, 255, 0.6);
         }
 
-        /* EMPTY SLOT TEXT (GOLDEN) */
         .slot-empty {
-            color: var(--gold-accent);
+            color: var(--text-muted);
             font-size: 0.8rem;
             font-style: italic;
             cursor: pointer;
@@ -793,8 +789,8 @@
         }
 
         .slot-empty:hover {
-            color: #ffffff;
-            text-shadow: 0 0 8px rgba(255, 215, 0, 0.8);
+            color: var(--cute-cyan);
+            text-shadow: 0 0 8px rgba(0, 229, 255, 0.6);
         }
 
         .slot-actions {
@@ -806,14 +802,14 @@
         .btn-slot-icon {
             background: none;
             border: none;
-            color: var(--gold-accent);
+            color: var(--text-muted);
             cursor: pointer;
             font-size: 0.85rem;
             padding: 4px;
             transition: var(--transition);
         }
 
-        .btn-slot-icon:hover { color: #ffffff; }
+        .btn-slot-icon:hover { color: var(--cute-cyan); }
         .btn-slot-icon.del:hover { color: var(--primary-hot); }
 
         /* --- QUICK TOOLS --- */
@@ -1150,6 +1146,12 @@
         }
 
         /* --- RESPONSIVE MEDIA QUERIES --- */
+        @media (max-width: 1200px) {
+            .offline-50-grid {
+                grid-template-columns: repeat(3, 1fr); /* 3 columns for medium screens */
+            }
+        }
+
         @media (max-width: 768px) {
             body { padding-bottom: 20px; }
             header { 
@@ -1192,14 +1194,17 @@
             .btn-add-link { width: 100%; }
             .link-item { padding: 12px 14px; flex-direction: column; align-items: flex-start; gap: 10px; }
             .link-actions { width: 100%; justify-content: space-between; margin-top: 4px; }
+            .offline-50-grid {
+                grid-template-columns: repeat(2, 1fr); /* 2 columns for tablets */
+            }
         }
 
-        @media (max-width: 420px) {
+        @media (max-width: 480px) {
             .brand-text { font-size: 1rem; }
-            .ms-search-btn span { display: none; }
+            .ms-nav-link-btn span { display: none; }
             .btn-youtube-hub, .btn-editor-hub { padding: 6px 10px; font-size: 0.78rem; }
             .quick-tools-compact .os-card { flex: 0 1 calc(50% - 4px); }
-            .offline-50-grid { grid-template-columns: 1fr; }
+            .offline-50-grid { grid-template-columns: 1fr; /* 1 column for mobile */ }
         }
     </style>
 </head>
@@ -1239,10 +1244,11 @@
                 <i class="fa-brands fa-youtube"></i> Video Hub
             </a>
 
-            <button class="ms-search-btn" id="navSearchTrigger" title="Search Links">
-                <span>Search</span>
-                <i class="fa-solid fa-magnifying-glass"></i>
-            </button>
+            <!-- Explore Page Link Button -->
+            <a href="other.html" class="ms-nav-link-btn" id="navExploreTrigger" title="Explore Other Page">
+                <span>Explore</span>
+                <i class="fa-solid fa-compass"></i>
+            </a>
 
             <!-- Profile Avatar Icon with Dynamic Blue/Red Glow & Vibrate -->
             <div class="ms-profile-avatar" id="loginBtn" title="Account / Profile Options">
@@ -1287,27 +1293,31 @@
             </div>
         </section>
 
-        <!-- OFFLINE DATA BOX SYSTEM (1 TO 50 WITH COLLAPSIBLE TOGGLE) -->
+        <!-- OFFLINE DATA BOX SYSTEM -->
         <section class="os-container" id="offlineInboxSection">
             <div class="offline-box-header">
                 <h3 class="os-heading txt-purple-neon" style="margin-bottom: 0; text-align: left; font-size: 1.05rem;">
-                    <i class="fa-solid fa-inbox"></i> Personal Offline Data Box (1-50)
+                    <i class="fa-solid fa-inbox"></i> Personal Offline Data Box
                 </h3>
                 <div class="offline-header-right">
                     <span style="font-size: 0.8rem; color: var(--text-muted);">
-                        Saved Links: <strong id="offlineCount" style="color: var(--gold-accent);">0</strong>/50
+                        Total Slots: <strong id="offlineCount" style="color: var(--cute-cyan);">0</strong>
                     </span>
+                    <!-- Add New Box Button for Admin -->
+                    <button type="button" class="ms-nav-link-btn" id="addNewBoxBtn" onclick="addNewOfflineBox()" style="background: rgba(0, 229, 255, 0.15); border-color: rgba(0, 229, 255, 0.4); color: var(--cute-cyan);">
+                        <i class="fa-solid fa-plus"></i> Add New Box
+                    </button>
                     <!-- Toggle Show/Hide Button -->
-                    <button type="button" class="ms-search-btn" id="toggleOfflineBtn" onclick="toggleOfflineGrid()">
+                    <button type="button" class="ms-nav-link-btn" id="toggleOfflineBtn" onclick="toggleOfflineGrid()">
                         <i class="fa-solid fa-chevron-down" id="offlineToggleIcon"></i>
                         <span id="offlineToggleText">Show List</span>
                     </button>
                 </div>
             </div>
 
-            <!-- 1 to 50 Grid Container (Hidden by Default) -->
+            <!-- Grid Container (Hidden by Default) -->
             <div class="offline-50-grid hidden" id="offlineDataGrid">
-                <!-- JavaScript will populate 1 to 50 slots -->
+                <!-- JavaScript will populate slots in 5-column series -->
             </div>
         </section>
 
@@ -1385,27 +1395,27 @@
 
     </main>
 
-    <!-- OFFLINE SLOT EDIT MODAL (FOR SLOTS 1 TO 50) -->
+    <!-- OFFLINE SLOT EDIT MODAL (ADMIN ONLY) -->
     <div class="modal-overlay" id="slotModalOverlay">
         <div class="profile-modal" style="max-width: 420px;">
             <button class="btn-close-modal" onclick="closeSlotModal()" title="Close Modal">
                 <i class="fa-solid fa-xmark"></i>
             </button>
             <div class="profile-modal-header">
-                <h4 class="profile-title" id="slotModalTitle">Setup Slot #1</h4>
+                <h4 class="profile-title" id="slotModalTitle">Setup Slot</h4>
             </div>
             <div class="input-stack" style="gap: 12px;">
                 <input type="hidden" id="slotModalIndex">
                 <div>
                     <label style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 6px;">Website Title:</label>
-                    <input type="text" id="slotModalName" class="custom-input" placeholder="e.g. My Facebook">
+                    <input type="text" id="slotModalName" class="custom-input" placeholder="e.g. My Website">
                 </div>
                 <div>
                     <label style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 6px;">Website URL:</label>
                     <input type="url" id="slotModalUrl" class="custom-input" placeholder="https://example.com">
                 </div>
                 <div style="display: flex; gap: 10px; margin-top: 10px;">
-                    <button class="btn-add-link" style="flex: 1;" onclick="saveSlotFromModal()"><i class="fa-solid fa-check"></i> Save Slot</button>
+                    <button class="btn-add-link" style="flex: 1;" onclick="saveSlotFromModal()"><i class="fa-solid fa-check"></i> Save Slot (Admin)</button>
                     <button type="button" style="background: rgba(255,255,255,0.08); color: white; border: 1px solid var(--glass-border); padding: 10px 16px; border-radius: 12px; cursor: pointer;" onclick="closeSlotModal()">Cancel</button>
                 </div>
             </div>
@@ -1485,7 +1495,6 @@
             if (isAdmin) {
                 document.body.classList.add('is-admin');
                 
-                // Switch Nav Avatar to RED Glow Mode
                 if (navAvatar) {
                     navAvatar.classList.remove('public-mode');
                     navAvatar.classList.add('admin-mode');
@@ -1509,7 +1518,6 @@
             } else {
                 document.body.classList.remove('is-admin');
                 
-                // Switch Nav Avatar to BLUE Glow Mode
                 if (navAvatar) {
                     navAvatar.classList.remove('admin-mode');
                     navAvatar.classList.add('public-mode');
@@ -1532,7 +1540,6 @@
                 if (adminText) adminText.textContent = 'Admin Login';
             }
 
-            // Re-render components to show/hide delete buttons
             renderOfflineSlots();
             renderPublicResources();
         }
@@ -1542,18 +1549,17 @@
                 isAdmin = false;
                 localStorage.setItem('darknet_is_admin', 'false');
                 updateAdminUI();
-                alert('Switched to Public Guest Mode. Delete features are now restricted.');
+                alert('Switched to Public Guest Mode.');
             } else {
-                const passInput = prompt('Enter Admin Password to activate delete permissions:');
+                const passInput = prompt('Enter Admin Password to activate admin permissions:');
                 if (passInput !== null) {
                     const pass = passInput.trim().toLowerCase();
-                    // Passwords supported: 123, admin123, admin, 01766393311, 01766393311c
                     const validPasswords = ['123', 'admin123', 'admin', '01766393311', '01766393311c'];
                     if (validPasswords.includes(pass)) {
                         isAdmin = true;
                         localStorage.setItem('darknet_is_admin', 'true');
                         updateAdminUI();
-                        alert('Admin access granted! Delete buttons are now active and profile glow turned RED.');
+                        alert('Admin access granted!');
                     } else {
                         alert('Incorrect password!');
                     }
@@ -1561,10 +1567,11 @@
             }
         }
 
-        // --- OFFLINE 1-50 LISTING SYSTEM ---
+        // --- OFFLINE SLOTS SYSTEM ---
         let offlineSlots = JSON.parse(localStorage.getItem('darknet_offline_slots_50')) || [];
 
-        while (offlineSlots.length < 50) {
+        // Ensure at least 5 initial slots
+        while (offlineSlots.length < 5) {
             offlineSlots.push({ name: '', url: '' });
         }
 
@@ -1575,7 +1582,7 @@
 
             let filledCount = 0;
 
-            for (let i = 0; i < 50; i++) {
+            for (let i = 0; i < offlineSlots.length; i++) {
                 const item = offlineSlots[i] || { name: '', url: '' };
                 const isFilled = item.name && item.url;
                 if (isFilled) filledCount++;
@@ -1588,11 +1595,11 @@
                     <div class="slot-content">
                         ${isFilled ? `
                             <a href="${escapeHtml(item.url)}" target="_blank" class="slot-link" title="${escapeHtml(item.url)}">
-                                <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.75rem; color:var(--gold-light);"></i>
+                                <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.75rem; color:var(--cute-cyan);"></i>
                                 ${escapeHtml(item.name)}
                             </a>
                         ` : `
-                            <span class="slot-empty" onclick="openSlotModal(${i})">+ Add Name & URL</span>
+                            <span class="slot-empty" onclick="openSlotModal(${i})">+ Add Name & URL (Admin)</span>
                         `}
                     </div>
                     <div class="slot-actions">
@@ -1604,7 +1611,30 @@
             }
 
             const countSpan = document.getElementById('offlineCount');
-            if (countSpan) countSpan.textContent = filledCount;
+            if (countSpan) countSpan.textContent = offlineSlots.length;
+        }
+
+        // Add New Box functionality
+        function addNewOfflineBox() {
+            if (!isAdmin) {
+                const passInput = prompt('Only Admin can add a new box. Enter Admin Password:');
+                if (passInput === null) return;
+                const pass = passInput.trim().toLowerCase();
+                const validPasswords = ['123', 'admin123', 'admin', '01766393311', '01766393311c'];
+                if (validPasswords.includes(pass)) {
+                    isAdmin = true;
+                    localStorage.setItem('darknet_is_admin', 'true');
+                    updateAdminUI();
+                } else {
+                    alert('Incorrect password!');
+                    return;
+                }
+            }
+
+            offlineSlots.push({ name: '', url: '' });
+            localStorage.setItem('darknet_offline_slots_50', JSON.stringify(offlineSlots));
+            renderOfflineSlots();
+            alert(`New Box #${offlineSlots.length} added successfully! Click it to configure.`);
         }
 
         function toggleOfflineGrid() {
@@ -1624,6 +1654,21 @@
         }
 
         function openSlotModal(index) {
+            if (!isAdmin) {
+                const passInput = prompt('Only Admin can edit slots. Enter Admin Password:');
+                if (passInput === null) return;
+                const pass = passInput.trim().toLowerCase();
+                const validPasswords = ['123', 'admin123', 'admin', '01766393311', '01766393311c'];
+                if (validPasswords.includes(pass)) {
+                    isAdmin = true;
+                    localStorage.setItem('darknet_is_admin', 'true');
+                    updateAdminUI();
+                } else {
+                    alert('Incorrect password!');
+                    return;
+                }
+            }
+
             document.getElementById('slotModalIndex').value = index;
             document.getElementById('slotModalTitle').textContent = `Setup Slot #${index + 1}`;
             const item = offlineSlots[index] || { name: '', url: '' };
@@ -1637,6 +1682,11 @@
         }
 
         function saveSlotFromModal() {
+            if (!isAdmin) {
+                alert('Only Admin can save slot data!');
+                return;
+            }
+
             const index = parseInt(document.getElementById('slotModalIndex').value, 10);
             const name = document.getElementById('slotModalName').value.trim();
             let url = document.getElementById('slotModalUrl').value.trim();
@@ -1658,7 +1708,7 @@
 
         function clearSlot(index) {
             if (!isAdmin) {
-                alert('Only Admin can delete or clear slots!');
+                alert('Only Admin can clear slots!');
                 return;
             }
             if (confirm(`Are you sure you want to clear Slot #${index + 1}?`)) {
@@ -1672,7 +1722,7 @@
             return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
         }
 
-        // --- ONLINE PUBLIC RESOURCE MANAGER SYSTEM WITH DYNAMIC ICONS & PERSISTENCE ---
+        // --- ONLINE PUBLIC RESOURCE MANAGER SYSTEM ---
         let defaultPublicData = [
             {
                 category: "YouTube",
@@ -1774,7 +1824,6 @@
                     `;
                 });
 
-                /* ALL FOLDERS CLOSED BY DEFAULT */
                 folderDiv.innerHTML = `
                     <div class="folder-header" onclick="toggleFolderContent(this)">
                         <div class="folder-title-wrap">
@@ -1869,7 +1918,6 @@
             renderPublicResources();
         }
 
-        // PUBLIC ACCESS: Anyone can add links!
         function addOnlineLink() {
             const titleInput = document.getElementById('titleInput');
             const categorySelect = document.getElementById('categorySelect');
@@ -1948,7 +1996,6 @@
         document.addEventListener('DOMContentLoaded', function() {
             updateAdminUI();
 
-            // Profile Modal triggers
             const loginBtn = document.getElementById('loginBtn');
             const profileModal = document.getElementById('profileModalOverlay');
             const closeProfileModalBtn = document.getElementById('closeProfileModalBtn');
@@ -1985,7 +2032,6 @@
                 });
             }
 
-            // Bkash Modal triggers
             const profileDonateBtn = document.getElementById('profileDonateBtn');
             const bkashModal = document.getElementById('bkashModalOverlay');
             const closeBkashModalBtn = document.getElementById('closeBkashModalBtn');
