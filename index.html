@@ -3,7 +3,7 @@
 <head>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9257622719007989"
      crossorigin="anonymous"></script>
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='16' fill='%2308080C'/><rect x='12' y='12' width='18' height='18' rx='4.5' fill='%23FF007F'/><rect x='34' y='12' width='18' height='18' rx='4.5' fill='%2339FF14'/><rect x='12' y='34' width='18' height='18' rx='4.5' fill='%2300E5FF'/><rect x='34' y='34' width='18' height='18' rx='4.5' fill='%238A2BE2'/></svg>">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='16' fill='%2309090b'/><rect x='12' y='12' width='18' height='18' rx='4.5' fill='%23ffffff'/><rect x='34' y='12' width='18' height='18' rx='4.5' fill='%23a1a1aa'/><rect x='12' y='34' width='18' height='18' rx='4.5' fill='%2371717a'/><rect x='34' y='34' width='18' height='18' rx='4.5' fill='%2352525b'/></svg>">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <title>DARK-NET | HOME-PAGE</title>
@@ -19,36 +19,36 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 
     <style>
-        /* --- DESIGN SYSTEM: CYBER-PASTEL --- */
+        /* --- DESIGN SYSTEM: BLACK & WHITE MINIMALIST GEMINI THEME --- */
         :root {
-            --bg-base: #0b0914;           
-            --primary-hot: #ff337a;       
-            --cute-cyan: #00e5ff;         
-            --accent-purple: #8a4fff;     
-            --neon-green: #2eff66;        
-            --bkash-pink: #e2136e;
-            --yt-red: #FF0000;
-            --text-main: #f4f2f7;
-            --text-muted: #857da1;
-            --panel-bg: rgba(23, 19, 41, 0.75); 
-            --glass-border: rgba(255, 255, 255, 0.08); 
-            --radius-lg: 20px;
-            --radius-sm: 12px;
-            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            --bg-main-gradient-start: #1c1537;
-            --bg-main-gradient-end: #0f0b21;
+            --bg-base: #09090b;           
+            --primary-hot: #ffffff;       
+            --cute-cyan: #f4f4f5;         
+            --accent-purple: #a1a1aa;     
+            --neon-green: #ffffff;        
+            --bkash-pink: #71717a;
+            --yt-red: #ffffff;
+            --text-main: #f4f4f5;
+            --text-muted: #a1a1aa;
+            --panel-bg: #121215; 
+            --glass-border: #27272a; 
+            --radius-lg: 16px;
+            --radius-sm: 10px;
+            --transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            --bg-main-gradient-start: #09090b;
+            --bg-main-gradient-end: #121215;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            background: linear-gradient(145deg, var(--bg-main-gradient-start), var(--bg-main-gradient-end));
+            background-color: var(--bg-base);
             color: var(--text-main);
             min-height: 100vh;
             position: relative;
@@ -56,30 +56,6 @@
             display: flex;
             flex-direction: column;
             padding-bottom: 30px;
-        }
-
-        body::before, body::after {
-            content: '';
-            position: fixed;
-            width: 40vw;
-            height: 40vw;
-            border-radius: 50%;
-            filter: blur(160px);
-            z-index: -1;
-            opacity: 0.12; 
-            pointer-events: none;
-        }
-
-        body::before {
-            background: var(--primary-hot);
-            top: -10%;
-            left: -5%;
-        }
-
-        body::after {
-            background: var(--accent-purple);
-            bottom: -10%;
-            right: -5%;
         }
 
         /* --- ADMIN RESTRICTION RULE (HIDE DELETE BUTTONS FOR NON-ADMINS) --- */
@@ -105,10 +81,10 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px 3%;
-            background: rgba(13, 10, 24, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            padding: 14px 24px;
+            background: rgba(18, 18, 21, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             border-bottom: 1px solid var(--glass-border);
             position: sticky;
             top: 0;
@@ -143,19 +119,16 @@
             border-radius: 1px;
         }
 
-        .ms-grid-icon .s1 { background-color: var(--primary-hot); }
-        .ms-grid-icon .s2 { background-color: var(--neon-green); }
-        .ms-grid-icon .s3 { background-color: var(--cute-cyan); }
-        .ms-grid-icon .s4 { background-color: var(--accent-purple); }
+        .ms-grid-icon .s1 { background-color: #ffffff; }
+        .ms-grid-icon .s2 { background-color: #a1a1aa; }
+        .ms-grid-icon .s3 { background-color: #71717a; }
+        .ms-grid-icon .s4 { background-color: #52525b; }
 
         .brand-text {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.15rem;
-            font-weight: 800;
+            font-size: 1.1rem;
+            font-weight: 700;
             letter-spacing: -0.3px;
-            background: linear-gradient(135deg, #ffffff, var(--cute-cyan));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: #ffffff;
         }
 
         .ms-menu-links {
@@ -174,7 +147,7 @@
         }
 
         .ms-menu-links a:hover {
-            color: var(--cute-cyan);
+            color: #ffffff;
         }
 
         .ms-nav-right {
@@ -186,54 +159,53 @@
 
         /* --- BUTTONS --- */
         .btn-editor-hub {
-            background: linear-gradient(135deg, var(--accent-purple), var(--primary-hot));
+            background: #18181c;
+            border: 1px solid var(--glass-border);
             color: #ffffff;
             text-decoration: none;
             padding: 8px 16px;
             border-radius: 50px;
             font-size: 0.85rem;
-            font-weight: 700;
+            font-weight: 600;
             display: inline-flex;
             align-items: center;
             gap: 8px;
             transition: var(--transition);
-            box-shadow: 0 0 12px rgba(138, 79, 255, 0.4);
             white-space: nowrap;
         }
 
         .btn-editor-hub:hover {
-            background: linear-gradient(135deg, var(--primary-hot), var(--accent-purple));
-            color: #ffffff;
-            transform: translateY(-1px);
-            box-shadow: 0 0 18px rgba(255, 51, 122, 0.6);
+            background: #ffffff;
+            color: #000000;
+            border-color: #ffffff;
         }
 
         .btn-youtube-hub {
-            background: var(--yt-red);
+            background: #18181c;
+            border: 1px solid var(--glass-border);
             color: #ffffff;
             text-decoration: none;
             padding: 8px 16px;
             border-radius: 50px;
             font-size: 0.85rem;
-            font-weight: 700;
+            font-weight: 600;
             display: inline-flex;
             align-items: center;
             gap: 8px;
             transition: var(--transition);
-            box-shadow: 0 0 12px rgba(255, 0, 0, 0.4);
             white-space: nowrap;
         }
 
         .btn-youtube-hub:hover {
-            background: #cc0000;
-            color: #ffffff;
-            transform: translateY(-1px);
+            background: #ffffff;
+            color: #000000;
+            border-color: #ffffff;
         }
 
         /* Navigation Link Button */
         .ms-nav-link-btn {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: #18181c;
+            border: 1px solid var(--glass-border);
             color: var(--text-muted);
             font-size: 0.88rem;
             text-decoration: none;
@@ -248,9 +220,9 @@
         }
 
         .ms-nav-link-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--text-main);
-            border-color: var(--cute-cyan);
+            background: #27272a;
+            color: #ffffff;
+            border-color: #52525b;
         }
 
         /* Profile Avatar Base */
@@ -258,7 +230,7 @@
             width: 38px;
             height: 38px;
             border-radius: 50%;
-            background: linear-gradient(135deg, var(--accent-purple), var(--primary-hot));
+            background: #18181c;
             color: #ffffff;
             display: flex;
             align-items: center;
@@ -266,84 +238,30 @@
             font-size: 1rem;
             font-weight: 700;
             cursor: pointer;
-            border: 2px solid rgba(255, 255, 255, 0.25);
+            border: 1px solid var(--glass-border);
             transition: var(--transition);
             flex-shrink: 0;
             position: relative;
         }
 
-        /* PUBLIC MODE BLUE GLOW & VIBRATE ANIMATION */
-        @keyframes bluePulseVibrate {
-            0% { 
-                box-shadow: 0 0 8px rgba(0, 229, 255, 0.8), 0 0 18px rgba(0, 150, 255, 0.5); 
-                transform: scale(1) rotate(0deg); 
-            }
-            25% { 
-                transform: scale(1.04) rotate(-2deg); 
-            }
-            50% { 
-                box-shadow: 0 0 20px rgba(0, 229, 255, 1), 0 0 30px rgba(0, 140, 255, 0.8); 
-                transform: scale(1) rotate(2deg); 
-            }
-            75% { 
-                transform: scale(1.04) rotate(-1deg); 
-            }
-            100% { 
-                box-shadow: 0 0 8px rgba(0, 229, 255, 0.8), 0 0 18px rgba(0, 150, 255, 0.5); 
-                transform: scale(1) rotate(0deg); 
-            }
-        }
-
         .ms-profile-avatar.public-mode {
-            animation: bluePulseVibrate 2.2s infinite ease-in-out;
-            border-color: var(--cute-cyan) !important;
-            background: linear-gradient(135deg, #0055ff, var(--cute-cyan)) !important;
-        }
-
-        /* ADMIN MODE RED GLOW & VIBRATE ANIMATION */
-        @keyframes redPulseVibrate {
-            0% { 
-                box-shadow: 0 0 10px rgba(255, 51, 122, 0.9), 0 0 20px rgba(255, 0, 80, 0.6); 
-                transform: scale(1) rotate(0deg); 
-            }
-            25% { 
-                transform: scale(1.05) rotate(-2deg); 
-            }
-            50% { 
-                box-shadow: 0 0 22px rgba(255, 51, 122, 1), 0 0 35px rgba(255, 0, 50, 0.9); 
-                transform: scale(1) rotate(2deg); 
-            }
-            75% { 
-                transform: scale(1.05) rotate(-1deg); 
-            }
-            100% { 
-                box-shadow: 0 0 10px rgba(255, 51, 122, 0.9), 0 0 20px rgba(255, 0, 80, 0.6); 
-                transform: scale(1) rotate(0deg); 
-            }
+            border-color: #52525b !important;
+            background: #18181c !important;
         }
 
         .ms-profile-avatar.admin-mode {
-            animation: redPulseVibrate 2s infinite ease-in-out;
-            border-color: var(--primary-hot) !important;
-            background: linear-gradient(135deg, #ff0055, var(--primary-hot)) !important;
+            border-color: #ffffff !important;
+            background: #27272a !important;
         }
 
         .ms-profile-avatar:hover {
-            transform: scale(1.1) !important;
+            transform: scale(1.05);
         }
 
-        .txt-cyan-neon {
-            color: var(--cute-cyan);
-            font-weight: 800;
-            text-shadow: 0 0 8px rgba(0, 229, 255, 0.2);
-        }
-        .txt-green-neon {
-            color: var(--neon-green);
-            font-weight: 800;
-            text-shadow: 0 0 8px rgba(0, 230, 118, 0.2);
-        }
-        .txt-pink-neon { color: var(--primary-hot); font-weight: 800; }
-        .txt-purple-neon { color: var(--cute-cyan); font-weight: 800; text-shadow: 0 0 8px rgba(0, 229, 255, 0.3); }
+        .txt-cyan-neon { color: #ffffff; font-weight: 700; }
+        .txt-green-neon { color: #f4f4f5; font-weight: 700; }
+        .txt-pink-neon { color: #e4e4e7; font-weight: 700; }
+        .txt-purple-neon { color: #d4d4d8; font-weight: 700; }
 
         .main-layout-fullscreen {
             max-width: 1280px;
@@ -359,7 +277,7 @@
             position: fixed;
             top: 0; left: 0;
             width: 100vw; height: 100vh;
-            background: rgba(5, 3, 10, 0.88);
+            background: rgba(9, 9, 11, 0.85);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             z-index: 1000;
@@ -377,12 +295,11 @@
             pointer-events: auto;
         }
 
-        /* VISIBLE CLOSE CROSS ICON BUTTON */
         .btn-close-modal {
             position: absolute;
             top: 14px; right: 16px;
-            background: rgba(255, 255, 255, 0.12);
-            border: 1px solid rgba(255, 255, 255, 0.25);
+            background: #18181c;
+            border: 1px solid var(--glass-border);
             color: #ffffff !important;
             font-size: 1.1rem;
             width: 34px; height: 34px;
@@ -402,27 +319,25 @@
         }
 
         .btn-close-modal:hover {
-            background: var(--primary-hot);
-            border-color: var(--primary-hot);
-            color: #ffffff;
-            transform: rotate(90deg);
+            background: #ffffff;
+            color: #000000 !important;
+            border-color: #ffffff;
         }
 
         /* Profile Modal */
         .profile-modal {
-            background: linear-gradient(145deg, rgba(23, 19, 41, 0.96), rgba(13, 10, 24, 0.98));
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 24px;
+            background: #121215;
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
             padding: 32px 28px;
             max-width: 420px;
             width: 100%;
             max-height: 90vh;
             overflow-y: auto;
             position: relative;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(20px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9);
             transform: scale(0.85);
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .modal-overlay.active .profile-modal { transform: scale(1); }
@@ -431,21 +346,19 @@
         .profile-avatar-large {
             width: 68px; height: 68px;
             border-radius: 50%;
-            background: linear-gradient(135deg, var(--accent-purple), var(--primary-hot));
+            background: #18181c;
             color: #ffffff;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 1.8rem;
             margin: 0 auto 12px auto;
-            border: 2px solid rgba(255, 255, 255, 0.25);
-            box-shadow: 0 0 20px rgba(138, 79, 255, 0.5);
-            transition: var(--transition);
+            border: 1px solid var(--glass-border);
         }
 
         .profile-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
+            font-weight: 700;
             color: #ffffff;
             margin-bottom: 4px;
         }
@@ -464,82 +377,80 @@
             padding: 14px 18px;
             border-radius: var(--radius-sm);
             border: 1px solid var(--glass-border);
-            background: rgba(255, 255, 255, 0.03);
+            background: #18181c;
             color: var(--text-main);
             font-size: 0.95rem;
-            font-weight: 700;
+            font-weight: 600;
             cursor: pointer;
             text-decoration: none;
             transition: var(--transition);
         }
 
         .profile-action-btn:hover {
-            background: rgba(255, 255, 255, 0.08);
-            transform: translateY(-2px);
+            background: #27272a;
+            border-color: #52525b;
         }
 
         .profile-action-btn.donate-btn {
-            border-color: rgba(226, 19, 110, 0.4);
-            color: #ff3399;
+            border-color: var(--glass-border);
+            color: #ffffff;
         }
 
         .profile-action-btn.donate-btn:hover {
-            background: rgba(226, 19, 110, 0.18);
-            border-color: var(--bkash-pink);
-            box-shadow: 0 0 14px rgba(226, 19, 110, 0.4);
+            background: #27272a;
         }
 
         .profile-action-btn.web-link-btn {
-            border-color: rgba(255, 51, 122, 0.2);
-            color: var(--primary-hot);
+            border-color: var(--glass-border);
+            color: #ffffff;
         }
 
         .profile-divider {
             height: 1px;
-            background: rgba(255, 255, 255, 0.08);
+            background: var(--glass-border);
             margin: 6px 0;
         }
 
         /* Bkash Modal */
         .bkash-modal {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(226, 19, 110, 0.18));
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 28px;
+            background: #121215;
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
             padding: 36px 30px;
             max-width: 440px;
             width: 100%;
             max-height: 90vh;
             overflow-y: auto;
             position: relative;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(20px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9);
             transform: scale(0.85);
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             text-align: center;
         }
 
         .modal-overlay.active .bkash-modal { transform: scale(1); }
-        .bkash-modal-title { font-family: 'Orbitron', sans-serif; font-size: 1.35rem; color: #ffffff; margin-bottom: 6px; }
-        .bkash-modal-subtext { font-size: 0.9rem; color: rgba(255, 255, 255, 0.85); margin-bottom: 22px; }
+        .bkash-modal-title { font-size: 1.2rem; font-weight: 700; color: #ffffff; margin-bottom: 6px; }
+        .bkash-modal-subtext { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 22px; }
 
         .bkash-card-box {
-            background: rgba(15, 8, 22, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 18px;
+            background: #18181c;
+            border: 1px solid var(--glass-border);
+            border-radius: 14px;
             padding: 20px;
             margin-bottom: 18px;
         }
 
         .bkash-badge-tag {
             display: inline-block;
-            background: linear-gradient(135deg, var(--bkash-pink), #ff2a8d);
-            color: white;
+            background: #27272a;
+            color: #ffffff;
             font-size: 0.75rem;
-            font-weight: 800;
+            font-weight: 700;
             padding: 4px 14px;
             border-radius: 12px;
             text-transform: uppercase;
             margin-bottom: 12px;
+            border: 1px solid var(--glass-border);
         }
 
         .bkash-num-flex {
@@ -547,27 +458,27 @@
             align-items: center;
             justify-content: space-between;
             gap: 10px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: #09090b;
+            border: 1px solid var(--glass-border);
             padding: 10px 16px;
-            border-radius: 12px;
+            border-radius: 10px;
         }
 
         .bkash-big-num {
-            font-family: 'Orbitron', monospace;
+            font-family: monospace;
             font-size: 1.25rem;
-            font-weight: 900;
+            font-weight: 700;
             color: #ffffff;
             word-break: break-all;
         }
 
         .btn-modal-copy {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.05));
+            background: #18181c;
             color: white;
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            border: 1px solid var(--glass-border);
             padding: 8px 16px;
             border-radius: 8px;
-            font-weight: 700;
+            font-weight: 600;
             font-size: 0.85rem;
             cursor: pointer;
             transition: var(--transition);
@@ -575,9 +486,9 @@
         }
 
         .btn-modal-copy:hover {
-            background: var(--bkash-pink);
-            border-color: var(--bkash-pink);
-            transform: scale(1.05);
+            background: #ffffff;
+            color: #000000;
+            border-color: #ffffff;
         }
 
         /* --- OS HUB & CATEGORIES --- */
@@ -592,11 +503,12 @@
         }
 
         .os-heading {
-            font-size: 1.1rem;
-            font-weight: 800;
+            font-size: 1rem;
+            font-weight: 700;
             margin-bottom: 18px;
             text-transform: uppercase;
             text-align: center;
+            color: #ffffff;
         }
 
         .os-grid {
@@ -609,8 +521,8 @@
         .os-card {
             flex: 1 1 160px;
             max-width: 220px;
-            background: rgba(13, 10, 25, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: #18181c;
+            border: 1px solid var(--glass-border);
             border-radius: var(--radius-sm);
             padding: 18px 14px;
             text-align: center;
@@ -624,62 +536,32 @@
             transition: var(--transition);
         }
 
-        .os-card:hover { transform: translateY(-3px); }
+        .os-card:hover { transform: translateY(-3px); border-color: #52525b; background: #222226; }
 
-        .os-card-win:hover { border-color: #00a4ef; background: rgba(0, 164, 239, 0.08); }
-        .os-card-linux:hover { border-color: var(--neon-green); background: rgba(46, 255, 102, 0.08); }
-        .os-card-mac:hover { border-color: #ff337a; background: rgba(255, 51, 122, 0.08); }
-        .os-card-android:hover { border-color: #3ddc84; background: rgba(61, 220, 132, 0.08); }
-        .os-card-ios:hover { border-color: #007aff; background: rgba(0, 122, 255, 0.08); }
+        .os-icon-wrapper { font-size: 2rem; color: #ffffff; }
 
-        .os-card-id:hover { border-color: #ff9900; background: rgba(255, 153, 0, 0.08); }
-        .os-card-temp:hover { border-color: #a855f7; background: rgba(168, 85, 247, 0.08); }
-        .os-card-radio:hover { border-color: #22c55e; background: rgba(34, 197, 94, 0.08); }
-        .os-card-world:hover { border-color: #06b6d4; background: rgba(6, 182, 212, 0.08); }
-        .os-card-hack:hover { border-color: #ef4444; background: rgba(239, 68, 68, 0.08); }
-
-        .os-icon-wrapper { font-size: 2rem; }
-
-        .win-glow { color: #00e5ff; }
-        .linux-glow { color: var(--neon-green); }
-        .mac-glow { color: #ffffff; }
-        .android-glow { color: #3ddc84; }
-        .ios-glow { color: #007aff; }
-
-        .id-glow { color: #ff9900; }
-        .temp-glow { color: #a855f7; }
-        .radio-glow { color: #22c55e; }
-        .world-glow { color: #06b6d4; }
-        .hack-glow { color: #ef4444; }
+        .win-glow, .linux-glow, .mac-glow, .android-glow, .ios-glow,
+        .id-glow, .temp-glow, .radio-glow, .world-glow, .hack-glow { color: #ffffff; }
 
         .os-title-text {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1rem;
-            font-weight: 800;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #ffffff;
         }
 
-        .win-title { background: linear-gradient(135deg, #ffffff, #00e5ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .linux-title { background: linear-gradient(135deg, #ffffff, #2eff66); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .mac-title { background: linear-gradient(135deg, #ffffff, #ff75a0); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .android-title { background: linear-gradient(135deg, #ffffff, #3ddc84); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .ios-title { background: linear-gradient(135deg, #ffffff, #007aff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-
-        .id-title { background: linear-gradient(135deg, #ffffff, #ff9900); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .temp-title { background: linear-gradient(135deg, #ffffff, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .radio-title { background: linear-gradient(135deg, #ffffff, #22c55e); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .world-title { background: linear-gradient(135deg, #ffffff, #06b6d4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .hack-title { background: linear-gradient(135deg, #ffffff, #ef4444); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .win-title, .linux-title, .mac-title, .android-title, .ios-title,
+        .id-title, .temp-title, .radio-title, .world-title, .hack-title { color: #ffffff; }
 
         .os-sub-text {
             font-size: 0.72rem;
             color: var(--text-muted);
-            font-weight: 700;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            font-weight: 600;
+            border-top: 1px solid var(--glass-border);
             padding-top: 6px;
             width: 100%;
         }
 
-        /* --- OFFLINE DATA BOX SYSTEM (5 COLUMNS PER ROW: 1-5 & 6-10 SERIES) --- */
+        /* --- OFFLINE DATA BOX SYSTEM --- */
         .offline-box-header {
             display: flex;
             justify-content: space-between;
@@ -698,7 +580,7 @@
 
         .offline-50-grid {
             display: grid;
-            grid-template-columns: repeat(5, 1fr); /* Exactly 5 items per row (1-5 in first row, 6-10 in second row, etc.) */
+            grid-template-columns: repeat(5, 1fr);
             gap: 10px;
             max-height: 380px; 
             overflow-y: auto;
@@ -708,15 +590,15 @@
         }
 
         .offline-50-grid::-webkit-scrollbar {
-            width: 6px;
+            width: 5px;
         }
         .offline-50-grid::-webkit-scrollbar-thumb {
-            background: var(--cute-cyan);
+            background: #52525b;
             border-radius: 10px;
         }
 
         .offline-slot-card {
-            background: rgba(13, 10, 25, 0.75);
+            background: #18181c;
             border: 1px solid var(--glass-border);
             border-radius: 10px;
             padding: 10px 12px;
@@ -728,23 +610,22 @@
         }
 
         .offline-slot-card.filled {
-            border-color: rgba(0, 229, 255, 0.25);
-            background: rgba(18, 15, 35, 0.85);
+            border-color: #52525b;
+            background: #1c1c21;
         }
 
         .offline-slot-card:hover {
-            border-color: var(--cute-cyan);
-            background: rgba(25, 20, 48, 0.95);
-            box-shadow: 0 0 14px rgba(0, 229, 255, 0.2);
+            border-color: #ffffff;
+            background: #222226;
         }
 
         .slot-badge {
-            font-family: 'Orbitron', monospace;
+            font-family: monospace;
             font-size: 0.75rem;
-            font-weight: 800;
-            color: var(--cute-cyan);
-            background: rgba(0, 229, 255, 0.12);
-            border: 1px solid rgba(0, 229, 255, 0.25);
+            font-weight: 700;
+            color: #ffffff;
+            background: #27272a;
+            border: 1px solid var(--glass-border);
             padding: 4px 8px;
             border-radius: 6px;
             flex-shrink: 0;
@@ -774,9 +655,8 @@
         }
 
         .slot-link:hover {
-            color: var(--cute-cyan);
+            color: #ffffff;
             text-decoration: underline;
-            text-shadow: 0 0 8px rgba(0, 229, 255, 0.6);
         }
 
         .slot-empty {
@@ -784,13 +664,12 @@
             font-size: 0.8rem;
             font-style: italic;
             cursor: pointer;
-            font-weight: 700;
+            font-weight: 600;
             transition: var(--transition);
         }
 
         .slot-empty:hover {
-            color: var(--cute-cyan);
-            text-shadow: 0 0 8px rgba(0, 229, 255, 0.6);
+            color: #ffffff;
         }
 
         .slot-actions {
@@ -809,8 +688,8 @@
             transition: var(--transition);
         }
 
-        .btn-slot-icon:hover { color: var(--cute-cyan); }
-        .btn-slot-icon.del:hover { color: var(--primary-hot); }
+        .btn-slot-icon:hover { color: #ffffff; }
+        .btn-slot-icon.del:hover { color: #ef4444; }
 
         /* --- QUICK TOOLS --- */
         .quick-tools-compact {
@@ -856,16 +735,17 @@
         }
 
         .section-heading {
-            font-size: 1.1rem;
-            font-weight: 800;
+            font-size: 1rem;
+            font-weight: 700;
             margin-bottom: 18px;
             text-transform: uppercase;
             text-align: left;
+            color: #ffffff;
         }
 
         .add-link-box {
-            background: rgba(0, 0, 0, 0.25);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: #18181c;
+            border: 1px solid var(--glass-border);
             border-radius: var(--radius-sm);
             padding: 18px;
             margin-bottom: 20px;
@@ -873,9 +753,9 @@
 
         .add-link-box-title {
             font-size: 0.9rem;
-            color: var(--cute-cyan);
+            color: #ffffff;
             margin-bottom: 12px;
-            font-weight: 700;
+            font-weight: 600;
             display: flex;
             align-items: center;
             gap: 8px;
@@ -895,49 +775,48 @@
 
         .custom-input {
             width: 100%;
-            background: #0f0c1f;
-            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: #09090b;
+            border: 1px solid var(--glass-border);
             padding: 12px 16px;
             border-radius: var(--radius-sm);
             color: var(--text-main);
-            font-weight: 600;
+            font-weight: 500;
             outline: none;
             transition: var(--transition);
             text-align: left;
         }
         
         select.custom-input option {
-            background: #0f0c1f;
+            background: #18181c;
             color: var(--text-main);
         }
 
         .custom-input:focus {
-            border-color: var(--cute-cyan);
-            box-shadow: 0 0 10px rgba(0, 229, 255, 0.2);
+            border-color: #52525b;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
         }
 
         .btn-add-link {
-            background: linear-gradient(135deg, var(--cute-cyan), var(--accent-purple));
-            color: #ffffff;
+            background: #ffffff;
+            color: #000000;
             border: none;
             padding: 12px 24px;
             border-radius: var(--radius-sm);
-            font-weight: 700;
+            font-weight: 600;
             cursor: pointer;
             transition: var(--transition);
             white-space: nowrap;
-            box-shadow: 0 0 12px rgba(0, 229, 255, 0.3);
         }
 
         .btn-add-link:hover { 
-            transform: translateY(-2px);
-            box-shadow: 0 0 18px rgba(0, 229, 255, 0.5);
+            background: #e4e4e7;
+            transform: translateY(-1px);
         }
 
         .hidden { display: none !important; }
 
         .search-wrapper {
-            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            border-top: 1px solid var(--glass-border);
             padding-top: 16px;
             margin-bottom: 16px;
         }
@@ -950,7 +829,7 @@
         }
 
         .category-folder {
-            background: rgba(15, 12, 31, 0.6);
+            background: #18181c;
             border: 1px solid var(--glass-border);
             border-radius: var(--radius-sm);
             overflow: hidden;
@@ -959,18 +838,18 @@
 
         .folder-header {
             padding: 14px 18px;
-            background: rgba(255, 255, 255, 0.03);
+            background: #1c1c21;
             cursor: pointer;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-weight: 700;
+            font-weight: 600;
             user-select: none;
             transition: var(--transition);
         }
 
         .folder-header:hover {
-            background: rgba(255, 255, 255, 0.08);
+            background: #222226;
         }
 
         .folder-header .folder-title-wrap {
@@ -987,9 +866,9 @@
         }
 
         .btn-delete-folder {
-            background: rgba(255, 51, 122, 0.15);
-            color: var(--primary-hot);
-            border: 1px solid rgba(255, 51, 122, 0.3);
+            background: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.3);
             width: 28px;
             height: 28px;
             border-radius: 50%;
@@ -1002,7 +881,7 @@
         }
 
         .btn-delete-folder:hover {
-            background: var(--primary-hot);
+            background: #ef4444;
             color: #ffffff;
         }
 
@@ -1012,7 +891,7 @@
             flex-direction: column;
             gap: 10px;
             border-top: 1px solid var(--glass-border);
-            background: rgba(0, 0, 0, 0.18);
+            background: #121215;
         }
 
         .folder-content.active {
@@ -1020,8 +899,8 @@
         }
 
         .link-item {
-            background: rgba(23, 19, 41, 0.85);
-            border: 1px solid rgba(255, 255, 255, 0.06);
+            background: #18181c;
+            border: 1px solid var(--glass-border);
             padding: 12px 16px;
             border-radius: 10px;
             display: flex;
@@ -1034,21 +913,21 @@
         }
 
         .link-item:hover {
-            border-color: rgba(0, 229, 255, 0.3);
-            background: rgba(30, 25, 52, 0.95);
+            border-color: #52525b;
+            background: #222226;
         }
 
         .link-icon-badge {
             width: 38px;
             height: 38px;
             border-radius: 8px;
-            background: rgba(255, 255, 255, 0.05);
+            background: #09090b;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 1.2rem;
             flex-shrink: 0;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--glass-border);
         }
 
         .link-details {
@@ -1061,9 +940,9 @@
         }
 
         .link-title {
-            font-weight: 700;
+            font-weight: 600;
             font-size: 0.92rem;
-            color: var(--cute-cyan);
+            color: #ffffff;
             word-wrap: break-word;
             display: flex;
             align-items: center;
@@ -1088,47 +967,49 @@
         }
 
         .btn-watch-video {
-            background: linear-gradient(135deg, var(--primary-hot), var(--accent-purple));
+            background: #27272a;
             color: #ffffff;
             text-decoration: none;
             padding: 6px 14px;
             border-radius: 50px;
             font-size: 0.75rem;
-            font-weight: 700;
+            font-weight: 600;
             display: inline-flex;
             align-items: center;
             gap: 6px;
             transition: var(--transition);
+            border: 1px solid var(--glass-border);
         }
 
         .btn-watch-video:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 12px rgba(255, 51, 122, 0.6);
+            background: #ffffff;
+            color: #000000;
         }
 
         .btn-visit-site {
-            background: linear-gradient(135deg, #00e5ff, #8a4fff);
+            background: #27272a;
             color: #ffffff;
             text-decoration: none;
             padding: 6px 14px;
             border-radius: 50px;
             font-size: 0.75rem;
-            font-weight: 700;
+            font-weight: 600;
             display: inline-flex;
             align-items: center;
             gap: 6px;
             transition: var(--transition);
+            border: 1px solid var(--glass-border);
         }
 
         .btn-visit-site:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 12px rgba(0, 229, 255, 0.5);
+            background: #ffffff;
+            color: #000000;
         }
 
         .btn-delete-link {
-            background: rgba(255, 51, 122, 0.12);
-            color: var(--primary-hot);
-            border: 1px solid rgba(255, 51, 122, 0.25);
+            background: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.3);
             width: 30px;
             height: 30px;
             border-radius: 50%;
@@ -1141,14 +1022,13 @@
         }
 
         .btn-delete-link:hover {
-            background: var(--primary-hot);
+            background: #ef4444;
             color: white;
         }
 
-        /* --- RESPONSIVE MEDIA QUERIES --- */
         @media (max-width: 1200px) {
             .offline-50-grid {
-                grid-template-columns: repeat(3, 1fr); /* 3 columns for medium screens */
+                grid-template-columns: repeat(3, 1fr);
             }
         }
 
@@ -1195,7 +1075,7 @@
             .link-item { padding: 12px 14px; flex-direction: column; align-items: flex-start; gap: 10px; }
             .link-actions { width: 100%; justify-content: space-between; margin-top: 4px; }
             .offline-50-grid {
-                grid-template-columns: repeat(2, 1fr); /* 2 columns for tablets */
+                grid-template-columns: repeat(2, 1fr);
             }
         }
 
@@ -1204,14 +1084,13 @@
             .ms-nav-link-btn span { display: none; }
             .btn-youtube-hub, .btn-editor-hub { padding: 6px 10px; font-size: 0.78rem; }
             .quick-tools-compact .os-card { flex: 0 1 calc(50% - 4px); }
-            .offline-50-grid { grid-template-columns: 1fr; /* 1 column for mobile */ }
+            .offline-50-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 
 <body>
 
-    <!-- DARK-NET TOP NAVIGATION HEADER -->
     <header>
         <div class="ms-nav-left">
             <a href="index.html" class="ms-logo-container">
@@ -1224,7 +1103,6 @@
                 <span class="brand-text">DARK 365</span>
             </a>
 
-            <!-- Navigation Links -->
             <ul class="ms-menu-links">
                 <li><a href="#osSection">Apps</a></li>
                 <li><a href="#offlineInboxSection">Offline Data</a></li>
@@ -1234,23 +1112,19 @@
         </div>
 
         <div class="ms-nav-right">
-            <!-- Video Editor Hub Button -->
             <a href="py/app.html" class="btn-editor-hub" title="Go to Video Editor Page">
                 <i class="fa-solid fa-film"></i> Video Editor
             </a>
 
-            <!-- Video Hub Button -->
             <a href="video.html" class="btn-youtube-hub" title="Go to Video Section">
                 <i class="fa-brands fa-youtube"></i> Video Hub
             </a>
 
-            <!-- Explore Page Link Button -->
-            <a href="other.html" class="ms-nav-link-btn" id="navExploreTrigger" title="Explore Other Page">
+            <a href="py/explore.html" class="ms-nav-link-btn" id="navExploreTrigger" title="Explore Other Page">
                 <span>Explore</span>
                 <i class="fa-solid fa-compass"></i>
             </a>
 
-            <!-- Profile Avatar Icon with Dynamic Blue/Red Glow & Vibrate -->
             <div class="ms-profile-avatar" id="loginBtn" title="Account / Profile Options">
                 <i class="fa-solid fa-user" id="userIcon"></i>
             </div>
@@ -1259,9 +1133,8 @@
 
     <main class="main-layout-fullscreen">
 
-        <!-- OS APPLICATIONS HUB -->
         <section class="os-container" id="osSection">
-            <h3 class="os-heading txt-cyan-neon">
+            <h3 class="os-heading">
                 <i class="fa-solid fa-laptop-code"></i> OS Applications Hub
             </h3>
             <div class="os-grid">
@@ -1293,21 +1166,18 @@
             </div>
         </section>
 
-        <!-- OFFLINE DATA BOX SYSTEM -->
         <section class="os-container" id="offlineInboxSection">
             <div class="offline-box-header">
-                <h3 class="os-heading txt-purple-neon" style="margin-bottom: 0; text-align: left; font-size: 1.05rem;">
+                <h3 class="os-heading" style="margin-bottom: 0; text-align: left; font-size: 1rem;">
                     <i class="fa-solid fa-inbox"></i> Personal Offline Data Box
                 </h3>
                 <div class="offline-header-right">
                     <span style="font-size: 0.8rem; color: var(--text-muted);">
-                        Total Slots: <strong id="offlineCount" style="color: var(--cute-cyan);">0</strong>
+                        Total Slots: <strong id="offlineCount" style="color: #ffffff;">0</strong>
                     </span>
-                    <!-- Add New Box Button for Admin -->
-                    <button type="button" class="ms-nav-link-btn" id="addNewBoxBtn" onclick="addNewOfflineBox()" style="background: rgba(0, 229, 255, 0.15); border-color: rgba(0, 229, 255, 0.4); color: var(--cute-cyan);">
+                    <button type="button" class="ms-nav-link-btn" id="addNewBoxBtn" onclick="addNewOfflineBox()">
                         <i class="fa-solid fa-plus"></i> Add New Box
                     </button>
-                    <!-- Toggle Show/Hide Button -->
                     <button type="button" class="ms-nav-link-btn" id="toggleOfflineBtn" onclick="toggleOfflineGrid()">
                         <i class="fa-solid fa-chevron-down" id="offlineToggleIcon"></i>
                         <span id="offlineToggleText">Show List</span>
@@ -1315,15 +1185,12 @@
                 </div>
             </div>
 
-            <!-- Grid Container (Hidden by Default) -->
             <div class="offline-50-grid hidden" id="offlineDataGrid">
-                <!-- JavaScript will populate slots in 5-column series -->
             </div>
         </section>
 
-        <!-- QUICK ACCESS TOOL SECTION -->
         <section class="os-container quick-tools-compact" id="quickToolsSection">
-            <h3 class="os-heading txt-green-neon">
+            <h3 class="os-heading" style="text-align: left;">
                 <i class="fa-solid fa-screwdriver-wrench"></i> Quick Access Tool
             </h3>
             <div class="quick-tools-grid">
@@ -1335,13 +1202,11 @@
             </div>
         </section>
 
-        <!-- ONLINE PUBLIC RESOURCE MANAGER -->
         <section class="resource-manager-container" id="resourceManagerSection">
-            <h3 class="section-heading txt-pink-neon">
+            <h3 class="section-heading">
                 <i class="fa-solid fa-folder-tree"></i> Online Resource Manager (Publicly Open)
             </h3>
             
-            <!-- Add Link Box with Custom Category & Dynamic Icon Selector Support -->
             <div class="add-link-box">
                 <div class="add-link-box-title">
                     <i class="fa-solid fa-plus-circle"></i> Add New Link to Public Resource Manager
@@ -1361,7 +1226,6 @@
                         <input type="text" id="customCategoryInput" class="custom-input hidden" placeholder="Type Custom Category Name">
                     </div>
 
-                    <!-- Custom Icon Selection -->
                     <div class="input-inline-row">
                         <select id="iconSelect" class="custom-input">
                             <option value="auto">✨ Auto-Detect Icon (YouTube, Games, App, etc.)</option>
@@ -1382,20 +1246,16 @@
                 </div>
             </div>
 
-            <!-- Search Area -->
             <div class="search-wrapper">
                 <input type="text" id="searchInput" class="custom-input" placeholder="Search in public folders..." onkeyup="filterLinks()">
             </div>
 
-            <!-- Database Folders Area -->
             <div class="database-folders" id="databaseFolders">
-                <!-- Javascript will load folders dynamically -->
             </div>
         </section>
 
     </main>
 
-    <!-- OFFLINE SLOT EDIT MODAL (ADMIN ONLY) -->
     <div class="modal-overlay" id="slotModalOverlay">
         <div class="profile-modal" style="max-width: 420px;">
             <button class="btn-close-modal" onclick="closeSlotModal()" title="Close Modal">
@@ -1416,16 +1276,14 @@
                 </div>
                 <div style="display: flex; gap: 10px; margin-top: 10px;">
                     <button class="btn-add-link" style="flex: 1;" onclick="saveSlotFromModal()"><i class="fa-solid fa-check"></i> Save Slot (Admin)</button>
-                    <button type="button" style="background: rgba(255,255,255,0.08); color: white; border: 1px solid var(--glass-border); padding: 10px 16px; border-radius: 12px; cursor: pointer;" onclick="closeSlotModal()">Cancel</button>
+                    <button type="button" style="background: #18181c; color: white; border: 1px solid var(--glass-border); padding: 10px 16px; border-radius: 10px; cursor: pointer;" onclick="closeSlotModal()">Cancel</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- PROFILE ACCOUNT MODAL -->
     <div class="modal-overlay" id="profileModalOverlay">
         <div class="profile-modal">
-            <!-- VISIBLE CROSS ICON FOR CLOSE -->
             <button class="btn-close-modal" id="closeProfileModalBtn" title="Close Modal">
                 <i class="fa-solid fa-xmark"></i>
             </button>
@@ -1435,7 +1293,7 @@
                     <i class="fa-solid fa-user-shield" id="modalAvatarIcon"></i>
                 </div>
                 <h4 class="profile-title" id="profileTitleText">User Profile</h4>
-                <span id="profileRoleBadge" class="bkash-badge-tag" style="background: rgba(0, 229, 255, 0.1); color: #00e5ff; border: 1px solid rgba(0, 229, 255, 0.2);">Public Guest Mode</span>
+                <span id="profileRoleBadge" class="bkash-badge-tag">Public Guest Mode</span>
             </div>
             <div class="profile-actions-list">
                 <button class="profile-action-btn admin-btn" id="adminAuthBtn">
@@ -1458,10 +1316,8 @@
         </div>
     </div>
 
-    <!-- BKASH DONATE MODAL -->
     <div class="modal-overlay" id="bkashModalOverlay">
         <div class="bkash-modal">
-            <!-- VISIBLE CROSS ICON FOR CLOSE -->
             <button class="btn-close-modal" id="closeBkashModalBtn" title="Close Modal">
                 <i class="fa-solid fa-xmark"></i>
             </button>
@@ -1477,12 +1333,9 @@
         </div>
     </div>
 
-    <!-- MAIN SYSTEM SCRIPT -->
     <script src="script.js"></script>
 
-    <!-- SYSTEM FUNCTIONAL SCRIPT -->
     <script>
-        // --- ADMIN AUTH & ROLE SYSTEM ---
         let isAdmin = localStorage.getItem('darknet_is_admin') === 'true';
 
         function updateAdminUI() {
@@ -1494,48 +1347,36 @@
 
             if (isAdmin) {
                 document.body.classList.add('is-admin');
-                
                 if (navAvatar) {
                     navAvatar.classList.remove('public-mode');
                     navAvatar.classList.add('admin-mode');
                 }
-
                 if (modalAvatar) {
-                    modalAvatar.style.background = 'linear-gradient(135deg, #ff0055, var(--primary-hot))';
-                    modalAvatar.style.boxShadow = '0 0 25px rgba(255, 51, 122, 0.8)';
+                    modalAvatar.style.background = '#27272a';
+                    modalAvatar.style.borderColor = '#ffffff';
                 }
                 if (modalAvatarIcon) {
                     modalAvatarIcon.className = 'fa-solid fa-user-shield';
                 }
-                
                 if (badge) {
                     badge.textContent = 'Admin Mode Active';
-                    badge.style.color = '#ff337a';
-                    badge.style.background = 'rgba(255, 51, 122, 0.15)';
-                    badge.style.borderColor = 'rgba(255, 51, 122, 0.4)';
                 }
                 if (adminText) adminText.textContent = 'Logout Admin Mode';
             } else {
                 document.body.classList.remove('is-admin');
-                
                 if (navAvatar) {
                     navAvatar.classList.remove('admin-mode');
                     navAvatar.classList.add('public-mode');
                 }
-
                 if (modalAvatar) {
-                    modalAvatar.style.background = 'linear-gradient(135deg, var(--accent-purple), var(--primary-hot))';
-                    modalAvatar.style.boxShadow = '0 0 20px rgba(138, 79, 255, 0.5)';
+                    modalAvatar.style.background = '#18181c';
+                    modalAvatar.style.borderColor = '#27272a';
                 }
                 if (modalAvatarIcon) {
                     modalAvatarIcon.className = 'fa-solid fa-user';
                 }
-                
                 if (badge) {
                     badge.textContent = 'Public Guest Mode';
-                    badge.style.color = '#00e5ff';
-                    badge.style.background = 'rgba(0, 229, 255, 0.1)';
-                    badge.style.borderColor = 'rgba(0, 229, 255, 0.2)';
                 }
                 if (adminText) adminText.textContent = 'Admin Login';
             }
@@ -1567,10 +1408,7 @@
             }
         }
 
-        // --- OFFLINE SLOTS SYSTEM ---
         let offlineSlots = JSON.parse(localStorage.getItem('darknet_offline_slots_50')) || [];
-
-        // Ensure at least 5 initial slots
         while (offlineSlots.length < 5) {
             offlineSlots.push({ name: '', url: '' });
         }
@@ -1595,7 +1433,7 @@
                     <div class="slot-content">
                         ${isFilled ? `
                             <a href="${escapeHtml(item.url)}" target="_blank" class="slot-link" title="${escapeHtml(item.url)}">
-                                <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.75rem; color:var(--cute-cyan);"></i>
+                                <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.75rem; color:#ffffff;"></i>
                                 ${escapeHtml(item.name)}
                             </a>
                         ` : `
@@ -1614,7 +1452,6 @@
             if (countSpan) countSpan.textContent = offlineSlots.length;
         }
 
-        // Add New Box functionality
         function addNewOfflineBox() {
             if (!isAdmin) {
                 const passInput = prompt('Only Admin can add a new box. Enter Admin Password:');
@@ -1722,12 +1559,11 @@
             return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
         }
 
-        // --- ONLINE PUBLIC RESOURCE MANAGER SYSTEM ---
         let defaultPublicData = [
             {
                 category: "YouTube",
                 icon: "fa-brands fa-youtube",
-                color: "#FF0000",
+                color: "#ffffff",
                 links: [
                     { title: "Face crime home", url: "https://youtube.com/shorts/Q2ItkHzJitw?si=uWXp2KItdx_ao0n", isVideo: true, icon: "fa-brands fa-youtube" },
                     { title: "World reality", url: "https://youtube.com/shorts/8ATL3uoxXGM?si=IzSlcKOckWsRksHS", isVideo: true, icon: "fa-brands fa-youtube" },
@@ -1737,7 +1573,7 @@
             {
                 category: "Video Search",
                 icon: "fa-solid fa-video",
-                color: "#00e5ff",
+                color: "#ffffff",
                 links: [
                     { title: "Remittance Video Share", url: "https://www.facebook.com/share/r/1HXBzhzhEc/", isVideo: false, icon: "fa-solid fa-video" }
                 ]
@@ -1745,7 +1581,7 @@
             {
                 category: "Cracked Games",
                 icon: "fa-solid fa-gamepad",
-                color: "#2eff66",
+                color: "#ffffff",
                 links: [
                     { title: "SteamRIP - Free PC Games", url: "https://steamrip.com/", isVideo: false, icon: "fa-solid fa-gamepad" }
                 ]
@@ -1753,7 +1589,7 @@
             {
                 category: "Software/Apps",
                 icon: "fa-solid fa-laptop-code",
-                color: "#8a4fff",
+                color: "#ffffff",
                 links: [
                     { title: "OpenLearn - Free Courses", url: "https://www.open.edu/openlearn/", isVideo: false, icon: "fa-solid fa-laptop-code" }
                 ]
@@ -1802,7 +1638,7 @@
                     linksHtml += `
                         <div class="link-item">
                             <div class="link-icon-badge">
-                                <i class="${iconClass}" style="color: ${isYt ? '#FF0000' : 'var(--cute-cyan)'};"></i>
+                                <i class="${iconClass}" style="color: #ffffff;"></i>
                             </div>
                             <div class="link-details">
                                 <span class="link-title">${escapeHtml(linkObj.title)}</span>
@@ -1827,12 +1663,12 @@
                 folderDiv.innerHTML = `
                     <div class="folder-header" onclick="toggleFolderContent(this)">
                         <div class="folder-title-wrap">
-                            <i class="${catObj.icon || 'fa-solid fa-folder-open'}" style="color: ${catObj.color || 'var(--cute-cyan)'}; font-size: 1.2rem;"></i>
+                            <i class="${catObj.icon || 'fa-solid fa-folder-open'}" style="color: #ffffff; font-size: 1.1rem;"></i>
                             <span>${escapeHtml(catObj.category)}</span>
                         </div>
                         <div class="folder-header-actions">
                             <button class="btn-delete-folder" onclick="deleteFolder(event, ${catIdx})" title="Delete Folder"><i class="fa-solid fa-trash"></i></button>
-                            <i class="fa-solid fa-chevron-down txt-muted"></i>
+                            <i class="fa-solid fa-chevron-down" style="color: var(--text-muted);"></i>
                         </div>
                     </div>
                     <div class="folder-content">
@@ -1953,7 +1789,7 @@
                 targetCatObj = {
                     category: category,
                     icon: itemIcon,
-                    color: "var(--cute-cyan)",
+                    color: "#ffffff",
                     links: []
                 };
                 publicResources.push(targetCatObj);
@@ -1992,7 +1828,6 @@
             });
         }
 
-        // --- INIT ON LOAD ---
         document.addEventListener('DOMContentLoaded', function() {
             updateAdminUI();
 

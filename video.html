@@ -3,7 +3,7 @@
 <head>
     <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9257622719007989"
      crossorigin="anonymous"></script> -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%23FF0055'/><stop offset='100%25' stop-color='%237A00FF'/></linearGradient></defs><rect width='64' height='64' rx='18' fill='url(%23g)'/><rect x='8' y='8' width='48' height='48' rx='14' fill='none' stroke='%23FFFFFF' stroke-opacity='0.2' stroke-width='1.5'/><path d='M 26 20.5 C 26 18.7 28 17.6 29.5 18.5 L 45.5 29 C 46.8 29.9 46.8 32.1 45.5 33 L 29.5 43.5 C 28 44.4 26 43.3 26 41.5 Z' fill='%23FFFFFF'/></svg>">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='18' fill='%2309090b'/><rect x='8' y='8' width='48' height='48' rx='14' fill='none' stroke='%23FFFFFF' stroke-opacity='0.2' stroke-width='1.5'/><path d='M 26 20.5 C 26 18.7 28 17.6 29.5 18.5 L 45.5 29 C 46.8 29.9 46.8 32.1 45.5 33 L 29.5 43.5 C 28 44.4 26 43.3 26 41.5 Z' fill='%23FFFFFF'/></svg>">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DRK-JU | CRACK SOFTWARE & PRIVATE HUB</title>
@@ -14,32 +14,33 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800;900&family=Rajdhani:wght@600;700&family=Hind+Siliguri:wght@500;600;700&display=swap" rel="stylesheet">
     
     <style>
-        /* --- DESIGN SYSTEM: DARK CYBER-PURPLE --- */
+        /* --- DESIGN SYSTEM: BLACK & WHITE MINIMALIST GEMINI THEME --- */
         :root {
-            --bg-base: #0b0914;           
-            --primary-hot: #ff337a;       
-            --cute-cyan: #00e5ff;         
-            --accent-purple: #8a4fff;     
-            --neon-green: #2eff66;        
-            --text-main: #f4f2f7;
-            --text-muted: #857da1;
-            --panel-bg: rgba(23, 19, 41, 0.75); 
-            --glass-border: rgba(255, 255, 255, 0.08); 
+            --bg-base: #09090b;           
+            --panel-bg: #121215; 
+            --card-bg: #18181c;
+            --border-color: #27272a; 
+            --border-focus: #52525b;
+            --text-main: #f4f4f5;
+            --text-muted: #a1a1aa;
+            --text-subtle: #71717a;
+            --accent-white: #ffffff;
+            --radius-lg: 16px;
             --radius-sm: 10px;
-            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            --bg-main-gradient-start: #1c1537;
-            --bg-main-gradient-end: #0f0b21;
+            --transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            --bg-main-gradient-start: #09090b;
+            --bg-main-gradient-end: #121215;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', 'Hind Siliguri', system-ui, -apple-system, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, 'Hind Siliguri', sans-serif;
         }
 
         body {
-            background: linear-gradient(145deg, var(--bg-main-gradient-start), var(--bg-main-gradient-end));
+            background-color: var(--bg-base);
             color: var(--text-main);
             min-height: 100vh;
             position: relative;
@@ -49,31 +50,16 @@
             padding-bottom: 60px;
         }
 
-        /* Background Ambient Glow */
-        body::before, body::after {
-            content: '';
-            position: fixed;
-            width: 40vw;
-            height: 40vw;
-            border-radius: 50%;
-            filter: blur(160px);
-            z-index: -1;
-            opacity: 0.15; 
-            pointer-events: none;
-        }
-        body::before { background: var(--primary-hot); top: -10%; left: -5%; }
-        body::after { background: var(--accent-purple); bottom: -10%; right: -5%; }
-
         /* --- STICKY TOP HEADER --- */
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 16px 3%;
-            background: rgba(13, 10, 24, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--glass-border);
+            padding: 14px 24px;
+            background: rgba(18, 18, 21, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border-color);
             position: sticky;
             top: 0;
             z-index: 100;
@@ -86,32 +72,27 @@
             text-decoration: none;
             padding: 8px 16px;
             border-radius: 50px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: #18181c;
+            border: 1px solid var(--border-color);
             transition: var(--transition);
         }
 
         .brand-logo-link:hover {
-            background: rgba(138, 79, 255, 0.15);
-            border-color: var(--accent-purple);
-            box-shadow: 0 0 15px rgba(138, 79, 255, 0.4);
+            background: #27272a;
+            border-color: #52525b;
             transform: translateY(-1px);
         }
 
         .brand-icon {
-            color: var(--primary-hot);
-            font-size: 1.2rem;
-            filter: drop-shadow(0 0 8px var(--primary-hot));
+            color: #ffffff;
+            font-size: 1.1rem;
         }
 
         .brand-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.2rem;
-            font-weight: 800;
-            letter-spacing: 1.5px;
-            background: linear-gradient(135deg, #ffffff, var(--cute-cyan));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: #ffffff;
         }
 
         .top-tagline {
@@ -137,31 +118,29 @@
             padding-bottom: 15px;
             margin-bottom: 25px;
             scrollbar-width: thin;
-            scrollbar-color: var(--accent-purple) transparent;
+            scrollbar-color: var(--border-focus) transparent;
         }
 
         .cat-btn {
-            background: var(--panel-bg);
-            border: 1px solid var(--glass-border);
+            background: #18181c;
+            border: 1px solid var(--border-color);
             color: var(--text-main);
             padding: 8px 16px;
             border-radius: 30px;
             font-size: 0.82rem;
-            font-weight: 700;
+            font-weight: 600;
             cursor: pointer;
             white-space: nowrap;
             display: flex;
             align-items: center;
             gap: 8px;
             transition: var(--transition);
-            backdrop-filter: blur(8px);
         }
 
         .cat-btn:hover, .cat-btn.active {
-            background: linear-gradient(135deg, var(--primary-hot), var(--accent-purple));
-            border-color: transparent;
-            color: #ffffff;
-            box-shadow: 0 4px 15px rgba(255, 51, 122, 0.3);
+            background: #ffffff;
+            border-color: #ffffff;
+            color: #000000;
             transform: translateY(-2px);
         }
 
@@ -180,20 +159,18 @@
             justify-content: space-between;
             margin-bottom: 18px;
             padding-bottom: 10px;
-            border-bottom: 1px solid var(--glass-border);
+            border-bottom: 1px solid var(--border-color);
         }
 
         .section-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.1rem;
-            font-weight: 800;
-            color: var(--cute-cyan);
+            font-size: 1rem;
+            font-weight: 700;
+            color: #ffffff;
             text-transform: uppercase;
             letter-spacing: 1px;
             display: flex;
             align-items: center;
             gap: 10px;
-            text-shadow: 0 0 8px rgba(0, 229, 255, 0.3);
         }
 
         /* RESPONSIVE GRID LAYOUT FIX */
@@ -206,7 +183,7 @@
         /* Individual Compact Video Card Item */
         .video-card-item {
             background: var(--panel-bg);
-            border: 1px solid var(--glass-border);
+            border: 1px solid var(--border-color);
             border-radius: var(--radius-sm);
             overflow: hidden;
             display: flex;
@@ -214,14 +191,13 @@
             text-decoration: none;
             transition: var(--transition);
             position: relative;
-            backdrop-filter: blur(10px);
             cursor: pointer;
         }
 
         .video-card-item:hover {
-            transform: translateY(-5px);
-            border-color: var(--accent-purple);
-            box-shadow: 0 8px 20px rgba(138, 79, 255, 0.3);
+            transform: translateY(-4px);
+            border-color: #52525b;
+            background: #18181c;
         }
 
         /* Video Thumbnail Box */
@@ -241,17 +217,17 @@
         }
 
         .video-card-item:hover .thumb-container img {
-            transform: scale(1.08);
+            transform: scale(1.05);
         }
 
-        /* RGB Hover Play Button Overlay */
+        /* Play Button Overlay */
         .play-overlay {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(11, 9, 20, 0.5);
+            background: rgba(9, 9, 11, 0.6);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -262,14 +238,13 @@
         .play-icon {
             width: 36px;
             height: 36px;
-            background: linear-gradient(135deg, var(--primary-hot), var(--accent-purple));
+            background: #ffffff;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #ffffff;
+            color: #000000;
             font-size: 0.9rem;
-            box-shadow: 0 0 12px rgba(255, 51, 122, 0.8);
             transform: scale(0.8);
             transition: var(--transition);
         }
@@ -286,13 +261,13 @@
             position: absolute;
             bottom: 6px;
             right: 6px;
-            background: rgba(11, 9, 20, 0.85);
+            background: rgba(9, 9, 11, 0.85);
             color: #ffffff;
             font-size: 0.68rem;
-            font-weight: 700;
+            font-weight: 600;
             padding: 2px 6px;
             border-radius: 4px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--border-color);
         }
 
         /* Compact Card Text Details */
@@ -308,20 +283,19 @@
             display: inline-flex;
             align-items: center;
             gap: 5px;
-            background: rgba(138, 79, 255, 0.15);
-            border: 1px solid rgba(138, 79, 255, 0.3);
-            color: var(--cute-cyan);
+            background: #18181c;
+            border: 1px solid var(--border-color);
+            color: #ffffff;
             font-size: 0.65rem;
-            font-weight: 700;
+            font-weight: 600;
             padding: 2px 6px;
             border-radius: 4px;
             width: fit-content;
-            letter-spacing: 0.5px;
         }
 
         .card-title {
             font-size: 0.85rem;
-            font-weight: 700;
+            font-weight: 600;
             color: var(--text-main);
             line-height: 1.3;
             display: -webkit-box;
@@ -332,7 +306,7 @@
         }
 
         .video-card-item:hover .card-title {
-            color: var(--cute-cyan);
+            color: #ffffff;
         }
 
         .card-meta {
@@ -346,8 +320,8 @@
         }
 
         .category-tag {
-            color: var(--neon-green);
-            font-weight: 700;
+            color: #f4f4f5;
+            font-weight: 600;
         }
 
         /* --- VIDEO MODAL POPUP --- */
@@ -357,7 +331,7 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(8, 6, 15, 0.9);
+            background: rgba(9, 9, 11, 0.85);
             backdrop-filter: blur(15px);
             z-index: 1000;
             display: flex;
@@ -377,8 +351,7 @@
             width: 90%;
             max-width: 900px;
             background: var(--panel-bg);
-            border: 1px solid var(--accent-purple);
-            box-shadow: 0 0 30px rgba(138, 79, 255, 0.4);
+            border: 1px solid var(--border-color);
             border-radius: 12px;
             overflow: hidden;
             display: flex;
@@ -396,14 +369,14 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(13, 10, 24, 0.95);
-            border-bottom: 1px solid var(--glass-border);
+            background: #18181c;
+            border-bottom: 1px solid var(--border-color);
         }
 
         .modal-title {
             font-size: 0.95rem;
-            font-weight: 700;
-            color: var(--cute-cyan);
+            font-weight: 600;
+            color: #ffffff;
         }
 
         .close-btn {
@@ -416,7 +389,7 @@
         }
 
         .close-btn:hover {
-            color: var(--primary-hot);
+            color: #ffffff;
             transform: scale(1.1);
         }
 
@@ -433,7 +406,6 @@
             border: none;
         }
 
-        /* --- RESPONSIVE BREAKPOINTS --- */
         @media (min-width: 1600px) { .video-grid-8x3 { grid-template-columns: repeat(8, 1fr); } }
         @media (max-width: 1250px) { .video-grid-8x3 { grid-template-columns: repeat(4, 1fr); } }
         @media (max-width: 850px) { 
@@ -445,19 +417,16 @@
 </head>
 <body>
 
-    <!-- STICKY HEADER -->
     <header>
         <a href="index.html" class="brand-logo-link" title="Click to Return Home">
             <i class="fa-solid fa-play brand-icon"></i>
             <span class="brand-title">DRK-JU | VIDEO HUB</span>
         </a>
-        <div class="top-tagline"><i class="fa-solid fa-shield-halved" style="color: var(--neon-green);"></i> Private Software & Research Storage</div>
+        <div class="top-tagline"><i class="fa-solid fa-shield-halved" style="color: #ffffff;"></i> Private Software & Research Storage</div>
     </header>
 
-    <!-- MAIN CONTAINER -->
     <main class="main-layout">
         
-        <!-- CATEGORY FILTERS ROW -->
         <div class="category-filter-bar">
             <button class="cat-btn active" data-category="all"><i class="fa-solid fa-border-all"></i> All Private Videos</button>
             <button class="cat-btn" data-category="Crack App"><i class="fa-solid fa-key"></i> Crack App</button>
@@ -467,14 +436,12 @@
             <button class="cat-btn" data-category="Open Source"><i class="fa-solid fa-code"></i> Open Source</button>
         </div>
 
-        <!-- LAYER 1 : CRACK APP -->
         <section class="layer-section" data-layer="Crack App">
             <div class="section-header">
                 <div class="section-title">
                     <i class="fa-solid fa-key"></i> Nowlage Crack App 
                 </div>
             </div>
-            <!-- 1 -->
             <div class="video-grid-8x3">
                 <div class="video-card-item" data-video-src="video-file/Sochta Houn -(Remix) Dekhte Dekhte - Nfak - Sochta Hoon Ke Woh Kitne Masoom The_2.mp4" data-title="Sochta Houn -(Remix) Dekhte Dekhte - Nfak | Sochta Hoon Ke Woh Kitne Masoom The">
                     <div class="thumb-container">
@@ -489,7 +456,6 @@
                     </div>
                 </div>
 
-                <!-- 2 -->
                 <div class="video-card-item" data-video-src="video-file/Disable Microsoft Defender Antivirus PERMANENTLY in Windows 11 (2025)_2.mp4" data-title="Windows Defender Permanent Disable">
                     <div class="thumb-container">
                         <img src="https://i.ytimg.com/vi/FVBo54-rPsU/hq720.jpg?sqp=-oaymwEnCNAFEJQDSFryq4qpAxkIARUAAIhCGAHYAQHiAQoIGBACGAY4AUAB&rs=AOn4CLB6qhTNvgoUsXMteNhWL1tZ-1Zsmw" alt="Thumbnail">
@@ -503,7 +469,6 @@
                     </div>
                 </div>
                 
-                <!-- 3 -->
                 <div class="video-card-item" data-video-src="" data-title="IDM Integration & Trial Reset Guide">
                     <div class="thumb-container">
                         <img src="https://picsum.photos/400/225?random=9" alt="Thumbnail">
@@ -571,7 +536,6 @@
             </div>
         </section>
 
-        <!-- LAYER 2 : RESEARCH -->
         <section class="layer-section" data-layer="Research">
             <div class="section-header">
                 <div class="section-title">
@@ -646,7 +610,6 @@
             </div>
         </section>
 
-        <!-- LAYER 3 : VIDEO EDITING -->
         <section class="layer-section" data-layer="Video Edit">
             <div class="section-header">
                 <div class="section-title">
@@ -708,7 +671,6 @@
             </div>
         </section>
 
-        <!-- LAYER 4 : GRAPHICS -->
         <section class="layer-section" data-layer="Graphics">
             <div class="section-header">
                 <div class="section-title">
@@ -783,7 +745,6 @@
             </div>
         </section>
 
-        <!-- LAYER 5 : OPEN SOURCE -->
         <section class="layer-section" data-layer="Open Source">
             <div class="section-header">
                 <div class="section-title">
@@ -834,7 +795,6 @@
 
     </main>
 
-    <!-- VIDEO PLAYER MODAL -->
     <div class="video-modal-overlay" id="videoModal">
         <div class="video-modal-container">
             <div class="modal-header">
@@ -850,7 +810,6 @@
         </div>
     </div>
 
-    <!-- CATEGORY FILTER & POPUP JAVASCRIPT -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const filterBtns = document.querySelectorAll('.cat-btn');
@@ -875,7 +834,6 @@
                 });
             });
 
-            // FIXED JAVASCRIPT FOR VIDEO PLAYING MODAL
             const videoCards = document.querySelectorAll('.video-card-item');
             const videoModal = document.getElementById('videoModal');
             const mainVideoPlayer = document.getElementById('mainVideoPlayer');
