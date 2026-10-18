@@ -35,8 +35,6 @@
             --radius-lg: 16px;
             --radius-sm: 10px;
             --transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-            --bg-main-gradient-start: #09090b;
-            --bg-main-gradient-end: #121215;
         }
 
         * {
@@ -58,14 +56,14 @@
             padding-bottom: 30px;
         }
 
-        /* --- ADMIN RESTRICTION RULE (HIDE DELETE BUTTONS FOR NON-ADMINS) --- */
+        /* --- ADMIN RESTRICTION RULE --- */
         body:not(.is-admin) .btn-delete-folder,
         body:not(.is-admin) .btn-delete-link,
-        body:not(.is-admin) .btn-slot-icon.del {
+        body:not(.is-admin) .btn-slot-icon.del,
+        body:not(.is-admin) #modalDeleteSlotBtn {
             display: none !important;
         }
 
-        /* SHOW DELETE BUTTONS SPECIFICALLY FOR ADMIN */
         body.is-admin .btn-delete-folder {
             display: inline-flex !important;
         }
@@ -74,6 +72,9 @@
         }
         body.is-admin .btn-slot-icon.del {
             display: inline-block !important;
+        }
+        body.is-admin #modalDeleteSlotBtn {
+            display: inline-flex !important;
         }
 
         /* --- TOP NAV HEADER --- */
@@ -157,8 +158,7 @@
             flex-wrap: wrap;
         }
 
-        /* --- BUTTONS --- */
-        .btn-editor-hub {
+        .btn-editor-hub, .btn-youtube-hub {
             background: #18181c;
             border: 1px solid var(--glass-border);
             color: #ffffff;
@@ -174,35 +174,12 @@
             white-space: nowrap;
         }
 
-        .btn-editor-hub:hover {
+        .btn-editor-hub:hover, .btn-youtube-hub:hover {
             background: #ffffff;
             color: #000000;
             border-color: #ffffff;
         }
 
-        .btn-youtube-hub {
-            background: #18181c;
-            border: 1px solid var(--glass-border);
-            color: #ffffff;
-            text-decoration: none;
-            padding: 8px 16px;
-            border-radius: 50px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: var(--transition);
-            white-space: nowrap;
-        }
-
-        .btn-youtube-hub:hover {
-            background: #ffffff;
-            color: #000000;
-            border-color: #ffffff;
-        }
-
-        /* Navigation Link Button */
         .ms-nav-link-btn {
             background: #18181c;
             border: 1px solid var(--glass-border);
@@ -225,7 +202,6 @@
             border-color: #52525b;
         }
 
-        /* Profile Avatar Base */
         .ms-profile-avatar {
             width: 38px;
             height: 38px;
@@ -257,11 +233,6 @@
         .ms-profile-avatar:hover {
             transform: scale(1.05);
         }
-
-        .txt-cyan-neon { color: #ffffff; font-weight: 700; }
-        .txt-green-neon { color: #f4f4f5; font-weight: 700; }
-        .txt-pink-neon { color: #e4e4e7; font-weight: 700; }
-        .txt-purple-neon { color: #d4d4d8; font-weight: 700; }
 
         .main-layout-fullscreen {
             max-width: 1280px;
@@ -312,19 +283,12 @@
             z-index: 20;
         }
 
-        .btn-close-modal i {
-            color: #ffffff;
-            font-size: 1rem;
-            display: block;
-        }
-
         .btn-close-modal:hover {
             background: #ffffff;
             color: #000000 !important;
             border-color: #ffffff;
         }
 
-        /* Profile Modal */
         .profile-modal {
             background: #121215;
             border: 1px solid var(--glass-border);
@@ -389,20 +353,6 @@
         .profile-action-btn:hover {
             background: #27272a;
             border-color: #52525b;
-        }
-
-        .profile-action-btn.donate-btn {
-            border-color: var(--glass-border);
-            color: #ffffff;
-        }
-
-        .profile-action-btn.donate-btn:hover {
-            background: #27272a;
-        }
-
-        .profile-action-btn.web-link-btn {
-            border-color: var(--glass-border);
-            color: #ffffff;
         }
 
         .profile-divider {
@@ -537,20 +487,8 @@
         }
 
         .os-card:hover { transform: translateY(-3px); border-color: #52525b; background: #222226; }
-
         .os-icon-wrapper { font-size: 2rem; color: #ffffff; }
-
-        .win-glow, .linux-glow, .mac-glow, .android-glow, .ios-glow,
-        .id-glow, .temp-glow, .radio-glow, .world-glow, .hack-glow { color: #ffffff; }
-
-        .os-title-text {
-            font-size: 0.95rem;
-            font-weight: 700;
-            color: #ffffff;
-        }
-
-        .win-title, .linux-title, .mac-title, .android-title, .ios-title,
-        .id-title, .temp-title, .radio-title, .world-title, .hack-title { color: #ffffff; }
+        .os-title-text { font-size: 0.95rem; font-weight: 700; color: #ffffff; }
 
         .os-sub-text {
             font-size: 0.72rem;
@@ -561,7 +499,7 @@
             width: 100%;
         }
 
-        /* --- OFFLINE DATA BOX SYSTEM --- */
+        /* --- PUBLIC OFFLINE DATA BOX SYSTEM --- */
         .offline-box-header {
             display: flex;
             justify-content: space-between;
@@ -966,7 +904,7 @@
             flex-shrink: 0;
         }
 
-        .btn-watch-video {
+        .btn-watch-video, .btn-visit-site {
             background: #27272a;
             color: #ffffff;
             text-decoration: none;
@@ -981,27 +919,7 @@
             border: 1px solid var(--glass-border);
         }
 
-        .btn-watch-video:hover {
-            background: #ffffff;
-            color: #000000;
-        }
-
-        .btn-visit-site {
-            background: #27272a;
-            color: #ffffff;
-            text-decoration: none;
-            padding: 6px 14px;
-            border-radius: 50px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            transition: var(--transition);
-            border: 1px solid var(--glass-border);
-        }
-
-        .btn-visit-site:hover {
+        .btn-watch-video:hover, .btn-visit-site:hover {
             background: #ffffff;
             color: #000000;
         }
@@ -1105,7 +1023,7 @@
 
             <ul class="ms-menu-links">
                 <li><a href="#osSection">Apps</a></li>
-                <li><a href="#offlineInboxSection">Offline Data</a></li>
+                <li><a href="#offlineInboxSection">Public Data Box</a></li>
                 <li><a href="#quickToolsSection">Quick Tools</a></li>
                 <li><a href="#resourceManagerSection">Manager</a></li>
             </ul>
@@ -1166,10 +1084,11 @@
             </div>
         </section>
 
+        <!-- PERSONAL PUBLIC DATA BOX SECTION (Independent & Public) -->
         <section class="os-container" id="offlineInboxSection">
             <div class="offline-box-header">
                 <h3 class="os-heading" style="margin-bottom: 0; text-align: left; font-size: 1rem;">
-                    <i class="fa-solid fa-inbox"></i> Personal Offline Data Box
+                    <i class="fa-solid fa-inbox"></i> Personal Public Data Box
                 </h3>
                 <div class="offline-header-right">
                     <span style="font-size: 0.8rem; color: var(--text-muted);">
@@ -1256,6 +1175,7 @@
 
     </main>
 
+    <!-- Slot Modal for Public Data Box (Includes Delete Button for Admin) -->
     <div class="modal-overlay" id="slotModalOverlay">
         <div class="profile-modal" style="max-width: 420px;">
             <button class="btn-close-modal" onclick="closeSlotModal()" title="Close Modal">
@@ -1274,9 +1194,10 @@
                     <label style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 6px;">Website URL:</label>
                     <input type="url" id="slotModalUrl" class="custom-input" placeholder="https://example.com">
                 </div>
-                <div style="display: flex; gap: 10px; margin-top: 10px;">
-                    <button class="btn-add-link" style="flex: 1;" onclick="saveSlotFromModal()"><i class="fa-solid fa-check"></i> Save Slot (Admin)</button>
-                    <button type="button" style="background: #18181c; color: white; border: 1px solid var(--glass-border); padding: 10px 16px; border-radius: 10px; cursor: pointer;" onclick="closeSlotModal()">Cancel</button>
+                <div style="display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap;">
+                    <button class="btn-add-link" style="flex: 2;" onclick="saveSlotFromModal()"><i class="fa-solid fa-check"></i> Save Slot</button>
+                    <button type="button" id="modalDeleteSlotBtn" style="background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); padding: 10px 14px; border-radius: 10px; cursor: pointer; font-weight: 600;" onclick="deleteSlotFromModal()" title="Delete This Slot Box"><i class="fa-solid fa-trash"></i> Delete</button>
+                    <button type="button" style="background: #18181c; color: white; border: 1px solid var(--glass-border); padding: 10px 16px; border-radius: 10px; cursor: pointer; flex: 1;" onclick="closeSlotModal()">Cancel</button>
                 </div>
             </div>
         </div>
@@ -1392,7 +1313,7 @@
                 updateAdminUI();
                 alert('Switched to Public Guest Mode.');
             } else {
-                const passInput = prompt('Enter Admin Password to activate admin permissions:');
+                const passInput = prompt('Enter Admin Password:');
                 if (passInput !== null) {
                     const pass = passInput.trim().toLowerCase();
                     const validPasswords = ['123', 'admin123', 'admin', '01766393311', '01766393311c'];
@@ -1408,6 +1329,7 @@
             }
         }
 
+        // --- PUBLIC DATA BOX LOGIC ---
         let offlineSlots = JSON.parse(localStorage.getItem('darknet_offline_slots_50')) || [];
         while (offlineSlots.length < 5) {
             offlineSlots.push({ name: '', url: '' });
@@ -1418,12 +1340,9 @@
             if (!container) return;
             container.innerHTML = '';
 
-            let filledCount = 0;
-
             for (let i = 0; i < offlineSlots.length; i++) {
                 const item = offlineSlots[i] || { name: '', url: '' };
                 const isFilled = item.name && item.url;
-                if (isFilled) filledCount++;
 
                 const slotDiv = document.createElement('div');
                 slotDiv.className = `offline-slot-card ${isFilled ? 'filled' : ''}`;
@@ -1437,7 +1356,7 @@
                                 ${escapeHtml(item.name)}
                             </a>
                         ` : `
-                            <span class="slot-empty" onclick="openSlotModal(${i})">+ Add Name & URL (Admin)</span>
+                            <span class="slot-empty" onclick="openSlotModal(${i})">${isAdmin ? '+ Add Name & URL' : 'Empty Slot'}</span>
                         `}
                     </div>
                     <div class="slot-actions">
@@ -1454,7 +1373,7 @@
 
         function addNewOfflineBox() {
             if (!isAdmin) {
-                const passInput = prompt('Only Admin can add a new box. Enter Admin Password:');
+                const passInput = prompt('Enter Admin Password to add a new slot box:');
                 if (passInput === null) return;
                 const pass = passInput.trim().toLowerCase();
                 const validPasswords = ['123', 'admin123', 'admin', '01766393311', '01766393311c'];
@@ -1471,7 +1390,7 @@
             offlineSlots.push({ name: '', url: '' });
             localStorage.setItem('darknet_offline_slots_50', JSON.stringify(offlineSlots));
             renderOfflineSlots();
-            alert(`New Box #${offlineSlots.length} added successfully! Click it to configure.`);
+            alert(`New Box #${offlineSlots.length} added successfully! Click edit to configure.`);
         }
 
         function toggleOfflineGrid() {
@@ -1492,7 +1411,7 @@
 
         function openSlotModal(index) {
             if (!isAdmin) {
-                const passInput = prompt('Only Admin can edit slots. Enter Admin Password:');
+                const passInput = prompt('Enter Admin Password to edit slot:');
                 if (passInput === null) return;
                 const pass = passInput.trim().toLowerCase();
                 const validPasswords = ['123', 'admin123', 'admin', '01766393311', '01766393311c'];
@@ -1543,6 +1462,28 @@
             renderOfflineSlots();
         }
 
+        // Delete slot from modal (Admin Only)
+        function deleteSlotFromModal() {
+            if (!isAdmin) {
+                alert('Only Admin can delete slots!');
+                return;
+            }
+
+            const index = parseInt(document.getElementById('slotModalIndex').value, 10);
+            if (confirm(`Are you sure you want to completely delete Slot #${index + 1}?`)) {
+                offlineSlots.splice(index, 1); // Remove slot entirely from array
+                if (offlineSlots.length < 5) {
+                    while (offlineSlots.length < 5) {
+                        offlineSlots.push({ name: '', url: '' });
+                    }
+                }
+                localStorage.setItem('darknet_offline_slots_50', JSON.stringify(offlineSlots));
+                closeSlotModal();
+                renderOfflineSlots();
+                alert('Slot deleted successfully!');
+            }
+        }
+
         function clearSlot(index) {
             if (!isAdmin) {
                 alert('Only Admin can clear slots!');
@@ -1556,9 +1497,11 @@
         }
 
         function escapeHtml(str) {
+            if (!str) return '';
             return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
         }
 
+        // --- ONLINE RESOURCE MANAGER LOGIC ---
         let defaultPublicData = [
             {
                 category: "YouTube",
