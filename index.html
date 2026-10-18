@@ -1257,10 +1257,6 @@
     <script src="script.js"></script>
 
     <script>
-        // JSONbin API Configuration for Global Public Cloud Sync (Fixes Incognito/Other device sync issue)
-        const JSONBIN_BIN_ID = "66f43e0ae41b4d34e437021e";
-        const JSONBIN_API_KEY = "$2a$10$U7v0pC0s2H5K.kLpXQ4/uuO82WkO1z5xWwY6m7xP";
-
         let isAdmin = localStorage.getItem('darknet_is_admin') === 'true';
 
         function updateAdminUI() {
@@ -1333,46 +1329,10 @@
             }
         }
 
-        // --- PUBLIC DATA BOX LOGIC WITH CLOUD SYNC ---
+        // --- PUBLIC DATA BOX LOGIC ---
         let offlineSlots = JSON.parse(localStorage.getItem('darknet_offline_slots_50')) || [];
         while (offlineSlots.length < 5) {
             offlineSlots.push({ name: '', url: '' });
-        }
-
-        // Fetch live cloud data so incognito/other users see the exact saved slots
-        async function fetchCloudSlots() {
-            try {
-                const response = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest`, {
-                    headers: { "X-Master-Key": JSONBIN_API_KEY }
-                });
-                if (response.ok) {
-                    const data = await response.json();
-                    if (data.record && data.record.offlineSlots) {
-                        offlineSlots = data.record.offlineSlots;
-                        localStorage.setItem('darknet_offline_slots_50', JSON.stringify(offlineSlots));
-                        renderOfflineSlots();
-                    }
-                }
-            } catch (e) {
-                console.warn("Using local cache fallback for slots:", e);
-            }
-        }
-
-        // Sync local updates directly to online cloud bin
-        async function syncCloudSlots() {
-            localStorage.setItem('darknet_offline_slots_50', JSON.stringify(offlineSlots));
-            try {
-                await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`, {
-                    method: "PUT",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "X-Master-Key": JSONBIN_API_KEY
-                    },
-                    body: JSON.stringify({ offlineSlots: offlineSlots, publicResources: publicResources })
-                });
-            } catch (e) {
-                console.error("Cloud sync error:", e);
-            }
         }
 
         function renderOfflineSlots() {
@@ -1428,7 +1388,7 @@
             }
 
             offlineSlots.push({ name: '', url: '' });
-            syncCloudSlots();
+            localStorage.setItem('darknet_offline_slots_50', JSON.stringify(offlineSlots));
             renderOfflineSlots();
             alert(`New Box #${offlineSlots.length} added successfully! Click edit to configure.`);
         }
@@ -1497,7 +1457,7 @@
             }
 
             offlineSlots[index] = { name, url };
-            syncCloudSlots();
+            localStorage.setItem('darknet_offline_slots_50', JSON.stringify(offlineSlots));
             closeSlotModal();
             renderOfflineSlots();
         }
@@ -1517,7 +1477,7 @@
                         offlineSlots.push({ name: '', url: '' });
                     }
                 }
-                syncCloudSlots();
+                localStorage.setItem('darknet_offline_slots_50', JSON.stringify(offlineSlots));
                 closeSlotModal();
                 renderOfflineSlots();
                 alert('Slot deleted successfully!');
@@ -1531,7 +1491,7 @@
             }
             if (confirm(`Are you sure you want to clear Slot #${index + 1}?`)) {
                 offlineSlots[index] = { name: '', url: '' };
-                syncCloudSlots();
+                localStorage.setItem('darknet_offline_slots_50', JSON.stringify(offlineSlots));
                 renderOfflineSlots();
             }
         }
@@ -1583,7 +1543,6 @@
 
         function savePublicResources() {
             localStorage.setItem('darknet_public_resources_data', JSON.stringify(publicResources));
-            syncCloudSlots();
         }
 
         function getIconForCategoryOrUrl(category, url, selectedIcon) {
@@ -1814,7 +1773,6 @@
 
         document.addEventListener('DOMContentLoaded', function() {
             updateAdminUI();
-            fetchCloudSlots(); // Fetch cloud sync data automatically on page load
 
             const loginBtn = document.getElementById('loginBtn');
             const profileModal = document.getElementById('profileModalOverlay');
