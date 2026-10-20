@@ -1255,9 +1255,9 @@
     </div>
 
     <script>
-        // --- JSONbin.io Cloud Credentials Configured ---
-        const JSONBIN_BIN_ID = '6aba0fcbac6210605afd0b26'; 
-        const JSONBIN_API_KEY = '$2a$10$NdVprjNSRs1iJOzSyH896.6YYu87qOoZC5AH5WZsi99PacsVRU7AS'; 
+        // --- JSONbin.io Cloud Configuration (Configured) ---
+        const JSONBIN_BIN_ID = '6ab4e1ddffd5d1605329a6d2'; 
+        const JSONBIN_API_KEY = '$2a$10$HYw4h4y5gW.sx3Cmz02WCeu4rjP9uzhvwVYKfOKjrRv9nO7jEPM22'; 
 
         let isAdmin = localStorage.getItem('darknet_is_admin') === 'true';
 
@@ -1371,15 +1371,8 @@
             }
         ];
 
-        // Safe Load Logic with Full Local Fallback & Cloud Sync
+        // Safe Load Logic (Prioritizes Cloud Data so Incognito gets fresh data instantly)
         async function loadData() {
-            const localSlots = JSON.parse(localStorage.getItem('darknet_offline_slots_50'));
-            const localRes = JSON.parse(localStorage.getItem('darknet_public_resources_data'));
-
-            // Always fallback first to ensure initial fast render
-            offlineSlots = localSlots || [];
-            publicResources = localRes || defaultPublicData;
-
             if (JSONBIN_BIN_ID && JSONBIN_API_KEY) {
                 try {
                     const response = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest`, {
@@ -1398,6 +1391,16 @@
                 }
             }
 
+            // Fallback to local storage if cloud data wasn't fully loaded
+            if (!offlineSlots || offlineSlots.length === 0) {
+                const localSlots = JSON.parse(localStorage.getItem('darknet_offline_slots_50'));
+                offlineSlots = localSlots || [];
+            }
+            if (!publicResources || publicResources.length === 0) {
+                const localRes = JSON.parse(localStorage.getItem('darknet_public_resources_data'));
+                publicResources = localRes || defaultPublicData;
+            }
+
             while (offlineSlots.length < 5) {
                 offlineSlots.push({ name: '', url: '' });
             }
@@ -1406,8 +1409,9 @@
             renderPublicResources();
         }
 
-        // Safe Save Logic
+        // Real-Time Safe Save Logic (Updates Cloud & Local Storage immediately)
         async function saveData() {
+            // Local storage backup
             localStorage.setItem('darknet_offline_slots_50', JSON.stringify(offlineSlots));
             localStorage.setItem('darknet_public_resources_data', JSON.stringify(publicResources));
 
@@ -1416,7 +1420,7 @@
             }
 
             try {
-                await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`, {
+                const response = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -1427,8 +1431,14 @@
                         publicResources: publicResources
                     })
                 });
+
+                if (!response.ok) {
+                    throw new Error('Cloud sync failed with status: ' + response.status);
+                }
+                console.log('Real-time Cloud Sync Successful!');
             } catch (err) {
-                console.warn('Cloud save failed:', err);
+                console.error('Cloud save failed:', err);
+                alert('সতর্কতা: ক্লাউডে ডেটা সিঙ্ক হয়নি! দয়া করে ইন্টারনেট কানেকশন বা এপিআই কি (API Key) চেক করুন।');
             }
         }
 
@@ -1468,7 +1478,7 @@
             if (countSpan) countSpan.textContent = offlineSlots.length;
         }
 
-        function addNewOfflineBox() {
+        async function addNewOfflineBox() {
             if (!isAdmin) {
                 const passInput = prompt('Enter Admin Password to add a new slot box:');
                 if (passInput === null) return;
@@ -1485,9 +1495,9 @@
             }
 
             offlineSlots.push({ name: '', url: '' });
-            saveData();
+            await saveData();
             renderOfflineSlots();
-            alert(`New Box #${offlineSlots.length} added successfully! Click edit to configure.`);
+            alert(`New Box #${offlineSlots.length} added & synced to cloud!`);
         }
 
         function toggleOfflineGrid() {
@@ -1536,7 +1546,7 @@
             document.getElementById('slotModalOverlay').classList.remove('active');
         }
 
-        function saveSlotFromModal() {
+        async function saveSlotFromModal() {
             if (!isAdmin) {
                 alert('Only Admin can save slot data!');
                 return;
@@ -1556,12 +1566,13 @@
             }
 
             offlineSlots[index] = { name, url };
-            saveData();
+            await saveData();
             closeSlotModal();
             renderOfflineSlots();
+            alert('Slot saved & updated in cloud successfully! 🚀');
         }
 
-        function deleteSlotFromModal() {
+        async function deleteSlotFromModal() {
             if (!isAdmin) {
                 alert('Only Admin can delete slots!');
                 return;
@@ -1575,21 +1586,21 @@
                         offlineSlots.push({ name: '', url: '' });
                     }
                 }
-                saveData();
+                await saveData();
                 closeSlotModal();
                 renderOfflineSlots();
-                alert('Slot deleted successfully!');
+                alert('Slot deleted from cloud!');
             }
         }
 
-        function clearSlot(index) {
+        async function clearSlot(index) {
             if (!isAdmin) {
                 alert('Only Admin can clear slots!');
                 return;
             }
             if (confirm(`Are you sure you want to clear Slot #${index + 1}?`)) {
                 offlineSlots[index] = { name: '', url: '' };
-                saveData();
+                await saveData();
                 renderOfflineSlots();
             }
         }
@@ -1726,7 +1737,7 @@
             }
         }
 
-        function deleteFolder(event, catIdx) {
+        async function deleteFolder(event, catIdx) {
             event.stopPropagation();
             if (!isAdmin) {
                 alert('Only Admin can delete folders!');
@@ -1734,12 +1745,12 @@
             }
             if (confirm('Are you sure you want to delete this folder and all its links?')) {
                 publicResources.splice(catIdx, 1);
-                saveData();
+                await saveData();
                 renderPublicResources();
             }
         }
 
-        function deleteLink(catIdx, linkIdx) {
+        async function deleteLink(catIdx, linkIdx) {
             if (!isAdmin) {
                 alert('Only Admin can delete links!');
                 return;
@@ -1748,11 +1759,11 @@
             if (publicResources[catIdx].links.length === 0) {
                 publicResources.splice(catIdx, 1);
             }
-            saveData();
+            await saveData();
             renderPublicResources();
         }
 
-        function addOnlineLink() {
+        async function addOnlineLink() {
             const titleInput = document.getElementById('titleInput');
             const categorySelect = document.getElementById('categorySelect');
             const customCategoryInput = document.getElementById('customCategoryInput');
@@ -1799,7 +1810,7 @@
                 icon: itemIcon
             });
 
-            saveData();
+            await saveData();
             renderPublicResources();
 
             titleInput.value = '';
@@ -1808,7 +1819,7 @@
             customCategoryInput.value = '';
             customCategoryInput.classList.add('hidden');
 
-            alert('New link added successfully!');
+            alert('New link added & synced to cloud successfully! 🚀');
         }
 
         function filterLinks() {
@@ -1828,7 +1839,7 @@
 
         document.addEventListener('DOMContentLoaded', async function() {
             updateAdminUI();
-            await loadData();
+            await loadData(); // Loads latest from Cloud first so Incognito gets it instantly
 
             const loginBtn = document.getElementById('loginBtn');
             const profileModal = document.getElementById('profileModalOverlay');
