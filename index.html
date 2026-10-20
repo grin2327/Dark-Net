@@ -1919,11 +1919,13 @@
             if (closeBkashModalBtn && bkashModal) {
                 closeBkashModalBtn.addEventListener('click', () => bkashModal.classList.remove('active'));
             }
-            if.copyBkashBtn && copyBkashBtn.addEventListener('click', () => {
-                const num = document.getElementById('bkashNumber').innerText;
-                navigator.clipboard.writeText(num);
-                alert('bKash Number Copied: ' + num);
-            });
+            if (copyBkashBtn) {
+                copyBkashBtn.addEventListener('click', () => {
+                    const num = document.getElementById('bkashNumber').innerText;
+                    navigator.clipboard.writeText(num);
+                    alert('bKash Number Copied: ' + num);
+                });
+            }
         });
     </script>
 
