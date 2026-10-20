@@ -1254,13 +1254,10 @@
         </div>
     </div>
 
-    <script src="script.js"></script>
-
     <script>
-        // --- JSONbin.io Cloud Configuration ---
-        // আপনার JSONbin.io এর Bin ID এবং API Key এখানে বসিয়ে দিন যাতে সবাই পাবলিকালি দেখতে ও সেভ করতে পারে।
-        const JSONBIN_BIN_ID = 'YOUR_BIN_ID_HERE'; 
-        const JSONBIN_API_KEY = 'YOUR_MASTER_API_KEY_HERE'; 
+        // --- JSONbin.io Cloud Credentials Configured ---
+        const JSONBIN_BIN_ID = '6aba0fcbac6210605afd0b26'; 
+        const JSONBIN_API_KEY = '$2a$10$NdVprjNSRs1iJOzSyH896.6YYu87qOoZC5AH5WZsi99PacsVRU7AS'; 
 
         let isAdmin = localStorage.getItem('darknet_is_admin') === 'true';
 
@@ -1334,7 +1331,7 @@
             }
         }
 
-        // --- PUBLIC DATA BOX & JSONBIN SYNC LOGIC ---
+        // --- PUBLIC DATA & STORAGE LOGIC ---
         let offlineSlots = [];
         let publicResources = [];
         let defaultPublicData = [
@@ -1374,13 +1371,16 @@
             }
         ];
 
-        // Load data from JSONbin.io (Public Sync) with fallback to localStorage
-        async function loadFromJSONbin() {
-            if (!JSONBIN_BIN_ID || JSONBIN_BIN_ID === 'YOUR_BIN_ID_HERE') {
-                // Fallback to LocalStorage if JSONbin credentials are not configured yet
-                offlineSlots = JSON.parse(localStorage.getItem('darknet_offline_slots_50')) || [];
-                publicResources = JSON.parse(localStorage.getItem('darknet_public_resources_data')) || defaultPublicData;
-            } else {
+        // Safe Load Logic with Full Local Fallback & Cloud Sync
+        async function loadData() {
+            const localSlots = JSON.parse(localStorage.getItem('darknet_offline_slots_50'));
+            const localRes = JSON.parse(localStorage.getItem('darknet_public_resources_data'));
+
+            // Always fallback first to ensure initial fast render
+            offlineSlots = localSlots || [];
+            publicResources = localRes || defaultPublicData;
+
+            if (JSONBIN_BIN_ID && JSONBIN_API_KEY) {
                 try {
                     const response = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest`, {
                         headers: {
@@ -1390,16 +1390,11 @@
                     if (response.ok) {
                         const data = await response.json();
                         const record = data.record || data;
-                        offlineSlots = record.offlineSlots || (JSON.parse(localStorage.getItem('darknet_offline_slots_50')) || []);
-                        publicResources = record.publicResources || (JSON.parse(localStorage.getItem('darknet_public_resources_data')) || defaultPublicData);
-                    } else {
-                        offlineSlots = JSON.parse(localStorage.getItem('darknet_offline_slots_50')) || [];
-                        publicResources = JSON.parse(localStorage.getItem('darknet_public_resources_data')) || defaultPublicData;
+                        if (record.offlineSlots) offlineSlots = record.offlineSlots;
+                        if (record.publicResources) publicResources = record.publicResources;
                     }
                 } catch (err) {
-                    console.error('Error loading from JSONbin:', err);
-                    offlineSlots = JSON.parse(localStorage.getItem('darknet_offline_slots_50')) || [];
-                    publicResources = JSON.parse(localStorage.getItem('darknet_public_resources_data')) || defaultPublicData;
+                    console.warn('Cloud load failed, fallback to local storage:', err);
                 }
             }
 
@@ -1411,12 +1406,12 @@
             renderPublicResources();
         }
 
-        // Save data to JSONbin.io (Public Sync) and LocalStorage backup
-        async function saveToJSONbin() {
+        // Safe Save Logic
+        async function saveData() {
             localStorage.setItem('darknet_offline_slots_50', JSON.stringify(offlineSlots));
             localStorage.setItem('darknet_public_resources_data', JSON.stringify(publicResources));
 
-            if (!JSONBIN_BIN_ID || JSONBIN_BIN_ID === 'YOUR_BIN_ID_HERE') {
+            if (!JSONBIN_BIN_ID || !JSONBIN_API_KEY) {
                 return;
             }
 
@@ -1433,7 +1428,7 @@
                     })
                 });
             } catch (err) {
-                console.error('Error saving to JSONbin:', err);
+                console.warn('Cloud save failed:', err);
             }
         }
 
@@ -1490,7 +1485,7 @@
             }
 
             offlineSlots.push({ name: '', url: '' });
-            saveToJSONbin();
+            saveData();
             renderOfflineSlots();
             alert(`New Box #${offlineSlots.length} added successfully! Click edit to configure.`);
         }
@@ -1500,14 +1495,16 @@
             const icon = document.getElementById('offlineToggleIcon');
             const txt = document.getElementById('offlineToggleText');
 
+            if (!grid) return;
+
             if (grid.classList.contains('hidden')) {
                 grid.classList.remove('hidden');
-                icon.className = 'fa-solid fa-chevron-up';
-                txt.textContent = 'Hide List';
+                if (icon) icon.className = 'fa-solid fa-chevron-up';
+                if (txt) txt.textContent = 'Hide List';
             } else {
                 grid.classList.add('hidden');
-                icon.className = 'fa-solid fa-chevron-down';
-                txt.textContent = 'Show List';
+                if (icon) icon.className = 'fa-solid fa-chevron-down';
+                if (txt) txt.textContent = 'Show List';
             }
         }
 
@@ -1559,7 +1556,7 @@
             }
 
             offlineSlots[index] = { name, url };
-            saveToJSONbin();
+            saveData();
             closeSlotModal();
             renderOfflineSlots();
         }
@@ -1578,7 +1575,7 @@
                         offlineSlots.push({ name: '', url: '' });
                     }
                 }
-                saveToJSONbin();
+                saveData();
                 closeSlotModal();
                 renderOfflineSlots();
                 alert('Slot deleted successfully!');
@@ -1592,7 +1589,7 @@
             }
             if (confirm(`Are you sure you want to clear Slot #${index + 1}?`)) {
                 offlineSlots[index] = { name: '', url: '' };
-                saveToJSONbin();
+                saveData();
                 renderOfflineSlots();
             }
         }
@@ -1737,7 +1734,7 @@
             }
             if (confirm('Are you sure you want to delete this folder and all its links?')) {
                 publicResources.splice(catIdx, 1);
-                saveToJSONbin();
+                saveData();
                 renderPublicResources();
             }
         }
@@ -1751,7 +1748,7 @@
             if (publicResources[catIdx].links.length === 0) {
                 publicResources.splice(catIdx, 1);
             }
-            saveToJSONbin();
+            saveData();
             renderPublicResources();
         }
 
@@ -1802,7 +1799,7 @@
                 icon: itemIcon
             });
 
-            saveToJSONbin();
+            saveData();
             renderPublicResources();
 
             titleInput.value = '';
@@ -1811,7 +1808,7 @@
             customCategoryInput.value = '';
             customCategoryInput.classList.add('hidden');
 
-            alert('New link added to Public Online Resource Manager & synced with Cloud!');
+            alert('New link added successfully!');
         }
 
         function filterLinks() {
@@ -1831,7 +1828,7 @@
 
         document.addEventListener('DOMContentLoaded', async function() {
             updateAdminUI();
-            await loadFromJSONbin();
+            await loadData();
 
             const loginBtn = document.getElementById('loginBtn');
             const profileModal = document.getElementById('profileModalOverlay');
