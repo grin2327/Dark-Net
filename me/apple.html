@@ -1,943 +1,656 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='16' fill='%2308080C'/><rect x='12' y='12' width='18' height='18' rx='4.5' fill='%23FF007F'/><rect x='34' y='12' width='18' height='18' rx='4.5' fill='%2339FF14'/><rect x='12' y='34' width='18' height='18' rx='4.5' fill='%2300E5FF'/><rect x='34' y='34' width='18' height='18' rx='4.5' fill='%238A2BE2'/></svg>">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>macOS Applications | DRK-JU</title>
+    <title>Software Store - macOS Applications</title>
     
+    <!-- Exact Custom Favicon Matching Your Provided Image -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%230b0d10'/><rect x='10' y='10' width='20' height='20' rx='4' fill='%23ff2a8d'/><rect x='34' y='10' width='20' height='20' rx='4' fill='%232eff66'/><rect x='10' y='34' width='20' height='20' rx='4' fill='%2300e5ff'/><rect x='34' y='34' width='20' height='20' rx='4' fill='%238a2be2'/></svg>">
+
     <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800&family=Rajdhani:wght@600;700&family=Hind+Siliguri:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <style>
-        /* --- PURPLE CYBER-THEME DESIGN SYSTEM --- */
         :root {
-            --bg-base: #0a0612;
-            --primary-purple: #b042ff;
-            --neon-pink: #ff3399;
-            --neon-cyan: #00e5ff;
-            --neon-green: #2eff66;
-            --bkash-pink: #e2136e;
-            --text-main: #f5edff;
-            --text-muted: #9f8bb8;
-            --panel-bg: rgba(25, 15, 42, 0.65);
-            --glass-border: rgba(176, 66, 255, 0.25);
-            --radius-lg: 16px;
-            --radius-sm: 10px;
-            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --bg-body: #f8fafc;
+            --bg-surface: #ffffff;
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --radius: 12px;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            --transition: all 0.25s ease;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', 'Hind Siliguri', system-ui, sans-serif;
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            background: linear-gradient(135deg, #130a24 0%, #080410 100%);
+            background-color: var(--bg-body);
             color: var(--text-main);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* --- HEADER --- */
+        header {
+            background: var(--bg-surface);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.02);
+        }
+
+        .header-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 14px 24px;
+            display: flex;
             align-items: center;
-            padding: 20px 15px;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
         }
 
-        body::before, body::after {
-            content: '';
-            position: fixed;
-            width: 45vw;
-            height: 45vw;
-            border-radius: 50%;
-            -webkit-filter: blur(150px);
-            filter: blur(150px);
-            z-index: -1;
-            opacity: 0.25;
-            pointer-events: none;
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--primary);
+            letter-spacing: -0.5px;
         }
-        body::before { background: var(--primary-purple); top: -10%; left: -5%; }
-        body::after { background: var(--neon-pink); bottom: -10%; right: -5%; }
 
-        .container {
-            max-width: 900px;
+        .logo i {
+            background: var(--primary);
+            color: white;
+            padding: 8px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+        }
+
+        .search-bar {
+            flex: 1;
+            max-width: 450px;
+            position: relative;
+            min-width: 220px;
+        }
+
+        .search-bar input {
             width: 100%;
+            padding: 10px 16px 10px 42px;
+            border-radius: 50px;
+            border: 1px solid var(--border-color);
+            background: #f1f5f9;
+            font-size: 0.95rem;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .search-bar input:focus {
+            background: var(--bg-surface);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+        }
+
+        .search-bar i {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+
+        .nav-platforms {
+            display: flex;
+            gap: 8px;
+            list-style: none;
+            flex-wrap: wrap;
+        }
+
+        .nav-platforms a {
+            text-decoration: none;
+            color: var(--text-muted);
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nav-platforms a:hover, .nav-platforms a.active {
+            color: #ffffff;
+            background: var(--primary);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        /* --- MAIN LAYOUT --- */
+        .main-container {
+            max-width: 1280px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 30px 24px;
+            flex: 1;
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            gap: 30px;
+        }
+
+        /* --- SIDEBAR CATEGORIES --- */
+        aside {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 20px;
+            height: fit-content;
+            box-shadow: var(--shadow);
+        }
+
+        aside h3 {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 14px;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .category-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .category-item button {
+            width: 100%;
+            background: transparent;
+            border: none;
+            text-align: left;
+            padding: 9px 12px;
+            border-radius: 8px;
+            color: var(--text-muted);
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .category-item button:hover, .category-item button.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* --- CONTENT SECTION --- */
+        .content-area {
             display: flex;
             flex-direction: column;
             gap: 20px;
+            min-width: 0;
         }
 
-        /* --- HEADER & NAVIGATION --- */
-        .header-wrapper {
+        .hero-banner {
+            background: linear-gradient(135deg, #1e40af, #2563eb);
+            color: white;
+            padding: 30px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .hero-banner h1 {
+            font-size: 1.8rem;
+            font-weight: 800;
+        }
+
+        .hero-banner p {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            max-width: 600px;
+        }
+
+        .section-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-bottom: 5px;
         }
 
-        .page-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: clamp(1.3rem, 4vw, 1.8rem);
-            color: var(--neon-cyan);
-            text-shadow: 0 0 12px rgba(0, 229, 255, 0.5);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .nav-buttons-wrap {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .btn-back {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(0, 229, 255, 0.1);
-            border: 1px solid var(--neon-cyan);
-            color: var(--neon-cyan);
-            padding: 8px 16px;
-            border-radius: var(--radius-sm);
-            text-decoration: none;
+        .section-header h2 {
+            font-size: 1.25rem;
             font-weight: 700;
-            font-size: 0.9rem;
-            transition: var(--transition);
-        }
-        .btn-back:hover {
-            background: var(--neon-cyan);
-            color: var(--bg-base);
-            box-shadow: 0 0 15px rgba(0, 229, 255, 0.4);
-            transform: translateX(-3px);
         }
 
-        .btn-donate {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(226, 19, 110, 0.15);
-            border: 1px solid var(--bkash-pink);
-            color: #ff3399;
-            padding: 8px 16px;
-            border-radius: var(--radius-sm);
-            font-weight: 700;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-        .btn-donate:hover {
-            background: var(--bkash-pink);
-            color: #ffffff;
-            box-shadow: 0 0 15px rgba(226, 19, 110, 0.5);
-            transform: translateY(-2px);
+        /* --- SOFTWARE GRID --- */
+        .software-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 20px;
         }
 
-        /* --- CATEGORY & FILTER SECTION --- */
-        .category-container {
-            background: var(--panel-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--radius-lg);
-            padding: 16px 20px;
-            -webkit-backdrop-filter: blur(14px);
-            backdrop-filter: blur(14px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        .software-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 18px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
             display: flex;
             flex-direction: column;
+            justify-content: space-between;
             gap: 14px;
         }
 
-        .category-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 12px;
+        .software-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--primary);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
         }
 
-        .category-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1rem;
-            color: var(--primary-purple);
+        .card-top {
             display: flex;
-            align-items: center;
-            gap: 8px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            gap: 14px;
+            align-items: flex-start;
         }
 
-        .filter-select-wrapper {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(10, 6, 18, 0.6);
-            border: 1px solid var(--glass-border);
-            padding: 6px 12px;
-            border-radius: var(--radius-sm);
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            object-fit: contain;
+            background: #f1f5f9;
+            padding: 4px;
+            flex-shrink: 0;
+            border: 1px solid var(--border-color);
         }
 
-        .filter-select-wrapper label {
-            font-size: 0.85rem;
-            color: var(--neon-cyan);
+        .card-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            min-width: 0;
+        }
+
+        .card-title {
+            font-size: 0.95rem;
             font-weight: 700;
-        }
-
-        .filter-select {
-            background: transparent;
-            border: none;
             color: var(--text-main);
-            font-size: 0.85rem;
-            font-weight: 600;
-            outline: none;
-            cursor: pointer;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
-        .filter-select option {
-            background: #130a24;
-            color: var(--text-main);
-        }
-
-        .category-buttons {
+        .card-meta {
+            font-size: 0.78rem;
+            color: var(--text-muted);
             display: flex;
-            flex-wrap: wrap;
             gap: 8px;
         }
 
-        .cat-btn {
-            background: rgba(176, 66, 255, 0.1);
-            border: 1px solid rgba(176, 66, 255, 0.3);
-            color: var(--text-main);
-            padding: 8px 14px;
-            border-radius: var(--radius-sm);
+        .card-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            line-height: 1.4;
+        }
+
+        .card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-top: 1px solid var(--border-color);
+            padding-top: 12px;
+        }
+
+        .platform-badge {
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 6px;
+            background: #eff6ff;
+            color: var(--primary);
+            text-transform: uppercase;
+        }
+
+        .btn-download {
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            padding: 7px 14px;
+            border-radius: 8px;
             font-size: 0.82rem;
             font-weight: 600;
-            cursor: pointer;
             transition: var(--transition);
             display: inline-flex;
             align-items: center;
             gap: 6px;
         }
 
-        .cat-btn:hover, .cat-btn.active {
-            background: rgba(0, 229, 255, 0.2);
-            border-color: var(--neon-cyan);
-            color: var(--neon-cyan);
-            box-shadow: 0 0 12px rgba(0, 229, 255, 0.3);
-        }
-
-        /* --- POSTS CONTAINER --- */
-        #postsContainer {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .post-card {
-            background: var(--panel-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--radius-lg);
-            padding: 20px;
-            -webkit-backdrop-filter: blur(14px);
-            backdrop-filter: blur(14px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
-            transition: var(--transition);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .post-card:hover {
-            border-color: rgba(0, 229, 255, 0.5);
-            box-shadow: 0 0 20px rgba(0, 229, 255, 0.2);
-            transform: translateY(-2px);
-        }
-
-        .post-title {
-            font-size: 1.15rem;
-            font-weight: 700;
-            color: var(--text-main);
-            line-height: 1.4;
-            margin-bottom: 8px;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        .post-meta {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            display: flex;
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-
-        .post-meta i {
-            margin-right: 4px;
-            color: var(--neon-cyan);
-        }
-
-        .post-content {
-            display: flex;
-            gap: 18px;
-            align-items: center;
-            margin-bottom: 18px;
-        }
-
-        .post-image-container {
-            flex: 0 0 180px;
-            height: 110px;
-            border-radius: var(--radius-sm);
-            overflow: hidden;
-            border: 1px solid var(--glass-border);
-            background: rgba(10, 6, 18, 0.8);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .post-image-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            padding: 8px;
-        }
-
-        .post-text {
-            flex: 1;
-            font-size: 0.88rem;
-            color: var(--text-muted);
-            line-height: 1.5;
-            display: -webkit-box;
-            -webkit-line-clamp: 4;
-            line-clamp: 4;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        .btn-download {
-            align-self: flex-start;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: linear-gradient(135deg, #ff8c00, #ff5500);
-            color: #ffffff;
-            text-decoration: none;
-            padding: 9px 18px;
-            border-radius: var(--radius-sm);
-            font-weight: 700;
-            font-size: 0.85rem;
-            transition: var(--transition);
-            box-shadow: 0 4px 12px rgba(255, 85, 0, 0.3);
-        }
-
         .btn-download:hover {
-            background: linear-gradient(135deg, #ffa024, #ff661a);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 18px rgba(255, 85, 0, 0.5);
+            background: var(--primary-hover);
         }
 
         .no-results {
             text-align: center;
-            padding: 30px;
+            padding: 40px;
             color: var(--text-muted);
             font-size: 0.95rem;
             display: none;
+            grid-column: 1 / -1;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
         }
 
-        /* --- GLOSSY BKASH MODAL --- */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(5, 3, 10, 0.85);
-            -webkit-backdrop-filter: blur(16px);
-            backdrop-filter: blur(16px);
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: all 0.3s ease;
-        }
-        .modal-overlay.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .bkash-modal {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(226, 19, 110, 0.15));
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-top: 1px solid rgba(255, 255, 255, 0.4);
-            border-left: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 28px;
-            padding: 36px 30px;
-            max-width: 440px;
-            width: 90%;
-            position: relative;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), inset 0 0 15px rgba(255, 255, 255, 0.05);
-            -webkit-backdrop-filter: blur(20px);
-            backdrop-filter: blur(20px);
-            transform: scale(0.85);
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        /* --- FOOTER --- */
+        footer {
+            background: var(--bg-surface);
+            border-top: 1px solid var(--border-color);
             text-align: center;
-        }
-        .modal-overlay.active .bkash-modal {
-            transform: scale(1);
-        }
-
-        .btn-close-modal {
-            position: absolute;
-            top: 16px;
-            right: 18px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            color: white;
-            font-size: 1.2rem;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-        .btn-close-modal:hover { background: var(--bkash-pink); transform: rotate(90deg); }
-
-        .bkash-modal-logo {
-            width: 150px;
-            margin: 0 auto 15px auto;
-            display: block;
-        }
-
-        .bkash-modal-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.35rem;
-            color: #ffffff;
-            margin-bottom: 6px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-        }
-
-        .bkash-modal-subtext {
-            font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.85);
-            margin-bottom: 22px;
-            line-height: 1.4;
-            font-family: 'Hind Siliguri', sans-serif;
-        }
-
-        .bkash-card-box {
-            background: rgba(15, 8, 22, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 18px;
             padding: 20px;
-            margin-bottom: 18px;
-            -webkit-backdrop-filter: blur(10px);
-            backdrop-filter: blur(10px);
-            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
-        }
-
-        .bkash-badge-tag {
-            display: inline-block;
-            background: linear-gradient(135deg, var(--bkash-pink), #ff2a8d);
-            color: white;
-            font-size: 0.7rem;
-            font-weight: 800;
-            padding: 4px 12px;
-            border-radius: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 12px;
-            box-shadow: 0 4px 10px rgba(226, 19, 110, 0.3);
-        }
-
-        .bkash-num-flex {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 10px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            padding: 10px 16px;
-            border-radius: 12px;
-        }
-
-        .bkash-big-num {
-            font-family: 'Orbitron', monospace;
-            font-size: 1.25rem;
-            font-weight: 900;
-            color: #ffffff;
-            letter-spacing: 2px;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
-        }
-
-        .btn-modal-copy {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.05));
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-weight: 700;
+            color: var(--text-muted);
             font-size: 0.85rem;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            -webkit-backdrop-filter: blur(5px);
-            backdrop-filter: blur(5px);
-        }
-        .btn-modal-copy:hover { 
-            background: var(--bkash-pink); 
-            border-color: var(--bkash-pink);
-            transform: scale(1.05); 
+            margin-top: auto;
         }
 
-        @media (max-width: 650px) {
-            body { padding: 15px 10px; }
-            .header-wrapper { flex-direction: row; justify-content: space-between; }
-            .post-content { flex-direction: column; align-items: stretch; gap: 12px; }
-            .post-image-container { flex: none; width: 100%; height: 130px; }
-            .btn-download { width: 100%; justify-content: center; }
-            .cat-btn { flex: 1 1 calc(50% - 8px); justify-content: center; }
+        /* --- RESPONSIVE OPTIMIZATIONS FOR MOBILE & PC --- */
+        @media (max-width: 900px) {
+            .main-container {
+                grid-template-columns: 1fr;
+                padding: 20px 16px;
+            }
+            .header-container {
+                flex-direction: column;
+                align-items: stretch;
+                padding: 12px 16px;
+            }
+            .search-bar {
+                max-width: 100%;
+            }
+            .nav-platforms {
+                justify-content: space-around;
+                overflow-x: auto;
+                padding-bottom: 4px;
+            }
+            .hero-banner h1 {
+                font-size: 1.5rem;
+            }
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <!-- HEADER -->
-        <div class="header-wrapper">
-            <h1 class="page-title"><i class="fa-brands fa-apple"></i> macOS Applications</h1>
+    <!-- HEADER -->
+    <header>
+        <div class="header-container">
+            <a href="index.html" class="logo">
+                <i class="fa-solid fa-cube"></i> Software Store
+            </a>
             
-            <div class="nav-buttons-wrap">
-                <a href="../index.html" class="btn-back"><i class="fa-solid fa-arrow-left"></i> Back Page</a>
-                <button class="btn-donate" onclick="openBkashModal()"><i class="fa-solid fa-heart"></i> Donate</button>
-            </div>
-        </div>
-
-        <!-- CATEGORIES & FILTER -->
-        <div class="category-container">
-            <div class="category-header">
-                <div class="category-title">
-                    <i class="fa-solid fa-layer-group"></i> Categories
-                </div>
-
-                <div class="filter-select-wrapper">
-                    <label for="filterSelect"><i class="fa-solid fa-filter"></i> Filter:</label>
-                    <select id="filterSelect" class="filter-select">
-                        <option value="all">All Software</option>
-                        <option value="video-editing">Video Editing Software</option>
-                        <option value="graphics-design">Graphics Design Software</option>
-                        <option value="video-recording">Video Recording Software</option>
-                        <option value="open-source">Free & Open Source Software</option>
-                    </select>
-                </div>
+            <div class="search-bar">
+                <i class="fa-solid fa-search"></i>
+                <input type="text" id="searchInput" placeholder="Search macOS software & apps..." onkeyup="filterSoftware()">
             </div>
 
-            <div class="category-buttons">
-                <button class="cat-btn active" data-filter="all">
-                    <i class="fa-solid fa-border-all"></i> All
-                </button>
-                <button class="cat-btn" data-filter="video-editing">
-                    <i class="fa-solid fa-video"></i> Video Editing Software
-                </button>
-                <button class="cat-btn" data-filter="graphics-design">
-                    <i class="fa-solid fa-pen-nib"></i> Graphics Design Software
-                </button>
-                <button class="cat-btn" data-filter="video-recording">
-                    <i class="fa-solid fa-record-vinyl"></i> Video Recording Software
-                </button>
-                <button class="cat-btn" data-filter="open-source">
-                    <i class="fa-solid fa-code"></i> Free & Open Source Software
-                </button>
+            <ul class="nav-platforms">
+                <li><a href="../index.html"><i class="fa-brands fa-windows"></i> Windows</a></li>
+                <li><a href="apple.html" class="active"><i class="fa-brands fa-apple"></i> macOS</a></li>
+                <li><a href="linux.html"><i class="fa-brands fa-linux"></i> Linux</a></li>
+                <li><a href="android.html"><i class="fa-brands fa-android"></i> Android</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- MAIN BODY -->
+    <div class="main-container">
+        <!-- SIDEBAR CATEGORIES -->
+        <aside>
+            <h3><i class="fa-solid fa-list"></i> Categories</h3>
+            <ul class="category-list">
+                <li class="category-item"><button class="active" onclick="filterCategory('all', this)"><i class="fa-solid fa-border-all"></i> All Software</button></li>
+                <li class="category-item"><button onclick="filterCategory('video-editing', this)"><i class="fa-solid fa-video"></i> Video Editing</button></li>
+                <li class="category-item"><button onclick="filterCategory('graphics-design', this)"><i class="fa-solid fa-pen-nib"></i> Graphics Design</button></li>
+                <li class="category-item"><button onclick="filterCategory('utilities', this)"><i class="fa-solid fa-toolbox"></i> Utilities</button></li>
+                <li class="category-item"><button onclick="filterCategory('open-source', this)"><i class="fa-solid fa-code"></i> Open Source</button></li>
+            </ul>
+        </aside>
+
+        <!-- CONTENT AREA -->
+        <main class="content-area">
+            <div class="hero-banner">
+                <h1>macOS Applications Hub</h1>
+                <p>Download full version optimized applications, video suites, and design tools natively built for Apple Silicon & Intel Mac systems.</p>
             </div>
-        </div>
 
-        <!-- POSTS CONTAINER (MACOS SOFTWARE LIST) -->
-        <div id="postsContainer">
-            
-            <!-- 1. DaVinci Resolve (Video Editing) -->
-            <article class="post-card" data-category="video-editing">
-                <div>
-                    <h2 class="post-title">
-                        DaVinci Resolve: Professional Hollywood Grade Video Suite for Mac
-                    </h2>
-                    <div class="post-meta">
-                        <span><i class="fa-regular fa-clock"></i> September 14, 2026</span>
-                        <span><i class="fa-regular fa-comment"></i> Comments Off</span>
+            <div class="section-header">
+                <h2>macOS Software List</h2>
+            </div>
+
+            <div class="software-grid" id="softwareGrid">
+                <!-- 1. DaVinci Resolve -->
+                <div class="software-card" data-category="video-editing" data-name="davinci resolve macos">
+                    <div>
+                        <div class="card-top">
+                            <img src="https://th.bing.com/th/id/ODF.eiAZmhuyA3AcIeX5-nC7Qg?w=32&h=32&qlt=92&pcl=fffffa&r=0&o=6&pid=1.2" class="card-icon" alt="Logo">
+                            <div class="card-info">
+                                <span class="card-title">DaVinci Resolve Studio</span>
+                                <div class="card-meta"><span>v20.3</span> • <span>macOS</span></div>
+                            </div>
+                        </div>
+                        <p class="card-desc" style="margin-top: 12px;">Professional Hollywood grade video suite optimized for Apple Silicon M1/M2/M3/M4.</p>
                     </div>
-                    <div class="post-content">
-                        <div class="post-image-container">
-                            <img src="https://th.bing.com/th/id/ODF.eiAZmhuyA3AcIeX5-nC7Qg?w=32&h=32&qlt=92&pcl=fffffa&r=0&o=6&pid=1.2" alt="DaVinci Resolve macOS">
-                        </div>
-                        <div class="post-text">
-                            Extremely powerful video editing, Fairlight audio tools, Fusion visual effects, and world-class color grading natively optimized for Apple Silicon (M1/M2/M3/M4) chips.
-                        </div>
+                    <div class="card-footer">
+                        <span class="platform-badge">macOS</span>
+                        <a href="https://www.blackmagicdesign.com/products/davinciresolve" target="_blank" class="btn-download"><i class="fa-solid fa-download"></i> Download</a>
                     </div>
                 </div>
-                <a href="https://www.blackmagicdesign.com/products/davinciresolve" target="_blank" rel="noopener noreferrer" class="btn-download">
-                    Download / Read More »
-                </a>
-            </article>
 
-            <article class="post-card" data-category="open-source">
-                <div>
-                    <h2 class="post-title">
-                        NeatDownloadManager [ open-source ]
-                    </h2>
-                    <div class="post-meta">
-                        <span><i class="fa-regular fa-clock"></i> September 5, 2026</span>
-                        <span><i class="fa-regular fa-comment"></i> Comments Off</span>
+                <!-- 2. NeatDownloadManager -->
+                <div class="software-card" data-category="open-source utilities" data-name="neatdownloadmanager">
+                    <div>
+                        <div class="card-top">
+                            <img src="https://th.bing.com/th/id/ODF.lsCnJrGrOXG8PSbYNxmPTQ?w=32&h=32&qlt=90&pcl=fffffa&r=0&o=6&pid=1.2" class="card-icon" alt="Logo">
+                            <div class="card-info">
+                                <span class="card-title">NeatDownloadManager</span>
+                                <div class="card-meta"><span>v1.8</span> • <span>macOS</span></div>
+                            </div>
+                        </div>
+                        <p class="card-desc" style="margin-top: 12px;">Free and open-source high performance download manager for macOS.</p>
                     </div>
-                    <div class="post-content">
-                        <div class="post-image-container">
-                            <img src="https://th.bing.com/th/id/ODF.lsCnJrGrOXG8PSbYNxmPTQ?w=32&h=32&qlt=90&pcl=fffffa&r=0&o=6&pid=1.2" alt="NeatDownloadManager Preview">
-                        </div>
-                        <div class="post-text">
-                            A free and open-source download manager for macOS.
-                        </div>
+                    <div class="card-footer">
+                        <span class="platform-badge">Open Source</span>
+                        <a href="https://www.neatdownloadmanager.com/index.php/en/" target="_blank" class="btn-download"><i class="fa-solid fa-download"></i> Download</a>
                     </div>
                 </div>
-                <a href="https://www.neatdownloadmanager.com/index.php/en/" target="_blank" rel="noopener noreferrer" class="btn-download">
-                    Download / Read More »
-                </a>
-            </article>
 
-            <!-- 2. Apple iMovie (Video Editing) -->
-            <article class="post-card" data-category="video-editing">
-                <div>
-                    <h2 class="post-title">
-                        Apple iMovie: Official Free Video Editor for macOS & iOS
-                    </h2>
-                    <div class="post-meta">
-                        <span><i class="fa-regular fa-clock"></i> September 14, 2026</span>
-                        <span><i class="fa-regular fa-comment"></i> Comments Off</span>
+                <!-- 3. Apple iMovie -->
+                <div class="software-card" data-category="video-editing" data-name="apple imovie">
+                    <div>
+                        <div class="card-top">
+                            <img src="https://th.bing.com/th/id/OIP.F9Wy5awIFMjJAtXfHaE1-wAAAA?w=108&h=108&c=1&bgcl=769cec&r=0&o=7&pid=ImgRC&rm=3" class="card-icon" alt="Logo">
+                            <div class="card-info">
+                                <span class="card-title">Apple iMovie</span>
+                                <div class="card-meta"><span>v3.0</span> • <span>macOS</span></div>
+                            </div>
+                        </div>
+                        <p class="card-desc" style="margin-top: 12px;">Official free video editing application with 4K support and smooth ecosystem integration.</p>
                     </div>
-                    <div class="post-content">
-                        <div class="post-image-container">
-                            <img src="https://th.bing.com/th/id/OIP.F9Wy5awIFMjJAtXfHaE1-wAAAA?w=108&h=108&c=1&bgcl=769cec&r=0&o=7&pid=ImgRC&rm=3" alt="Apple iMovie">
-                        </div>
-                        <div class="post-text">
-                            Apple's official free video editing application. Perfect for beginners with 4K video editing, studio-quality titles, cinematic mode editing, and seamless Mac ecosystem integration.
-                        </div>
+                    <div class="card-footer">
+                        <span class="platform-badge">macOS</span>
+                        <a href="https://www.apple.com/imovie/" target="_blank" class="btn-download"><i class="fa-solid fa-download"></i> Download</a>
                     </div>
                 </div>
-                <a href="https://www.apple.com/imovie/" target="_blank" rel="noopener noreferrer" class="btn-download">
-                    Download / Read More »
-                </a>
-            </article>
 
-            <!-- 3. CapCut for Mac (Video Editing) -->
-            <article class="post-card" data-category="video-editing">
-                <div>
-                    <h2 class="post-title">
-                        CapCut for Mac: Easy AI-Powered Video Editing & Content Creation
-                    </h2>
-                    <div class="post-meta">
-                        <span><i class="fa-regular fa-clock"></i> September 14, 2026</span>
-                        <span><i class="fa-regular fa-comment"></i> Comments Off</span>
+                <!-- 4. CapCut for Mac -->
+                <div class="software-card" data-category="video-editing" data-name="capcut for mac">
+                    <div>
+                        <div class="card-top">
+                            <img src="https://th.bing.com/th/id/ODF.8mKc3lxFvuogU2wu_r13-g?w=32&h=32&qlt=90&pcl=fffffa&r=0&o=6&pid=1.2" class="card-icon" alt="Logo">
+                            <div class="card-info">
+                                <span class="card-title">CapCut for Mac</span>
+                                <div class="card-meta"><span>v5.1</span> • <span>macOS</span></div>
+                            </div>
+                        </div>
+                        <p class="card-desc" style="margin-top: 12px;">Easy AI-powered video editing tool with auto-captions and trending social media presets.</p>
                     </div>
-                    <div class="post-content">
-                        <div class="post-image-container">
-                            <img src="https://th.bing.com/th/id/ODF.8mKc3lxFvuogU2wu_r13-g?w=32&h=32&qlt=90&pcl=fffffa&r=0&o=6&pid=1.2" alt="CapCut macOS">
-                        </div>
-                        <div class="post-text">
-                            Feature-rich desktop video editor optimized for macOS. Includes auto-captions, background removal, trending transitions, speed ramping, and social media presets.
-                        </div>
+                    <div class="card-footer">
+                        <span class="platform-badge">macOS</span>
+                        <a href="https://www.capcut.com/" target="_blank" class="btn-download"><i class="fa-solid fa-download"></i> Download</a>
                     </div>
                 </div>
-                <a href="https://www.capcut.com/" target="_blank" rel="noopener noreferrer" class="btn-download">
-                    Download / Read More »
-                </a>
-            </article>
 
-            <!-- 4. Kdenlive (Video Editing / Open Source) -->
-            <article class="post-card" data-category="video-editing open-source">
-                <div>
-                    <h2 class="post-title">
-                        Kdenlive: Powerful Free & Open Source Video Editor for Mac
-                    </h2>
-                    <div class="post-meta">
-                        <span><i class="fa-regular fa-clock"></i> September 14, 2026</span>
-                        <span><i class="fa-regular fa-comment"></i> Comments Off</span>
+                <!-- 5. GIMP for macOS -->
+                <div class="software-card" data-category="graphics-design open-source" data-name="gimp for macos">
+                    <div>
+                        <div class="card-top">
+                            <img src="https://th.bing.com/th/id/ODF.ZQpRKCkh5zI3_5M1qicOww?w=32&h=32&qlt=90&pcl=fffffa&r=0&o=6&pid=1.2" class="card-icon" alt="Logo">
+                            <div class="card-info">
+                                <span class="card-title">GIMP for macOS</span>
+                                <div class="card-meta"><span>v2.10</span> • <span>macOS</span></div>
+                            </div>
+                        </div>
+                        <p class="card-desc" style="margin-top: 12px;">Advanced image editor and powerful open-source Photoshop alternative for Mac.</p>
                     </div>
-                    <div class="post-content">
-                        <div class="post-image-container">
-                            <img src="https://th.bing.com/th/id/ODF.rybIbTa3yFPztvpPE4GDZw?w=32&h=32&qlt=90&pcl=fffffa&r=0&o=6&pid=1.2" alt="Kdenlive macOS">
-                        </div>
-                        <div class="post-text">
-                            Fully open-source multi-track timeline video editor available for macOS. Features proxy editing, custom keyframes, audio scopes, and advanced effects.
-                        </div>
+                    <div class="card-footer">
+                        <span class="platform-badge">Open Source</span>
+                        <a href="https://www.gimp.org/downloads/" target="_blank" class="btn-download"><i class="fa-solid fa-download"></i> Download</a>
                     </div>
                 </div>
-                <a href="https://kdenlive.org/en/download/" target="_blank" rel="noopener noreferrer" class="btn-download">
-                    Download / Read More »
-                </a>
-            </article>
 
-            <!-- 5. GIMP (Graphics Design / Open Source) -->
-            <article class="post-card" data-category="graphics-design open-source">
-                <div>
-                    <h2 class="post-title">
-                        GIMP for macOS: Advanced Image Editor & Photoshop Alternative
-                    </h2>
-                    <div class="post-meta">
-                        <span><i class="fa-regular fa-clock"></i> September 14, 2026</span>
-                        <span><i class="fa-regular fa-comment"></i> Comments Off</span>
+                <!-- 6. OBS Studio -->
+                <div class="software-card" data-category="video-editing open-source" data-name="obs studio for mac">
+                    <div>
+                        <div class="card-top">
+                            <img src="https://obsproject.com/assets/images/new_icon_small-r.png" class="card-icon" alt="Logo">
+                            <div class="card-info">
+                                <span class="card-title">OBS Studio for Mac</span>
+                                <div class="card-meta"><span>v30.2</span> • <span>macOS</span></div>
+                            </div>
+                        </div>
+                        <p class="card-desc" style="margin-top: 12px;">Live streaming and high-performance screen recorder optimized with Apple Silicon encoders.</p>
                     </div>
-                    <div class="post-content">
-                        <div class="post-image-container">
-                            <img src="https://th.bing.com/th/id/ODF.ZQpRKCkh5zI3_5M1qicOww?w=32&h=32&qlt=90&pcl=fffffa&r=0&o=6&pid=1.2" alt="GIMP macOS">
-                        </div>
-                        <div class="post-text">
-                            Free and open-source photo manipulation tool running smoothly on Mac systems. Offers photo retouching, graphic design, composition tools, and plugin expansion.
-                        </div>
+                    <div class="card-footer">
+                        <span class="platform-badge">Open Source</span>
+                        <a href="https://obsproject.com/download" target="_blank" class="btn-download"><i class="fa-solid fa-download"></i> Download</a>
                     </div>
                 </div>
-                <a href="https://www.gimp.org/downloads/" target="_blank" rel="noopener noreferrer" class="btn-download">
-                    Download / Read More »
-                </a>
-            </article>
 
-            <!-- 6. Inkscape (Graphics Design / Open Source) -->
-            <article class="post-card" data-category="graphics-design open-source">
-                <div>
-                    <h2 class="post-title">
-                        Inkscape macOS: Professional Vector Graphics & Illustrator Alternative
-                    </h2>
-                    <div class="post-meta">
-                        <span><i class="fa-regular fa-clock"></i> September 14, 2026</span>
-                        <span><i class="fa-regular fa-comment"></i> Comments Off</span>
+                <!-- 7. Adobe Illustrator 2026 -->
+                <div class="software-card" data-category="graphics-design" data-name="adobe illustrator 2026">
+                    <div>
+                        <div class="card-top">
+                            <img src="https://th.bing.com/th/id/OIP.0OwjoNEVuqTTk5yqqFFp_QHaH9?w=146&h=180&c=7&r=0&o=7&pid=1.7&rm=3" class="card-icon" alt="Logo">
+                            <div class="card-info">
+                                <span class="card-title">Adobe Illustrator 2026</span>
+                                <div class="card-meta"><span>v28.0</span> • <span>macOS</span></div>
+                            </div>
+                        </div>
+                        <p class="card-desc" style="margin-top: 12px;">Professional vector graphics editor with AI-powered features. (PASSWORD: 6165)</p>
                     </div>
-                    <div class="post-content">
-                        <div class="post-image-container">
-                            <img src="https://th.bing.com/th/id/ODF.gXpQ5kUZcSns85PgS6pCCg?w=32&h=32&qlt=90&pcl=fffffa&r=0&o=6&pid=1.2" alt="Inkscape macOS">
-                        </div>
-                        <div class="post-text">
-                            High quality vector design app for creating SVG graphics, logos, icons, and illustrations with native macOS hardware acceleration support.
-                        </div>
+                    <div class="card-footer">
+                        <span class="platform-badge">macOS</span>
+                        <a href="https://www.mediafire.com/file/wn2c7x7zrwaxiw9/SETUP_INSTALLER_(KEY=6165).zip/file" target="_blank" class="btn-download"><i class="fa-solid fa-download"></i> Download</a>
                     </div>
                 </div>
-                <a href="https://inkscape.org/release/" target="_blank" rel="noopener noreferrer" class="btn-download">
-                    Download / Read More »
-                </a>
-            </article>
 
-            <!-- 7. OBS Studio (Video Recording / Video Editing / Open Source) -->
-            <article class="post-card" data-category="video-recording video-editing open-source">
-                <div>
-                    <h2 class="post-title">
-                        OBS Studio for Mac: Live Streaming & High Performance Screen Recorder
-                    </h2>
-                    <div class="post-meta">
-                        <span><i class="fa-regular fa-clock"></i> September 14, 2026</span>
-                        <span><i class="fa-regular fa-comment"></i> Comments Off</span>
+                <!-- 8. Autodesk AutoCAD 2026 -->
+                <div class="software-card" data-category="graphics-design" data-name="autodesk autocad 2026">
+                    <div>
+                        <div class="card-top">
+                            <img src="https://th.bing.com/th/id/OIP.jGP6OCDMcb5lLTvqmMnwmgHaHa?w=172&h=180&c=7&r=0&o=7&pid=1.7&rm=3" class="card-icon" alt="Logo">
+                            <div class="card-info">
+                                <span class="card-title">Autodesk AutoCAD 2026</span>
+                                <div class="card-meta"><span>v26.0</span> • <span>macOS</span></div>
+                            </div>
+                        </div>
+                        <p class="card-desc" style="margin-top: 12px;">Professional CAD software providing advanced design tools. (PASSWORD: 4590)</p>
                     </div>
-                    <div class="post-content">
-                        <div class="post-image-container">
-                            <img src="https://obsproject.com/assets/images/new_icon_small-r.png" alt="OBS Studio macOS">
-                        </div>
-                        <div class="post-text">
-                            Industry standard free recorder and streaming tool. Fully optimized for macOS Audio Capture and Apple Silicon Hardware Encoders (Apple VT).
-                        </div>
+                    <div class="card-footer">
+                        <span class="platform-badge">macOS</span>
+                        <a href="https://drive.google.com/file/d/1YSYBPawJB2IqXTe5I_ZKqNo1GjWDWrkW/view?usp=sharing" target="_blank" class="btn-download"><i class="fa-solid fa-download"></i> Download</a>
                     </div>
                 </div>
-                <a href="https://obsproject.com/download" target="_blank" rel="noopener noreferrer" class="btn-download">
-                    Download / Read More »
-                </a>
-            </article>
+            </div>
 
-             <!-- Adobe Illustrator 2026 -->
-            <article class="post-card" data-category="video-editing">
-                <div>
-                    <h2 class="post-title">
-                        Adobe Illustrator 2026: Professional Vector Graphics Editor
-                    </h2>
-                    <div class="post-meta">
-                        <span><i class="fa-regular fa-clock"></i> September 6, 2026</span>
-                        <span><i class="fa-regular fa-comment"></i> Comments Off</span>
-                    </div>
-                    <div class="post-content">
-                        <div class="post-image-container">
-                            <img src="https://th.bing.com/th/id/OIP.0OwjoNEVuqTTk5yqqFFp_QHaH9?w=146&h=180&c=7&r=0&o=7&pid=1.7&rm=3" alt="Illustrator Preview">
-                        </div>
-                        <div class="post-text">
-                            Industry leading vector graphics editor providing advanced design tools and AI-powered features PASSWORD : 6165
-                        </div>
-                    </div>
-                </div>
-                <a href="https://www.mediafire.com/file/wn2c7x7zrwaxiw9/SETUP_INSTALLER_(KEY=6165).zip/file" target="_blank" rel="noopener noreferrer" class="btn-download">
-                    Download / Read More »
-                </a>
-            </article>
-
-            <!-- Autodesk AutoCAD 2026 -->
-            <article class="post-card" data-category="graphics-design">
-                <div>
-                    <h2 class="post-title">
-                        Autodesk AutoCAD 2026: Professional CAD Software
-                    </h2>
-                    <div class="post-meta">
-                        <span><i class="fa-regular fa-clock"></i> September 6, 2026</span>
-                        <span><i class="fa-regular fa-comment"></i> Comments Off</span>
-                    </div>
-                    <div class="post-content">
-                        <div class="post-image-container">
-                            <img src="https://th.bing.com/th/id/OIP.jGP6OCDMcb5lLTvqmMnwmgHaHa?w=172&h=180&c=7&r=0&o=7&pid=1.7&rm=3" alt="AutoCAD Preview">
-                        </div>
-                        <div class="post-text">
-                            Industry leading CAD software providing advanced design tools and AI-powered features PASSWORD : 4590
-                        </div>
-                    </div>
-                </div>
-                <a href="https://drive.google.com/file/d/1YSYBPawJB2IqXTe5I_ZKqNo1GjWDWrkW/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn-download">
-                    Download / Read More »
-                </a>
-            </article>
-
-            <!-- 8. Shotcut (Video Editing / Open Source) -->
-            <article class="post-card" data-category="video-editing open-source">
-                <div>
-                    <h2 class="post-title">
-                        Shotcut Video Editor: Cross-Platform Free 4K Video Suite
-                    </h2>
-                    <div class="post-meta">
-                        <span><i class="fa-regular fa-clock"></i> September 14, 2026</span>
-                        <span><i class="fa-regular fa-comment"></i> Comments Off</span>
-                    </div>
-                    <div class="post-content">
-                        <div class="post-image-container">
-                            <img src="https://th.bing.com/th/id/ODF.25GowLfF2iIxT8WywlXK3g?w=32&h=32&qlt=90&pcl=fffffa&r=0&o=6&pid=1.2" alt="Shotcut macOS">
-                        </div>
-                        <div class="post-text">
-                            Lightweight 4K timeline video editor for Mac users with native video filters, wide audio codec support, and smooth rendering engine.
-                        </div>
-                    </div>
-                </div>
-                <a href="https://shotcut.org/download/" target="_blank" rel="noopener noreferrer" class="btn-download">
-                    Download / Read More »
-                </a>
-            </article>
-
-        </div>
-
-        <div id="noResults" class="no-results">
-            No software found in this category.
-        </div>
+            <!-- No results message -->
+            <div id="noResults" class="no-results">
+                No software found matching your search.
+            </div>
+        </main>
     </div>
 
-    <!-- GLOSSY BKASH POPUP MODAL -->
-    <div id="bkashModalOverlay" class="modal-overlay" onclick="closeBkashModalOnOutside(event)">
-        <div class="bkash-modal">
-            <button class="btn-close-modal" onclick="closeBkashModal()">×</button>
-            
-            <!-- bKash Vector Logo -->
-            <svg class="bkash-modal-logo" viewBox="0 0 300 120" xmlns="http://www.w3.org/2000/svg">
-                <path fill="#e2136e" d="M35 15 L85 60 L35 105 L15 105 L55 60 L15 15 Z"/>
-                <path fill="#e2136e" d="M90 15 L140 60 L90 105 L110 105 L160 60 L110 15 Z"/>
-                <text x="165" y="72" font-family="'Orbitron', sans-serif" font-size="36" font-weight="900" fill="#ffffff">bKash</text>
-            </svg>
+    <!-- FOOTER -->
+    <footer>
+        <p>&copy; 2006 Software Store. All rights reserved.</p>
+    </footer>
 
-            <h3 class="bkash-modal-title">💖 Support Our Project</h3>
-            <p class="bkash-modal-subtext">আপনার ছোট্ট অনুদান আমাদের সার্ভার সচল রাখতে সাহায্য করবে।</p>
-
-            <div class="bkash-card-box">
-                <span class="bkash-badge-tag"><i class="fa-solid fa-paper-plane"></i> Personal / Send Money</span>
-                <div class="bkash-num-flex">
-                    <span id="bkashNum" class="bkash-big-num">0156xxx1721</span>
-                    <button id="copyBkashBtn" class="btn-modal-copy" onclick="copyBkashNumber()"><i class="fa-regular fa-copy"></i> Copy</button>
-                </div>
-            </div>
-
-            <p style="font-size: 0.78rem; color: rgba(255,255,255,0.6);"><i class="fa-solid fa-circle-info" style="color: #e2136e;"></i> bKash App ba *247# dial kore Send Money korun.</p>
-        </div>
-    </div>
-
+    <!-- SCRIPT FOR SEARCH & CATEGORIES -->
     <script>
-        // Modal Handlers
-        function openBkashModal() {
-            document.getElementById('bkashModalOverlay').classList.add('active');
-        }
+        function filterSoftware() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const cards = document.querySelectorAll('.software-card');
+            const noResults = document.getElementById('noResults');
+            let visibleCount = 0;
 
-        function closeBkashModal() {
-            document.getElementById('bkashModalOverlay').classList.remove('active');
-        }
-
-        function closeBkashModalOnOutside(e) {
-            if (e.target.id === 'bkashModalOverlay') closeBkashModal();
-        }
-
-        // Smart Copy Function with Full bKash Number
-        function copyBkashNumber() {
-            const actualFullNumber = "01560001721";
-            navigator.clipboard.writeText(actualFullNumber).then(() => {
-                const btn = document.getElementById('copyBkashBtn');
-                if(btn) {
-                    btn.innerHTML = '<i class="fa-solid fa-check"></i> Copied!';
-                    btn.style.background = '#2eff66';
-                    btn.style.color = '#000000';
-                    setTimeout(() => {
-                        btn.innerHTML = '<i class="fa-regular fa-copy"></i> Copy';
-                        btn.style.background = '';
-                        btn.style.color = '';
-                    }, 2000);
+            cards.forEach(card => {
+                const name = card.getAttribute('data-name');
+                if (name.includes(query)) {
+                    card.style.display = 'flex';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
                 }
-            }).catch(err => {
-                console.error("Failed to copy number: ", err);
             });
+
+            noResults.style.display = visibleCount === 0 ? 'block' : 'none';
         }
 
-        // Category Filtering System
-        document.addEventListener("DOMContentLoaded", () => {
-            const buttons = document.querySelectorAll(".cat-btn");
-            const selectFilter = document.getElementById("filterSelect");
-            const posts = document.querySelectorAll(".post-card");
-            const noResults = document.getElementById("noResults");
+        function filterCategory(category, btn) {
+            document.querySelectorAll('.category-list button').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
 
-            function filterContent(category) {
-                let matchCount = 0;
-                posts.forEach(post => {
-                    const postCategories = post.getAttribute("data-category").split(" ");
-                    if (category === "all" || postCategories.includes(category)) {
-                        post.style.display = "flex";
-                        matchCount++;
-                    } else {
-                        post.style.display = "none";
-                    }
-                });
+            const cards = document.querySelectorAll('.software-card');
+            const noResults = document.getElementById('noResults');
+            let visibleCount = 0;
 
-                noResults.style.display = matchCount === 0 ? "block" : "none";
-
-                buttons.forEach(btn => {
-                    if (btn.getAttribute("data-filter") === category) {
-                        btn.classList.add("active");
-                    } else {
-                        btn.classList.remove("active");
-                    }
-                });
-
-                if (selectFilter) selectFilter.value = category;
-            }
-
-            buttons.forEach(btn => {
-                btn.addEventListener("click", () => {
-                    filterContent(btn.getAttribute("data-filter"));
-                });
+            cards.forEach(card => {
+                const cardCat = card.getAttribute('data-category');
+                if (category === 'all' || cardCat.includes(category)) {
+                    card.style.display = 'flex';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
             });
 
-            if (selectFilter) {
-                selectFilter.addEventListener("change", (e) => {
-                    filterContent(e.target.value);
-                });
-            }
-        });
+            noResults.style.display = visibleCount === 0 ? 'block' : 'none';
+        }
     </script>
 </body>
 </html>
