@@ -1416,17 +1416,18 @@
             renderPublicResources();
         }
 
-        // Fixed Save Logic: Updates Cloud & Local Storage immediately
+        // Fixed Save Logic with Robust Cloud Sync & Error Alerting
         async function saveData() {
             localStorage.setItem('darknet_offline_slots_50', JSON.stringify(offlineSlots));
             localStorage.setItem('darknet_public_resources_data', JSON.stringify(publicResources));
 
             if (!JSONBIN_BIN_ID || !JSONBIN_API_KEY) {
-                return;
+                alert('Cloud configuration missing!');
+                return false;
             }
 
             try {
-                await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`, {
+                const response = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -1437,8 +1438,20 @@
                         publicResources: publicResources
                     })
                 });
+
+                if (!response.ok) {
+                    const errText = await response.text();
+                    console.error('Cloud Sync Failed:', response.status, errText);
+                    alert('⚠️ ক্লাউডে (JSONBin) ডাটা সেভ হয়নি! API রেসপন্স এরর: ' + response.status);
+                    return false;
+                } else {
+                    console.log('Real-time Cloud Sync Successful!');
+                    return true;
+                }
             } catch (err) {
-                console.warn('Cloud sync error:', err);
+                console.error('Cloud sync network exception:', err);
+                alert('⚠️ নেটওয়ার্ক বা CORS সমস্যার কারণে ক্লাউডে ডাটা আপডেট হয়নি। ইন্টারনেট কানেকশন চেক করুন।');
+                return false;
             }
         }
 
@@ -1495,9 +1508,11 @@
             }
 
             offlineSlots.push({ name: '', url: '' });
-            await saveData();
-            renderOfflineSlots();
-            alert(`New Box #${offlineSlots.length} added successfully!`);
+            const success = await saveData();
+            if (success) {
+                renderOfflineSlots();
+                alert(`New Box #${offlineSlots.length} added successfully!`);
+            }
         }
 
         function toggleOfflineGrid() {
@@ -1566,10 +1581,12 @@
             }
 
             offlineSlots[index] = { name, url };
-            await saveData();
-            closeSlotModal();
-            renderOfflineSlots();
-            alert('Slot saved successfully! 🚀');
+            const success = await saveData();
+            if (success) {
+                closeSlotModal();
+                renderOfflineSlots();
+                alert('Slot saved successfully! 🚀');
+            }
         }
 
         async function deleteSlotFromModal() {
@@ -1586,10 +1603,12 @@
                         offlineSlots.push({ name: '', url: '' });
                     }
                 }
-                await saveData();
-                closeSlotModal();
-                renderOfflineSlots();
-                alert('Slot deleted successfully!');
+                const success = await saveData();
+                if (success) {
+                    closeSlotModal();
+                    renderOfflineSlots();
+                    alert('Slot deleted successfully!');
+                }
             }
         }
 
@@ -1600,8 +1619,10 @@
             }
             if (confirm(`Are you sure you want to clear Slot #${index + 1}?`)) {
                 offlineSlots[index] = { name: '', url: '' };
-                await saveData();
-                renderOfflineSlots();
+                const success = await saveData();
+                if (success) {
+                    renderOfflineSlots();
+                }
             }
         }
 
@@ -1745,8 +1766,10 @@
             }
             if (confirm('Are you sure you want to delete this folder and all its links?')) {
                 publicResources.splice(catIdx, 1);
-                await saveData();
-                renderPublicResources();
+                const success = await saveData();
+                if (success) {
+                    renderPublicResources();
+                }
             }
         }
 
@@ -1759,8 +1782,10 @@
             if (publicResources[catIdx].links.length === 0) {
                 publicResources.splice(catIdx, 1);
             }
-            await saveData();
-            renderPublicResources();
+            const success = await saveData();
+            if (success) {
+                renderPublicResources();
+            }
         }
 
         async function addOnlineLink() {
@@ -1810,16 +1835,19 @@
                 icon: itemIcon
             });
 
-            await saveData();
-            renderPublicResources();
+            // Wait for cloud save before clearing inputs and showing success
+            const success = await saveData();
+            if (success) {
+                renderPublicResources();
 
-            titleInput.value = '';
-            linkInput.value = '';
-            categorySelect.value = '';
-            customCategoryInput.value = '';
-            customCategoryInput.classList.add('hidden');
+                titleInput.value = '';
+                linkInput.value = '';
+                categorySelect.value = '';
+                customCategoryInput.value = '';
+                customCategoryInput.classList.add('hidden');
 
-            alert('New link added successfully! 🚀');
+                alert('New link added successfully! 🚀');
+            }
         }
 
         function filterLinks() {
@@ -1891,13 +1919,11 @@
             if (closeBkashModalBtn && bkashModal) {
                 closeBkashModalBtn.addEventListener('click', () => bkashModal.classList.remove('active'));
             }
-            if (copyBkashBtn) {
-                copyBkashBtn.addEventListener('click', () => {
-                    const num = document.getElementById('bkashNumber').innerText;
-                    navigator.clipboard.writeText(num);
-                    alert('bKash Number Copied: ' + num);
-                });
-            }
+            if.copyBkashBtn && copyBkashBtn.addEventListener('click', () => {
+                const num = document.getElementById('bkashNumber').innerText;
+                navigator.clipboard.writeText(num);
+                alert('bKash Number Copied: ' + num);
+            });
         });
     </script>
 
