@@ -964,7 +964,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-weight: 700; user-select: none;
+            font-weight: 700;
+            user-select: none;
             transition: var(--transition);
         }
 
@@ -1147,7 +1148,7 @@
         /* --- RESPONSIVE MEDIA QUERIES --- */
         @media (max-width: 1200px) {
             .offline-50-grid {
-                grid-template-columns: repeat(3, 1fr); /* 3 columns for medium screens */
+                grid-template-columns: repeat(3, 1fr);
             }
         }
 
@@ -1194,7 +1195,7 @@
             .link-item { padding: 12px 14px; flex-direction: column; align-items: flex-start; gap: 10px; }
             .link-actions { width: 100%; justify-content: space-between; margin-top: 4px; }
             .offline-50-grid {
-                grid-template-columns: repeat(2, 1fr); /* 2 columns for tablets */
+                grid-template-columns: repeat(2, 1fr);
             }
         }
 
@@ -1203,7 +1204,7 @@
             .ms-nav-link-btn span { display: none; }
             .btn-youtube-hub, .btn-editor-hub { padding: 6px 10px; font-size: 0.78rem; }
             .quick-tools-compact .os-card { flex: 0 1 calc(50% - 4px); }
-            .offline-50-grid { grid-template-columns: 1fr; /* 1 column for mobile */ }
+            .offline-50-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -1479,7 +1480,7 @@
     <!-- MAIN SYSTEM SCRIPT -->
     <script src="script.js"></script>
 
-    <!-- SYSTEM FUNCTIONAL SCRIPT WITH JSONBIN INTEGRATION -->
+    <!-- SYSTEM FUNCTIONAL SCRIPT WITH ROBUST JSONBIN & LOCAL FALLBACK -->
     <script>
         // --- JSONBIN API CONFIGURATION ---
         const JSONBIN_API_KEY = '$2a$10$ZQo/XyqLNkpma8bQUujyF.k9Vw33sTRqUd0p.9H0uLaA..AeJLNl2';
@@ -1616,7 +1617,7 @@
 
         let publicResources = JSON.parse(localStorage.getItem('darknet_public_resources_data')) || defaultPublicData;
 
-        // --- JSONBIN FETCH & SAVE FUNCTIONS ---
+        // --- SAFE CLOUD SYNC & FETCH (WITH LOCALSTORAGE FALLBACK) ---
         async function loadDataFromCloud() {
             try {
                 const res = await fetch(JSONBIN_URL + '/latest', {
@@ -1628,11 +1629,11 @@
                 if (res.ok) {
                     const json = await res.json();
                     if (json.record) {
-                        if (json.record.publicResources) {
+                        if (json.record.publicResources && Array.isArray(json.record.publicResources)) {
                             publicResources = json.record.publicResources;
                             localStorage.setItem('darknet_public_resources_data', JSON.stringify(publicResources));
                         }
-                        if (json.record.offlineSlots) {
+                        if (json.record.offlineSlots && Array.isArray(json.record.offlineSlots)) {
                             offlineSlots = json.record.offlineSlots;
                             localStorage.setItem('darknet_offline_slots_50', JSON.stringify(offlineSlots));
                         }
@@ -1641,16 +1642,17 @@
                     }
                 }
             } catch (err) {
-                console.error("JSONBin Cloud fetch error:", err);
+                console.warn("Cloud fetch offline/failed, using local storage cache:", err);
             }
         }
 
         async function syncDataToCloud() {
+            // Always save to localStorage first for instant local responsiveness and reliability
             localStorage.setItem('darknet_public_resources_data', JSON.stringify(publicResources));
             localStorage.setItem('darknet_offline_slots_50', JSON.stringify(offlineSlots));
 
             try {
-                await fetch(JSONBIN_URL, {
+                const response = await fetch(JSONBIN_URL, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -1661,8 +1663,12 @@
                         offlineSlots: offlineSlots
                     })
                 });
+                
+                if (!response.ok) {
+                    console.warn("JSONBin cloud sync warning: Server responded with status " + response.status);
+                }
             } catch (err) {
-                console.error("JSONBin Sync error:", err);
+                console.warn("Cloud sync network error. Data safely kept in local storage.", err);
             }
         }
 
@@ -1733,14 +1739,16 @@
             const icon = document.getElementById('offlineToggleIcon');
             const txt = document.getElementById('offlineToggleText');
 
+            if (!grid) return;
+
             if (grid.classList.contains('hidden')) {
                 grid.classList.remove('hidden');
-                icon.className = 'fa-solid fa-chevron-up';
-                txt.textContent = 'Hide List';
+                if (icon) icon.className = 'fa-solid fa-chevron-up';
+                if (txt) txt.textContent = 'Hide List';
             } else {
                 grid.classList.add('hidden');
-                icon.className = 'fa-solid fa-chevron-down';
-                txt.textContent = 'Show List';
+                if (icon) icon.className = 'fa-solid fa-chevron-down';
+                if (txt) txt.textContent = 'Show List';
             }
         }
 
@@ -1810,6 +1818,7 @@
         }
 
         function escapeHtml(str) {
+            if (!str) return '';
             return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
         }
 
@@ -1817,8 +1826,8 @@
         function getIconForCategoryOrUrl(category, url, selectedIcon) {
             if (selectedIcon && selectedIcon !== 'auto') return selectedIcon;
 
-            const lUrl = url.toLowerCase();
-            const lCat = category.toLowerCase();
+            const lUrl = (url || '').toLowerCase();
+            const lCat = (category || '').toLowerCase();
 
             if (lUrl.includes('youtube.com') || lUrl.includes('youtu.be') || lCat.includes('youtube')) {
                 return 'fa-brands fa-youtube';
@@ -1933,10 +1942,12 @@
             
             content.classList.toggle('active');
             if (content.classList.contains('active')) {
-                icon.style.transform = 'rotate(180deg)';
-                icon.style.transition = 'transform 0.3s ease';
+                if (icon) {
+                    icon.style.transform = 'rotate(180deg)';
+                    icon.style.transition = 'transform 0.3s ease';
+                }
             } else {
-                icon.style.transform = 'rotate(0deg)';
+                if (icon) icon.style.transform = 'rotate(0deg)';
             }
         }
 
@@ -2022,7 +2033,7 @@
             customCategoryInput.value = '';
             customCategoryInput.classList.add('hidden');
 
-            alert('New link added to Public Online Resource Manager!');
+            alert('New link successfully added to Resource Manager!');
         }
 
         function filterLinks() {
@@ -2043,7 +2054,7 @@
         // --- INIT ON LOAD ---
         document.addEventListener('DOMContentLoaded', function() {
             updateAdminUI();
-            loadDataFromCloud(); // Realtime cloud fetching via JSONBin
+            loadDataFromCloud(); // Try fetching latest from cloud, fallback to local cache seamlessly
 
             const loginBtn = document.getElementById('loginBtn');
             const profileModal = document.getElementById('profileModalOverlay');
