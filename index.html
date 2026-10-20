@@ -1371,28 +1371,35 @@
             }
         ];
 
-        // Safe Load Logic (Prioritizes Cloud Data so Incognito gets fresh data instantly)
+        // Fixed Load Logic: Prioritizes JSONBin cloud data first so Incognito gets public data correctly
         async function loadData() {
+            let cloudLoaded = false;
             if (JSONBIN_BIN_ID && JSONBIN_API_KEY) {
                 try {
                     const response = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest`, {
                         headers: {
                             'X-Master-Key': JSONBIN_API_KEY
-                        }
+                        },
+                        cache: 'no-store'
                     });
                     if (response.ok) {
                         const data = await response.json();
                         const record = data.record || data;
-                        if (record.offlineSlots) offlineSlots = record.offlineSlots;
-                        if (record.publicResources) publicResources = record.publicResources;
+                        if (record.offlineSlots && Array.isArray(record.offlineSlots)) {
+                            offlineSlots = record.offlineSlots;
+                            cloudLoaded = true;
+                        }
+                        if (record.publicResources && Array.isArray(record.publicResources)) {
+                            publicResources = record.publicResources;
+                        }
                     }
                 } catch (err) {
-                    console.warn('Cloud load failed, fallback to local storage:', err);
+                    console.warn('Cloud load warning:', err);
                 }
             }
 
-            // Fallback to local storage if cloud data wasn't fully loaded
-            if (!offlineSlots || offlineSlots.length === 0) {
+            // Fallback to local storage if cloud data was not retrieved
+            if (!cloudLoaded || !offlineSlots || offlineSlots.length === 0) {
                 const localSlots = JSON.parse(localStorage.getItem('darknet_offline_slots_50'));
                 offlineSlots = localSlots || [];
             }
@@ -1409,9 +1416,8 @@
             renderPublicResources();
         }
 
-        // Real-Time Safe Save Logic (Updates Cloud & Local Storage immediately without intrusive alerts)
+        // Fixed Save Logic: Updates Cloud & Local Storage immediately
         async function saveData() {
-            // Local storage backup
             localStorage.setItem('darknet_offline_slots_50', JSON.stringify(offlineSlots));
             localStorage.setItem('darknet_public_resources_data', JSON.stringify(publicResources));
 
@@ -1420,7 +1426,7 @@
             }
 
             try {
-                const response = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`, {
+                await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -1431,14 +1437,8 @@
                         publicResources: publicResources
                     })
                 });
-
-                if (!response.ok) {
-                    console.warn('Cloud sync skipped due to network/CORS restrictions. Data saved locally.');
-                } else {
-                    console.log('Real-time Cloud Sync Successful!');
-                }
             } catch (err) {
-                console.warn('Cloud sync network exception handled safely:', err);
+                console.warn('Cloud sync error:', err);
             }
         }
 
