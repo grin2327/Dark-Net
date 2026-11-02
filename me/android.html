@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Software Store - Android Applications</title>
+    <!-- SVG Favicon / Browser Tab Icon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='25%' fill='%232563eb'/><path fill='%23ffffff' d='M256 120L130 185v142l126 65 126-65V185L256 120zm0 32l94 48-94 48-94-48 94-48zm-104 72l84 43v88l-84-43v-88zm124 131v-88l84-43v88l-84 43z'/></svg>">
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
@@ -140,7 +142,9 @@
 
         .nav-platforms {
             display: flex;
-            gap: 8px;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
             list-style: none;
             flex-wrap: wrap;
             width: 100%;
@@ -151,7 +155,7 @@
         .nav-platforms a {
             text-decoration: none;
             color: var(--text-muted);
-            padding: 8px 14px;
+            padding: 8px 16px;
             border-radius: 8px;
             font-weight: 600;
             font-size: 0.9rem;
@@ -352,6 +356,7 @@
             justify-content: space-between;
             border-top: 1px solid var(--border-color);
             padding-top: 12px;
+            gap: 6px;
         }
 
         .platform-badge {
@@ -368,7 +373,7 @@
             background: var(--primary);
             color: white;
             text-decoration: none;
-            padding: 7px 14px;
+            padding: 7px 12px;
             border-radius: 8px;
             font-size: 0.82rem;
             font-weight: 600;
@@ -380,6 +385,22 @@
 
         .btn-download:hover {
             background: var(--primary-hover);
+        }
+
+        .btn-edit {
+            background: #f1f5f9;
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            padding: 6px 10px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-edit:hover {
+            background: #e2e8f0;
         }
 
         .no-results {
@@ -394,7 +415,7 @@
             border-radius: var(--radius);
         }
 
-        /* --- MODAL FOR ADDING APP --- */
+        /* --- MODAL FOR ADDING/EDITING APP --- */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -543,7 +564,7 @@
                 max-width: 100%;
             }
             .nav-platforms {
-                justify-content: space-around;
+                justify-content: center;
                 overflow-x: auto;
                 padding-bottom: 4px;
             }
@@ -615,14 +636,15 @@
         </main>
     </div>
 
-    <!-- ADD APP MODAL -->
+    <!-- ADD/EDIT APP MODAL -->
     <div class="modal-overlay" id="addAppModal">
         <div class="modal">
             <div class="modal-header">
-                <h3>Add New Android App</h3>
+                <h3 id="modalTitle">Add New Android App</h3>
                 <button class="modal-close" onclick="closeModal()">&times;</button>
             </div>
             <div class="modal-body">
+                <input type="hidden" id="editAppId">
                 <div class="form-group">
                     <label>App Name</label>
                     <input type="text" id="appName" placeholder="e.g. WhatsApp Messenger">
@@ -636,10 +658,13 @@
                     <select id="appPlatform">
                         <option value="Android" selected>Android</option>
                         <option value="Cross-Platform">Cross-Platform</option>
+                        <option value="Windows">Windows</option>
+                        <option value="macOS">macOS</option>
+                        <option value="Linux">Linux</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>Category (Select or type custom category)</label>
+                    <label>Category (Select existing or type NEW custom category)</label>
                     <input type="text" id="appCategory" list="categoryOptions" placeholder="e.g. utilities, gaming, video-editing">
                     <datalist id="categoryOptions">
                         <option value="utilities">
@@ -659,6 +684,10 @@
                 <div class="form-group">
                     <label>Description</label>
                     <textarea id="appDesc" rows="3" placeholder="Brief description of the Android app..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label style="color: #d97706;"><i class="fa-solid fa-lock"></i> Admin Password Required (Required to publish/edit)</label>
+                    <input type="password" id="appPassword" placeholder="Enter password (admin123)">
                 </div>
             </div>
             <div class="modal-footer">
@@ -712,6 +741,7 @@
                 card.className = 'software-card dynamic-card';
                 card.setAttribute('data-category', item.category.toLowerCase());
                 card.setAttribute('data-name', item.name.toLowerCase());
+                card.id = `remote-${item.id}`;
 
                 card.innerHTML = `
                     <div>
@@ -726,6 +756,7 @@
                     </div>
                     <div class="card-footer">
                         <span class="platform-badge">${item.platform}</span>
+                        <button class="btn-edit" onclick="editApp('${item.id}', \`${item.name}\`, \`${item.version}\`, \`${item.platform}\`, \`${item.category}\`, \`${item.image}\`, \`${item.link}\`, \`${item.desc}\`)"><i class="fa-solid fa-pen"></i> Edit</button>
                         <a href="${item.link}" target="_blank" class="btn-download"><i class="fa-solid fa-download"></i> Download</a>
                     </div>
                 `;
@@ -787,6 +818,29 @@
         }
 
         function openModal() {
+            document.getElementById('editAppId').value = '';
+            document.getElementById('modalTitle').textContent = 'Add New Android App';
+            document.getElementById('appName').value = '';
+            document.getElementById('appVersion').value = '';
+            document.getElementById('appImage').value = '';
+            document.getElementById('appLink').value = '';
+            document.getElementById('appDesc').value = '';
+            document.getElementById('appCategory').value = '';
+            document.getElementById('appPassword').value = '';
+            document.getElementById('addAppModal').style.display = 'flex';
+        }
+
+        function editApp(id, name, version, platform, category, image, link, desc) {
+            document.getElementById('editAppId').value = id;
+            document.getElementById('modalTitle').textContent = 'Edit Android App';
+            document.getElementById('appName').value = name;
+            document.getElementById('appVersion').value = version;
+            document.getElementById('appPlatform').value = platform;
+            document.getElementById('appCategory').value = category;
+            document.getElementById('appImage').value = image;
+            document.getElementById('appLink').value = link;
+            document.getElementById('appDesc').value = desc;
+            document.getElementById('appPassword').value = '';
             document.getElementById('addAppModal').style.display = 'flex';
         }
 
@@ -795,6 +849,7 @@
         }
 
         async function saveNewApp() {
+            const id = document.getElementById('editAppId').value;
             const name = document.getElementById('appName').value.trim();
             const version = document.getElementById('appVersion').value.trim();
             const platform = document.getElementById('appPlatform').value;
@@ -802,6 +857,12 @@
             const image = document.getElementById('appImage').value.trim();
             const link = document.getElementById('appLink').value.trim();
             const desc = document.getElementById('appDesc').value.trim();
+            const password = document.getElementById('appPassword').value.trim();
+
+            if (password !== 'admin123') {
+                alert('Wrong Password! Only authorized admins can publish or update apps.');
+                return;
+            }
 
             if (!name || !link) {
                 alert('Please enter at least the App Name and Download Link!');
@@ -810,23 +871,29 @@
 
             if (!category) category = 'utilities';
 
-            const newApp = {
-                id: Date.now().toString(),
-                name,
-                version: version || 'v1.0',
-                platform,
-                category,
-                image: image || 'https://via.placeholder.com/50',
-                link,
-                desc: desc || 'No description provided.'
-            };
-
             const btn = document.getElementById('saveAppBtn');
             btn.textContent = 'Saving...';
             btn.disabled = true;
 
             try {
-                remoteSoftware.push(newApp);
+                if (id) {
+                    const idx = remoteSoftware.findIndex(item => item.id.toString() === id.toString());
+                    if (idx !== -1) {
+                        remoteSoftware[idx] = { id, name, version: version || 'v1.0', platform, category, image: image || 'https://via.placeholder.com/50', link, desc: desc || 'No description provided.' };
+                    }
+                } else {
+                    const newApp = {
+                        id: Date.now().toString(),
+                        name,
+                        version: version || 'v1.0',
+                        platform,
+                        category,
+                        image: image || 'https://via.placeholder.com/50',
+                        link,
+                        desc: desc || 'No description provided.'
+                    };
+                    remoteSoftware.push(newApp);
+                }
 
                 const response = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
                     method: 'PUT',
@@ -841,18 +908,11 @@
                     closeModal();
                     renderRemoteSoftware();
                     updateCategories();
-
-                    document.getElementById('appName').value = '';
-                    document.getElementById('appVersion').value = '';
-                    document.getElementById('appImage').value = '';
-                    document.getElementById('appLink').value = '';
-                    document.getElementById('appDesc').value = '';
-                    document.getElementById('appCategory').value = '';
                 } else {
                     alert('Failed to save to JSONBin.');
                 }
             } catch (error) {
-                console.error('Error saving to JSONBin:', error);
+                console.error('Error saving:', error);
                 alert('An error occurred while saving.');
             } finally {
                 btn.textContent = 'Save & Publish';
